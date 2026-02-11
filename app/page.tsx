@@ -795,7 +795,7 @@ export default function Home() {
                 </h2>
                 <div className="space-y-6 text-slate-500 font-light text-lg mb-10">
                   <p>Kami meniadakan langganan bulanan. Cukup satu kali investasi untuk setiap karya digital yang Anda ciptakan.</p>
-                  <p>Akses tanpa batas, penyimpanan abadi, dan kebahagiaan yang tak lekang oleh waktu.</p>
+                  <p>Akses tanpa batas dan kebahagiaan yang tak lekang oleh waktu.</p>
                 </div>
 
                 {/* Secondary Trust Indicators */}
@@ -803,10 +803,6 @@ export default function Home() {
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                     <span className="text-xs font-bold uppercase tracking-wider">Secure Payment</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Cloud Hosting</span>
                   </div>
                 </div>
               </AnimatedSection>
