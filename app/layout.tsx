@@ -19,8 +19,12 @@ const pacifico = Pacifico({
 });
 
 export const metadata: Metadata = {
-  title: "for you, always. | Personalize Your Digital Gifts",
-  description: "Create premium digital greeting cards, memories, and more for Valentine, Birthdays, and special moments.",
+  title: "For you, Always.",
+  description: "Digital Atelier eksklusif untuk mengabadikan momen paling berharga Anda menjadi pengalaman digital yang abadi.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
