@@ -284,21 +284,21 @@ export default function Home() {
       title: "LDR Edition",
       subtitle: "Miles and Memories",
       description: "Menghubungkan jarak ribuan mil dalam sebuah garis emosional, melacak setiap titik pertemuan yang berharga antara Anda dan pasangan.",
-      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.mov",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.webp",
       accent: "emerald"
     },
     {
       title: "Valentine Edition",
       subtitle: "The Atlas of Us",
       description: "Visualisasi peta bernuansa Rose yang lembut, menceritakan setiap kilometer perjalanan cinta Anda dengan detail puitis.",
-      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine_map.mov",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine_map.webp",
       accent: "rose"
     },
     {
       title: "Birthday Edition",
       subtitle: "Lifetime Journey",
       description: "Navigasi cerita hidup dalam satu peta interaktif, merayakan setiap tahun bertambahnya usia dengan narasi visual yang dinamis.",
-      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.mov",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.webp",
       accent: "blue"
     }
   ];
