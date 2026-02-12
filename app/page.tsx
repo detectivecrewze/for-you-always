@@ -105,16 +105,22 @@ function ThemeCard({
           {/* Image Container */}
           <div className={`relative aspect-[16/10] ${c.bg} overflow-hidden`}>
             {image.match(/\.(mp4|webm|mov)$/i) ? (
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
-              >
-                <source src={image} type="video/mp4" />
-              </video>
+              <div className="absolute inset-0 pointer-events-none select-none">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  webkit-playsinline="true"
+                  preload="metadata"
+                  poster={image.replace('.mp4', '.png')}
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                >
+                  <source src={image} type="video/mp4" />
+                </video>
+              </div>
             ) : (
               <img
                 src={image}
@@ -421,16 +427,22 @@ export default function Home() {
                   <div className="relative rounded-[1.8rem] overflow-hidden bg-slate-50 aspect-[4/5]">
                     {/* Mendukung Video (Autoplay) atau Gambar Statis */}
                     {"https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4".match(/\.(mp4|webm|mov)$/i) ? (
-                      <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 pointer-events-none"
-                      >
-                        <source src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4" type="video/mp4" />
-                      </video>
+                      <div className="absolute inset-0 pointer-events-none select-none">
+                        <video
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          webkit-playsinline="true"
+                          preload="metadata"
+                          poster="/valentine.png"
+                          disablePictureInPicture
+                          disableRemotePlayback
+                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                        >
+                          <source src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4" type="video/mp4" />
+                        </video>
+                      </div>
                     ) : (
                       <img
                         src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
@@ -667,17 +679,22 @@ export default function Home() {
                   <div className="relative bg-white/40 backdrop-blur-2xl rounded-[3rem] p-4 md:p-6 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.12)] ring-1 ring-white/60">
                     <div className="relative bg-slate-900 rounded-[2rem] overflow-hidden aspect-square md:aspect-video lg:aspect-[1.5/1]">
                       {/* Key-based Video for clean switching animation */}
-                      <video
-                        key={activeMap}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        className="w-full h-full object-cover animate-in fade-in duration-1000 pointer-events-none"
-                      >
-                        <source src={mapThemes[activeMap].video} type="video/mp4" />
-                      </video>
+                      <div className="absolute inset-0 pointer-events-none select-none">
+                        <video
+                          key={activeMap}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          webkit-playsinline="true"
+                          preload="metadata"
+                          disablePictureInPicture
+                          disableRemotePlayback
+                          className="w-full h-full object-cover animate-in fade-in duration-1000"
+                        >
+                          <source src={mapThemes[activeMap].video} type="video/mp4" />
+                        </video>
+                      </div>
 
                       {/* Floating UI Badges */}
                       <div className="absolute top-6 left-6 flex items-center gap-3">
