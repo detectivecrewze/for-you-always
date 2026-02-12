@@ -276,21 +276,21 @@ export default function Home() {
       title: "LDR Edition",
       subtitle: "Miles and Memories",
       description: "Menghubungkan jarak ribuan mil dalam sebuah garis emosional, melacak setiap titik pertemuan yang berharga antara Anda dan pasangan.",
-      video: "/ldr_map.mp4",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.mp4",
       accent: "emerald"
     },
     {
       title: "Valentine Edition",
       subtitle: "The Atlas of Us",
       description: "Visualisasi peta bernuansa Rose yang lembut, menceritakan setiap kilometer perjalanan cinta Anda dengan detail puitis.",
-      video: "/valentine_map.mp4",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine_map.mp4",
       accent: "rose"
     },
     {
       title: "Birthday Edition",
       subtitle: "Lifetime Journey",
       description: "Navigasi cerita hidup dalam satu peta interaktif, merayakan setiap tahun bertambahnya usia dengan narasi visual yang dinamis.",
-      video: "/birthday_map.mp4",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.mp4",
       accent: "blue"
     }
   ];
@@ -418,9 +418,9 @@ export default function Home() {
                   {/* Image Container */}
                   <div className="relative rounded-[1.8rem] overflow-hidden bg-slate-50 aspect-[4/5]">
                     {/* Mendukung Video (Autoplay) atau Gambar Statis */}
-                    {"/valentine.mp4".match(/\.(mp4|webm|mov)$/i) ? (
+                    {"https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4".match(/\.(mp4|webm|mov)$/i) ? (
                       <video
-                        src="/valentine.mp4"
+                        src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
                         autoPlay
                         muted
                         loop
@@ -429,7 +429,7 @@ export default function Home() {
                       />
                     ) : (
                       <img
-                        src="/valentine.mp4"
+                        src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
                         alt="Preview Hadiah Digital"
                         className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       />
@@ -543,7 +543,7 @@ export default function Home() {
               title="Valentine"
               subtitle="The Atlas of Us"
               description="Perjalanan romantis dengan fitur peta interaktif, infinity scroll storytelling, dan tipografi elegan yang mengabadikan kisah cinta Anda."
-              image="/valentine.mp4"
+              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
               color="rose"
               href="https://valentine-site-sigma.vercel.app/"
               available={true}
@@ -555,7 +555,7 @@ export default function Home() {
               title="Ulang Tahun"
               subtitle="Wrapped Bash"
               description="Desain bergaya Spotify Wrapped yang merayakan tahun mereka lewat analisis musik, momen berkesan, dan insight personal."
-              image="/birthday.png"
+              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.mp4"
               color="blue"
               href="https://birthday-site-wine-sigma.vercel.app"
               available={true}
@@ -567,7 +567,7 @@ export default function Home() {
               title="LDR Love"
               subtitle="Journey of Miles"
               description="Estetika Windows XP yang nostalgik dengan statistik hubungan, countdown timer, dan pelacakan jarak untuk pasangan LDR."
-              image="/ldr.png"
+              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.mp4"
               color="emerald"
               href="https://ldr-pages.vercel.app/"
               available={true}
