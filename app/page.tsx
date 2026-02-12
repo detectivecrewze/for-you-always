@@ -278,27 +278,35 @@ function FeatureCard({ icon, title, description, color }: { icon: React.ReactNod
 // Main Home Component
 export default function Home() {
   const [activeMap, setActiveMap] = useState(0);
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   const mapThemes = [
     {
       title: "LDR Edition",
       subtitle: "Miles and Memories",
       description: "Menghubungkan jarak ribuan mil dalam sebuah garis emosional, melacak setiap titik pertemuan yang berharga antara Anda dan pasangan.",
-      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.webp",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.mov",
       accent: "emerald"
     },
     {
       title: "Valentine Edition",
       subtitle: "The Atlas of Us",
       description: "Visualisasi peta bernuansa Rose yang lembut, menceritakan setiap kilometer perjalanan cinta Anda dengan detail puitis.",
-      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine_map.webp",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine_map.mov",
       accent: "rose"
     },
     {
       title: "Birthday Edition",
       subtitle: "Lifetime Journey",
       description: "Navigasi cerita hidup dalam satu peta interaktif, merayakan setiap tahun bertambahnya usia dengan narasi visual yang dinamis.",
-      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.webp",
+      video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.mov",
       accent: "blue"
     }
   ];
@@ -410,7 +418,7 @@ export default function Home() {
               </AnimatedSection>
             </div>
 
-            {/* Right Content - Abstract 3D Glassmorphism Showcase */}
+            {/* Right Content - Abstract 3D Glassmorphism Showcase with Slider */}
             <div className="order-1 lg:order-2 relative h-[500px] md:h-[600px] flex items-center justify-center">
               {/* Abstract 3D-like Background Elements */}
               <div className="absolute top-1/4 -right-20 w-80 h-80 bg-rose-200/30 rounded-full blur-[100px] animate-blob" />
@@ -432,20 +440,37 @@ export default function Home() {
                       <div className="w-2 h-2 rounded-full bg-slate-200/60" />
                     </div>
 
-                    {/* High-Res Static Image Container */}
+                    {/* High-Res Image Slider Container */}
                     <div className="relative rounded-[2.2rem] overflow-hidden bg-slate-50 aspect-[4/5] shadow-inner">
-                      <img
-                        src="/valentine.png"
-                        alt="For you, Always. Digital Atelier"
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                      />
+                      {[
+                        "/valentine.png",
+                        "/valentine2.png",
+                        "/valentine3.png"
+                      ].map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={img}
+                          alt={`Showcase ${idx + 1}`}
+                          className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out 
+                            ${currentImage === idx ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
+                        />
+                      ))}
 
                       {/* Glass Overlay for depth */}
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-black/5 pointer-events-none" />
                       <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2.2rem]" />
                     </div>
 
-
+                    {/* Slider Progress Indicator */}
+                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                      {[0, 1, 2].map((i) => (
+                        <div
+                          key={i}
+                          className={`h-0.5 rounded-full transition-all duration-[800ms] ${currentImage === i ? 'w-6 bg-rose-500' : 'w-1.5 bg-slate-400/30'
+                            }`}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
