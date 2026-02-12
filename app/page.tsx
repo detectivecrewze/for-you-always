@@ -106,13 +106,15 @@ function ThemeCard({
           <div className={`relative aspect-[16/10] ${c.bg} overflow-hidden`}>
             {image.match(/\.(mp4|webm|mov)$/i) ? (
               <video
-                src={image}
                 autoPlay
                 muted
                 loop
                 playsInline
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
+                preload="auto"
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
+              >
+                <source src={image} type="video/mp4" />
+              </video>
             ) : (
               <img
                 src={image}
@@ -420,13 +422,15 @@ export default function Home() {
                     {/* Mendukung Video (Autoplay) atau Gambar Statis */}
                     {"https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4".match(/\.(mp4|webm|mov)$/i) ? (
                       <video
-                        src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
                         autoPlay
                         muted
                         loop
                         playsInline
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                      />
+                        preload="auto"
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 pointer-events-none"
+                      >
+                        <source src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4" type="video/mp4" />
+                      </video>
                     ) : (
                       <img
                         src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
@@ -665,13 +669,15 @@ export default function Home() {
                       {/* Key-based Video for clean switching animation */}
                       <video
                         key={activeMap}
-                        src={mapThemes[activeMap].video}
                         autoPlay
                         muted
                         loop
                         playsInline
-                        className="w-full h-full object-cover animate-in fade-in duration-1000"
-                      />
+                        preload="auto"
+                        className="w-full h-full object-cover animate-in fade-in duration-1000 pointer-events-none"
+                      >
+                        <source src={mapThemes[activeMap].video} type="video/mp4" />
+                      </video>
 
                       {/* Floating UI Badges */}
                       <div className="absolute top-6 left-6 flex items-center gap-3">
