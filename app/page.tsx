@@ -445,16 +445,7 @@ export default function Home() {
                       <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2.2rem]" />
                     </div>
 
-                    {/* Designer Badge Floating on Mockup */}
-                    <div className="absolute -bottom-6 -right-6 glass-card px-4 py-3 rounded-2xl shadow-xl animate-float-slow">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-rose-300 flex items-center justify-center text-white text-[10px] font-black">FA</div>
-                        <div>
-                          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-nowrap">Curated Design</p>
-                          <p className="text-[10px] font-bold text-slate-900 leading-none">Memoir Edition</p>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                 </div>
               </div>
