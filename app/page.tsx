@@ -688,7 +688,7 @@ export default function Home() {
               <AnimatedSection delay={200}>
                 <div className="relative">
                   {/* Dynamic Backdrop Glow based on active theme */}
-                  <div className={`absolute -inset-10 rounded-full blur-[120px] transition-colors duration-1000 -z-10 ${activeMap === 0 ? 'bg-rose-100/30' : activeMap === 1 ? 'bg-blue-100/20' : 'bg-emerald-100/20'
+                  <div className={`absolute -inset-10 rounded-full blur-[120px] transition-colors duration-1000 -z-10 ${activeMap === 0 ? 'bg-emerald-100/20' : activeMap === 1 ? 'bg-rose-100/30' : 'bg-blue-100/20'
                     }`} />
 
                   {/* Cinematic Gallery Frame */}
@@ -699,6 +699,7 @@ export default function Home() {
                         {mapThemes[activeMap].video.match(/\.(mp4|webm|mov)$/i) ? (
                           <video
                             key={activeMap}
+                            src={mapThemes[activeMap].video}
                             autoPlay
                             muted
                             loop
@@ -708,12 +709,7 @@ export default function Home() {
                             disablePictureInPicture
                             disableRemotePlayback
                             className="w-full h-full object-cover animate-in fade-in duration-1000"
-                          >
-                            <source
-                              src={mapThemes[activeMap].video}
-                              type={mapThemes[activeMap].video.endsWith('.mov') ? 'video/quicktime' : 'video/mp4'}
-                            />
-                          </video>
+                          />
                         ) : (
                           <img
                             key={activeMap}
