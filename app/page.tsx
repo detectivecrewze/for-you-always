@@ -680,20 +680,32 @@ export default function Home() {
                     <div className="relative bg-slate-900 rounded-[2rem] overflow-hidden aspect-square md:aspect-video lg:aspect-[1.5/1]">
                       {/* Key-based Video for clean switching animation */}
                       <div className="absolute inset-0 pointer-events-none select-none">
-                        <video
-                          key={activeMap}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          webkit-playsinline="true"
-                          preload="metadata"
-                          disablePictureInPicture
-                          disableRemotePlayback
-                          className="w-full h-full object-cover animate-in fade-in duration-1000"
-                        >
-                          <source src={mapThemes[activeMap].video} type="video/mp4" />
-                        </video>
+                        {mapThemes[activeMap].video.match(/\.(mp4|webm|mov)$/i) ? (
+                          <video
+                            key={activeMap}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            webkit-playsinline="true"
+                            preload="auto"
+                            disablePictureInPicture
+                            disableRemotePlayback
+                            className="w-full h-full object-cover animate-in fade-in duration-1000"
+                          >
+                            <source
+                              src={mapThemes[activeMap].video}
+                              type={mapThemes[activeMap].video.endsWith('.mov') ? 'video/quicktime' : 'video/mp4'}
+                            />
+                          </video>
+                        ) : (
+                          <img
+                            key={activeMap}
+                            src={mapThemes[activeMap].video}
+                            alt={mapThemes[activeMap].title}
+                            className="w-full h-full object-cover animate-in fade-in duration-1000"
+                          />
+                        )}
                       </div>
 
                       {/* Floating UI Badges */}
