@@ -410,55 +410,55 @@ export default function Home() {
               </AnimatedSection>
             </div>
 
-            {/* Right Content - Hero Image (Resized for better balance) */}
-            <AnimatedSection delay={200} className="order-1 lg:order-2">
-              <div className="relative p-2 max-w-md mx-auto lg:ml-auto lg:mr-0">
-                {/* Frame Container */}
-                <div className="relative bg-white rounded-[2.5rem] p-3 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 transition-all duration-700 hover:shadow-[0_48px_80px_-20px_rgba(0,0,0,0.15)]">
+            {/* Right Content - Abstract 3D Glassmorphism Showcase */}
+            <div className="order-1 lg:order-2 relative h-[500px] md:h-[600px] flex items-center justify-center">
+              {/* Abstract 3D-like Background Elements */}
+              <div className="absolute top-1/4 -right-20 w-80 h-80 bg-rose-200/30 rounded-full blur-[100px] animate-blob" />
+              <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-blue-100/40 rounded-full blur-[120px] animate-blob [animation-delay:2s]" />
 
-                  {/* Mockup Header */}
-                  <div className="absolute top-7 left-8 flex gap-1.5 z-20">
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-200" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-200" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-200" />
-                  </div>
+              <div className="relative z-10 w-full max-w-sm md:max-w-md animate-float">
+                {/* Floating Glass Pills / Abstract 3D elements formed by CSS */}
+                <div className="absolute -top-12 -right-8 w-24 h-48 glass-pill rounded-full animate-tilt blur-[1px] -z-10 [animation-delay:1s]" />
+                <div className="absolute -bottom-8 -left-12 w-32 h-32 glass-card rounded-full animate-spin-slow opacity-60 -z-10 [animation-duration:30s]" />
 
-                  {/* Image Container */}
-                  <div className="relative rounded-[1.8rem] overflow-hidden bg-slate-50 aspect-[4/5]">
-                    {/* Mendukung Video (Autoplay) atau Gambar Statis (Termasuk WebP) */}
-                    {"https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.webp".match(/\.(mp4|webm|mov)$/i) ? (
-                      <div className="absolute inset-0 pointer-events-none select-none">
-                        <video
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          webkit-playsinline="true"
-                          preload="metadata"
-                          poster="/valentine.png"
-                          disablePictureInPicture
-                          disableRemotePlayback
-                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                        >
-                          <source src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.webp" type="video/mp4" />
-                        </video>
-                      </div>
-                    ) : (
+                {/* Main Premium Mockup */}
+                <div className="relative group perspective-1000">
+                  <div className="relative bg-white/80 backdrop-blur-sm rounded-[3rem] p-3 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] ring-1 ring-white/60 transition-all duration-1000 group-hover:shadow-[0_80px_120px_-30px_rgba(0,0,0,0.2)] animate-tilt">
+
+                    {/* Mockup Top Detail */}
+                    <div className="absolute top-8 left-10 flex gap-2 z-20">
+                      <div className="w-2 h-2 rounded-full bg-slate-200/60" />
+                      <div className="w-2 h-2 rounded-full bg-slate-200/60" />
+                      <div className="w-2 h-2 rounded-full bg-slate-200/60" />
+                    </div>
+
+                    {/* High-Res Static Image Container */}
+                    <div className="relative rounded-[2.2rem] overflow-hidden bg-slate-50 aspect-[4/5] shadow-inner">
                       <img
-                        src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.webp"
-                        alt="Preview Hadiah Digital"
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                        src="/valentine.png"
+                        alt="For you, Always. Digital Atelier"
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                       />
-                    )}
-                    <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[1.8rem]" />
+
+                      {/* Glass Overlay for depth */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-black/5 pointer-events-none" />
+                      <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2.2rem]" />
+                    </div>
+
+                    {/* Designer Badge Floating on Mockup */}
+                    <div className="absolute -bottom-6 -right-6 glass-card px-4 py-3 rounded-2xl shadow-xl animate-float-slow">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-rose-300 flex items-center justify-center text-white text-[10px] font-black">FA</div>
+                        <div>
+                          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-nowrap">Curated Design</p>
+                          <p className="text-[10px] font-bold text-slate-900 leading-none">Memoir Edition</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Floating Aesthetic Elements */}
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-rose-200/40 rounded-full blur-3xl -z-10 animate-pulse" />
-                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-blue-200/40 rounded-full blur-3xl -z-10" />
               </div>
-            </AnimatedSection>
+            </div>
           </div>
         </div>
       </section>
