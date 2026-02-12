@@ -543,7 +543,7 @@ export default function Home() {
               title="Valentine"
               subtitle="The Atlas of Us"
               description="Perjalanan romantis dengan fitur peta interaktif, infinity scroll storytelling, dan tipografi elegan yang mengabadikan kisah cinta Anda."
-              image="/valentine.png"
+              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
               color="rose"
               href="https://valentine-site-sigma.vercel.app/"
               available={true}
