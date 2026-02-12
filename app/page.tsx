@@ -519,13 +519,13 @@ export default function Home() {
                 Proses Kreasi
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-8 leading-[1.1]">
-                Tiga Langkah Menuju <br />
+                Sempurnakan Momen <br />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-rose-700 via-slate-800 to-slate-900 italic font-serif py-1">
-                  Keajaiban Digital.
+                  Melalui Sentuhan Digital.
                 </span>
               </h2>
               <p className="text-lg text-slate-500 font-light max-w-2xl mx-auto">
-                Kami merancang pengalaman kustomisasi yang intuitif untuk memastikan setiap detail kado Anda sempurna.
+                Hadirkan kebahagiaan dalam genggaman dengan proses kustomisasi yang dirancang khusus untuk setiap cerita berharga Anda.
               </p>
             </div>
           </AnimatedSection>
@@ -585,13 +585,13 @@ export default function Home() {
                 Koleksi Premium
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-8 leading-[1.1]">
-                Temukan Tema <br />
+                Jelajahi Koleksi Tema <br />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-rose-700 via-slate-800 to-slate-900 italic font-serif py-1">
-                  Bahasa Kalbu Anda.
+                  dengan Estetika Terpilih.
                 </span>
               </h2>
               <p className="text-lg text-slate-500 font-light max-w-2xl mx-auto">
-                Setiap tema adalah sebuah atelier digital yang dirancang untuk menceritakan kisah unik Anda dengan keindahan yang abadi.
+                Setiap desain adalah representasi unik dari sebuah cerita. Pilih bingkai visual yang paling pas untuk mengabadikan momen spesial Anda.
               </p>
             </div>
           </AnimatedSection>
@@ -912,7 +912,7 @@ export default function Home() {
                     <ul className="space-y-5 mb-12">
                       {[
                         "Akses Penuh ke Koleksi Tema",
-                        "Editor Intuitif & Link Abadi",
+                        "Editor Intuitif",
                         "Penyimpanan Cloud Aman",
                         "Optimasi Layar Mobile",
                         "Priority Atelier Support"
