@@ -543,7 +543,7 @@ export default function Home() {
               title="Valentine"
               subtitle="The Atlas of Us"
               description="Perjalanan romantis dengan fitur peta interaktif, infinity scroll storytelling, dan tipografi elegan yang mengabadikan kisah cinta Anda."
-              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.mp4"
+              image="/valentine.png"
               color="rose"
               href="https://valentine-site-sigma.vercel.app/"
               available={true}
@@ -555,7 +555,7 @@ export default function Home() {
               title="Ulang Tahun"
               subtitle="Wrapped Bash"
               description="Desain bergaya Spotify Wrapped yang merayakan tahun mereka lewat analisis musik, momen berkesan, dan insight personal."
-              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/birthday_map.mp4"
+              image="/birthday.png"
               color="blue"
               href="https://birthday-site-wine-sigma.vercel.app"
               available={true}
@@ -567,7 +567,7 @@ export default function Home() {
               title="LDR Love"
               subtitle="Journey of Miles"
               description="Estetika Windows XP yang nostalgik dengan statistik hubungan, countdown timer, dan pelacakan jarak untuk pasangan LDR."
-              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/ldr_map.mp4"
+              image="/ldr.png"
               color="emerald"
               href="https://ldr-pages.vercel.app/"
               available={true}
