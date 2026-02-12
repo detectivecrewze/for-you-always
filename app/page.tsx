@@ -54,6 +54,7 @@ function ThemeCard({
   available = false,
   index,
   password,
+  images,
 }: {
   title: string;
   subtitle: string;
@@ -64,7 +65,18 @@ function ThemeCard({
   available?: boolean;
   index: number;
   password?: string;
+  images?: string[];
 }) {
+  const [currentIdx, setCurrentIdx] = useState(0);
+
+  useEffect(() => {
+    if (images && images.length > 0) {
+      const timer = setInterval(() => {
+        setCurrentIdx((prev) => (prev + 1) % images.length);
+      }, 4000 + (index * 500)); // Staggered start
+      return () => clearInterval(timer);
+    }
+  }, [images, index]);
   const colorClasses = {
     rose: {
       bg: "bg-rose-50/50",
@@ -104,7 +116,19 @@ function ThemeCard({
         >
           {/* Image Container */}
           <div className={`relative aspect-[16/10] ${c.bg} overflow-hidden`}>
-            {image.match(/\.(mp4|webm|mov|mov)$/i) ? (
+            {images && images.length > 0 ? (
+              <div className="absolute inset-0">
+                {images.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    alt={`${title} showcase ${i}`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 
+                      ${currentIdx === i ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
+                  />
+                ))}
+              </div>
+            ) : image.match(/\.(mp4|webm|mov|mov)$/i) ? (
               <div className="absolute inset-0 pointer-events-none select-none">
                 <video
                   autoPlay
@@ -187,7 +211,7 @@ function ThemeCard({
                 className={`inline-flex items-center justify-center w-full py-4 rounded-2xl text-[13px] font-bold text-white
                   transition-all duration-500 ${c.button} uppercase tracking-widest`}
               >
-                Lihat Karya
+                Coba Demo
                 <svg className="w-4 h-4 ml-3 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -282,7 +306,7 @@ export default function Home() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % 3);
+      setCurrentImage((prev) => (prev + 1) % 6);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
@@ -440,12 +464,15 @@ export default function Home() {
                       <div className="w-2 h-2 rounded-full bg-slate-200/60" />
                     </div>
 
-                    {/* High-Res Image Slider Container */}
+                    {/* High-Res Image Slider Container - 6 Images Loop */}
                     <div className="relative rounded-[2.2rem] overflow-hidden bg-slate-50 aspect-[4/5] shadow-inner">
                       {[
                         "/valentine.png",
                         "/valentine2.png",
-                        "/valentine3.png"
+                        "/valentine3.png",
+                        "/ldr4.png",
+                        "/ldr5.png",
+                        "/ldr6.png"
                       ].map((img, idx) => (
                         <img
                           key={idx}
@@ -463,10 +490,10 @@ export default function Home() {
 
                     {/* Slider Progress Indicator */}
                     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
-                      {[0, 1, 2].map((i) => (
+                      {[0, 1, 2, 3, 4, 5].map((i) => (
                         <div
                           key={i}
-                          className={`h-0.5 rounded-full transition-all duration-[800ms] ${currentImage === i ? 'w-6 bg-rose-500' : 'w-1.5 bg-slate-400/30'
+                          className={`h-0.5 rounded-full transition-all duration-[800ms] ${currentImage === i ? 'w-6 bg-rose-500' : 'w-1 bg-slate-400/30'
                             }`}
                         />
                       ))}
@@ -599,7 +626,7 @@ export default function Home() {
               title="LDR Love"
               subtitle="Journey of Miles"
               description="Estetika Windows XP yang nostalgik dengan statistik hubungan, countdown timer, dan pelacakan jarak untuk pasangan LDR."
-              image="/ldr.png"
+              image="/ldr_preview.png"
               color="emerald"
               href="https://ldr-pages.vercel.app/"
               available={true}
@@ -877,7 +904,7 @@ export default function Home() {
                     <div className="mb-10">
                       <div className="flex items-baseline gap-2">
                         <span className="text-sm font-bold text-slate-400">Rp</span>
-                        <span className="text-6xl font-display font-bold text-slate-900 tracking-tight">25.000</span>
+                        <span className="text-6xl font-display font-bold text-slate-900 tracking-tight">20.000</span>
                         <span className="text-sm text-slate-400">/tema</span>
                       </div>
                     </div>
@@ -943,7 +970,7 @@ export default function Home() {
                   <span className="italic font-serif text-rose-700">Abadi & Bermakna?</span>
                 </h2>
                 <p className="text-lg text-slate-500 mb-12 max-w-xl mx-auto font-light">
-                  Bergabunglah dengan ribuan orang yang telah mempercayakan momen spesial mereka kepada Digital Atelier kami.
+                  Bergabunglah dengan ratusan orang yang telah mempercayakan momen spesial mereka kepada Digital Atelier kami.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
                   <a
