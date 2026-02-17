@@ -60,7 +60,7 @@ function ThemeCard({
   subtitle: string;
   description: string;
   image: string;
-  color: "rose" | "blue" | "emerald";
+  color: "rose" | "blue" | "emerald" | "amber";
   href?: string;
   available?: boolean;
   index: number;
@@ -101,6 +101,14 @@ function ThemeCard({
       glow: "group-hover:shadow-[0_40px_80px_-20px_rgba(16,185,129,0.15)]",
       accent: "text-emerald-500",
       ring: "group-hover:ring-emerald-200"
+    },
+    amber: {
+      bg: "bg-amber-50/50",
+      badge: "bg-amber-100/50 text-amber-700 border-amber-200",
+      button: "bg-slate-900 hover:bg-amber-600 shadow-slate-200 hover:shadow-amber-500/20",
+      glow: "group-hover:shadow-[0_40px_80px_-20px_rgba(245,158,11,0.15)]",
+      accent: "text-amber-500",
+      ring: "group-hover:ring-amber-200"
     },
   };
 
@@ -632,6 +640,17 @@ export default function Home() {
               available={true}
               index={2}
               password="forever"
+            />
+
+            <ThemeCard
+              title="Voices."
+              subtitle="Always for you"
+              description="Platform kado digital mandiri untuk menggabungkan foto kenangan dan pesan suara pribadi dalam satu halaman hadiah yang emosional."
+              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
+              color="amber"
+              href="https://voice.for-you-always.my.id"
+              available={true}
+              index={3}
             />
           </div>
         </div>
