@@ -17,10 +17,10 @@ const PAGE_TYPES = [
     { id: "page-2", type: "greeting", name: "Greeting Card", icon: "favorite" },
     { id: "page-3", type: "music", name: "Music Player", icon: "library_music" },
     { id: "page-4", type: "wrapped", name: "Our Vibe", icon: "auto_awesome" },
-    { id: "page-5", type: "quiz", name: "Love Quiz", icon: "quiz" },
+    { id: "page-5", type: "quiz", name: "Memory Quiz", icon: "quiz" },
     { id: "page-6", type: "gallery", name: "Photo Gallery", icon: "photo_library" },
     { id: "page-7", type: "map", name: "Our Journey", icon: "location_on" },
-    { id: "page-8", type: "letter", name: "Love Letter", icon: "history_edu" },
+    { id: "page-8", type: "letter", name: "Sincere Letter", icon: "history_edu" },
     { id: "page-9", type: "lock", name: "Final Lock", icon: "lock" },
     { id: "page-10", type: "infinity", name: "Infinity Scroll", icon: "all_inclusive" },
 ];
@@ -139,7 +139,7 @@ export default function WizardEditor() {
                     <h1 className="font-bold text-gray-900 truncate max-w-[200px]">
                         {config.metadata.customerName || "New Project"}
                     </h1>
-                    <span className="px-2 py-0.5 bg-rose-50 text-rose-600 text-[10px] font-black uppercase rounded-full">Valentine Admin</span>
+                    <span className="px-2 py-0.5 bg-rose-50 text-rose-600 text-[10px] font-black uppercase rounded-full">Everlasting Admin</span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -264,7 +264,7 @@ export default function WizardEditor() {
                                         <input
                                             type="text"
                                             className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-2 focus:ring-rose-500 transition-all font-bold shadow-sm"
-                                            value={config.greeting?.title || "Happy Valentine's Day"}
+                                            value={config.greeting?.title || "Untuk Kamu, Selamanya"}
                                             onChange={(e) => handleFieldChange("greeting", "title", e.target.value)}
                                         />
                                     </div>

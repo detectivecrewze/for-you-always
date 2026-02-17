@@ -320,7 +320,7 @@ export default function Home() {
       accent: "emerald"
     },
     {
-      title: "Valentine Edition",
+      title: "Everlasting Edition",
       subtitle: "The Atlas of Us",
       description: "Visualisasi peta bernuansa Rose yang lembut, menceritakan setiap kilometer perjalanan cinta Anda dengan detail puitis.",
       video: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine_map.mov",
@@ -599,12 +599,12 @@ export default function Home() {
           {/* Theme Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             <ThemeCard
-              title="Valentine"
+              title="Everlasting"
               subtitle="The Atlas of Us"
               description="Perjalanan romantis dengan fitur peta interaktif, infinity scroll storytelling, dan tipografi elegan yang mengabadikan kisah cinta Anda."
               image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/valentine.webp"
               color="rose"
-              href="https://valentine-site-sigma.vercel.app/"
+              href="https://gift.for-you-always.my.id"
               available={true}
               index={0}
               password="123"
@@ -616,7 +616,7 @@ export default function Home() {
               description="Desain bergaya Spotify Wrapped yang merayakan tahun mereka lewat analisis musik, momen berkesan, dan insight personal."
               image="/birthday.png"
               color="blue"
-              href="https://birthday-site-wine-sigma.vercel.app"
+              href="https://birthday.for-you-always.my.id"
               available={true}
               index={1}
               password="123"
@@ -628,7 +628,7 @@ export default function Home() {
               description="Estetika Windows XP yang nostalgik dengan statistik hubungan, countdown timer, dan pelacakan jarak untuk pasangan LDR."
               image="/ldr_preview.png"
               color="emerald"
-              href="https://ldr-pages.vercel.app/"
+              href="https://ldr.for-you-always.my.id"
               available={true}
               index={2}
               password="forever"
@@ -897,19 +897,23 @@ export default function Home() {
                         <p className="text-sm text-slate-400 italic">Unlimited Customization</p>
                       </div>
                       <div className="px-3 py-1 bg-rose-50 rounded-lg text-[10px] font-bold text-rose-600 uppercase tracking-wider">
-                        Best Value
+                        Promo Terbatas
                       </div>
                     </div>
 
-                    <div className="mb-10">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-sm font-bold text-slate-400">Rp</span>
-                        <span className="text-6xl font-display font-bold text-slate-900 tracking-tight">20.000</span>
-                        <span className="text-sm text-slate-400">/tema</span>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-bold text-slate-300 line-through decoration-rose-400/30 tracking-wider">Rp 30.000</span>
+                        <span className="px-2 py-0.5 bg-rose-500 text-[10px] font-black text-white rounded-md uppercase tracking-tighter">Hemat 33%</span>
+                      </div>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-xl font-display font-medium text-slate-400">Rp</span>
+                        <span className="text-7xl font-display font-bold text-slate-900 tracking-tighter">20.<span className="text-4xl">000</span></span>
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">/tema</span>
                       </div>
                     </div>
 
-                    <ul className="space-y-5 mb-12">
+                    <ul className="space-y-5 my-12">
                       {[
                         "Akses Penuh ke Koleksi Tema",
                         "Editor Intuitif",

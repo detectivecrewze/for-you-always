@@ -119,7 +119,7 @@ export default function Dashboard() {
                                         <td className="px-8 py-6 font-bold text-gray-900">{p.name}</td>
                                         <td className="px-8 py-6">
                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${p.theme_type === 'valentine' ? 'bg-rose-100 text-rose-600' : p.theme_type === 'birthday' ? 'bg-sky-100 text-sky-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                                                {p.theme_type}
+                                                {p.theme_type === 'valentine' ? 'everlasting' : p.theme_type}
                                             </span>
                                         </td>
                                         <td className="px-8 py-6">
