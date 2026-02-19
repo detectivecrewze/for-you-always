@@ -351,14 +351,6 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 // Main Home Component
 export default function Home() {
   const [activeMap, setActiveMap] = useState(0);
-  const [currentImage, setCurrentImage] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % 6);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
   const mapThemes = [
     {
@@ -446,6 +438,13 @@ export default function Home() {
             <div className="text-center lg:text-left order-2 lg:order-1">
 
               <AnimatedSection delay={100}>
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100 mb-6">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Voices Edition is Now Free</span>
+                </div>
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-slate-900 mb-8 leading-[1.1] tracking-tight">
                   Kirimkan Kenangan
                   <br />
@@ -513,39 +512,17 @@ export default function Home() {
                       <div className="w-2 h-2 rounded-full bg-slate-200/60" />
                     </div>
 
-                    {/* High-Res Image Slider Container - 6 Images Loop */}
+                    {/* High-Res Image Container - Permanent Voices Edition Showcase */}
                     <div className="relative rounded-[2.2rem] overflow-hidden bg-slate-50 aspect-[4/5] shadow-inner">
-                      {[
-                        "/valentine.png",
-                        "/valentine2.png",
-                        "/valentine3.png",
-                        "/ldr4.png",
-                        "/ldr5.png",
-                        "/ldr6.png"
-                      ].map((img, idx) => (
-                        <img
-                          key={idx}
-                          src={img}
-                          alt={`Showcase ${idx + 1}`}
-                          className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out 
-                            ${currentImage === idx ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
-                        />
-                      ))}
+                      <img
+                        src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
+                        alt="Voices Edition Preview"
+                        className="w-full h-full object-cover"
+                      />
 
                       {/* Glass Overlay for depth */}
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-black/5 pointer-events-none" />
                       <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2.2rem]" />
-                    </div>
-
-                    {/* Slider Progress Indicator */}
-                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
-                      {[0, 1, 2, 3, 4, 5].map((i) => (
-                        <div
-                          key={i}
-                          className={`h-0.5 rounded-full transition-all duration-[800ms] ${currentImage === i ? 'w-6 bg-rose-500' : 'w-1 bg-slate-400/30'
-                            }`}
-                        />
-                      ))}
                     </div>
                   </div>
                 </div>
@@ -648,6 +625,19 @@ export default function Home() {
           {/* Theme Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             <ThemeCard
+              id="voices-theme"
+              title="Voices."
+              subtitle="Always for you"
+              description="Platform kado digital mandiri untuk menggabungkan foto kenangan dan pesan suara pribadi dalam satu halaman hadiah yang emosional. Sekarang tersedia gratis selamanya."
+              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
+              color="amber"
+              href="https://voice.for-you-always.my.id"
+              available={true}
+              index={0}
+              isFree={true}
+            />
+
+            <ThemeCard
               title="Everlasting"
               subtitle="The Atlas of Us"
               description="Perjalanan romantis dengan fitur peta interaktif, infinity scroll storytelling, dan tipografi elegan yang mengabadikan kisah cinta Anda."
@@ -655,7 +645,7 @@ export default function Home() {
               color="rose"
               href="https://gift.for-you-always.my.id"
               available={true}
-              index={0}
+              index={1}
               password="123"
             />
 
@@ -667,7 +657,7 @@ export default function Home() {
               color="blue"
               href="https://birthday.for-you-always.my.id"
               available={true}
-              index={1}
+              index={2}
               password="123"
             />
 
@@ -679,21 +669,8 @@ export default function Home() {
               color="emerald"
               href="https://ldr.for-you-always.my.id"
               available={true}
-              index={2}
-              password="forever"
-            />
-
-            <ThemeCard
-              id="voices-theme"
-              title="Voices."
-              subtitle="Always for you"
-              description="Platform kado digital mandiri untuk menggabungkan foto kenangan dan pesan suara pribadi dalam satu halaman hadiah yang emosional. Sekarang tersedia gratis selamanya."
-              image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
-              color="amber"
-              href="https://voice.for-you-always.my.id"
-              available={true}
               index={3}
-              isFree={true}
+              password="forever"
             />
           </div>
         </div>
