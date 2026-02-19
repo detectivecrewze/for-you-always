@@ -55,6 +55,8 @@ function ThemeCard({
   index,
   password,
   images,
+  isFree,
+  id,
 }: {
   title: string;
   subtitle: string;
@@ -66,6 +68,8 @@ function ThemeCard({
   index: number;
   password?: string;
   images?: string[];
+  isFree?: boolean;
+  id?: string;
 }) {
   const [currentIdx, setCurrentIdx] = useState(0);
 
@@ -116,7 +120,7 @@ function ThemeCard({
 
   return (
     <AnimatedSection delay={index * 150}>
-      <div className="group h-full relative">
+      <div className="group h-full relative" id={id}>
         <div
           className={`relative h-full bg-white rounded-[2.5rem] overflow-hidden transition-all duration-700 
             border border-slate-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.05)] ring-1 ring-transparent
@@ -162,9 +166,15 @@ function ThemeCard({
             )}
 
             {/* Availability Badge */}
+            {/* Availability / Free Edition Badge */}
             <div className="absolute top-6 right-6">
-              <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] border backdrop-blur-md ${c.badge}`}>
-                {available ? (
+              <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] border backdrop-blur-md ${isFree ? 'bg-emerald-100/50 text-emerald-700 border-emerald-200' : c.badge}`}>
+                {isFree ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Free Edition
+                  </>
+                ) : available ? (
                   <>
                     <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                     Tersedia
@@ -192,6 +202,7 @@ function ThemeCard({
                 </div>
               </div>
             )}
+
           </div>
 
           {/* Content */}
@@ -219,7 +230,7 @@ function ThemeCard({
                 className={`inline-flex items-center justify-center w-full py-4 rounded-2xl text-[13px] font-bold text-white
                   transition-all duration-500 ${c.button} uppercase tracking-widest`}
               >
-                Coba Demo
+                {isFree ? "Mulai Gratis" : "Coba Demo"}
                 <svg className="w-4 h-4 ml-3 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -304,6 +315,36 @@ function FeatureCard({ icon, title, description, color }: { icon: React.ReactNod
         <div className="w-8 h-[2px] bg-slate-100 mt-8 group-hover:w-16 group-hover:bg-rose-200 transition-all duration-700" />
       </div>
     </div>
+  );
+}
+
+// FAQ Item Component - Refined & Minimalist
+function FAQItem({ question, answer, index }: { question: string; answer: string; index: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <AnimatedSection delay={index * 100} className="w-full">
+      <div className={`transition-all duration-500 rounded-3xl mb-2 ${isOpen ? 'bg-white shadow-[0_15px_30px_-10px_rgba(0,0,0,0.03)] border border-slate-100' : 'hover:bg-white/50'}`}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full px-8 py-6 flex items-center justify-between text-left gap-6"
+        >
+          <span className={`text-base md:text-[17px] font-bold tracking-tight transition-colors duration-500 ${isOpen ? 'text-rose-600' : 'text-slate-700'}`}>
+            {question}
+          </span>
+          <div className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-rose-500 text-white rotate-180' : 'bg-slate-100 text-slate-400'}`}>
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[300px] opacity-100 pb-8 px-8' : 'max-h-0 opacity-0'}`}>
+          <p className="text-slate-500 font-light leading-relaxed text-sm md:text-base border-t border-slate-50 pt-4">
+            {answer}
+          </p>
+        </div>
+      </div>
+    </AnimatedSection>
   );
 }
 
@@ -643,14 +684,16 @@ export default function Home() {
             />
 
             <ThemeCard
+              id="voices-theme"
               title="Voices."
               subtitle="Always for you"
-              description="Platform kado digital mandiri untuk menggabungkan foto kenangan dan pesan suara pribadi dalam satu halaman hadiah yang emosional."
+              description="Platform kado digital mandiri untuk menggabungkan foto kenangan dan pesan suara pribadi dalam satu halaman hadiah yang emosional. Sekarang tersedia gratis selamanya."
               image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
               color="amber"
               href="https://voice.for-you-always.my.id"
               available={true}
               index={3}
+              isFree={true}
             />
           </div>
         </div>
@@ -920,6 +963,17 @@ export default function Home() {
                       </div>
                     </div>
 
+                    <div className="mb-6 p-4 bg-amber-50 rounded-2xl border border-amber-100 flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </div>
+                      <p className="text-[11px] font-bold text-amber-900 leading-tight">
+                        Tema <a href="#voices-theme" className="text-amber-600 uppercase font-black underline decoration-amber-300 underline-offset-4 hover:bg-amber-100 transition-all rounded px-1">Voices</a> tersedia gratis secara eksklusif.
+                      </p>
+                    </div>
+
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-bold text-slate-300 line-through decoration-rose-400/30 tracking-wider">Rp 30.000</span>
@@ -967,6 +1021,62 @@ export default function Home() {
                 </div>
               </AnimatedSection>
             </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* --- FAQ SECTION - Centered Minimalist --- */}
+      <section id="faq" className="py-24 md:py-32 relative overflow-hidden">
+        <div className="max-w-3xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 bg-white rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] border border-slate-100 shadow-sm">
+              Q&A Section
+            </span>
+          </div>
+
+          <div className="space-y-1">
+            {[
+              {
+                q: "Apa itu For you, Always?",
+                a: "Platform kado digital premium untuk merangkai memori, foto, dan cerita ke dalam satu microsite interaktif yang indah."
+              },
+              {
+                q: "Bagaimana cara membagikan hadiahnya?",
+                a: "Setelah kustomisasi selesai, Anda akan mendapatkan URL unik yang dapat dikirimkan langsung kepada orang tersayang."
+              },
+              {
+                q: "Apakah hadiah ini bisa diakses selamanya?",
+                a: "Ya. Cukup satu kali investasi untuk akses selamanya tanpa biaya langganan bulanan."
+              },
+              {
+                q: "Apakah tema 'Voices.' benar-benar gratis?",
+                a: "Betul. Edisi Voices tersedia secara gratis bagi siapa saja tanpa memerlukan biaya Pass-Key tema premium."
+              },
+              {
+                q: "Apakah datanya aman?",
+                a: "Sangat aman. Setiap proyek dilengkapi fitur Password Gate untuk memastikan memori Anda tetap bersifat pribadi."
+              },
+              {
+                q: "Proses pemesanannya seperti apa?",
+                a: "Pilih tema, aktivasi via Admin WhatsApp, dan mulai kreasikan cerita Anda melalui editor intuitif kami."
+              }
+            ].map((item, idx) => (
+              <FAQItem key={idx} question={item.q} answer={item.a} index={idx} />
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <p className="text-xs text-slate-400 font-medium mb-6">Masih punya pertanyaan lain?</p>
+            <a
+              href="https://wa.me/6281381381543981"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-100 rounded-2xl text-xs font-bold text-slate-600 hover:text-rose-600 hover:border-rose-100 transition-all shadow-sm"
+            >
+              Tanya Admin via WhatsApp
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
@@ -1044,7 +1154,7 @@ export default function Home() {
           <nav className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-8">
             <Link href="#tema" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Tema</Link>
             <Link href="#cara-kerja" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Cara Kerja</Link>
-            <Link href="#fitur" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Keunggulan</Link>
+            <Link href="#faq" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Q&A</Link>
             <a href="https://wa.me/6281381381543981?text=Halo%20Digital%20Atelier!%20Saya%20butuh%20bantuan%20terkait%20layanan%20hadiah%20digital." target="_blank" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">WA Center</a>
           </nav>
 
