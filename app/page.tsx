@@ -624,7 +624,7 @@ export default function Home() {
               description="Platform kado digital mandiri untuk menggabungkan foto kenangan dan pesan suara pribadi dalam satu halaman hadiah yang emosional dan memorable."
               image="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
               color="amber"
-              href="https://voice.for-you-always.my.id/gift/index.html?to=for-nadin"
+              href="https://voice.for-you-always.my.id/gift-blanc/index.html?to=for-preview"
               available={true}
               index={0}
               password="12345"
