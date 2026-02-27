@@ -513,6 +513,16 @@ export default function Home() {
                         className="w-full h-full object-cover"
                       />
 
+                      {/* Best Seller Badge */}
+                      <div className="absolute bottom-4 left-4">
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-white/20 shadow-xl shadow-black/5">
+                          <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                          </svg>
+                          <span className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">Best Seller</span>
+                        </div>
+                      </div>
+
                       {/* Glass Overlay for depth */}
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-black/5 pointer-events-none" />
                       <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2.2rem]" />
@@ -934,7 +944,7 @@ export default function Home() {
 
                       <div className="flex items-baseline gap-1.5 mb-8">
                         <span className="text-lg font-display font-medium text-slate-400">Rp</span>
-                        <span className="text-5xl font-display font-bold text-slate-900 tracking-tighter">7.<span className="text-2xl">000</span></span>
+                        <span className="text-5xl font-display font-bold text-slate-900 tracking-tighter">10.<span className="text-2xl">000</span></span>
                       </div>
 
                       <ul className="space-y-3 mb-8 flex-grow">
@@ -957,7 +967,7 @@ export default function Home() {
                       </ul>
 
                       <a
-                        href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20%E2%9C%A8%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%207.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                        href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20%E2%9C%A8%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-full py-4 bg-amber-500 text-white font-bold rounded-2xl
@@ -1065,7 +1075,7 @@ export default function Home() {
               },
               {
                 q: "Berapa harga tema 'Voices.'?",
-                a: "Tema Voices tersedia dengan harga spesial Rp 7.000. Harga terjangkau untuk pengalaman digital yang bermakna dan memorable."
+                a: "Tema Voices tersedia dengan harga spesial Rp 10.000. Harga terjangkau untuk pengalaman digital yang bermakna dan memorable."
               },
               {
                 q: "Apakah datanya aman?",
