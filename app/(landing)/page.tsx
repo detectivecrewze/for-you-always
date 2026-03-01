@@ -526,6 +526,29 @@ export default function VoicesLandingPage() {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Elegant Try Demo Button - Placed Below, Wider */}
+                            <div style={{ marginTop: 32, display: 'flex', justifyContent: 'center', width: '100%', padding: '0 16px' }}>
+                                <a
+                                    href="https://voice.for-you-always.my.id/gift/for-preview"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-primary"
+                                    style={{
+                                        width: '100%',
+                                        maxWidth: 340,
+                                        padding: '16px 32px',
+                                        borderRadius: 999,
+                                        boxShadow: '0 15px 30px -10px rgba(59, 47, 37, 0.3)',
+                                        fontSize: '0.8rem',
+                                    }}
+                                >
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                    <span>Coba Demo</span>
+                                </a>
+                            </div>
                         </div>
                     </AnimatedSection>
                 </div>
