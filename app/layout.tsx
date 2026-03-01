@@ -17,8 +17,30 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Voices. — For you, Always.",
-  description: "Simpan suara mereka. Selamanya. Sebuah mesin waktu digital yang mengabadikan foto kenangan dan getaran suara orang terkasih.",
+  title: "Voices. Gift — Digital Memoir",
+  description: "Rangkai memori. Hadirkan kembali. Sebuah mesin waktu digital untuk merangkai foto kenangan dan pesan suara menjadi kado yang istimewa.",
+  openGraph: {
+    title: "Voices. Gift — Digital Memoir",
+    description: "Rangkai memori. Hadirkan kembali. Sebuah mesin waktu digital untuk merangkai foto kenangan dan pesan suara menjadi kado yang istimewa.",
+    url: "https://for-you-always.my.id",
+    siteName: "For you, Always.",
+    images: [
+      {
+        url: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
+        width: 800,
+        height: 1000,
+        alt: "Voices. Gift Preview",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Voices. Gift — Digital Memoir",
+    description: "Rangkai memori. Hadirkan kembali. Sebuah mesin waktu digital untuk merangkai foto kenangan dan pesan suara menjadi kado yang istimewa.",
+    images: ["https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"],
+  },
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",

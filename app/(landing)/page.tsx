@@ -373,9 +373,9 @@ export default function VoicesLandingPage() {
 
                         <AnimatedSection delay={100}>
                             <h1 className="heading-xl" style={{ marginBottom: 28 }}>
-                                Simpan Suara Mereka.
+                                Rangkai Memori.
                                 <br />
-                                <span className="italic-accent">Selamanya.</span>
+                                <span className="italic-accent">Abadikan Selamanya.</span>
                             </h1>
                         </AnimatedSection>
 
@@ -388,9 +388,17 @@ export default function VoicesLandingPage() {
                                     margin: "0 auto 40px",
                                 }}
                             >
-                                Sebuah mesin waktu digital. Mengabadikan foto kenangan dan
-                                getaran suara orang terkasih ke dalam kanvas yang{" "}
-                                <span className="italic-accent">tak lekang oleh zaman.</span>
+                                Sebuah mesin waktu digital. Rangkai foto-foto penuh memori dan
+                                rekam pesan suara Anda sendiri menjadi kado personal yang{" "}
+                                <strong
+                                    className="italic-accent"
+                                    style={{
+                                        fontWeight: 600,
+                                        color: "var(--accent)"
+                                    }}
+                                >
+                                    sangat istimewa.
+                                </strong>
                             </p>
                         </AnimatedSection>
 
@@ -495,38 +503,7 @@ export default function VoicesLandingPage() {
                                             }}
                                         />
 
-                                        {/* Best Seller Badge */}
-                                        <div style={{ position: "absolute", bottom: 16, left: 16 }}>
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: 6,
-                                                    padding: "6px 12px",
-                                                    background: "rgba(255, 255, 255, 0.9)",
-                                                    backdropFilter: "blur(4px)",
-                                                    borderRadius: 999,
-                                                    border: "1px solid rgba(255,255,255,0.2)",
-                                                    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-                                                }}
-                                            >
-                                                <svg width="14" height="14" fill="var(--accent)" viewBox="0 0 20 20">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                </svg>
-                                                <span
-                                                    style={{
-                                                        fontSize: 10,
-                                                        fontWeight: 700,
-                                                        color: "var(--text-primary)",
-                                                        textTransform: "uppercase",
-                                                        letterSpacing: "0.05em",
-                                                        marginTop: 1
-                                                    }}
-                                                >
-                                                    Best Seller
-                                                </span>
-                                            </div>
-                                        </div>
+
 
                                         {/* Glass Overlay for depth */}
                                         <div
@@ -552,15 +529,16 @@ export default function VoicesLandingPage() {
                         </div>
                     </AnimatedSection>
                 </div>
-            </section>
+            </section >
 
             {/* ════════════════════════════════════
           SHOWCASE — Art of Sound
          ════════════════════════════════════ */}
-            <section
+            < section
                 id="showcase"
                 className="section-spacing"
-                style={{ position: "relative", background: "var(--bg-warm)" }}
+                style={{ position: "relative", background: "var(--bg-warm)" }
+                }
             >
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
                     {/* Section Header */}
@@ -655,28 +633,27 @@ export default function VoicesLandingPage() {
                                     margin: "0 auto",
                                 }}
                             >
-                                &ldquo;Foto bisa pudar. Tulisan bisa hilang. Tapi suara orang
-                                yang kamu cintai akan selalu membawa{" "}
+                                &ldquo;Foto bercerita lewat mata, suara menyentuh langsung ke hati. Gabungkan keduanya menjadi kado istimewa yang {" "}
                                 <span style={{ color: "var(--accent)", fontWeight: 600 }}>
-                                    kehangatan yang sama.
+                                    takkan lekang oleh waktu.
                                 </span>
                                 &rdquo;
                             </p>
                         </div>
                     </AnimatedSection>
                 </div>
-            </section>
+            </section >
 
             {/* ════════════════════════════════════
           CARA KERJA
          ════════════════════════════════════ */}
-            <section
+            < section
                 id="cara-kerja"
                 className="section-spacing"
                 style={{ position: "relative", overflow: "hidden" }}
             >
                 {/* Ambient decorations */}
-                <div
+                < div
                     className="ambient-blob"
                     style={{
                         top: 0,
@@ -688,7 +665,7 @@ export default function VoicesLandingPage() {
                     }}
                 />
 
-                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+                < div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
                     <AnimatedSection>
                         <div
                             style={{
@@ -767,13 +744,13 @@ export default function VoicesLandingPage() {
                             />
                         </AnimatedSection>
                     </div>
-                </div>
-            </section>
+                </div >
+            </section >
 
             {/* ════════════════════════════════════
           FINAL CTA — Dark Section
          ════════════════════════════════════ */}
-            <section
+            < section
                 id="pesan"
                 className="dark-section section-spacing"
             >
@@ -989,7 +966,7 @@ export default function VoicesLandingPage() {
                                     boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)",
                                 }}
                             >
-                                Pesan via WhatsApp
+                                Pesan Sekarang
                                 <svg
                                     width="16"
                                     height="16"
@@ -1059,12 +1036,12 @@ export default function VoicesLandingPage() {
                         </div>
                     </AnimatedSection>
                 </div>
-            </section>
+            </section >
 
             {/* ════════════════════════════════════
           FOOTER
          ════════════════════════════════════ */}
-            <footer
+            < footer
                 style={{
                     padding: "48px 24px",
                     background: "var(--bg)",
