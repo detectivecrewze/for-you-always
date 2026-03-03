@@ -415,7 +415,7 @@ function HeroCarousel() {
 
 export default function VoicesLandingPage() {
     return (
-        <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden" }}>
+        <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden", width: "100%" }}>
             {/* ── Background Ambient Blobs ── */}
             <div
                 style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: -1 }}
@@ -471,7 +471,7 @@ export default function VoicesLandingPage() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        padding: "16px 28px",
+                        padding: "16px 24px",
                         borderRadius: "var(--radius-lg)",
                         background: "rgba(245, 239, 230, 0.75)",
                         backdropFilter: "blur(24px)",
@@ -559,7 +559,15 @@ export default function VoicesLandingPage() {
                     }}
                 >
                     {/* Text Content */}
-                    <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto" }}>
+                    <div style={{
+                        textAlign: "center",
+                        maxWidth: 700,
+                        margin: "0 auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        width: "100%"
+                    }}>
                         <AnimatedSection>
                             <div
                                 className="label-text"
@@ -799,10 +807,10 @@ export default function VoicesLandingPage() {
                     style={{
                         top: 0,
                         right: 0,
-                        width: 500,
-                        height: 500,
+                        width: "min(500px, 80vw)",
+                        height: "min(500px, 80vw)",
                         background: "rgba(166,124,82,0.05)",
-                        transform: "translate(30%, -30%)",
+                        transform: "translate(10%, -30%)",
                     }}
                 />
 
