@@ -415,7 +415,7 @@ function HeroCarousel() {
 
 export default function VoicesLandingPage() {
     return (
-        <div style={{ minHeight: "100vh", position: "relative" }}>
+        <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden" }}>
             {/* ── Background Ambient Blobs ── */}
             <div
                 style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: -1 }}
