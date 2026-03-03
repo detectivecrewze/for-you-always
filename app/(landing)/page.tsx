@@ -194,9 +194,225 @@ function FeatureCard({
     );
 }
 
-/* ═════════════════════════════════════════════
-   MAIN PAGE COMPONENT
-   ═════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────
+   HeroCarousel — Template Switcher
+   ───────────────────────────────────────────── */
+const HERO_TEMPLATES = [
+    {
+        label: "Template: Voices Box",
+        isVideo: false,
+        src: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
+        demoHref: "https://voice.for-you-always.my.id/gift/for-preview",
+        demoLabel: "Coba Demo — Voices Box",
+    },
+    {
+        label: "Template: Camera",
+        isVideo: true,
+        src: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/Screen%20Recording%202026-03-04%20040235.mp4",
+        demoHref: "https://voice.for-you-always.my.id/camera/midnight/for-preview",
+        demoLabel: "Coba Demo — Camera",
+    },
+];
+
+function HeroCarousel() {
+    const [active, setActive] = useState(0);
+    const [fading, setFading] = useState(false);
+
+    const goTo = (idx: number) => {
+        if (idx === active || fading) return;
+        setFading(true);
+        setTimeout(() => {
+            setActive(idx);
+            setFading(false);
+        }, 280);
+    };
+
+    const prev = () => goTo((active - 1 + HERO_TEMPLATES.length) % HERO_TEMPLATES.length);
+    const next = () => goTo((active + 1) % HERO_TEMPLATES.length);
+
+    const t = HERO_TEMPLATES[active];
+
+    return (
+        <AnimatedSection delay={400}>
+            <div style={{ position: "relative", maxWidth: 400, margin: "0 auto" }} className="animate-float-gentle">
+
+                {/* Template Label */}
+                <div style={{ textAlign: "center", marginBottom: 16 }}>
+                    <span
+                        className="label-text"
+                        style={{
+                            background: "var(--bg-card)",
+                            padding: "6px 16px",
+                            borderRadius: 999,
+                            border: "1px solid var(--border)",
+                            display: "inline-block",
+                            transition: "opacity 0.28s ease",
+                            opacity: fading ? 0 : 1,
+                        }}
+                    >
+                        {t.label}
+                    </span>
+                </div>
+
+                {/* Mockup Frame */}
+                <div className="relative group" style={{ perspective: 1000 }}>
+                    <div
+                        style={{
+                            position: "relative",
+                            background: "rgba(255, 252, 247, 0.8)",
+                            backdropFilter: "blur(8px)",
+                            WebkitBackdropFilter: "blur(8px)",
+                            borderRadius: "3rem",
+                            padding: 12,
+                            boxShadow: "0 40px 80px -20px rgba(59, 47, 37, 0.15)",
+                            border: "1px solid rgba(255, 255, 255, 0.6)",
+                            transition: "all 1s ease",
+                        }}
+                    >
+                        {/* Decorative dots */}
+                        <div style={{ position: "absolute", top: 32, left: 40, display: "flex", gap: 8, zIndex: 20 }}>
+                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
+                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
+                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
+                        </div>
+
+                        {/* Media */}
+                        <div
+                            style={{
+                                position: "relative",
+                                borderRadius: "2.2rem",
+                                overflow: "hidden",
+                                background: "var(--bg-card)",
+                                aspectRatio: "4/5",
+                                boxShadow: "inset 0 2px 4px rgba(0,0,0,0.05)",
+                                transition: "opacity 0.28s ease",
+                                opacity: fading ? 0 : 1,
+                            }}
+                        >
+                            {t.isVideo ? (
+                                <video
+                                    key={t.src}
+                                    src={t.src}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                />
+                            ) : (
+                                <img
+                                    key={t.src}
+                                    src={t.src}
+                                    alt={t.label}
+                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                />
+                            )}
+                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top right, rgba(255,255,255,0.1), transparent, rgba(0,0,0,0.05))", pointerEvents: "none" }} />
+                            <div style={{ position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.05)", borderRadius: "2.2rem", pointerEvents: "none" }} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Controls Row: Prev | Demo | Next */}
+                <div style={{ marginTop: 28, display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+                    {/* Prev Arrow */}
+                    <button
+                        onClick={prev}
+                        aria-label="Previous Template"
+                        style={{
+                            flexShrink: 0,
+                            width: 44,
+                            height: 44,
+                            borderRadius: "50%",
+                            border: "1px solid var(--border)",
+                            background: "var(--bg-card)",
+                            color: "var(--text-primary)",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s ease",
+                            boxShadow: "0 2px 8px rgba(59,47,37,0.08)",
+                        }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
+                    >
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+
+                    {/* Demo Button */}
+                    <a
+                        href={t.demoHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-primary"
+                        style={{
+                            flex: 1,
+                            maxWidth: 260,
+                            padding: "16px 24px",
+                            borderRadius: 999,
+                            boxShadow: "0 15px 30px -10px rgba(59, 47, 37, 0.3)",
+                            fontSize: "0.8rem",
+                            transition: "opacity 0.28s ease",
+                            opacity: fading ? 0.5 : 1,
+                        }}
+                    >
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                        <span style={{ whiteSpace: "nowrap" }}>{t.demoLabel}</span>
+                    </a>
+
+                    {/* Next Arrow */}
+                    <button
+                        onClick={next}
+                        aria-label="Next Template"
+                        style={{
+                            flexShrink: 0,
+                            width: 44,
+                            height: 44,
+                            borderRadius: "50%",
+                            border: "1px solid var(--border)",
+                            background: "var(--bg-card)",
+                            color: "var(--text-primary)",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s ease",
+                            boxShadow: "0 2px 8px rgba(59,47,37,0.08)",
+                        }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
+                    >
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
+
+                {/* Dot Indicators */}
+                <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 8 }}>
+                    {HERO_TEMPLATES.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => goTo(i)}
+                            aria-label={`Go to template ${i + 1}`}
+                            style={{
+                                width: i === active ? 24 : 8,
+                                height: 8,
+                                borderRadius: 999,
+                                border: "none",
+                                background: i === active ? "var(--accent)" : "var(--border)",
+                                cursor: "pointer",
+                                padding: 0,
+                                transition: "all 0.3s ease",
+                            }}
+                        />
+                    ))}
+                </div>
+            </div>
+        </AnimatedSection>
+    );
+}
+
+
 export default function VoicesLandingPage() {
     return (
         <div style={{ minHeight: "100vh", position: "relative" }}>
@@ -450,141 +666,8 @@ export default function VoicesLandingPage() {
                         </AnimatedSection>
                     </div>
 
-                    {/* Hero Mockup — Original Voices Edition Showcase */}
-                    <AnimatedSection delay={400}>
-                        <div
-                            style={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                justifyContent: "center",
-                                gap: 40,
-                                width: "100%",
-                            }}
-                        >
-                            {/* TEMPLATE 1: VOICES BOX */}
-                            <div
-                                style={{
-                                    position: "relative",
-                                    width: "100%",
-                                    maxWidth: 360,
-                                }}
-                                className="animate-float-gentle"
-                            >
-                                <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                                    <span className="label-text" style={{ background: 'var(--bg-card)', padding: '6px 16px', borderRadius: 999, border: '1px solid var(--border)', display: 'inline-block' }}>
-                                        Template 1: Voices Box
-                                    </span>
-                                </div>
-                                <div className="relative group" style={{ perspective: 1000 }}>
-                                    <div
-                                        style={{
-                                            position: "relative",
-                                            background: "rgba(255, 252, 247, 0.8)",
-                                            backdropFilter: "blur(8px)",
-                                            WebkitBackdropFilter: "blur(8px)",
-                                            borderRadius: "3rem",
-                                            padding: 12,
-                                            boxShadow: "0 40px 80px -20px rgba(59, 47, 37, 0.15)",
-                                            border: "1px solid rgba(255, 255, 255, 0.6)",
-                                            transition: "all 1s ease",
-                                        }}
-                                    >
-                                        <div style={{ position: "absolute", top: 32, left: 40, display: "flex", gap: 8, zIndex: 20 }}>
-                                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                                        </div>
-
-                                        <div style={{ position: "relative", borderRadius: "2.2rem", overflow: "hidden", background: "var(--bg-card)", aspectRatio: "4/5", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.05)" }}>
-                                            <img
-                                                src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
-                                                alt="Voices Box Preview"
-                                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                            />
-                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top right, rgba(255,255,255,0.1), transparent, rgba(0,0,0,0.05))", pointerEvents: "none" }} />
-                                            <div style={{ position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.05)", borderRadius: "2.2rem", pointerEvents: "none" }} />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center', width: '100%' }}>
-                                    <a
-                                        href="https://voice.for-you-always.my.id/gift/for-preview"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn-primary"
-                                        style={{ width: '100%', maxWidth: 320, padding: '16px 32px', borderRadius: 999, boxShadow: '0 15px 30px -10px rgba(59, 47, 37, 0.3)', fontSize: '0.8rem' }}
-                                    >
-                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                                        <span>Coba Demo Voices</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* TEMPLATE 2: CAMERA */}
-                            <div
-                                style={{
-                                    position: "relative",
-                                    width: "100%",
-                                    maxWidth: 360,
-                                    animationDelay: "1s",
-                                }}
-                                className="animate-float-gentle"
-                            >
-                                <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                                    <span className="label-text" style={{ background: 'var(--bg-card)', padding: '6px 16px', borderRadius: 999, border: '1px solid var(--border)', display: 'inline-block' }}>
-                                        Template 2: Camera
-                                    </span>
-                                </div>
-                                <div className="relative group" style={{ perspective: 1000 }}>
-                                    <div
-                                        style={{
-                                            position: "relative",
-                                            background: "rgba(255, 252, 247, 0.8)",
-                                            backdropFilter: "blur(8px)",
-                                            WebkitBackdropFilter: "blur(8px)",
-                                            borderRadius: "3rem",
-                                            padding: 12,
-                                            boxShadow: "0 40px 80px -20px rgba(59, 47, 37, 0.15)",
-                                            border: "1px solid rgba(255, 255, 255, 0.6)",
-                                            transition: "all 1s ease",
-                                        }}
-                                    >
-                                        <div style={{ position: "absolute", top: 32, left: 40, display: "flex", gap: 8, zIndex: 20 }}>
-                                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                                        </div>
-
-                                        <div style={{ position: "relative", borderRadius: "2.2rem", overflow: "hidden", background: "var(--bg-card)", aspectRatio: "4/5", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.05)" }}>
-                                            {/* GANTI LINK DI BAWAH INI DENGAN MP4 TEMPLATE CAMERA */}
-                                            <video
-                                                src="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/Screen%20Recording%202026-03-04%20040235.mp4"
-                                                autoPlay
-                                                loop
-                                                muted
-                                                playsInline
-                                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                            />
-                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top right, rgba(255,255,255,0.1), transparent, rgba(0,0,0,0.05))", pointerEvents: "none" }} />
-                                            <div style={{ position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.05)", borderRadius: "2.2rem", pointerEvents: "none" }} />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center', width: '100%' }}>
-                                    <a
-                                        href="https://voice.for-you-always.my.id/camera/midnight/for-preview"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn-primary"
-                                        style={{ width: '100%', maxWidth: 320, padding: '16px 32px', borderRadius: 999, boxShadow: '0 15px 30px -10px rgba(59, 47, 37, 0.3)', fontSize: '0.8rem', background: 'var(--bg-deep)' }}
-                                    >
-                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                                        <span>Coba Demo Camera</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </AnimatedSection>
+                    {/* Hero Mockup — Template Carousel */}
+                    <HeroCarousel />
 
                 </div>
             </section >
