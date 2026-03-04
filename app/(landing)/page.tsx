@@ -207,8 +207,8 @@ const HERO_TEMPLATES = [
     },
     {
         label: "Template: Camera",
-        isVideo: true,
-        src: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/Screen%20Recording%202026-03-04%20040235.mp4",
+        isVideo: false,
+        src: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/gif.gif",
         demoHref: "https://voice.for-you-always.my.id/camera/midnight/for-iklan2",
         demoLabel: "Coba Demo — Camera",
     },
