@@ -143,6 +143,7 @@ body::after {
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    max-width: 100%;
 }
 
 .btn-primary::before {
@@ -187,6 +188,7 @@ body::after {
     cursor: pointer;
     transition: all 0.4s ease;
     text-decoration: none;
+    max-width: 100%;
 }
 
 .btn-secondary:hover {
@@ -228,6 +230,18 @@ body::after {
 @media (max-width: 768px) {
     .section-spacing {
         padding: 80px 0;
+    }
+
+    .btn-primary {
+        padding: 16px 24px;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    .btn-secondary {
+        padding: 16px 24px;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
     }
 }
 

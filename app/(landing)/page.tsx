@@ -349,16 +349,14 @@ function HeroCarousel() {
                         style={{
                             flex: 1,
                             maxWidth: 260,
-                            padding: "16px 24px",
                             borderRadius: 999,
                             boxShadow: "0 15px 30px -10px rgba(59, 47, 37, 0.3)",
-                            fontSize: "0.8rem",
                             transition: "opacity 0.28s ease",
                             opacity: fading ? 0.5 : 1,
                         }}
                     >
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                        <span style={{ whiteSpace: "nowrap" }}>{t.demoLabel}</span>
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" style={{ flexShrink: 0 }}><path d="M8 5v14l11-7z" /></svg>
+                        <span style={{ textAlign: "center", lineHeight: 1.2 }}>{t.demoLabel}</span>
                     </a>
 
                     {/* Next Arrow */}
@@ -529,7 +527,7 @@ export default function VoicesLandingPage() {
                     <a
                         href="#pesan"
                         className="btn-primary"
-                        style={{ padding: "12px 28px", fontSize: "0.7rem" }}
+                        style={{ padding: "12px 24px", fontSize: "0.75rem" }}
                     >
                         <span>Pesan Sekarang</span>
                     </a>
@@ -549,6 +547,7 @@ export default function VoicesLandingPage() {
             >
                 <div
                     style={{
+                        width: "100%",
                         maxWidth: 1100,
                         margin: "0 auto",
                         padding: "0 24px",
