@@ -234,7 +234,7 @@ function HeroCarousel() {
 
     return (
         <AnimatedSection delay={400}>
-            <div style={{ position: "relative", maxWidth: 400, margin: "0 auto" }} className="animate-float-gentle">
+            <div style={{ position: "relative", maxWidth: 450, margin: "0 auto" }} className="animate-float-gentle">
 
                 {/* Template Label */}
                 <div style={{ textAlign: "center", marginBottom: 16 }}>
@@ -259,21 +259,21 @@ function HeroCarousel() {
                     <div
                         style={{
                             position: "relative",
-                            background: "rgba(255, 252, 247, 0.8)",
+                            background: "var(--bg-deep)", /* Changed to dark chocolate */
                             backdropFilter: "blur(8px)",
                             WebkitBackdropFilter: "blur(8px)",
                             borderRadius: "3rem",
                             padding: 12,
-                            boxShadow: "0 40px 80px -20px rgba(59, 47, 37, 0.15)",
-                            border: "1px solid rgba(255, 255, 255, 0.6)",
+                            boxShadow: "0 40px 80px -20px rgba(59, 47, 37, 0.4), 0 0 0 1px rgba(166, 124, 82, 0.15)", /* Dramatis warm shadow */
+                            border: "1px solid rgba(166, 124, 82, 0.3)", /* Subtle warm gold border */
                             transition: "all 1s ease",
                         }}
                     >
                         {/* Decorative dots */}
                         <div style={{ position: "absolute", top: 32, left: 40, display: "flex", gap: 8, zIndex: 20 }}>
-                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
-                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(166,124,82,0.4)" }} />
+                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(201, 168, 124, 0.6)" }} />
+                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(201, 168, 124, 0.6)" }} />
+                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(201, 168, 124, 0.6)" }} />
                         </div>
 
                         {/* Media */}
@@ -307,8 +307,8 @@ function HeroCarousel() {
                                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                                 />
                             )}
-                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top right, rgba(255,255,255,0.1), transparent, rgba(0,0,0,0.05))", pointerEvents: "none" }} />
-                            <div style={{ position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.05)", borderRadius: "2.2rem", pointerEvents: "none" }} />
+                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top right, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.05))", pointerEvents: "none" }} />
+                            <div style={{ position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)", borderRadius: "2.2rem", pointerEvents: "none" }} />
                         </div>
                     </div>
                 </div>
@@ -339,25 +339,6 @@ function HeroCarousel() {
                     >
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                     </button>
-
-                    {/* Demo Button */}
-                    <a
-                        href={t.demoHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-primary"
-                        style={{
-                            flex: 1,
-                            maxWidth: 260,
-                            borderRadius: 999,
-                            boxShadow: "0 15px 30px -10px rgba(59, 47, 37, 0.3)",
-                            transition: "opacity 0.28s ease",
-                            opacity: fading ? 0.5 : 1,
-                        }}
-                    >
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" style={{ flexShrink: 0 }}><path d="M8 5v14l11-7z" /></svg>
-                        <span style={{ textAlign: "center", lineHeight: 1.2 }}>{t.demoLabel}</span>
-                    </a>
 
                     {/* Next Arrow */}
                     <button
@@ -406,7 +387,7 @@ function HeroCarousel() {
                     ))}
                 </div>
             </div>
-        </AnimatedSection>
+        </AnimatedSection >
     );
 }
 
@@ -733,7 +714,7 @@ export default function VoicesLandingPage() {
                                 </svg>
                             }
                             title="The Glass Viewport"
-                            description="Bingkai kaca interaktif tempat kepingan foto kenangan berputar secara memukau. Rasakan sensasi nostalgia layaknya mengintip ke dalam mesin waktu memori Anda."
+                            description="Bingkai interaktif yang memutar foto kenangan satu per satu. Lengkap dengan teks cerita di setiap momen."
                         />
                         <FeatureCard
                             index={1}
@@ -743,7 +724,8 @@ export default function VoicesLandingPage() {
                                 </svg>
                             }
                             title="The Golden Waveform"
-                            description="Gelombang suara emas yang menari seirama dengan setiap kata dan tawa dari pesan suara Anda, membuat momen terasa lebih hidup dan hangat."
+                            description="
+Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap kata terasa lebih hidup."
                         />
                         <FeatureCard
                             index={2}
@@ -753,8 +735,8 @@ export default function VoicesLandingPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                             }
-                            title="The Brass Crank"
-                            description="Sentuhan tuas kuningan klasik untuk memutar memori secara manual. Sebuah pengalaman interaktif unik yang membawa sensasi nostalgia pada kado digital Anda."
+                            title="The Interactive Touch"
+                            description="Setiap tema punya cara uniknya sendiri — putar tuas, atau balik foto dan temukan pesan tersembunyi di baliknya."
                         />
                     </div>
 
