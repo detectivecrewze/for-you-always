@@ -368,12 +368,28 @@ function ProductCard({
 }
 
 
+
+/* ─────────────────────────────────────────────
+   useIsMobile Hook
+   ───────────────────────────────────────────── */
+function useIsMobile() {
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
+    return isMobile;
+}
+
 export default function VoicesLandingPage() {
+    const isMobile = useIsMobile();
     return (
-        <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden", width: "100%" }}>
+        <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
             {/* ── Background Ambient Blobs ── */}
             <div
-                style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: -1 }}
+                style={{ position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: -1 }}
             >
                 <div
                     className="ambient-blob"
@@ -415,8 +431,8 @@ export default function VoicesLandingPage() {
             <section
                 style={{
                     position: "relative",
-                    paddingTop: 160,
-                    paddingBottom: 100,
+                    paddingTop: isMobile ? 96 : 160,
+                    paddingBottom: isMobile ? 56 : 100,
                     overflow: "hidden",
                 }}
             >
@@ -435,12 +451,13 @@ export default function VoicesLandingPage() {
                     {/* Text Content */}
                     <div style={{
                         textAlign: "center",
-                        maxWidth: 700,
+                        maxWidth: "100%",
                         margin: "0 auto",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        width: "100%"
+                        width: "100%",
+                        overflow: "hidden"
                     }}>
                         <AnimatedSection>
                             <div
@@ -470,7 +487,11 @@ export default function VoicesLandingPage() {
                         </AnimatedSection>
 
                         <AnimatedSection delay={100}>
-                            <h1 className="heading-xl" style={{ marginBottom: 28 }}>
+                            <h1 className="heading-xl" style={{
+                                marginBottom: 28,
+                                maxWidth: "100%",
+                                wordWrap: "break-word"
+                            }}>
                                 Rangkai Memori.
                                 <br />
                                 <span className="italic-accent">Abadikan Selamanya.</span>
@@ -482,8 +503,11 @@ export default function VoicesLandingPage() {
                                 className="body-text"
                                 style={{
                                     fontSize: "1.1rem",
-                                    maxWidth: 540,
+                                    maxWidth: "100%",
+                                    width: "100%",
                                     margin: "0 auto 40px",
+                                    padding: "0 10px",
+                                    boxSizing: "border-box"
                                 }}
                             >
                                 Sebuah mesin waktu digital. Rangkai foto-foto penuh memori dan
@@ -504,12 +528,14 @@ export default function VoicesLandingPage() {
                             <div
                                 style={{
                                     display: "flex",
-                                    flexWrap: "wrap",
+                                    flexDirection: "column",
                                     gap: 16,
-                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "100%",
+                                    maxWidth: "100%",
                                 }}
                             >
-                                <a href="#pesan" className="btn-primary">
+                                <a href="#pesan" className="btn-primary" style={{ width: "100%", maxWidth: "300px" }}>
                                     <span>Mulai Merangkai Kenangan</span>
                                     <svg
                                         width="18"
@@ -527,7 +553,7 @@ export default function VoicesLandingPage() {
                                         />
                                     </svg>
                                 </a>
-                                <a href="#showcase" className="btn-secondary">
+                                <a href="#showcase" className="btn-secondary" style={{ width: "100%", maxWidth: "300px" }}>
                                     Lihat Lebih Dekat
                                     <svg
                                         width="16"
@@ -552,7 +578,7 @@ export default function VoicesLandingPage() {
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(250px, 100%), 1fr))",
                             gap: 24,
                             maxWidth: 800,
                             margin: "0 auto",
@@ -588,13 +614,12 @@ export default function VoicesLandingPage() {
             {/* ════════════════════════════════════
           SHOWCASE — Art of Sound
          ════════════════════════════════════ */}
-            < section
+            <section
                 id="showcase"
                 className="section-spacing"
-                style={{ position: "relative", background: "var(--bg-warm)" }
-                }
+                style={{ position: "relative", background: "var(--bg-warm)", overflow: "hidden" }}
             >
-                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 24px)", boxSizing: "border-box", width: "100%" }}>
                     {/* Section Header */}
                     <AnimatedSection>
                         <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -719,7 +744,7 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                     }}
                 />
 
-                < div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+                < div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 24px)", boxSizing: "border-box", width: "100%" }}>
                     <AnimatedSection>
                         <div
                             style={{
