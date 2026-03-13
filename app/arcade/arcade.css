@@ -1,0 +1,685 @@
+/* ============================================================
+   Arcade Edition — "Storybook Atelier"
+   Palette: Warm Parchment / Dusty Rose / Sage / Aged Gold
+   Aesthetic: Premium indie game artbook, feminine, romantic
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+    /* ── Backgrounds (LIGHT, warm parchment) ── */
+    --arc-bg-deep: #f7f0e6;
+    --arc-bg-warm: #f0e8d8;
+    --arc-bg-mid: #e8dfc8;
+    --arc-surface: rgba(255, 252, 245, 0.85);
+    --arc-surface-raised: rgba(255, 255, 250, 0.95);
+
+    /* ── Parchment tones ── */
+    --arc-parchment: #fdf6e8;
+    --arc-parchment-dark: #f0e4c8;
+    --arc-cream: #fefcf5;
+
+    /* ── Accent colors ── */
+    --arc-accent: #a67c52;
+    --arc-accent-light: #c49a6c;
+    --arc-accent-warm: #8b6340;
+    --arc-accent-glow: rgba(166, 124, 82, 0.12);
+    --arc-rose: #c4848a;
+    --arc-rose-light: #d4a0a5;
+    --arc-rose-glow: rgba(196, 132, 138, 0.1);
+    --arc-gold: #c9a84c;
+    --arc-gold-light: #d4b96a;
+    --arc-sage: #7a9e7e;
+    --arc-sage-light: #96b89a;
+
+    /* ── Text (dark on light bg) ── */
+    --arc-text-primary: #2c1e12;
+    --arc-text-secondary: #5c4a36;
+    --arc-text-muted: #9c8b7a;
+    --arc-text-light: #fdf6e8;
+    --arc-text-heading: #2c1e12;
+
+    /* ── Borders ── */
+    --arc-border-gold: rgba(166, 124, 82, 0.22);
+    --arc-border-rose: rgba(196, 132, 138, 0.18);
+    --arc-border-subtle: rgba(166, 124, 82, 0.1);
+
+    /* ── Shadows (softer on light bg) ── */
+    --arc-shadow-soft: 0 4px 24px -4px rgba(44, 30, 18, 0.08);
+    --arc-shadow-wood: 0 8px 28px -6px rgba(44, 30, 18, 0.12);
+    --arc-shadow-elevated: 0 16px 48px -8px rgba(44, 30, 18, 0.16);
+    --arc-shadow-glow: 0 0 30px -5px rgba(166, 124, 82, 0.18);
+    --arc-shadow-rose-glow: 0 0 30px -5px rgba(196, 132, 138, 0.12);
+
+    /* ── Radii ── */
+    --arc-radius-sm: 12px;
+    --arc-radius-md: 20px;
+    --arc-radius-lg: 28px;
+
+    /* ── Fonts ── */
+    --arc-font-pixel: 'Press Start 2P', monospace;
+    --arc-font-body: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+    --arc-font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+
+    /* ── Section helpers ── */
+    --arc-section-alt: rgba(166, 124, 82, 0.04);
+    --arc-footer-bg: linear-gradient(180deg, #2c1e12 0%, #1e1208 100%);
+
+    /* ── Button wood tones ── */
+    --arc-bg-wood: #6b4a2a;
+    --arc-bg-wood-light: #835c38;
+    --arc-bg-wood-dark: #4a3218;
+}
+
+/* ── Page Base ── */
+.arcade-page {
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    width: 100%;
+    background: var(--arc-bg-deep);
+    font-family: var(--arc-font-body);
+    color: var(--arc-text-primary);
+}
+
+/* Warm ambient light radials */
+.arcade-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 55% 45% at 15% 10%, rgba(196, 168, 120, 0.1) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 85% 25%, rgba(196, 132, 138, 0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 35% at 50% 95%, rgba(122, 158, 126, 0.07) 0%, transparent 60%);
+}
+
+/* Paper grain texture */
+.arcade-page::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
+/* ── Atmospheric floating motes ── */
+.arcade-clouds {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.cloud-1 {
+    width: 5px;
+    height: 5px;
+    top: 18%;
+    left: 22%;
+    background: var(--arc-rose-light);
+    opacity: 0;
+    animation: mote-drift 9s ease-in-out infinite, mote-glow 4.5s ease-in-out infinite;
+}
+
+.cloud-2 {
+    width: 4px;
+    height: 4px;
+    top: 45%;
+    right: 28%;
+    background: var(--arc-gold-light);
+    opacity: 0;
+    animation: mote-drift 11s ease-in-out infinite, mote-glow 5.5s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.cloud-3 {
+    width: 3px;
+    height: 3px;
+    top: 70%;
+    left: 38%;
+    background: var(--arc-sage-light);
+    opacity: 0;
+    animation: mote-drift 13s ease-in-out infinite, mote-glow 6.5s ease-in-out infinite;
+    animation-delay: 4.5s;
+}
+
+@keyframes mote-drift {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(12px, -18px);
+    }
+
+    50% {
+        transform: translate(-8px, -30px);
+    }
+
+    75% {
+        transform: translate(16px, -12px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes mote-glow {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 0.5;
+    }
+
+    65% {
+        opacity: 0.3;
+    }
+}
+
+/* ── Typography ── */
+.arc-heading-xl {
+    font-family: var(--arc-font-display);
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--arc-text-heading);
+    letter-spacing: -0.01em;
+}
+
+.arc-heading-lg {
+    font-family: var(--arc-font-display);
+    font-size: clamp(1.3rem, 3.2vw, 2.2rem);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--arc-text-heading);
+}
+
+.arc-heading-md {
+    font-family: var(--arc-font-pixel);
+    font-size: clamp(0.48rem, 1vw, 0.6rem);
+    line-height: 1.9;
+    color: var(--arc-accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.arc-body {
+    font-family: var(--arc-font-body);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--arc-text-secondary);
+}
+
+.arc-label {
+    font-family: var(--arc-font-pixel);
+    font-size: 0.42rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--arc-accent-warm);
+}
+
+.arc-italic {
+    font-family: var(--arc-font-display);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--arc-rose);
+}
+
+/* ── Hero Card (wood-sign) — light parchment ── */
+.wood-sign {
+    position: relative;
+    background: rgba(253, 246, 232, 0.9);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-lg);
+    box-shadow:
+        var(--arc-shadow-wood),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -1px 2px rgba(166, 124, 82, 0.06);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.wood-sign:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        var(--arc-shadow-elevated),
+        0 0 40px -8px rgba(166, 124, 82, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-color: rgba(166, 124, 82, 0.35);
+}
+
+/* ── Parchment Card ── */
+.parchment-card {
+    background: var(--arc-surface);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-md);
+    box-shadow: var(--arc-shadow-soft);
+    transition: all 0.5s ease;
+}
+
+.parchment-card:hover {
+    box-shadow: var(--arc-shadow-elevated);
+    transform: translateY(-2px);
+}
+
+/* ── Room Card ── */
+.room-card {
+    background: var(--arc-surface-raised);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-md);
+    padding: 32px 28px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.room-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--arc-rose) 30%,
+            var(--arc-accent) 60%,
+            var(--arc-sage) 90%,
+            transparent 100%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.room-card:hover {
+    border-color: rgba(166, 124, 82, 0.38);
+    box-shadow: var(--arc-shadow-elevated), var(--arc-shadow-glow);
+    transform: translateY(-4px);
+}
+
+.room-card:hover::before {
+    opacity: 1;
+}
+
+/* ── Room Icon ── */
+.room-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(166, 124, 82, 0.1) 0%, rgba(196, 132, 138, 0.08) 100%);
+    border: 1.5px solid var(--arc-border-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--arc-accent);
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+}
+
+.room-card:hover .room-icon {
+    background: linear-gradient(135deg, rgba(166, 124, 82, 0.18) 0%, rgba(196, 132, 138, 0.12) 100%);
+    border-color: rgba(166, 124, 82, 0.4);
+}
+
+/* ── Buttons ── */
+.arc-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: linear-gradient(135deg, var(--arc-bg-wood) 0%, var(--arc-bg-wood-dark) 100%);
+    color: var(--arc-text-light);
+    font-family: var(--arc-font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1.5px solid rgba(166, 124, 82, 0.35);
+    border-radius: var(--arc-radius-md);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    box-shadow: var(--arc-shadow-wood), 0 4px 0 var(--arc-bg-wood-dark);
+    position: relative;
+    top: 0;
+}
+
+.arc-btn-primary:hover {
+    top: -2px;
+    box-shadow: var(--arc-shadow-elevated), var(--arc-shadow-glow), 0 6px 0 var(--arc-bg-wood-dark);
+    background: linear-gradient(135deg, var(--arc-accent) 0%, var(--arc-accent-warm) 100%);
+    border-color: rgba(166, 124, 82, 0.5);
+}
+
+.arc-btn-primary:active {
+    top: 2px;
+    box-shadow: 0 2px 0 var(--arc-bg-wood-dark);
+}
+
+.arc-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--arc-text-secondary);
+    font-family: var(--arc-font-pixel);
+    font-size: 0.45rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-md);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.arc-btn-secondary:hover {
+    border-color: var(--arc-accent);
+    background: var(--arc-accent-glow);
+    color: var(--arc-accent-warm);
+}
+
+/* ── Badge ── */
+.arc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(253, 246, 232, 0.9);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: 999px;
+    font-family: var(--arc-font-pixel);
+    font-size: 0.42rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--arc-accent-warm);
+    box-shadow: var(--arc-shadow-soft);
+}
+
+/* ── Navbar ── */
+.arc-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 50;
+    padding: 20px 24px;
+}
+
+.arc-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-radius: var(--arc-radius-lg);
+    background: rgba(253, 246, 232, 0.9);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1.5px solid var(--arc-border-gold);
+    box-shadow: var(--arc-shadow-soft);
+}
+
+.arc-nav-link {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-family: var(--arc-font-pixel);
+    font-size: 0.42rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.arc-nav-link--active {
+    background: var(--arc-accent-glow);
+    color: var(--arc-accent-warm);
+    border: 1.5px solid var(--arc-border-gold);
+}
+
+.arc-nav-link--inactive {
+    color: var(--arc-text-muted);
+    border: 1.5px solid transparent;
+}
+
+.arc-nav-link--inactive:hover {
+    color: var(--arc-text-primary);
+    background: rgba(166, 124, 82, 0.06);
+}
+
+/* ── Section Spacing ── */
+.arc-section {
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Alt section bg (very subtle) ── */
+[id="rooms"] {
+    background: rgba(166, 124, 82, 0.03);
+}
+
+/* ── Dark CTA Section ── */
+.arc-dark-section {
+    background: linear-gradient(180deg, #2c1e12 0%, #1e1208 50%, #2c1e12 100%);
+    position: relative;
+    overflow: hidden;
+    color: var(--arc-text-light);
+}
+
+.arc-dark-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 40% 50% at 50% 20%, rgba(196, 149, 106, 0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 30% 80%, rgba(196, 132, 138, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 70% 70%, rgba(122, 158, 126, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* ── Pixel Stars (in dark section) ── */
+.pixel-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--arc-gold-light);
+    border-radius: 50%;
+    animation: twinkle 4s ease-in-out infinite;
+    box-shadow: 0 0 6px 1px rgba(201, 168, 76, 0.3);
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.15;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.3);
+    }
+}
+
+/* ── Step Card ── */
+.arc-step-card {
+    background: var(--arc-surface-raised);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-lg);
+    padding: 40px 32px;
+    box-shadow: var(--arc-shadow-soft);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.arc-step-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--arc-accent-glow);
+    border: 1.5px solid var(--arc-border-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--arc-accent);
+}
+
+.arc-step-card:hover {
+    box-shadow: var(--arc-shadow-elevated), var(--arc-shadow-glow);
+    transform: translateY(-4px);
+    border-color: rgba(166, 124, 82, 0.35);
+}
+
+/* ── Animations ── */
+@keyframes float-gentle {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.arc-float {
+    animation: float-gentle 5s ease-in-out infinite;
+}
+
+@keyframes arc-pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* ── Divider ornament ── */
+.arc-divider {
+    width: 60px;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--arc-accent), transparent);
+    opacity: 0.4;
+}
+
+/* ── Scrollbar ── */
+.arcade-page::-webkit-scrollbar {
+    width: 6px;
+}
+
+.arcade-page::-webkit-scrollbar-track {
+    background: var(--arc-bg-warm);
+}
+
+.arcade-page::-webkit-scrollbar-thumb {
+    background: var(--arc-accent-light);
+    border-radius: 999px;
+    border: 1px solid var(--arc-bg-warm);
+}
+
+.arcade-page::-webkit-scrollbar-thumb:hover {
+    background: var(--arc-accent);
+}
+
+/* ── Selection ── */
+.arcade-page ::selection {
+    background-color: rgba(196, 132, 138, 0.2);
+    color: var(--arc-text-primary);
+}
+
+/* ── Link transitions ── */
+.arcade-page a {
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .arc-section {
+        padding: 60px 0;
+    }
+
+    .arc-btn-primary {
+        padding: 14px 24px;
+        font-size: 0.45rem;
+    }
+
+    .arc-btn-secondary {
+        padding: 12px 20px;
+        font-size: 0.4rem;
+    }
+
+    .room-card {
+        padding: 24px 20px;
+    }
+
+    .arc-heading-xl {
+        font-size: clamp(1.4rem, 5.5vw, 2.2rem);
+    }
+
+    .arc-nav-inner {
+        padding: 12px 16px;
+    }
+
+    .arc-nav-link {
+        padding: 6px 12px;
+        font-size: 0.38rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .arc-step-card {
+        padding: 28px 20px;
+    }
+
+    .arc-heading-lg {
+        font-size: clamp(1.1rem, 5vw, 1.6rem);
+    }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+
+    .arc-float,
+    .cloud-1,
+    .cloud-2,
+    .cloud-3,
+    .pixel-star {
+        animation: none;
+    }
+
+    .wood-sign,
+    .room-card,
+    .parchment-card,
+    .arc-step-card,
+    .arc-btn-primary,
+    .arc-btn-secondary {
+        transition: none;
+    }
+}

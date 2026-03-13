@@ -195,199 +195,175 @@ function FeatureCard({
 }
 
 /* ─────────────────────────────────────────────
-   HeroCarousel — Template Switcher
+   Product Card (Hero)
    ───────────────────────────────────────────── */
-const HERO_TEMPLATES = [
-    {
-        label: "Template: Voices Box",
-        isVideo: false,
-        src: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
-        demoHref: "https://voice.for-you-always.my.id/gift/for-preview",
-        demoLabel: "Coba Demo — Voices Box",
-    },
-    {
-        label: "Template: Camera",
-        isVideo: false,
-        src: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/gif.gif",
-        demoHref: "https://voice.for-you-always.my.id/camera/midnight/for-iklan2",
-        demoLabel: "Coba Demo — Camera",
-    },
-];
-
-function HeroCarousel() {
-    const [active, setActive] = useState(0);
-    const [fading, setFading] = useState(false);
-
-    const goTo = (idx: number) => {
-        if (idx === active || fading) return;
-        setFading(true);
-        setTimeout(() => {
-            setActive(idx);
-            setFading(false);
-        }, 280);
-    };
-
-    const prev = () => goTo((active - 1 + HERO_TEMPLATES.length) % HERO_TEMPLATES.length);
-    const next = () => goTo((active + 1) % HERO_TEMPLATES.length);
-
-    const t = HERO_TEMPLATES[active];
-
+function ProductCard({
+    label,
+    title,
+    description,
+    price,
+    gifSrc,
+    ctaHref,
+    ctaLabel,
+    isPlaceholder,
+    isNew,
+    delay,
+}: {
+    label: string;
+    title: string;
+    description: string;
+    price: string;
+    gifSrc: string;
+    ctaHref: string;
+    ctaLabel: string;
+    isPlaceholder?: boolean;
+    isNew?: boolean;
+    delay?: number;
+}) {
     return (
-        <AnimatedSection delay={400}>
-            <div style={{ position: "relative", maxWidth: 450, margin: "0 auto" }} className="animate-float-gentle">
-
-                {/* Template Label */}
-                <div style={{ textAlign: "center", marginBottom: 16 }}>
-                    <span
-                        className="label-text"
-                        style={{
-                            background: "var(--bg-card)",
-                            padding: "6px 16px",
-                            borderRadius: 999,
-                            border: "1px solid var(--border)",
-                            display: "inline-block",
-                            transition: "opacity 0.28s ease",
-                            opacity: fading ? 0 : 1,
-                        }}
-                    >
-                        {t.label}
-                    </span>
-                </div>
-
-                {/* Mockup Frame */}
-                <div className="relative group" style={{ perspective: 1000 }}>
-                    <div
-                        style={{
-                            position: "relative",
-                            background: "var(--bg-deep)", /* Changed to dark chocolate */
-                            backdropFilter: "blur(8px)",
-                            WebkitBackdropFilter: "blur(8px)",
-                            borderRadius: "3rem",
-                            padding: 12,
-                            boxShadow: "0 40px 80px -20px rgba(59, 47, 37, 0.4), 0 0 0 1px rgba(166, 124, 82, 0.15)", /* Dramatis warm shadow */
-                            border: "1px solid rgba(166, 124, 82, 0.3)", /* Subtle warm gold border */
-                            transition: "all 1s ease",
-                        }}
-                    >
-                        {/* Decorative dots */}
-                        <div style={{ position: "absolute", top: 32, left: 40, display: "flex", gap: 8, zIndex: 20 }}>
-                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(201, 168, 124, 0.6)" }} />
-                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(201, 168, 124, 0.6)" }} />
-                            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(201, 168, 124, 0.6)" }} />
-                        </div>
-
-                        {/* Media */}
+        <AnimatedSection delay={delay || 0}>
+            <div
+                className="glass-surface"
+                style={{
+                    padding: 0,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
+                {/* GIF / Placeholder */}
+                <div
+                    style={{
+                        position: "relative",
+                        background: "var(--bg-deep)",
+                        aspectRatio: "4/5",
+                        overflow: "hidden",
+                    }}
+                >
+                    {isPlaceholder ? (
                         <div
                             style={{
-                                position: "relative",
-                                borderRadius: "2.2rem",
-                                overflow: "hidden",
-                                background: "var(--bg-card)",
-                                aspectRatio: "4/5",
-                                boxShadow: "inset 0 2px 4px rgba(0,0,0,0.05)",
-                                transition: "opacity 0.28s ease",
-                                opacity: fading ? 0 : 1,
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 16,
+                                background: "linear-gradient(135deg, #3b2f25 0%, #2c2118 100%)",
                             }}
                         >
-                            {t.isVideo ? (
-                                <video
-                                    key={t.src}
-                                    src={t.src}
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                />
-                            ) : (
-                                <img
-                                    key={t.src}
-                                    src={t.src}
-                                    alt={t.label}
-                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                />
-                            )}
-                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top right, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.05))", pointerEvents: "none" }} />
-                            <div style={{ position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)", borderRadius: "2.2rem", pointerEvents: "none" }} />
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,124,0.4)" strokeWidth={1}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span
+                                style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: 11,
+                                    fontWeight: 600,
+                                    letterSpacing: "0.1em",
+                                    textTransform: "uppercase" as const,
+                                    color: "rgba(201,168,124,0.4)",
+                                }}
+                            >
+                                Coming Soon
+                            </span>
                         </div>
+                    ) : (
+                        <img
+                            src={gifSrc}
+                            alt={title}
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                    )}
+                    {/* Overlay */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            background: "linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%)",
+                            pointerEvents: "none",
+                        }}
+                    />
+                    {/* New Badge */}
+                    {isNew && (
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 16,
+                                left: 16,
+                                padding: "6px 14px",
+                                borderRadius: 999,
+                                background: "rgba(166, 124, 82, 0.9)",
+                                backdropFilter: "blur(8px)",
+                                color: "#fff",
+                                fontSize: 12,
+                                fontWeight: 700,
+                                letterSpacing: "0.04em",
+                                zIndex: 10,
+                            }}
+                        >
+                            NEW
+                        </div>
+                    )}
+                    {/* Price Badge */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 16,
+                            right: 16,
+                            padding: "6px 14px",
+                            borderRadius: 999,
+                            background: "rgba(166, 124, 82, 0.9)",
+                            backdropFilter: "blur(8px)",
+                            color: "#fff",
+                            fontSize: 12,
+                            fontWeight: 700,
+                            letterSpacing: "0.04em",
+                        }}
+                    >
+                        {price}
                     </div>
                 </div>
 
-                {/* Controls Row: Prev | Demo | Next */}
-                <div style={{ marginTop: 28, display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
-                    {/* Prev Arrow */}
-                    <button
-                        onClick={prev}
-                        aria-label="Previous Template"
+                {/* Text Info */}
+                <div style={{ padding: "28px 28px 32px" }}>
+                    <span
+                        className="label-text"
                         style={{
-                            flexShrink: 0,
-                            width: 44,
-                            height: 44,
-                            borderRadius: "50%",
-                            border: "1px solid var(--border)",
-                            background: "var(--bg-card)",
-                            color: "var(--text-primary)",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "all 0.2s ease",
-                            boxShadow: "0 2px 8px rgba(59,47,37,0.08)",
+                            display: "inline-block",
+                            padding: "4px 12px",
+                            background: "var(--accent-glow)",
+                            border: "1px solid var(--border-warm)",
+                            borderRadius: 999,
+                            marginBottom: 16,
+                            color: "var(--accent)",
                         }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
                     >
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-
-                    {/* Next Arrow */}
-                    <button
-                        onClick={next}
-                        aria-label="Next Template"
-                        style={{
-                            flexShrink: 0,
-                            width: 44,
-                            height: 44,
-                            borderRadius: "50%",
-                            border: "1px solid var(--border)",
-                            background: "var(--bg-card)",
-                            color: "var(--text-primary)",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "all 0.2s ease",
-                            boxShadow: "0 2px 8px rgba(59,47,37,0.08)",
-                        }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
+                        {label}
+                    </span>
+                    <h3
+                        className="heading-md"
+                        style={{ marginBottom: 8, fontSize: "1.35rem" }}
                     >
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                    </button>
-                </div>
-
-                {/* Dot Indicators */}
-                <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 8 }}>
-                    {HERO_TEMPLATES.map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => goTo(i)}
-                            aria-label={`Go to template ${i + 1}`}
-                            style={{
-                                width: i === active ? 24 : 8,
-                                height: 8,
-                                borderRadius: 999,
-                                border: "none",
-                                background: i === active ? "var(--accent)" : "var(--border)",
-                                cursor: "pointer",
-                                padding: 0,
-                                transition: "all 0.3s ease",
-                            }}
-                        />
-                    ))}
+                        {title}
+                    </h3>
+                    <p
+                        className="body-text"
+                        style={{ fontSize: "0.88rem", marginBottom: 24 }}
+                    >
+                        {description}
+                    </p>
+                    <a href={ctaHref} className="btn-secondary" style={{ width: "100%", justifyContent: "center" }}>
+                        {ctaLabel}
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
                 </div>
             </div>
-        </AnimatedSection >
+        </AnimatedSection>
     );
 }
 
@@ -431,89 +407,7 @@ export default function VoicesLandingPage() {
                 />
             </div>
 
-            {/* ════════════════════════════════════
-          NAVIGATION
-         ════════════════════════════════════ */}
-            <nav
-                style={{
-                    position: "fixed",
-                    top: 0,
-                    width: "100%",
-                    zIndex: 50,
-                    padding: "20px 24px",
-                }}
-            >
-                <div
-                    style={{
-                        maxWidth: 1100,
-                        margin: "0 auto",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "16px 24px",
-                        borderRadius: "var(--radius-lg)",
-                        background: "rgba(245, 239, 230, 0.75)",
-                        backdropFilter: "blur(24px)",
-                        WebkitBackdropFilter: "blur(24px)",
-                        border: "1px solid rgba(255,255,255,0.5)",
-                        boxShadow: "0 8px 32px -6px rgba(59, 47, 37, 0.06)",
-                    }}
-                >
-                    {/* Logo */}
-                    <a
-                        href="/"
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 12,
-                            textDecoration: "none",
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: 40,
-                                height: 40,
-                                borderRadius: 14,
-                                overflow: "hidden",
-                                border: "1px solid var(--border)",
-                            }}
-                        >
-                            <img
-                                src="/logo.png"
-                                alt="For you, Always."
-                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                            />
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column" }}>
-                            <span
-                                style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontStyle: "italic",
-                                    fontWeight: 600,
-                                    fontSize: 15,
-                                    color: "var(--text-primary)",
-                                    lineHeight: 1,
-                                    marginBottom: 2,
-                                }}
-                            >
-                                For you, Always.
-                            </span>
-                            <span className="label-text" style={{ fontSize: 8, margin: 0 }}>
-                                Digital Atelier
-                            </span>
-                        </div>
-                    </a>
 
-                    {/* CTA */}
-                    <a
-                        href="#pesan"
-                        className="btn-primary"
-                        style={{ padding: "12px 24px", fontSize: "0.75rem" }}
-                    >
-                        <span>Pesan Sekarang</span>
-                    </a>
-                </div>
-            </nav>
 
             {/* ════════════════════════════════════
           HERO SECTION
@@ -654,8 +548,39 @@ export default function VoicesLandingPage() {
                         </AnimatedSection>
                     </div>
 
-                    {/* Hero Mockup — Template Carousel */}
-                    <HeroCarousel />
+                    {/* Hero Product Cards */}
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
+                            gap: 24,
+                            maxWidth: 800,
+                            margin: "0 auto",
+                            width: "100%",
+                        }}
+                    >
+                        <ProductCard
+                            label="Voices Gift"
+                            title="Kado Suara & Foto"
+                            description="Rangkai foto kenangan + rekam pesan suara pribadimu. Lengkap dengan musik latar pilihan."
+                            price="Mulai Rp 10.000"
+                            gifSrc="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
+                            ctaHref="#showcase"
+                            ctaLabel="Lihat Detail"
+                            delay={400}
+                        />
+                        <ProductCard
+                            label="Arcade Edition"
+                            title="9 Rooms of Memories"
+                            description="Kado digital interaktif dengan 9 ruangan unik — dari Quiz, Journey, hingga Star Catcher."
+                            price="Rp 20.000"
+                            gifSrc="https://cdn.for-you-always.my.id/1773426766916-7k8labq.gif"
+                            ctaHref="/arcade"
+                            ctaLabel="Lihat Detail"
+                            isNew
+                            delay={550}
+                        />
+                    </div>
 
                 </div>
             </section >
@@ -696,11 +621,10 @@ export default function VoicesLandingPage() {
                         </div>
                     </AnimatedSection>
 
-                    {/* Feature Cards */}
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
                             gap: 20,
                         }}
                     >
@@ -833,7 +757,7 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
                             gap: 24,
                         }}
                     >
