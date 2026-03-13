@@ -165,6 +165,7 @@ const ARCADE_ROOMS = [
 // For each room: provide video MP4 url + image fallback url
 // If video fails to load, image will show automatically
 const ROOM_MEDIA: Record<string, { video: string; image: string }> = {
+    MainMenu: { video: "https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4", image: "https://cdn.for-you-always.my.id/1773430308266-v83pts.png" }, // <- isi URL video/image main menu di sini
     Music: { video: "https://cdn.for-you-always.my.id/1773426110433-1feui.mp4", image: "https://cdn.for-you-always.my.id/1773426246132-1fboiq.png" },
     Journey: { video: "https://cdn.for-you-always.my.id/1773426101549-nd559h.mp4", image: "https://cdn.for-you-always.my.id/1773426243996-qo142o.png" },
     Moments: { video: "https://cdn.for-you-always.my.id/1773426107508-yc067a.mp4", image: "https://cdn.for-you-always.my.id/1773426241684-7nyd8.png" },
@@ -177,6 +178,8 @@ const ROOM_MEDIA: Record<string, { video: string; image: string }> = {
 };
 
 function RoomShowcase() {
+    // slide 0 = main menu, slides 1-9 = rooms
+    const TOTAL_SLIDES = 10;
     const [active, setActive] = useState(0);
     const [fading, setFading] = useState(false);
 
@@ -189,11 +192,12 @@ function RoomShowcase() {
         }, 300);
     };
 
-    const prev = () => goTo((active - 1 + ARCADE_ROOMS.length) % ARCADE_ROOMS.length);
-    const next = () => goTo((active + 1) % ARCADE_ROOMS.length);
+    const prev = () => goTo((active - 1 + TOTAL_SLIDES) % TOTAL_SLIDES);
+    const next = () => goTo((active + 1) % TOTAL_SLIDES);
 
-    const room = ARCADE_ROOMS[active];
-    const media = ROOM_MEDIA[room.title];
+    const isMenu = active === 0;
+    const room = isMenu ? null : ARCADE_ROOMS[active - 1];
+    const media = room ? ROOM_MEDIA[room.title] : null;
 
     return (
         <section id="rooms" style={{ position: "relative", zIndex: 1, padding: "100px 0", background: "rgba(166,124,82,0.03)" }}>
@@ -231,7 +235,47 @@ function RoomShowcase() {
                         opacity: fading ? 0 : 1,
                     }}
                 >
-                    {media.video || media.image ? (
+                    {isMenu ? (
+                        /* ── Slide 0: Main Menu — video/image from ROOM_MEDIA.MainMenu ── */
+                        ROOM_MEDIA.MainMenu.video || ROOM_MEDIA.MainMenu.image ? (
+                            <video
+                                key={ROOM_MEDIA.MainMenu.video}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                poster={ROOM_MEDIA.MainMenu.image}
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            >
+                                {ROOM_MEDIA.MainMenu.video && <source src={ROOM_MEDIA.MainMenu.video} type="video/mp4" />}
+                            </video>
+                        ) : (
+                            /* Placeholder while URL belum diisi */
+                            <div style={{
+                                width: "100%", height: "100%",
+                                background: "linear-gradient(160deg, #2a1f14 0%, #1e1409 60%, #2d2010 100%)",
+                                display: "flex", flexDirection: "column",
+                                alignItems: "center", justifyContent: "center", gap: 12,
+                            }}>
+                                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="rgba(255,200,100,0.4)" strokeWidth={1}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+                                </svg>
+                                <span style={{
+                                    fontFamily: "monospace",
+                                    fontSize: "0.42rem",
+                                    color: "rgba(245,225,180,0.5)",
+                                    letterSpacing: "0.15em",
+                                    textTransform: "uppercase",
+                                }}>Main Menu Preview</span>
+                                <span style={{
+                                    fontFamily: "monospace",
+                                    fontSize: "0.35rem",
+                                    color: "rgba(245,225,180,0.3)",
+                                    letterSpacing: "0.1em",
+                                }}>isi URL di ROOM_MEDIA.MainMenu</span>
+                            </div>
+                        )
+                    ) : media && (media.video || media.image) ? (
                         <video
                             key={media.video}
                             autoPlay
@@ -242,9 +286,8 @@ function RoomShowcase() {
                             style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         >
                             {media.video && <source src={media.video} type="video/mp4" />}
-                            {/* Fallback: if video fails, poster image shows automatically */}
                         </video>
-                    ) : (
+                    ) : room ? (
                         /* Placeholder */
                         <div style={{
                             width: "100%", height: "100%",
@@ -273,23 +316,25 @@ function RoomShowcase() {
                                 Preview Coming Soon
                             </span>
                         </div>
-                    )}
+                    ) : null}
 
-                    {/* Room number badge top-left */}
-                    <div style={{
-                        position: "absolute", top: 16, left: 16,
-                        background: "rgba(253,246,232,0.9)",
-                        backdropFilter: "blur(8px)",
-                        border: "1px solid var(--arc-border-gold)",
-                        borderRadius: 999,
-                        padding: "5px 14px",
-                        fontFamily: "var(--arc-font-pixel)",
-                        fontSize: "0.38rem",
-                        color: "var(--arc-accent-warm)",
-                        letterSpacing: "0.12em",
-                    }}>
-                        {String(active + 1).padStart(2, "0")} / 09
-                    </div>
+                    {/* Badge top-left */}
+                    {!isMenu && (
+                        <div style={{
+                            position: "absolute", top: 16, left: 16,
+                            background: "rgba(253,246,232,0.9)",
+                            backdropFilter: "blur(8px)",
+                            border: "1px solid var(--arc-border-gold)",
+                            borderRadius: 999,
+                            padding: "5px 14px",
+                            fontFamily: "var(--arc-font-pixel)",
+                            fontSize: "0.38rem",
+                            color: "var(--arc-accent-warm)",
+                            letterSpacing: "0.12em",
+                        }}>
+                            {String(active).padStart(2, "0")} / 09
+                        </div>
+                    )}
                 </div>
 
                 {/* Info + Navigation */}
@@ -336,10 +381,12 @@ function RoomShowcase() {
                     {/* Room Info */}
                     <div style={{ flex: 1, textAlign: "center" }}>
                         <h3 className="arc-heading-md" style={{ marginBottom: 8, fontSize: "0.6rem" }}>
-                            {room.title} Room
+                            {isMenu ? "Arcade Edition" : `${room!.title} Room`}
                         </h3>
                         <p className="arc-body" style={{ fontSize: "0.9rem", margin: 0 }}>
-                            {room.description}
+                            {isMenu
+                                ? "9 ruangan interaktif dalam satu hadiah digital — dari musik hingga pesan penutup yang menyentuh hati."
+                                : room!.description}
                         </p>
                     </div>
 
@@ -381,21 +428,28 @@ function RoomShowcase() {
                     marginTop: 20,
                     display: "flex",
                     justifyContent: "center",
+                    alignItems: "center",
                     gap: 8,
                 }}>
-                    {ARCADE_ROOMS.map((_, i) => (
+                    {Array.from({ length: 10 }).map((_, i) => (
                         <button
                             key={i}
                             onClick={() => goTo(i)}
+                            title={i === 0 ? "Main Menu" : ARCADE_ROOMS[i - 1].title}
                             style={{
                                 width: i === active ? 24 : 8,
                                 height: 8,
                                 borderRadius: 999,
                                 border: "none",
-                                background: i === active ? "var(--arc-accent)" : "var(--arc-border-gold)",
+                                background: i === active
+                                    ? "var(--arc-accent)"
+                                    : i === 0 && active !== 0
+                                        ? "var(--arc-accent-warm)"
+                                        : "var(--arc-border-gold)",
                                 cursor: "pointer",
                                 padding: 0,
                                 transition: "all 0.3s ease",
+                                opacity: i === 0 && active !== 0 ? 0.6 : 1,
                             }}
                         />
                     ))}
