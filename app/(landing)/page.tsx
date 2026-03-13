@@ -386,7 +386,7 @@ function useIsMobile() {
 export default function VoicesLandingPage() {
     const isMobile = useIsMobile();
     return (
-        <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
+        <div style={{ minHeight: "100vh", position: "relative", overflowX: "clip", width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
             {/* ── Background Ambient Blobs ── */}
             <div
                 style={{ position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: -1 }}
