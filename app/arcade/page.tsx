@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState, useRef } from "react";
 
-/* ─────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Animated Section (Intersection Observer)
-   ───────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function AnimatedSection({
     children,
     className = "",
@@ -43,9 +43,9 @@ function AnimatedSection({
     );
 }
 
-/* ─────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    SVG Room Icons (no emoji)
-   ───────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const RoomIcons: Record<string, React.ReactNode> = {
     Music: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -114,13 +114,13 @@ const RoomIcons: Record<string, React.ReactNode> = {
     ),
 };
 
-/* ─────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    10 Arcade Rooms Data
-   ───────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ARCADE_ROOMS = [
     {
         title: "Atlas",
-        description: "Peta kenangan kita — setiap titik lokasi menyimpan foto dan cerita spesial.",
+        description: "Peta kenangan kita â€” setiap titik lokasi menyimpan foto dan cerita spesial.",
         color: "#b8956a",
     },
     {
@@ -130,49 +130,49 @@ const ARCADE_ROOMS = [
     },
     {
         title: "Journey",
-        description: "Petualangan visual perjalanan hubungan kalian — dari awal bertemu hingga hari ini.",
+        description: "Petualangan visual perjalanan hubungan kalian â€” dari awal bertemu hingga hari ini.",
         color: "#a89070",
     },
     {
         title: "Moments",
-        description: "Galeri foto kenangan yang berputar sinematik — setiap foto punya ceritanya sendiri.",
+        description: "Galeri foto kenangan yang berputar sinematik â€” setiap foto punya ceritanya sendiri.",
         color: "#b8956a",
     },
     {
         title: "Quiz",
-        description: "Tebak jawaban dari si penerima — penuh kejutan dan tawa di setiap pertanyaan.",
+        description: "Tebak jawaban dari si penerima â€” penuh kejutan dan tawa di setiap pertanyaan.",
         color: "#c4a882",
     },
     {
         title: "Catcher",
-        description: "Mini-game interaktif menangkap bintang — seru, ringan, dan bikin senyum terus.",
+        description: "Mini-game interaktif menangkap bintang â€” seru, ringan, dan bikin senyum terus.",
         color: "#d4b896",
     },
     {
         title: "Fortune",
-        description: "Ramalan romantis personal yang ditulis khusus — buka satu per satu untuk kejutan manis.",
+        description: "Ramalan romantis personal yang ditulis khusus â€” buka satu per satu untuk kejutan manis.",
         color: "#b89878",
     },
     {
         title: "Things",
-        description: "Hal-hal kecil yang kamu cintai dari orang tersayang — tiap satu lebih manis dari sebelumnya.",
+        description: "Hal-hal kecil yang kamu cintai dari orang tersayang â€” tiap satu lebih manis dari sebelumnya.",
         color: "#c4a882",
     },
     {
         title: "Bucket",
-        description: "Daftar impian bersama yang bisa di-check off — dari yang sederhana hingga yang berani.",
+        description: "Daftar impian bersama yang bisa di-check off â€” dari yang sederhana hingga yang berani.",
         color: "#a89070",
     },
     {
         title: "Message",
-        description: "Pesan cinta penutup yang menyentuh hati — kata terakhir yang paling berkesan.",
+        description: "Pesan cinta penutup yang menyentuh hati â€” kata terakhir yang paling berkesan.",
         color: "#c4a882",
     },
 ];
 
-/* ─────────────────────────────────────────────
-   Room Showcase — Cinematic Fullscreen Slideshow
-   ───────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Room Showcase â€” Cinematic Fullscreen Slideshow
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 // For each room: provide video MP4 url + image fallback url
 // If video fails to load, image will show automatically
@@ -249,7 +249,7 @@ function RoomShowcase() {
                     }}
                 >
                     {isMenu ? (
-                        /* ── Slide 0: Main Menu — video/image from ROOM_MEDIA.MainMenu ── */
+                        /* â”€â”€ Slide 0: Main Menu â€” video/image from ROOM_MEDIA.MainMenu â”€â”€ */
                         ROOM_MEDIA.MainMenu.video || ROOM_MEDIA.MainMenu.image ? (
                             <video
                                 key={ROOM_MEDIA.MainMenu.video}
@@ -398,7 +398,7 @@ function RoomShowcase() {
                         </h3>
                         <p className="arc-body" style={{ fontSize: "0.9rem", margin: 0 }}>
                             {isMenu
-                                ? "10 ruangan interaktif dalam satu hadiah digital — dari musik hingga pesan penutup yang menyentuh hati."
+                                ? "10 ruangan interaktif dalam satu hadiah digital â€” dari musik hingga pesan penutup yang menyentuh hati."
                                 : room!.description}
                         </p>
                     </div>
@@ -472,20 +472,20 @@ function RoomShowcase() {
     );
 }
 
-/* ═════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ARCADE LANDING PAGE
-   ═════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 export default function ArcadeLandingPage() {
     return (
         <div className="arcade-page">
-            {/* ── Atmospheric Layer ── */}
+            {/* â”€â”€ Atmospheric Layer â”€â”€ */}
             <div className="arcade-clouds">
                 <div className="cloud cloud-1" />
                 <div className="cloud cloud-2" />
                 <div className="cloud cloud-3" />
             </div>
 
-            {/* ── Navbar ── */}
+            {/* â”€â”€ Navbar â”€â”€ */}
             <nav className="arc-nav">
                 <div className="arc-nav-inner">
                     {/* Logo */}
@@ -545,9 +545,9 @@ export default function ArcadeLandingPage() {
                 </div>
             </nav>
 
-            {/* ════════════════════════════════════
+            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           HERO SECTION
-         ════════════════════════════════════ */}
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
             <section
                 style={{
                     position: "relative",
@@ -615,7 +615,7 @@ export default function ArcadeLandingPage() {
                                 color: "var(--arc-text-secondary)",
                             }}
                         >
-                            Kado digital interaktif dengan 10 mini-experience unik — dari Quiz,
+                            Kado digital interaktif dengan 10 mini-experience unik â€” dari Quiz,
                             Journey, Atlas, hingga Star Catcher. Setiap ruang menyimpan{" "}
                             <strong style={{ color: "var(--arc-accent-warm)", fontWeight: 700 }}>
                                 kejutan yang tak terlupakan.
@@ -700,14 +700,14 @@ export default function ArcadeLandingPage() {
                 </div>
             </section>
 
-            {/* ════════════════════════════════════
-          10 ROOMS SHOWCASE — Cinematic Slideshow
-         ════════════════════════════════════ */}
+            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+          10 ROOMS SHOWCASE â€” Cinematic Slideshow
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
             <RoomShowcase />
 
-            {/* ════════════════════════════════════
+            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           CARA KERJA
-         ════════════════════════════════════ */}
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
             <section id="cara-kerja" className="arc-section">
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
                     <AnimatedSection>
@@ -807,7 +807,7 @@ export default function ArcadeLandingPage() {
                                     Kustomisasi Sendiri
                                 </h3>
                                 <p className="arc-body" style={{ fontSize: "0.9rem" }}>
-                                    Isi semua 10 ruangan sesuai keinginanmu — foto, musik, pesan, quiz, dan lainnya. Privat, bebas, sepenuhnya milikmu.
+                                    Isi semua 10 ruangan sesuai keinginanmu â€” foto, musik, pesan, quiz, dan lainnya. Privat, bebas, sepenuhnya milikmu.
                                 </p>
                             </div>
                         </AnimatedSection>
@@ -851,7 +851,7 @@ export default function ArcadeLandingPage() {
                                     Publish & Kejutkan
                                 </h3>
                                 <p className="arc-body" style={{ fontSize: "0.9rem" }}>
-                                    Setelah selesai, publish dengan satu klik — lalu kirim link Arcade ke orang tersayang dan biarkan mereka terkejut.
+                                    Setelah selesai, publish dengan satu klik â€” lalu kirim link Arcade ke orang tersayang dan biarkan mereka terkejut.
                                 </p>
                             </div>
                         </AnimatedSection>
@@ -859,9 +859,9 @@ export default function ArcadeLandingPage() {
                 </div>
             </section>
 
-            {/* ════════════════════════════════════
+            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PRICING & CTA
-         ════════════════════════════════════ */}
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
             <section id="pesan" className="arc-section arc-dark-section">
                 <div
                     style={{
@@ -925,7 +925,7 @@ export default function ArcadeLandingPage() {
                                     fontFamily: "var(--arc-font-body)",
                                 }}
                             >
-                                9 interactive rooms &bull; Lifetime access &bull; Password protected
+                                10 interactive rooms &bull; Lifetime access &bull; Password protected
                             </p>
                         </div>
                     </AnimatedSection>
@@ -952,12 +952,12 @@ export default function ArcadeLandingPage() {
                                 }}
                             >
                                 {[
-                                    "9 Ruangan Interaktif",
-                                    "Music Room dengan Visualizer",
-                                    "Quiz, Bucket List & Fortune",
-                                    "Journey Map Personal",
-                                    "Star Catcher Mini-Game",
-                                    "Custom Message & Foto",
+                                    "10 Ruangan Interaktif",
+                                    "Bebas Kustomisasi & Privasi 100%",
+                                    "Upload Foto & Pesan Bebas",
+                                    "Opsi Nonaktifkan Ruangan",
+                                    "Kenyamanan Penuh Untuk Pasangan",
+                                    "Ruang Aman Untuk Ceritamu",
                                     "Password Protected",
                                     "Lifetime Access",
                                 ].map((f) => (
@@ -1065,9 +1065,9 @@ export default function ArcadeLandingPage() {
                 </div>
             </section>
 
-            {/* ════════════════════════════════════
+            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           FOOTER
-         ════════════════════════════════════ */}
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
             <footer
                 style={{
                     padding: "48px 24px",
@@ -1126,11 +1126,11 @@ export default function ArcadeLandingPage() {
                         letterSpacing: "0.08em",
                     }}
                 >
-                    © 2026 For you, Always. — Preserving Memories Digitally
+                    Â© 2026 For you, Always. â€” Preserving Memories Digitally
                 </p>
             </footer>
 
-            {/* ── Floating WhatsApp Button ── */}
+            {/* â”€â”€ Floating WhatsApp Button â”€â”€ */}
             <a
                 href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20Arcade%20Edition."
                 target="_blank"
