@@ -956,7 +956,7 @@ export default function ArcadeLandingPage() {
                                     "Bebas Kustomisasi & Privasi 100%",
                                     "Upload Foto & Pesan Bebas",
                                     "Opsi Nonaktifkan Ruangan",
-                                    "Kenyamanan Penuh Untuk Pasangan",
+                                    "Support Mobile Experience",
                                     "Ruang Aman Untuk Ceritamu",
                                     "Password Protected",
                                     "Lifetime Access",
