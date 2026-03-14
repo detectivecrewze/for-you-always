@@ -105,12 +105,24 @@ const RoomIcons: Record<string, React.ReactNode> = {
             <path d="M8 10h8M8 13h5" opacity="0.5" />
         </svg>
     ),
+    Atlas: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+            <line x1="9" y1="3" x2="9" y2="18" />
+            <line x1="15" y1="6" x2="15" y2="21" />
+        </svg>
+    ),
 };
 
 /* ─────────────────────────────────────────────
-   9 Arcade Rooms Data
+   10 Arcade Rooms Data
    ───────────────────────────────────────────── */
 const ARCADE_ROOMS = [
+    {
+        title: "Atlas",
+        description: "Peta kenangan kita — setiap titik lokasi menyimpan foto dan cerita spesial.",
+        color: "#b8956a",
+    },
     {
         title: "Music",
         description: "Putar lagu spesial dengan visualizer bintang-bintang yang menari mengikuti irama.",
@@ -174,12 +186,13 @@ const ROOM_MEDIA: Record<string, { video: string; image: string }> = {
     Fortune: { video: "https://cdn.for-you-always.my.id/1773426099696-jzm23i.mp4", image: "https://cdn.for-you-always.my.id/1773426247705-uljtlq.png" },
     Things: { video: "https://cdn.for-you-always.my.id/1773426093227-u7iyto.mp4", image: "https://cdn.for-you-always.my.id/1773426238625-g67c6g.png" },
     Bucket: { video: "https://cdn.for-you-always.my.id/1773426095486-zsqvxo.mp4", image: "https://cdn.for-you-always.my.id/1773426236078-a34r3.png" },
+    Atlas: { video: "https://cdn.for-you-always.my.id/1773525779608-nzn9pr.mp4", image: "https://cdn.for-you-always.my.id/1773525723347-lotpid.png" },
     Message: { video: "https://cdn.for-you-always.my.id/1773426105222-2tovrh.mp4", image: "https://cdn.for-you-always.my.id/1773426233907-oti0c8.png" },
 };
 
 function RoomShowcase() {
-    // slide 0 = main menu, slides 1-9 = rooms
-    const TOTAL_SLIDES = 10;
+    // slide 0 = main menu, slides 1-10 = rooms
+    const TOTAL_SLIDES = 11;
     const [active, setActive] = useState(0);
     const [fading, setFading] = useState(false);
 
@@ -205,7 +218,7 @@ function RoomShowcase() {
             <AnimatedSection>
                 <div style={{ textAlign: "center", marginBottom: 56 }}>
                     <div className="arc-badge" style={{ marginBottom: 24 }}>
-                        9 Interactive Rooms
+                        10 Interactive Rooms
                     </div>
                     <h2 className="arc-heading-lg">
                         Setiap Ruang, Satu Dunia.
@@ -332,7 +345,7 @@ function RoomShowcase() {
                             color: "var(--arc-accent-warm)",
                             letterSpacing: "0.12em",
                         }}>
-                            {String(active).padStart(2, "0")} / 09
+                            {String(active).padStart(2, "0")} / 10
                         </div>
                     )}
                 </div>
@@ -385,7 +398,7 @@ function RoomShowcase() {
                         </h3>
                         <p className="arc-body" style={{ fontSize: "0.9rem", margin: 0 }}>
                             {isMenu
-                                ? "9 ruangan interaktif dalam satu hadiah digital — dari musik hingga pesan penutup yang menyentuh hati."
+                                ? "10 ruangan interaktif dalam satu hadiah digital — dari musik hingga pesan penutup yang menyentuh hati."
                                 : room!.description}
                         </p>
                     </div>
@@ -431,7 +444,7 @@ function RoomShowcase() {
                     alignItems: "center",
                     gap: 8,
                 }}>
-                    {Array.from({ length: 10 }).map((_, i) => (
+                    {Array.from({ length: 11 }).map((_, i) => (
                         <button
                             key={i}
                             onClick={() => goTo(i)}
@@ -582,7 +595,7 @@ export default function ArcadeLandingPage() {
                             }}
                         >
                             <h1 className="arc-heading-xl" style={{ margin: 0 }}>
-                                Sembilan Ruang.
+                                Sepuluh Ruang.
                                 <br />
                                 <span className="arc-italic" style={{ fontSize: "clamp(1.2rem, 3vw, 2rem)" }}>
                                     Satu Kenangan Penuh.
@@ -602,8 +615,8 @@ export default function ArcadeLandingPage() {
                                 color: "var(--arc-text-secondary)",
                             }}
                         >
-                            Kado digital interaktif dengan 9 mini-experience unik — dari Quiz,
-                            Journey, hingga Star Catcher. Setiap ruang menyimpan{" "}
+                            Kado digital interaktif dengan 10 mini-experience unik — dari Quiz,
+                            Journey, Atlas ruang, hingga Star Catcher. Setiap ruang menyimpan{" "}
                             <strong style={{ color: "var(--arc-accent-warm)", fontWeight: 700 }}>
                                 kejutan yang tak terlupakan.
                             </strong>
@@ -627,7 +640,7 @@ export default function ArcadeLandingPage() {
                                 </svg>
                             </a>
                             <a href="#rooms" className="arc-btn-secondary">
-                                Jelajahi 9 Ruang
+                                Jelajahi 10 Ruang
                                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -688,7 +701,7 @@ export default function ArcadeLandingPage() {
             </section>
 
             {/* ════════════════════════════════════
-          9 ROOMS SHOWCASE — Cinematic Slideshow
+          10 ROOMS SHOWCASE — Cinematic Slideshow
          ════════════════════════════════════ */}
             <RoomShowcase />
 
@@ -794,7 +807,7 @@ export default function ArcadeLandingPage() {
                                     Kustomisasi Sendiri
                                 </h3>
                                 <p className="arc-body" style={{ fontSize: "0.9rem" }}>
-                                    Isi semua 9 ruangan sesuai keinginanmu — foto, musik, pesan, quiz, dan lainnya. Privat, bebas, sepenuhnya milikmu.
+                                    Isi semua 10 ruangan sesuai keinginanmu — foto, musik, pesan, quiz, dan lainnya. Privat, bebas, sepenuhnya milikmu.
                                 </p>
                             </div>
                         </AnimatedSection>
