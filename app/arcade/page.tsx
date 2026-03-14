@@ -953,10 +953,10 @@ export default function ArcadeLandingPage() {
                             >
                                 {[
                                     "10 Ruangan Interaktif",
+                                    "Sangat Optimal & Menawan di HP",
                                     "Bebas Kustomisasi & Privasi 100%",
                                     "Upload Foto & Pesan Bebas",
                                     "Opsi Nonaktifkan Ruangan",
-                                    "Support Mobile Experience",
                                     "Ruang Aman Untuk Ceritamu",
                                     "Password Protected",
                                     "Lifetime Access",
