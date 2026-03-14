@@ -598,7 +598,7 @@ export default function VoicesLandingPage() {
                         <ProductCard
                             label="Arcade Edition"
                             title="10 Rooms of Memories"
-                            description="Kado digital interaktif dengan 10 ruangan unik — dari Quiz, Journey, Atlas ruang, hingga Star Catcher."
+                            description="Kado digital interaktif dengan 10 ruangan unik — dari Quiz, Journey, Atlas, hingga Star Catcher."
                             price="Rp 20.000"
                             gifSrc="https://cdn.for-you-always.my.id/1773426766916-7k8labq.gif"
                             ctaHref="/arcade"

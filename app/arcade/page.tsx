@@ -616,7 +616,7 @@ export default function ArcadeLandingPage() {
                             }}
                         >
                             Kado digital interaktif dengan 10 mini-experience unik — dari Quiz,
-                            Journey, Atlas ruang, hingga Star Catcher. Setiap ruang menyimpan{" "}
+                            Journey, Atlas, hingga Star Catcher. Setiap ruang menyimpan{" "}
                             <strong style={{ color: "var(--arc-accent-warm)", fontWeight: 700 }}>
                                 kejutan yang tak terlupakan.
                             </strong>
