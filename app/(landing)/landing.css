@@ -471,3 +471,33 @@ body::after {
     opacity: 0.06;
     pointer-events: none;
 }
+
+/* ── Navbar Mobile Responsive ── */
+@media (max-width: 480px) {
+
+    /* Sembunyikan teks logo — sisakan image saja */
+    .landing-nav-subtitle,
+    .landing-nav-title {
+        display: none !important;
+    }
+
+    /* Logo image sedikit lebih kecil */
+    .landing-nav-logo-img {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 10px !important;
+    }
+
+    /* Nav links lebih compact */
+    .landing-nav-link {
+        padding: 6px 8px !important;
+        font-size: 0.6rem !important;
+        letter-spacing: 0.04em !important;
+    }
+
+    /* Inner navbar padding lebih rapat */
+    .landing-nav-inner {
+        padding: 10px 12px !important;
+        gap: 4px !important;
+    }
+}

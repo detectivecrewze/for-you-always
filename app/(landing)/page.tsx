@@ -419,6 +419,130 @@ const TESTIMONI_DATA = [
     },
 ];
 
+/* ─────────────────────────────────────────────
+   Studio Preview Section
+   ───────────────────────────────────────────── */
+function StudioPreview() {
+    const videoRef = React.useRef<HTMLVideoElement>(null);
+
+    React.useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    video.play().catch(() => { });
+                } else {
+                    video.pause();
+                }
+            },
+            { threshold: 0.3 }
+        );
+        observer.observe(video);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <section
+            style={{
+                padding: "120px 0",
+                position: "relative",
+                background: "var(--bg-warm)",
+                overflow: "hidden",
+            }}
+        >
+            {/* Ambient blob */}
+            <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "min(500px, 70vw)", height: "min(500px, 70vw)", borderRadius: "50%", background: "rgba(166,124,82,0.06)", filter: "blur(100px)", pointerEvents: "none", zIndex: 0 }} />
+
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 24px)", position: "relative", zIndex: 1 }}>
+
+                {/* Header */}
+                <AnimatedSection>
+                    <div style={{ textAlign: "center", marginBottom: 64 }}>
+                        <span className="label-text" style={{ display: "inline-block", padding: "6px 16px", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", borderRadius: 999, marginBottom: 28, color: "var(--accent)" }}>
+                            Studio Editor
+                        </span>
+                        <h2 className="heading-lg" style={{ marginBottom: 16 }}>
+                            Kamu yang Buat Sendiri.
+                            <br />
+                            <span className="italic-accent">Semudah Ini.</span>
+                        </h2>
+                        <p className="body-text" style={{ maxWidth: 520, margin: "0 auto", fontSize: "1rem" }}>
+                            Tidak perlu skill coding. Tidak perlu nunggu admin. Isi sendiri, publish sendiri, kirim sendiri — dalam hitungan menit.
+                        </p>
+                    </div>
+                </AnimatedSection>
+
+                {/* Video Preview */}
+                <AnimatedSection delay={150}>
+                    <div
+                        style={{
+                            maxWidth: 960,
+                            margin: "0 auto 56px",
+                            borderRadius: "var(--radius-lg)",
+                            overflow: "hidden",
+                            border: "1.5px solid var(--border-warm)",
+                            boxShadow: "var(--shadow-elevated)",
+                            background: "var(--bg-deep)",
+                            aspectRatio: "2/1",
+                        }}
+                    >
+                        <video
+                            ref={videoRef}
+                            loop
+                            muted
+                            playsInline
+                            preload="none"
+                            x-webkit-airplay="deny"
+                            disablePictureInPicture
+                            controlsList="nodownload nofullscreen noremoteplayback"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", WebkitMediaControls: "none" } as React.CSSProperties}
+                        >
+                            <source src="https://cdn.for-you-always.my.id/1773611293880-nh6g6w.mp4" type="video/mp4" />
+                        </video>
+                    </div>
+                </AnimatedSection>
+
+                {/* Feature pills */}
+                <AnimatedSection delay={250}>
+                    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
+                        {[
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>, text: "Tidak perlu skill coding" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>, text: "Selesai dalam menit" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>, text: "Privat & aman" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>, text: "Bisa preview sebelum kirim" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>, text: "Upload foto bebas" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 19V6l12-3v13M9 19c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2zm12-3c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2z" /></svg>, text: "Pilih musik sendiri" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>, text: "Revisi bebas setelah publish" },
+                        ].map((item, i) => (
+                            <div
+                                key={i}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    padding: "10px 18px",
+                                    borderRadius: 999,
+                                    background: "var(--bg-card)",
+                                    border: "1px solid var(--border)",
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: "var(--text-secondary)",
+                                    boxShadow: "var(--shadow-soft)",
+                                }}
+                            >
+                                <span style={{ color: "var(--accent)", flexShrink: 0 }}>{item.icon}</span>
+                                {item.text}
+                            </div>
+                        ))}
+                    </div>
+                </AnimatedSection>
+
+            </div>
+        </section>
+    );
+}
+
 function TestimoniCarousel() {
     const [active, setActive] = useState(0);
     const [fading, setFading] = useState(false);
@@ -464,7 +588,7 @@ function TestimoniCarousel() {
                         {[
                             { icon: <span style={{ color: "var(--accent-light)", fontSize: 14, letterSpacing: 2 }}>★★★★★</span>, text: "5.0 Rating" },
                             { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>, text: "100+ Customer Puas" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>, text: "Trusted Since 2026" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>, text: "Trusted Since 2025" },
                         ].map((item, i) => (
                             <React.Fragment key={i}>
                                 {i > 0 && <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--accent-light)", opacity: 0.4, flexShrink: 0 }} />}
@@ -1002,6 +1126,11 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
             </section >
 
             {/* ════════════════════════════════════
+          STUDIO PREVIEW
+         ════════════════════════════════════ */}
+            <StudioPreview />
+
+            {/* ════════════════════════════════════
           TESTIMONI — Carousel
          ════════════════════════════════════ */}
             <TestimoniCarousel />
@@ -1082,165 +1211,119 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                         </p>
                     </AnimatedSection>
 
-                    {/* Pricing Card */}
+                    {/* Pricing Cards — 2 column grid */}
                     <AnimatedSection delay={300}>
-                        <div
-                            style={{
-                                maxWidth: 400,
-                                margin: "0 auto 48px",
-                                padding: "48px 40px",
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))",
+                            gap: 20,
+                            maxWidth: 720,
+                            margin: "0 auto 48px",
+                        }}>
+
+                            {/* ── Voices Card ── */}
+                            <div style={{
+                                padding: "36px 32px",
                                 borderRadius: "var(--radius-lg)",
                                 background: "rgba(255,252,247,0.06)",
                                 border: "1px solid rgba(166,124,82,0.2)",
                                 backdropFilter: "blur(12px)",
                                 WebkitBackdropFilter: "blur(12px)",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontStyle: "italic",
-                                    fontSize: 18,
-                                    color: "var(--accent-light)",
-                                    marginBottom: 8,
-                                }}
-                            >
-                                Voices. Edition
-                            </div>
-                            <div style={{ marginBottom: 28 }}>
-                                <span
-                                    style={{
-                                        fontFamily: "var(--font-display)",
-                                        fontSize: 18,
-                                        color: "rgba(245,239,230,0.4)",
-                                    }}
-                                >
-                                    Rp{" "}
-                                </span>
-                                <span
-                                    style={{
-                                        fontFamily: "var(--font-display)",
-                                        fontSize: 56,
-                                        fontWeight: 600,
-                                        color: "#f5efe6",
-                                        letterSpacing: "-0.03em",
-                                    }}
-                                >
-                                    10
-                                </span>
-                                <span
-                                    style={{
-                                        fontFamily: "var(--font-display)",
-                                        fontSize: 28,
-                                        fontWeight: 600,
-                                        color: "#f5efe6",
-                                    }}
-                                >
-                                    .000
-                                </span>
-                            </div>
-
-                            {/* Feature list */}
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 14,
-                                    marginBottom: 32,
-                                    textAlign: "left",
-                                }}
-                            >
-                                {[
-                                    "Upload foto kenangan tanpa batas",
-                                    "Pesan suara personal",
-                                    "5 Pilihan Tema Warna",
-                                    "Link unik + Password Gate",
-                                    "Akses selamanya",
-                                ].map((f, i) => (
-                                    <div
-                                        key={i}
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: 12,
-                                            fontSize: 13,
-                                            color: "rgba(245,239,230,0.7)",
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                flexShrink: 0,
-                                                width: 18,
-                                                height: 18,
-                                                borderRadius: "50%",
-                                                background: "rgba(166,124,82,0.2)",
-                                                border: "1px solid rgba(166,124,82,0.3)",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                            }}
-                                        >
-                                            <svg
-                                                width="10"
-                                                height="10"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="var(--accent-light)"
-                                                strokeWidth={3}
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M5 13l4 4L19 7"
-                                                />
-                                            </svg>
+                                display: "flex",
+                                flexDirection: "column",
+                            }}>
+                                <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, color: "var(--accent-light)", marginBottom: 8 }}>
+                                    Voices. Edition
+                                </div>
+                                <div style={{ marginBottom: 24 }}>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>10</span>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1 }}>
+                                    {["Upload foto kenangan tanpa batas", "Pesan suara personal", "5 Pilihan Tema Warna", "Link unik + Password Gate", "Akses selamanya"].map((f, i) => (
+                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.7)" }}>
+                                            <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.2)", border: "1px solid rgba(166,124,82,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                            </div>
+                                            {f}
                                         </div>
-                                        {f}
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                                <a
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                                    target="_blank" rel="noopener noreferrer"
+                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "rgba(166,124,82,0.15)", border: "1px solid rgba(166,124,82,0.3)", color: "var(--accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease" }}
+                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.25)"; }}
+                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.15)"; }}
+                                >
+                                    Pesan Sekarang
+                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                </a>
                             </div>
 
-                            {/* WhatsApp Order Button */}
-                            <a
-                                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: 10,
-                                    width: "100%",
-                                    padding: "18px 0",
-                                    borderRadius: "var(--radius-md)",
-                                    background:
-                                        "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)",
-                                    color: "#fff",
-                                    fontSize: 14,
+                            {/* ── Bundle Card (Featured) ── */}
+                            <div style={{
+                                padding: "36px 32px",
+                                borderRadius: "var(--radius-lg)",
+                                background: "rgba(255,252,247,0.1)",
+                                border: "1.5px solid rgba(201,168,124,0.5)",
+                                backdropFilter: "blur(12px)",
+                                WebkitBackdropFilter: "blur(12px)",
+                                display: "flex",
+                                flexDirection: "column",
+                                position: "relative" as const,
+                            }}>
+                                {/* Featured badge */}
+                                <div style={{
+                                    position: "absolute" as const,
+                                    top: -14,
+                                    left: "50%",
+                                    transform: "translateX(-50%)",
+                                    background: "var(--accent-light)",
+                                    color: "#2c1e12",
+                                    fontSize: 10,
                                     fontWeight: 700,
-                                    letterSpacing: "0.08em",
+                                    padding: "4px 16px",
+                                    borderRadius: 999,
+                                    letterSpacing: "0.1em",
                                     textTransform: "uppercase" as const,
-                                    textDecoration: "none",
-                                    transition: "all 0.4s ease",
-                                    boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)",
-                                }}
-                            >
-                                Pesan Sekarang
-                                <svg
-                                    width="16"
-                                    height="16"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth={2}
+                                    whiteSpace: "nowrap" as const,
+                                }}>
+                                    ✦ Paling Worth It
+                                </div>
+                                <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, color: "var(--accent-light)", marginBottom: 8 }}>
+                                    Bundle Edition
+                                </div>
+                                <div style={{ marginBottom: 6 }}>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>25</span>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
+                                </div>
+                                <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
+                                    <span style={{ fontSize: 11, color: "rgba(245,239,230,0.3)", textDecoration: "line-through" }}>Normalnya Rp 30.000</span>
+                                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: "rgba(166,124,82,0.2)", color: "var(--accent-light)" }}>Hemat 5rb</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1 }}>
+                                    {["Semua fitur Voices. Edition", "Semua fitur Arcade Edition", "10 Ruangan Interaktif", "2 Kado dalam 1 paket", "Akses selamanya"].map((f, i) => (
+                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.85)" }}>
+                                            <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.25)", border: "1px solid rgba(201,168,124,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                            </div>
+                                            {f}
+                                        </div>
+                                    ))}
+                                </div>
+                                <a
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Bundle%20Edition*%20(Voices%20%2B%20Arcade)%20dengan%20harga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                                    target="_blank" rel="noopener noreferrer"
+                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.4s ease", boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)" }}
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                    />
-                                </svg>
-                            </a>
+                                    Pesan Sekarang
+                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                </a>
+                            </div>
+
                         </div>
                     </AnimatedSection>
 

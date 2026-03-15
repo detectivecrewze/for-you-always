@@ -683,3 +683,26 @@
         transition: none;
     }
 }
+
+/* ── Navbar mobile — sembunyikan brand text ── */
+@media (max-width: 480px) {
+    .arc-nav-brand-text {
+        display: none !important;
+    }
+
+    .arc-nav-logo-img {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 10px !important;
+    }
+
+    .arc-nav-inner {
+        padding: 10px 12px !important;
+        gap: 4px !important;
+    }
+
+    .arc-nav-link {
+        padding: 5px 8px !important;
+        font-size: 0.35rem !important;
+    }
+}

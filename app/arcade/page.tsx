@@ -258,6 +258,9 @@ function RoomShowcase() {
                                 muted
                                 playsInline
                                 poster={ROOM_MEDIA.MainMenu.image}
+                                x-webkit-airplay="deny"
+                                disablePictureInPicture
+                                controlsList="nodownload nofullscreen noremoteplayback"
                                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
                             >
                                 {ROOM_MEDIA.MainMenu.video && <source src={ROOM_MEDIA.MainMenu.video} type="video/mp4" />}
@@ -296,6 +299,9 @@ function RoomShowcase() {
                             muted
                             playsInline
                             poster={media.image}
+                            x-webkit-airplay="deny"
+                            disablePictureInPicture
+                            controlsList="nodownload nofullscreen noremoteplayback"
                             style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         >
                             {media.video && <source src={media.video} type="video/mp4" />}
@@ -478,6 +484,122 @@ function RoomShowcase() {
 /* ─────────────────────────────────────────────
    Arcade Testimoni Carousel
    ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   Arcade Studio Preview Section
+   ───────────────────────────────────────────── */
+function ArcadeStudioPreview() {
+    const videoRef = React.useRef<HTMLVideoElement>(null);
+
+    React.useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    video.play().catch(() => { });
+                } else {
+                    video.pause();
+                }
+            },
+            { threshold: 0.3 }
+        );
+        observer.observe(video);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <section className="arc-section" style={{ background: "var(--arc-bg-warm)", position: "relative", overflow: "hidden" }}>
+            {/* Ambient blob */}
+            <div style={{ position: "absolute", top: "-10%", right: "-5%", width: "min(500px,70vw)", height: "min(500px,70vw)", borderRadius: "50%", background: "rgba(166,124,82,0.06)", filter: "blur(100px)", pointerEvents: "none", zIndex: 0 }} />
+
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px,4vw,24px)", position: "relative", zIndex: 1 }}>
+
+                {/* Header */}
+                <AnimatedSection>
+                    <div style={{ textAlign: "center", marginBottom: 56 }}>
+                        <div className="arc-badge" style={{ marginBottom: 24 }}>
+                            Studio Editor
+                        </div>
+                        <h2 className="arc-heading-lg">
+                            Kamu yang Buat Sendiri.
+                            <br />
+                            <span className="arc-italic" style={{ fontSize: "clamp(1rem, 2.5vw, 1.5rem)" }}>
+                                Semudah Ini.
+                            </span>
+                        </h2>
+                        <p className="arc-body" style={{ maxWidth: 520, margin: "16px auto 0", fontSize: "0.95rem" }}>
+                            Tidak perlu skill coding. Tidak perlu nunggu admin. Isi sendiri, publish sendiri, kirim sendiri — dalam hitungan menit.
+                        </p>
+                    </div>
+                </AnimatedSection>
+
+                {/* Video Preview */}
+                <AnimatedSection delay={150}>
+                    <div style={{
+                        maxWidth: 960,
+                        margin: "0 auto 48px",
+                        borderRadius: "var(--arc-radius-lg)",
+                        overflow: "hidden",
+                        border: "1.5px solid var(--arc-border-gold)",
+                        boxShadow: "var(--arc-shadow-elevated)",
+                        background: "var(--arc-bg-mid)",
+                        aspectRatio: "2/1",
+                    }}>
+                        <video
+                            ref={videoRef}
+                            loop
+                            muted
+                            playsInline
+                            preload="none"
+                            x-webkit-airplay="deny"
+                            disablePictureInPicture
+                            controlsList="nodownload nofullscreen noremoteplayback"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        >
+                            <source src="https://cdn.for-you-always.my.id/1773611293880-nh6g6w.mp4" type="video/mp4" />
+                        </video>
+                    </div>
+                </AnimatedSection>
+
+                {/* Feature pills */}
+                <AnimatedSection delay={250}>
+                    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10 }}>
+                        {[
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>, text: "Tidak perlu skill coding" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>, text: "Selesai dalam menit" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>, text: "Privat & aman" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>, text: "Preview sebelum kirim" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636A9 9 0 1 1 5.636 18.364 9 9 0 0 1 18.364 5.636M9 9h6M9 12h6M9 15h4" /></svg>, text: "Nonaktifkan room sesuka hati" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>, text: "Revisi bebas setelah publish" },
+                        ].map((item, i) => (
+                            <div
+                                key={i}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    padding: "10px 18px",
+                                    borderRadius: 999,
+                                    background: "var(--arc-surface-raised)",
+                                    border: "1.5px solid var(--arc-border-gold)",
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: "var(--arc-text-secondary)",
+                                    boxShadow: "var(--arc-shadow-soft)",
+                                }}
+                            >
+                                <span style={{ color: "var(--arc-accent)", flexShrink: 0 }}>{item.icon}</span>
+                                {item.text}
+                            </div>
+                        ))}
+                    </div>
+                </AnimatedSection>
+
+            </div>
+        </section>
+    );
+}
+
 const ARCADE_TESTIMONI = [
     {
         quote: "Lucuu banget, gemes deh! Makasih banyak ya kak, hasilnya melebihi ekspektasi aku ♡",
@@ -689,13 +811,42 @@ export default function ArcadeLandingPage() {
                         </div>
                     </a>
 
-                    {/* Nav Links */}
+                    {/* Nav Links + Order CTA */}
                     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                         <a href="/" className="arc-nav-link arc-nav-link--inactive">
                             Voices
                         </a>
                         <a href="/arcade" className="arc-nav-link arc-nav-link--active">
                             Arcade
+                        </a>
+                        <a
+                            href="#pesan"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 5,
+                                padding: "8px 16px",
+                                background: "var(--arc-bg-wood)",
+                                color: "var(--arc-text-light)",
+                                borderRadius: 999,
+                                fontFamily: "var(--arc-font-pixel)",
+                                fontSize: "0.38rem",
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase" as const,
+                                textDecoration: "none",
+                                border: "1.5px solid var(--arc-accent)",
+                                transition: "all 0.3s ease",
+                                flexShrink: 0,
+                                whiteSpace: "nowrap" as const,
+                                boxShadow: "var(--arc-shadow-soft)",
+                            }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--arc-accent)"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--arc-bg-wood)"; }}
+                        >
+                            Order
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -1016,6 +1167,11 @@ export default function ArcadeLandingPage() {
             </section>
 
             {/* ══════════════════════════════════════
+          STUDIO PREVIEW
+         ══════════════════════════════════════ */}
+            <ArcadeStudioPreview />
+
+            {/* ══════════════════════════════════════
           TESTIMONI
          ══════════════════════════════════════ */}
             <ArcadeTestimoniCarousel />
@@ -1046,144 +1202,119 @@ export default function ArcadeLandingPage() {
                     <div className="pixel-star" style={{ top: "40%", left: "25%", animationDelay: "0.5s" }} />
 
                     <AnimatedSection>
-                        <div style={{ textAlign: "center" }}>
-                            <div
-                                className="arc-badge"
-                                style={{
-                                    marginBottom: 28,
-                                    background: "rgba(196, 154, 60, 0.12)",
-                                    borderColor: "rgba(196, 154, 60, 0.3)",
-                                    color: "var(--arc-accent-light)",
-                                }}
-                            >
-                                Special Price
-                            </div>
-                            <h2
-                                className="arc-heading-lg"
-                                style={{
-                                    color: "var(--arc-text-light)",
-                                    marginBottom: 16,
-                                    textShadow: "none",
-                                }}
-                            >
-                                Arcade Edition
-                            </h2>
-                            <p
-                                style={{
-                                    fontFamily: "var(--arc-font-pixel)",
-                                    fontSize: "clamp(1.2rem, 4vw, 2rem)",
-                                    fontWeight: 400,
-                                    color: "var(--arc-accent-light)",
-                                    marginBottom: 8,
-                                }}
-                            >
-                                Rp 20.000
-                            </p>
-                            <p
-                                style={{
-                                    color: "rgba(255,248,231,0.5)",
-                                    fontSize: 13,
-                                    fontWeight: 500,
-                                    fontFamily: "var(--arc-font-body)",
-                                }}
-                            >
-                                10 interactive rooms &bull; Lifetime access &bull; Password protected
-                            </p>
+                        <div className="arc-badge" style={{ marginBottom: 36, background: "rgba(196,154,60,0.12)", borderColor: "rgba(196,154,60,0.3)", color: "var(--arc-accent-light)" }}>
+                            Harga Spesial
                         </div>
                     </AnimatedSection>
 
+                    <AnimatedSection delay={100}>
+                        <h2 style={{ fontFamily: "var(--arc-font-display)", fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 400, color: "var(--arc-text-light)", lineHeight: 1.15, marginBottom: 20, textAlign: "center" }}>
+                            Satu Hadiah.
+                            <br />
+                            <span style={{ fontStyle: "italic", color: "var(--arc-accent-light)" }}>
+                                Satu Juta Makna.
+                            </span>
+                        </h2>
+                    </AnimatedSection>
+
                     <AnimatedSection delay={200}>
-                        <div
-                            style={{
-                                maxWidth: 440,
-                                margin: "0 auto",
-                                padding: "44px 36px",
-                                textAlign: "center",
-                                background: "rgba(30, 18, 10, 0.65)",
-                                border: "1.5px solid rgba(196, 154, 60, 0.22)",
+                        <p style={{ fontSize: "1.05rem", color: "rgba(255,248,231,0.6)", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 48px", textAlign: "center" }}>
+                            Cukup satu kali investasi untuk kebahagiaan yang tak lekang oleh waktu. Tanpa langganan. Akses selamanya.
+                        </p>
+                    </AnimatedSection>
+
+                    <AnimatedSection delay={200}>
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
+                            gap: 20,
+                            maxWidth: 720,
+                            margin: "0 auto",
+                            width: "100%",
+                        }}>
+
+                            {/* ── Arcade Card ── */}
+                            <div style={{
+                                padding: "36px 28px",
+                                background: "rgba(30,18,10,0.65)",
+                                border: "1.5px solid rgba(196,154,60,0.22)",
                                 borderRadius: "var(--arc-radius-lg)",
                                 backdropFilter: "blur(16px)",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 12,
-                                    marginBottom: 32,
-                                }}
-                            >
-                                {[
-                                    "10 Ruangan Interaktif",
-                                    "Sangat Optimal & Menawan di HP",
-                                    "Bebas Kustomisasi & Privasi 100%",
-                                    "Upload Foto & Pesan Bebas",
-                                    "Opsi Nonaktifkan Ruangan",
-                                    "Ruang Aman Untuk Ceritamu",
-                                    "Password Protected",
-                                    "Lifetime Access",
-                                ].map((f) => (
-                                    <div
-                                        key={f}
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: 10,
-                                            fontSize: 13,
-                                            color: "rgba(255,248,231,0.75)",
-                                            fontWeight: 500,
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                width: 20,
-                                                height: 20,
-                                                borderRadius: 6,
-                                                background: "rgba(196,154,60,0.15)",
-                                                border: "1.5px solid rgba(196,154,60,0.3)",
-                                                flexShrink: 0,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                            }}
-                                        >
-                                            <svg
-                                                width="10"
-                                                height="10"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="var(--arc-accent-light)"
-                                                strokeWidth={3}
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M5 13l4 4L19 7"
-                                                />
-                                            </svg>
+                                display: "flex",
+                                flexDirection: "column",
+                            }}>
+                                <div style={{ fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: 17, color: "var(--arc-accent-light)", marginBottom: 10 }}>
+                                    Arcade Edition
+                                </div>
+                                <div style={{ marginBottom: 20 }}>
+                                    <span style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "clamp(1.2rem,4vw,1.8rem)", color: "var(--arc-accent-light)" }}>Rp 20.000</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 28, flex: 1 }}>
+                                    {["10 Ruangan Interaktif", "Bebas Kustomisasi & Privasi 100%", "Opsi Nonaktifkan Ruangan", "Password Protected", "Lifetime Access"].map((f) => (
+                                        <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.75)", fontWeight: 500 }}>
+                                            <div style={{ width: 18, height: 18, borderRadius: 6, background: "rgba(196,154,60,0.15)", border: "1.5px solid rgba(196,154,60,0.3)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--arc-accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                            </div>
+                                            {f}
                                         </div>
-                                        {f}
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                                <a
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                                    target="_blank" rel="noopener noreferrer"
+                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "15px 0", borderRadius: "var(--arc-radius-md)", background: "rgba(196,154,60,0.15)", border: "1.5px solid rgba(196,154,60,0.3)", color: "var(--arc-accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease" }}
+                                >
+                                    Pesan Sekarang
+                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                </a>
                             </div>
 
-                            {/* WhatsApp Order Button */}
-                            <a
-                                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="arc-btn-primary"
-                                style={{
-                                    width: "100%",
-                                    justifyContent: "center",
-                                    padding: "18px 0",
-                                }}
-                            >
-                                Pesan Sekarang
-                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </a>
+                            {/* ── Bundle Card (Featured) ── */}
+                            <div style={{
+                                padding: "36px 28px",
+                                background: "rgba(30,18,10,0.8)",
+                                border: "1.5px solid rgba(201,168,124,0.5)",
+                                borderRadius: "var(--arc-radius-lg)",
+                                backdropFilter: "blur(16px)",
+                                display: "flex",
+                                flexDirection: "column",
+                                position: "relative" as const,
+                            }}>
+                                {/* Featured badge */}
+                                <div style={{ position: "absolute" as const, top: -14, left: "50%", transform: "translateX(-50%)", background: "var(--arc-accent-light)", color: "#2c1e12", fontSize: 10, fontWeight: 700, padding: "4px 16px", borderRadius: 999, letterSpacing: "0.1em", textTransform: "uppercase" as const, whiteSpace: "nowrap" as const }}>
+                                    ✦ Paling Worth It
+                                </div>
+                                <div style={{ fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: 17, color: "var(--arc-accent-light)", marginBottom: 10 }}>
+                                    Bundle Edition
+                                </div>
+                                <div style={{ marginBottom: 6 }}>
+                                    <span style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "clamp(1.2rem,4vw,1.8rem)", color: "var(--arc-accent-light)" }}>Rp 25.000</span>
+                                </div>
+                                <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
+                                    <span style={{ fontSize: 11, color: "rgba(255,248,231,0.3)", textDecoration: "line-through" }}>Normalnya Rp 30.000</span>
+                                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: "rgba(196,154,60,0.2)", color: "var(--arc-accent-light)" }}>Hemat 5rb</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 28, flex: 1 }}>
+                                    {["Semua fitur Voices. Edition", "Semua fitur Arcade Edition", "10 Ruangan Interaktif", "2 Kado dalam 1 paket", "Lifetime Access"].map((f) => (
+                                        <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.85)", fontWeight: 500 }}>
+                                            <div style={{ width: 18, height: 18, borderRadius: 6, background: "rgba(196,154,60,0.2)", border: "1.5px solid rgba(201,168,124,0.4)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--arc-accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                            </div>
+                                            {f}
+                                        </div>
+                                    ))}
+                                </div>
+                                <a
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Bundle%20Edition*%20(Voices%20%2B%20Arcade)%20dengan%20harga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                                    target="_blank" rel="noopener noreferrer"
+                                    className="arc-btn-primary"
+                                    style={{ width: "100%", justifyContent: "center", padding: "15px 0" }}
+                                >
+                                    Pesan Sekarang
+                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                </a>
+                            </div>
+
                         </div>
                     </AnimatedSection>
 
