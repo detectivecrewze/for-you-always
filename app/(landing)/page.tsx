@@ -383,6 +383,181 @@ function useIsMobile() {
     return isMobile;
 }
 
+/* ─────────────────────────────────────────────
+   Testimoni Carousel
+   ───────────────────────────────────────────── */
+const TESTIMONI_DATA = [
+    {
+        quote: "Lucuu banget, gemes deh! Makasih banyak ya kak, hasilnya melebihi ekspektasi aku ♡",
+        name: "Nabila",
+        label: "Untuk Pacarnya",
+        initial: "N",
+    },
+    {
+        quote: "Makasih ya kak! Cowo aku terharu banget sama surprise aku, dia sama sekali ga expect bakal disurprise kayak gini 🤲🥹",
+        name: "Arini",
+        label: "Untuk Pacarnya",
+        initial: "A",
+    },
+    {
+        quote: "Huhuu makasih kak, lucuu banget hasilnya! Next time aku pasti bakal order di sini lagi pokoknya!",
+        name: "Rara",
+        label: "Untuk Sahabatnya",
+        initial: "R",
+    },
+    {
+        quote: "Kakak makasih banyak yaa, adek aku seneng banget pas buka hadiah ini! Katanya unik dan beda dari kado biasa, lucuu pula 🥹♡",
+        name: "Sinta",
+        label: "Untuk Adiknya",
+        initial: "S",
+    },
+    {
+        quote: "Makasih kak, mama aku sampe terharu lho pas liat fotonya satu-satu! Bilang ini kado paling berkesan yang pernah dia terima ♡",
+        name: "Dinda",
+        label: "Untuk Mamahnya",
+        initial: "D",
+    },
+];
+
+function TestimoniCarousel() {
+    const [active, setActive] = useState(0);
+    const [fading, setFading] = useState(false);
+    const total = TESTIMONI_DATA.length;
+
+    const goTo = (idx: number) => {
+        if (idx === active || fading) return;
+        setFading(true);
+        setTimeout(() => {
+            setActive(idx);
+            setFading(false);
+        }, 250);
+    };
+
+    const prev = () => goTo((active - 1 + total) % total);
+    const next = () => goTo((active + 1) % total);
+    const t = TESTIMONI_DATA[active];
+
+    return (
+        <section style={{ padding: "120px 0", position: "relative", overflow: "hidden", background: "var(--bg)" }}>
+            {/* Ambient blob */}
+            <div style={{ position: "absolute", bottom: "-10%", right: "-5%", width: "min(400px,60vw)", height: "min(400px,60vw)", borderRadius: "50%", background: "rgba(166,124,82,0.05)", filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
+
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px,4vw,24px)", position: "relative", zIndex: 1 }}>
+
+                {/* Header */}
+                <AnimatedSection>
+                    <div style={{ textAlign: "center", marginBottom: 48 }}>
+                        <span className="label-text" style={{ display: "inline-block", padding: "6px 16px", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", borderRadius: 999, marginBottom: 28, color: "var(--accent)" }}>
+                            100+ Happy Customers
+                        </span>
+                        <h2 className="heading-lg" style={{ marginBottom: 0 }}>
+                            Mereka Sudah Merasakan.
+                            <br />
+                            <span className="italic-accent">Giliranmu Selanjutnya.</span>
+                        </h2>
+                    </div>
+                </AnimatedSection>
+
+                {/* Social proof bar */}
+                <AnimatedSection delay={100}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56, flexWrap: "wrap" }}>
+                        {[
+                            { icon: <span style={{ color: "var(--accent-light)", fontSize: 14, letterSpacing: 2 }}>★★★★★</span>, text: "5.0 Rating" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>, text: "100+ Customer Puas" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>, text: "Trusted Since 2026" },
+                        ].map((item, i) => (
+                            <React.Fragment key={i}>
+                                {i > 0 && <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--accent-light)", opacity: 0.4, flexShrink: 0 }} />}
+                                <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "var(--text-muted)" }}>
+                                    {item.icon}{item.text}
+                                </div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </AnimatedSection>
+
+                {/* Carousel */}
+                <AnimatedSection delay={200}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, maxWidth: 640, margin: "0 auto" }}>
+
+                        {/* Prev button */}
+                        <button
+                            onClick={prev}
+                            aria-label="Previous"
+                            style={{ flexShrink: 0, width: 44, height: 44, borderRadius: "50%", border: "1.5px solid var(--border-warm)", background: "var(--bg-card)", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.25s ease", boxShadow: "var(--shadow-soft)" }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)"; }}
+                        >
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+
+                        {/* Card — no photo, quote only */}
+                        <div
+                            className="glass-surface"
+                            style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", transition: "opacity 0.25s ease", opacity: fading ? 0 : 1 }}
+                        >
+                            <div style={{ padding: "36px 32px 32px" }}>
+                                {/* Quote mark */}
+                                <div style={{ fontFamily: "var(--font-display)", fontSize: 64, lineHeight: 1, color: "var(--accent-light)", opacity: 0.35, marginBottom: 8, userSelect: "none" }}>
+                                    &ldquo;
+                                </div>
+                                <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "1.15rem", color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: 32 }}>
+                                    {t.quote}
+                                </p>
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                        <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "var(--accent)", flexShrink: 0 }}>
+                                            {t.initial}
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", marginBottom: 2 }}>
+                                                {t.name}
+                                            </div>
+                                            <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500, letterSpacing: "0.05em" }}>
+                                                {t.label}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "var(--text-muted)" }}>
+                                        {active + 1} / {total}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Next button */}
+                        <button
+                            onClick={next}
+                            aria-label="Next"
+                            style={{ flexShrink: 0, width: 44, height: 44, borderRadius: "50%", border: "1.5px solid var(--border-warm)", background: "var(--bg-card)", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.25s ease", boxShadow: "var(--shadow-soft)" }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)"; }}
+                        >
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {/* Dot navigation */}
+                    <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 24 }}>
+                        {TESTIMONI_DATA.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => goTo(i)}
+                                style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 999, border: "none", background: i === active ? "var(--accent)" : "var(--border-warm)", cursor: "pointer", padding: 0, transition: "all 0.3s ease" }}
+                            />
+                        ))}
+                    </div>
+                </AnimatedSection>
+
+            </div>
+        </section>
+    );
+}
+
 export default function VoicesLandingPage() {
     const isMobile = useIsMobile();
     return (
@@ -825,6 +1000,11 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                     </div>
                 </div >
             </section >
+
+            {/* ════════════════════════════════════
+          TESTIMONI — Carousel
+         ════════════════════════════════════ */}
+            <TestimoniCarousel />
 
             {/* ════════════════════════════════════
           FINAL CTA — Dark Section

@@ -475,6 +475,162 @@ function RoomShowcase() {
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ARCADE LANDING PAGE
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ─────────────────────────────────────────────
+   Arcade Testimoni Carousel
+   ───────────────────────────────────────────── */
+const ARCADE_TESTIMONI = [
+    {
+        quote: "Lucuu banget, gemes deh! Makasih banyak ya kak, hasilnya melebihi ekspektasi aku ♡",
+        name: "Nabila",
+        label: "Untuk Pacarnya",
+        initial: "N",
+    },
+    {
+        quote: "Makasih ya kak! Cowo aku terharu banget sama surprise aku, dia sama sekali ga expect bakal disurprise kayak gini 🤲🥹",
+        name: "Arini",
+        label: "Untuk Pacarnya",
+        initial: "A",
+    },
+    {
+        quote: "Huhuu makasih kak, lucuu banget hasilnya! Next time aku pasti bakal order di sini lagi pokoknya!",
+        name: "Rara",
+        label: "Untuk Sahabatnya",
+        initial: "R",
+    },
+];
+
+function ArcadeTestimoniCarousel() {
+    const [active, setActive] = useState(0);
+    const [fading, setFading] = useState(false);
+    const total = ARCADE_TESTIMONI.length;
+
+    const goTo = (idx: number) => {
+        if (idx === active || fading) return;
+        setFading(true);
+        setTimeout(() => { setActive(idx); setFading(false); }, 250);
+    };
+    const prev = () => goTo((active - 1 + total) % total);
+    const next = () => goTo((active + 1) % total);
+    const t = ARCADE_TESTIMONI[active];
+
+    return (
+        <section className="arc-section" style={{ background: "var(--arc-section-alt)", position: "relative", overflow: "hidden" }}>
+            {/* Ambient blob */}
+            <div style={{ position: "absolute", bottom: "-10%", left: "-5%", width: "min(400px,60vw)", height: "min(400px,60vw)", borderRadius: "50%", background: "rgba(196,132,138,0.06)", filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
+
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px,4vw,24px)", position: "relative", zIndex: 1 }}>
+
+                {/* Header */}
+                <AnimatedSection>
+                    <div style={{ textAlign: "center", marginBottom: 48 }}>
+                        <div className="arc-badge" style={{ marginBottom: 28 }}>
+                            100+ Happy Customers
+                        </div>
+                        <h2 className="arc-heading-lg">
+                            Mereka Sudah Merasakan.
+                            <br />
+                            <span className="arc-italic" style={{ fontSize: "clamp(1rem, 2.5vw, 1.5rem)" }}>
+                                Giliranmu Selanjutnya.
+                            </span>
+                        </h2>
+                    </div>
+                </AnimatedSection>
+
+                {/* Social proof bar */}
+                <AnimatedSection delay={100}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56, flexWrap: "wrap" }}>
+                        {[
+                            { icon: <span style={{ color: "var(--arc-gold)", fontSize: 14, letterSpacing: 2 }}>★★★★★</span>, text: "5.0 Rating" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--arc-rose)" strokeWidth={2}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>, text: "100+ Customer Puas" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--arc-sage)" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>, text: "Trusted Since 2025" },
+                        ].map((item, i) => (
+                            <React.Fragment key={i}>
+                                {i > 0 && <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--arc-border-gold)", flexShrink: 0 }} />}
+                                <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--arc-font-pixel)", fontSize: "0.38rem", letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "var(--arc-text-muted)" }}>
+                                    {item.icon}{item.text}
+                                </div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </AnimatedSection>
+
+                {/* Carousel */}
+                <AnimatedSection delay={200}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, maxWidth: 640, margin: "0 auto" }}>
+
+                        {/* Prev */}
+                        <button
+                            onClick={prev}
+                            aria-label="Previous"
+                            style={{ flexShrink: 0, width: 44, height: 44, borderRadius: "50%", border: "1.5px solid var(--arc-border-gold)", background: "var(--arc-surface-raised)", color: "var(--arc-text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.25s ease", boxShadow: "var(--arc-shadow-soft)" }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--arc-accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--arc-surface-raised)"; (e.currentTarget as HTMLElement).style.color = "var(--arc-text-primary)"; }}
+                        >
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+
+                        {/* Card */}
+                        <div
+                            style={{ flex: 1, background: "var(--arc-surface-raised)", border: "1.5px solid var(--arc-border-gold)", borderRadius: "var(--arc-radius-lg)", overflow: "hidden", boxShadow: "var(--arc-shadow-soft)", transition: "opacity 0.25s ease", opacity: fading ? 0 : 1 }}
+                        >
+                            <div style={{ padding: "36px 32px 32px" }}>
+                                {/* Quote mark — pixel font flavour */}
+                                <div style={{ fontFamily: "var(--arc-font-display)", fontSize: 64, lineHeight: 1, color: "var(--arc-rose-light)", opacity: 0.4, marginBottom: 8, userSelect: "none" as const }}>
+                                    &ldquo;
+                                </div>
+                                <p style={{ fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: "1.15rem", color: "var(--arc-text-secondary)", lineHeight: 1.75, marginBottom: 32 }}>
+                                    {t.quote}
+                                </p>
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                        {/* Avatar */}
+                                        <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--arc-accent-glow)", border: "1.5px solid var(--arc-border-gold)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: 16, fontWeight: 600, color: "var(--arc-accent)", flexShrink: 0 }}>
+                                            {t.initial}
+                                        </div>
+                                        <div>
+                                            <div style={{ fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: 15, fontWeight: 600, color: "var(--arc-text-primary)", marginBottom: 2 }}>
+                                                {t.name}
+                                            </div>
+                                            <div style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "0.38rem", letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "var(--arc-rose)" }}>
+                                                {t.label}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "0.38rem", letterSpacing: "0.1em", color: "var(--arc-text-muted)" }}>
+                                        {active + 1} / {total}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Next */}
+                        <button
+                            onClick={next}
+                            aria-label="Next"
+                            style={{ flexShrink: 0, width: 44, height: 44, borderRadius: "50%", border: "1.5px solid var(--arc-border-gold)", background: "var(--arc-surface-raised)", color: "var(--arc-text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.25s ease", boxShadow: "var(--arc-shadow-soft)" }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--arc-accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--arc-surface-raised)"; (e.currentTarget as HTMLElement).style.color = "var(--arc-text-primary)"; }}
+                        >
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+
+                    {/* Dot nav */}
+                    <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 24 }}>
+                        {ARCADE_TESTIMONI.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => goTo(i)}
+                                style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 999, border: "none", background: i === active ? "var(--arc-accent)" : "var(--arc-border-gold)", cursor: "pointer", padding: 0, transition: "all 0.3s ease" }}
+                            />
+                        ))}
+                    </div>
+                </AnimatedSection>
+            </div>
+        </section>
+    );
+}
+
 export default function ArcadeLandingPage() {
     return (
         <div className="arcade-page">
@@ -851,13 +1007,19 @@ export default function ArcadeLandingPage() {
                                     Publish & Kejutkan
                                 </h3>
                                 <p className="arc-body" style={{ fontSize: "0.9rem" }}>
-                                    Setelah selesai, publish dengan satu klik - lalu kirim link Arcade ke orang tersayang dan biarkan mereka terkejut.
+                                    Setelah selesai, publish dengan satu klik` - `lalu kirim link Arcade ke orang tersayang dan biarkan mereka terkejut.
                                 </p>
                             </div>
                         </AnimatedSection>
                     </div>
                 </div>
             </section>
+
+            {/* ══════════════════════════════════════
+          TESTIMONI
+         ══════════════════════════════════════ */}
+            <ArcadeTestimoniCarousel />
+
 
             {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           PRICING & CTA
