@@ -1127,9 +1127,9 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
             </section >
 
             {/* ════════════════════════════════════
-          STUDIO PREVIEW
+          STUDIO PREVIEW (HIDDEN TEMP)
          ════════════════════════════════════ */}
-            <StudioPreview />
+            {/* <StudioPreview /> */}
 
             {/* ════════════════════════════════════
           TESTIMONI — Carousel

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState, useRef } from "react";
 
@@ -1179,9 +1179,9 @@ export default function ArcadeLandingPage() {
             </section>
 
             {/* ══════════════════════════════════════
-          STUDIO PREVIEW
+          STUDIO PREVIEW (HIDDEN TEMP)
          ══════════════════════════════════════ */}
-            <ArcadeStudioPreview />
+            {/* <ArcadeStudioPreview /> */}
 
             {/* ══════════════════════════════════════
           TESTIMONI
