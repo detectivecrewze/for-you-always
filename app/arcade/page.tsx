@@ -243,11 +243,20 @@ function RoomShowcase() {
                         overflow: "hidden",
                         background: "var(--arc-surface-raised)",
                         border: "1.5px solid var(--arc-border-gold)",
-                        boxShadow: "var(--arc-shadow-elevated)",
+                        boxShadow: "var(--arc-shadow-elevated), 0 0 0 1px rgba(44,30,18,0.08)",
                         transition: "opacity 0.3s ease",
                         opacity: fading ? 0 : 1,
                     }}
                 >
+                    {/* Vignette overlay */}
+                    <div style={{
+                        position: "absolute",
+                        inset: 0,
+                        zIndex: 2,
+                        pointerEvents: "none",
+                        borderRadius: "var(--arc-radius-lg)",
+                        background: "radial-gradient(ellipse at center, transparent 55%, rgba(20,12,6,0.55) 100%)",
+                    }} />
                     {isMenu ? (
                         /* â”€â”€ Slide 0: Main Menu - video/image from ROOM_MEDIA.MainMenu â”€â”€ */
                         ROOM_MEDIA.MainMenu.video || ROOM_MEDIA.MainMenu.image ? (
@@ -257,6 +266,7 @@ function RoomShowcase() {
                                 loop
                                 muted
                                 playsInline
+                                preload="none"
                                 poster={ROOM_MEDIA.MainMenu.image}
                                 x-webkit-airplay="deny"
                                 disablePictureInPicture
@@ -298,6 +308,7 @@ function RoomShowcase() {
                             loop
                             muted
                             playsInline
+                            preload="none"
                             poster={media.image}
                             x-webkit-airplay="deny"
                             disablePictureInPicture
