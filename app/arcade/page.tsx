@@ -507,12 +507,13 @@ function ArcadeStudioPreview() {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
+                    video.load();
                     video.play().catch(() => { });
                 } else {
                     video.pause();
                 }
             },
-            { threshold: 0.3 }
+            { threshold: 0.2 }
         );
         observer.observe(video);
         return () => observer.disconnect();
@@ -561,7 +562,7 @@ function ArcadeStudioPreview() {
                             loop
                             muted
                             playsInline
-                            preload="none"
+                            preload="metadata"
                             x-webkit-airplay="deny"
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"

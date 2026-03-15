@@ -431,12 +431,13 @@ function StudioPreview() {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
+                    video.load();
                     video.play().catch(() => { });
                 } else {
                     video.pause();
                 }
             },
-            { threshold: 0.3 }
+            { threshold: 0.2 }
         );
         observer.observe(video);
         return () => observer.disconnect();
@@ -492,11 +493,11 @@ function StudioPreview() {
                             loop
                             muted
                             playsInline
-                            preload="none"
+                            preload="metadata"
                             x-webkit-airplay="deny"
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", WebkitMediaControls: "none" } as React.CSSProperties}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                         >
                             <source src="https://cdn.for-you-always.my.id/1773611293880-nh6g6w.mp4" type="video/mp4" />
                         </video>
