@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState, useRef } from "react";
 
@@ -120,7 +120,7 @@ const RoomIcons: Record<string, React.ReactNode> = {
 const ARCADE_ROOMS = [
     {
         title: "Atlas",
-        description: "Peta kenangan kita â€” setiap titik lokasi menyimpan foto dan cerita spesial.",
+        description: "Peta kenangan kita - setiap titik lokasi menyimpan foto dan cerita spesial.",
         color: "#b8956a",
     },
     {
@@ -130,48 +130,48 @@ const ARCADE_ROOMS = [
     },
     {
         title: "Journey",
-        description: "Petualangan visual perjalanan hubungan kalian â€” dari awal bertemu hingga hari ini.",
+        description: "Petualangan visual perjalanan hubungan kalian - dari awal bertemu hingga hari ini.",
         color: "#a89070",
     },
     {
         title: "Moments",
-        description: "Galeri foto kenangan yang berputar sinematik â€” setiap foto punya ceritanya sendiri.",
+        description: "Galeri foto kenangan yang berputar sinematik - setiap foto punya ceritanya sendiri.",
         color: "#b8956a",
     },
     {
         title: "Quiz",
-        description: "Tebak jawaban dari si penerima â€” penuh kejutan dan tawa di setiap pertanyaan.",
+        description: "Tebak jawaban dari si penerima - penuh kejutan dan tawa di setiap pertanyaan.",
         color: "#c4a882",
     },
     {
         title: "Catcher",
-        description: "Mini-game interaktif menangkap bintang â€” seru, ringan, dan bikin senyum terus.",
+        description: "Mini-game interaktif menangkap bintang - seru, ringan, dan bikin senyum terus.",
         color: "#d4b896",
     },
     {
         title: "Fortune",
-        description: "Ramalan romantis personal yang ditulis khusus â€” buka satu per satu untuk kejutan manis.",
+        description: "Ramalan romantis personal yang ditulis khusus - buka satu per satu untuk kejutan manis.",
         color: "#b89878",
     },
     {
         title: "Things",
-        description: "Hal-hal kecil yang kamu cintai dari orang tersayang â€” tiap satu lebih manis dari sebelumnya.",
+        description: "Hal-hal kecil yang kamu cintai dari orang tersayang - tiap satu lebih manis dari sebelumnya.",
         color: "#c4a882",
     },
     {
         title: "Bucket",
-        description: "Daftar impian bersama yang bisa di-check off â€” dari yang sederhana hingga yang berani.",
+        description: "Daftar impian bersama yang bisa di-check off - dari yang sederhana hingga yang berani.",
         color: "#a89070",
     },
     {
         title: "Message",
-        description: "Pesan cinta penutup yang menyentuh hati â€” kata terakhir yang paling berkesan.",
+        description: "Pesan cinta penutup yang menyentuh hati - kata terakhir yang paling berkesan.",
         color: "#c4a882",
     },
 ];
 
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   Room Showcase â€” Cinematic Fullscreen Slideshow
+   Room Showcase - Cinematic Fullscreen Slideshow
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 // For each room: provide video MP4 url + image fallback url
@@ -249,7 +249,7 @@ function RoomShowcase() {
                     }}
                 >
                     {isMenu ? (
-                        /* â”€â”€ Slide 0: Main Menu â€” video/image from ROOM_MEDIA.MainMenu â”€â”€ */
+                        /* â”€â”€ Slide 0: Main Menu - video/image from ROOM_MEDIA.MainMenu â”€â”€ */
                         ROOM_MEDIA.MainMenu.video || ROOM_MEDIA.MainMenu.image ? (
                             <video
                                 key={ROOM_MEDIA.MainMenu.video}
@@ -398,7 +398,7 @@ function RoomShowcase() {
                         </h3>
                         <p className="arc-body" style={{ fontSize: "0.9rem", margin: 0 }}>
                             {isMenu
-                                ? "10 ruangan interaktif dalam satu hadiah digital â€” dari musik hingga pesan penutup yang menyentuh hati."
+                                ? "10 ruangan interaktif dalam satu hadiah digital - dari musik hingga pesan penutup yang menyentuh hati."
                                 : room!.description}
                         </p>
                     </div>
@@ -615,7 +615,7 @@ export default function ArcadeLandingPage() {
                                 color: "var(--arc-text-secondary)",
                             }}
                         >
-                            Kado digital interaktif dengan 10 mini-experience unik â€” dari Quiz,
+                            Kado digital interaktif dengan 10 mini-experience unik - dari Quiz,
                             Journey, Atlas, hingga Star Catcher. Setiap ruang menyimpan{" "}
                             <strong style={{ color: "var(--arc-accent-warm)", fontWeight: 700 }}>
                                 kejutan yang tak terlupakan.
@@ -701,7 +701,7 @@ export default function ArcadeLandingPage() {
             </section>
 
             {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          10 ROOMS SHOWCASE â€” Cinematic Slideshow
+          10 ROOMS SHOWCASE - Cinematic Slideshow
          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
             <RoomShowcase />
 
@@ -807,7 +807,7 @@ export default function ArcadeLandingPage() {
                                     Kustomisasi Sendiri
                                 </h3>
                                 <p className="arc-body" style={{ fontSize: "0.9rem" }}>
-                                    Isi semua 10 ruangan sesuai keinginanmu â€” foto, musik, pesan, quiz, dan lainnya. Privat, bebas, sepenuhnya milikmu.
+                                    Isi semua 10 ruangan sesuai keinginanmu - foto, musik, pesan, quiz, dan lainnya. Privat, bebas, sepenuhnya milikmu.
                                 </p>
                             </div>
                         </AnimatedSection>
@@ -851,7 +851,7 @@ export default function ArcadeLandingPage() {
                                     Publish & Kejutkan
                                 </h3>
                                 <p className="arc-body" style={{ fontSize: "0.9rem" }}>
-                                    Setelah selesai, publish dengan satu klik â€” lalu kirim link Arcade ke orang tersayang dan biarkan mereka terkejut.
+                                    Setelah selesai, publish dengan satu klik - lalu kirim link Arcade ke orang tersayang dan biarkan mereka terkejut.
                                 </p>
                             </div>
                         </AnimatedSection>
@@ -1126,7 +1126,7 @@ export default function ArcadeLandingPage() {
                         letterSpacing: "0.08em",
                     }}
                 >
-                    Â© 2026 For you, Always. â€” Preserving Memories Digitally
+                    Â© 2026 For you, Always. - Preserving Memories Digitally
                 </p>
             </footer>
 
