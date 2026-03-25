@@ -1303,7 +1303,7 @@ export default function ArcadeLandingPage() {
                                     <span style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "clamp(1.2rem,4vw,1.8rem)", color: "var(--arc-accent-light)" }}>Rp 25.000</span>
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 28, flex: 1 }}>
-                                    {["10 Ruangan Interaktif", "Bebas Kustomisasi & Privasi", "Opsi Nonaktifkan Ruangan", "Link khusus (namapenerima.vercel.app)", "Lifetime Access"].map((f) => (
+                                    {["10 Ruangan Interaktif", "Bebas Kustomisasi & Privasi", "Opsi Nonaktifkan Ruangan", "Link khusus", "Lifetime Access"].map((f) => (
                                         <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.85)", fontWeight: 500, lineHeight: 1.4 }}>
                                             <div style={{ width: 18, height: 18, borderRadius: 6, background: "rgba(196,154,60,0.2)", border: "1.5px solid rgba(201,168,124,0.4)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--arc-accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>

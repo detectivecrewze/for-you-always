@@ -1302,7 +1302,7 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1, marginTop: 14 }}>
-                                    {["Maksimal 20 foto", "Pesan suara personal", "5 Pilihan Tema Warna", "Link khusus (namapenerima.vercel.app)", "Akses selamanya"].map((f, i) => (
+                                    {["Maksimal 20 foto", "Pesan suara personal", "5 Pilihan Tema Warna", "Link khusus", "Akses selamanya"].map((f, i) => (
                                         <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.85)", lineHeight: 1.4 }}>
                                             <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.25)", border: "1px solid rgba(201,168,124,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
