@@ -1222,7 +1222,7 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                             margin: "0 auto 48px",
                         }}>
 
-                            {/* ── Voices Card ── */}
+                            {/* ── Voices Regular Card ── */}
                             <div style={{
                                 padding: "36px 32px",
                                 borderRadius: "var(--radius-lg)",
@@ -1234,7 +1234,7 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                 flexDirection: "column",
                             }}>
                                 <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, color: "var(--accent-light)", marginBottom: 8 }}>
-                                    Voices. Edition
+                                    Voices. Regular
                                 </div>
                                 <div style={{ marginBottom: 24 }}>
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
@@ -1242,8 +1242,8 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1 }}>
-                                    {["Upload foto kenangan tanpa batas", "Pesan suara personal", "5 Pilihan Tema Warna", "Link unik + Password Gate", "Akses selamanya"].map((f, i) => (
-                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.7)" }}>
+                                    {["Maksimal 10 foto", "Pesan suara personal", "5 Pilihan Tema Warna", "Link standar (untuk dikirim)", "Akses selamanya"].map((f, i) => (
+                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.7)", lineHeight: 1.4 }}>
                                             <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.2)", border: "1px solid rgba(166,124,82,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                             </div>
@@ -1252,9 +1252,9 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Regular)*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
-                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "rgba(166,124,82,0.15)", border: "1px solid rgba(166,124,82,0.3)", color: "var(--accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease" }}
+                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "rgba(166,124,82,0.15)", border: "1px solid rgba(166,124,82,0.3)", color: "var(--accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease", textAlign: "center" }}
                                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.25)"; }}
                                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.15)"; }}
                                 >
@@ -1263,7 +1263,7 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                 </a>
                             </div>
 
-                            {/* ── Bundle Card (Featured) ── */}
+                            {/* ── Voices Premium Card (Featured) ── */}
                             <div style={{
                                 padding: "36px 32px",
                                 borderRadius: "var(--radius-lg)",
@@ -1291,23 +1291,19 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                     textTransform: "uppercase" as const,
                                     whiteSpace: "nowrap" as const,
                                 }}>
-                                    ✦ Paling Worth It
+                                    ✦ Lebih Eksklusif
                                 </div>
                                 <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, color: "var(--accent-light)", marginBottom: 8 }}>
-                                    Bundle Edition
+                                    Voices. Premium
                                 </div>
                                 <div style={{ marginBottom: 6 }}>
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>25</span>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>15</span>
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
                                 </div>
-                                <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
-                                    <span style={{ fontSize: 11, color: "rgba(245,239,230,0.3)", textDecoration: "line-through" }}>Normalnya Rp 30.000</span>
-                                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: "rgba(166,124,82,0.2)", color: "var(--accent-light)" }}>Hemat 5rb</span>
-                                </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1 }}>
-                                    {["Semua fitur Voices. Edition", "Semua fitur Arcade Edition", "10 Ruangan Interaktif", "2 Kado dalam 1 paket", "Akses selamanya"].map((f, i) => (
-                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.85)" }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1, marginTop: 14 }}>
+                                    {["Maksimal 20 foto", "Pesan suara personal", "5 Pilihan Tema Warna", "Link khusus (namapenerima.vercel.app)", "Akses selamanya"].map((f, i) => (
+                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.85)", lineHeight: 1.4 }}>
                                             <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.25)", border: "1px solid rgba(201,168,124,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                             </div>
@@ -1316,9 +1312,9 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Bundle%20Edition*%20(Voices%20%2B%20Arcade)%20dengan%20harga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Premium)*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
-                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.4s ease", boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)" }}
+                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.4s ease", boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)", textAlign: "center" }}
                                 >
                                     Pesan Sekarang
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>

@@ -1245,7 +1245,7 @@ export default function ArcadeLandingPage() {
                             width: "100%",
                         }}>
 
-                            {/* ── Arcade Card ── */}
+                            {/* ── Arcade Regular Card ── */}
                             <div style={{
                                 padding: "36px 28px",
                                 background: "rgba(30,18,10,0.65)",
@@ -1256,14 +1256,14 @@ export default function ArcadeLandingPage() {
                                 flexDirection: "column",
                             }}>
                                 <div style={{ fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: 17, color: "var(--arc-accent-light)", marginBottom: 10 }}>
-                                    Arcade Edition
+                                    Arcade Regular
                                 </div>
                                 <div style={{ marginBottom: 20 }}>
                                     <span style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "clamp(1.2rem,4vw,1.8rem)", color: "var(--arc-accent-light)" }}>Rp 20.000</span>
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 28, flex: 1 }}>
-                                    {["10 Ruangan Interaktif", "Bebas Kustomisasi & Privasi 100%", "Opsi Nonaktifkan Ruangan", "Password Protected", "Lifetime Access"].map((f) => (
-                                        <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.75)", fontWeight: 500 }}>
+                                    {["10 Ruangan Interaktif", "Bebas Kustomisasi & Privasi", "Opsi Nonaktifkan Ruangan", "Link standar (untuk dikirim)", "Lifetime Access"].map((f) => (
+                                        <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.75)", fontWeight: 500, lineHeight: 1.4 }}>
                                             <div style={{ width: 18, height: 18, borderRadius: 6, background: "rgba(196,154,60,0.15)", border: "1.5px solid rgba(196,154,60,0.3)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--arc-accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                             </div>
@@ -1272,16 +1272,16 @@ export default function ArcadeLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition%20(Regular)*%20seharga%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
-                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "15px 0", borderRadius: "var(--arc-radius-md)", background: "rgba(196,154,60,0.15)", border: "1.5px solid rgba(196,154,60,0.3)", color: "var(--arc-accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease" }}
+                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "15px 0", borderRadius: "var(--arc-radius-md)", background: "rgba(196,154,60,0.15)", border: "1.5px solid rgba(196,154,60,0.3)", color: "var(--arc-accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease", textAlign: "center" }}
                                 >
                                     Pesan Sekarang
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                                 </a>
                             </div>
 
-                            {/* ── Bundle Card (Featured) ── */}
+                            {/* ── Arcade Premium Card (Featured) ── */}
                             <div style={{
                                 padding: "36px 28px",
                                 background: "rgba(30,18,10,0.8)",
@@ -1294,21 +1294,17 @@ export default function ArcadeLandingPage() {
                             }}>
                                 {/* Featured badge */}
                                 <div style={{ position: "absolute" as const, top: -14, left: "50%", transform: "translateX(-50%)", background: "var(--arc-accent-light)", color: "#2c1e12", fontSize: 10, fontWeight: 700, padding: "4px 16px", borderRadius: 999, letterSpacing: "0.1em", textTransform: "uppercase" as const, whiteSpace: "nowrap" as const }}>
-                                    ✦ Paling Worth It
+                                    ✦ Lebih Eksklusif
                                 </div>
                                 <div style={{ fontFamily: "var(--arc-font-display)", fontStyle: "italic", fontSize: 17, color: "var(--arc-accent-light)", marginBottom: 10 }}>
-                                    Bundle Edition
+                                    Arcade Premium
                                 </div>
-                                <div style={{ marginBottom: 6 }}>
+                                <div style={{ marginBottom: 20 }}>
                                     <span style={{ fontFamily: "var(--arc-font-pixel)", fontSize: "clamp(1.2rem,4vw,1.8rem)", color: "var(--arc-accent-light)" }}>Rp 25.000</span>
                                 </div>
-                                <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
-                                    <span style={{ fontSize: 11, color: "rgba(255,248,231,0.3)", textDecoration: "line-through" }}>Normalnya Rp 30.000</span>
-                                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: "rgba(196,154,60,0.2)", color: "var(--arc-accent-light)" }}>Hemat 5rb</span>
-                                </div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 28, flex: 1 }}>
-                                    {["Semua fitur Voices. Edition", "Semua fitur Arcade Edition", "10 Ruangan Interaktif", "2 Kado dalam 1 paket", "Lifetime Access"].map((f) => (
-                                        <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.85)", fontWeight: 500 }}>
+                                    {["10 Ruangan Interaktif", "Bebas Kustomisasi & Privasi", "Opsi Nonaktifkan Ruangan", "Link khusus (namapenerima.vercel.app)", "Lifetime Access"].map((f) => (
+                                        <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(255,248,231,0.85)", fontWeight: 500, lineHeight: 1.4 }}>
                                             <div style={{ width: 18, height: 18, borderRadius: 6, background: "rgba(196,154,60,0.2)", border: "1.5px solid rgba(201,168,124,0.4)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--arc-accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                             </div>
@@ -1317,10 +1313,10 @@ export default function ArcadeLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Bundle%20Edition*%20(Voices%20%2B%20Arcade)%20dengan%20harga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition%20(Premium)*%20seharga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
                                     className="arc-btn-primary"
-                                    style={{ width: "100%", justifyContent: "center", padding: "15px 0" }}
+                                    style={{ width: "100%", justifyContent: "center", padding: "15px 0", textAlign: "center" }}
                                 >
                                     Pesan Sekarang
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
