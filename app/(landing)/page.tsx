@@ -1324,7 +1324,150 @@ Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap k
                         </div>
                     </AnimatedSection>
 
-                    {/* Trust */}
+                    {/* ── Bundle Teaser Banner ── */}
+                    <AnimatedSection delay={380}>
+                        <a
+                            href="/bundle"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: 20,
+                                maxWidth: 720,
+                                margin: "0 auto 48px",
+                                padding: "24px 32px",
+                                borderRadius: "var(--radius-md)",
+                                background: "rgba(255,252,247,0.05)",
+                                border: "1px solid rgba(201,168,124,0.2)",
+                                backdropFilter: "blur(12px)",
+                                WebkitBackdropFilter: "blur(12px)",
+                                textDecoration: "none",
+                                transition: "all 0.4s ease",
+                                flexWrap: "wrap",
+                                cursor: "pointer",
+                            }}
+                            onMouseEnter={e => {
+                                (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.09)";
+                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.4)";
+                                (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                            }}
+                            onMouseLeave={e => {
+                                (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.05)";
+                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.2)";
+                                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                            }}
+                        >
+                            {/* Left — icon + text */}
+                            <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
+                                {/* Bundle icon box */}
+                                <div
+                                    style={{
+                                        flexShrink: 0,
+                                        width: 44,
+                                        height: 44,
+                                        borderRadius: 14,
+                                        background: "rgba(166,124,82,0.15)",
+                                        border: "1px solid rgba(201,168,124,0.25)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        color: "var(--accent-light)",
+                                    }}
+                                >
+                                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                                        <polyline points="20 12 20 22 4 22 4 12" />
+                                        <rect x="2" y="7" width="20" height="5" />
+                                        <line x1="12" y1="22" x2="12" y2="7" />
+                                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                        <span
+                                            style={{
+                                                fontFamily: "var(--font-display)",
+                                                fontStyle: "italic",
+                                                fontSize: 17,
+                                                color: "var(--accent-light)",
+                                            }}
+                                        >
+                                            Voices. Bundle
+                                        </span>
+                                        <span
+                                            style={{
+                                                fontSize: 9,
+                                                fontWeight: 700,
+                                                letterSpacing: "0.1em",
+                                                textTransform: "uppercase" as const,
+                                                padding: "3px 8px",
+                                                borderRadius: 999,
+                                                background: "rgba(166,124,82,0.2)",
+                                                border: "1px solid rgba(201,168,124,0.3)",
+                                                color: "var(--accent-light)",
+                                            }}
+                                        >
+                                            5 kado
+                                        </span>
+                                    </div>
+                                    <p
+                                        style={{
+                                            fontSize: 13,
+                                            color: "rgba(245,239,230,0.5)",
+                                            margin: 0,
+                                            lineHeight: 1.5,
+                                        }}
+                                    >
+                                        Beli 5 kuota Voices Gift sekaligus — cocok untuk reseller atau kamu yang ingin kasih kado ke banyak orang.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Right — price + arrow */}
+                            <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+                                <div style={{ textAlign: "right" as const }}>
+                                    <div
+                                        style={{
+                                            fontFamily: "var(--font-display)",
+                                            fontSize: 22,
+                                            fontWeight: 600,
+                                            color: "#f5efe6",
+                                            letterSpacing: "-0.02em",
+                                        }}
+                                    >
+                                        Rp 30.000
+                                    </div>
+                                    <div
+                                        style={{
+                                            fontSize: 10,
+                                            color: "rgba(245,239,230,0.3)",
+                                            textDecoration: "line-through",
+                                        }}
+                                    >
+                                        satuan 5× = Rp 50.000
+                                    </div>
+                                </div>
+                                <div
+                                    style={{
+                                        width: 36,
+                                        height: 36,
+                                        borderRadius: "50%",
+                                        border: "1px solid rgba(201,168,124,0.25)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        color: "var(--accent-light)",
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </a>
+                    </AnimatedSection>
+
                     <AnimatedSection delay={400}>
                         <div
                             style={{

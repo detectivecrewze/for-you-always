@@ -10,6 +10,7 @@ function Navbar() {
     const navLinks = [
         { label: "Voices", href: "/" },
         { label: "Arcade", href: "/arcade" },
+        { label: "Bundle", href: "/bundle" },
     ];
 
     return (
