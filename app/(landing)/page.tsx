@@ -120,72 +120,552 @@ function StepCard({
 }
 
 /* ─────────────────────────────────────────────
-   Feature Highlight Card
+   Feature Showcase — Slideshow with navigation
+   (mirrors Arcade’s RoomShowcase pattern)
    ───────────────────────────────────────────── */
+const FEATURE_SLIDES = [
+    {
+        label: "FOTO",
+        title: "The Glass Viewport",
+        description:
+            "Bingkai interaktif yang memutar foto-foto kenangan satu per satu. Setiap foto hadir dengan teks cerita personal di setiap momennya.",
+        videoSrc: "",
+        imageSrc: "",
+        gifSrc: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
+    },
+    {
+        label: "SUARA + MUSIK",
+        title: "The Curated Soundtrack",
+        description:
+            "Dua lapisan suara dalam satu kado — pesan suara pribadimu yang terekam, dibalut lagu latar pilihanmu sendiri. Pilih dari Spotify, YouTube, atau lagu apapun yang paling bermakna.",
+        videoSrc: "https://cdn.for-you-always.my.id/1774606552857-l95uqf.mp4",
+        imageSrc: "",
+        gifSrc: "",
+    },
+    {
+        label: "KEJUTAN",
+        title: "The Secret Epilogue",
+        description:
+            "Sembunyikan foto rahasia dan pesan akhir yang baru terungkap setelah semua kenangan selesai diputar — atau pada waktu yang kamu tentukan sendiri.",
+        videoSrc: "https://cdn.for-you-always.my.id/1774604930423-enc3lb.mp4",
+        imageSrc: "",
+        gifSrc: "",
+    },
+];
+
+function FeatureShowcase() {
+    const TOTAL = FEATURE_SLIDES.length;
+    const [active, setActive] = useState(0);
+    const [fading, setFading] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const goTo = (idx: number) => {
+        if (idx === active || fading) return;
+        setFading(true);
+        setTimeout(() => {
+            setActive(idx);
+            setFading(false);
+        }, 280);
+    };
+
+    const prev = () => goTo((active - 1 + TOTAL) % TOTAL);
+    const next = () => goTo((active + 1) % TOTAL);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.load();
+            videoRef.current.play().catch(() => { });
+        }
+    }, [active]);
+
+    const slide = FEATURE_SLIDES[active];
+    const hasVideo = !!slide.videoSrc;
+    const hasGif = !!slide.gifSrc;
+    const hasImage = !!slide.imageSrc;
+
+    /* soundwave bars for Soundtrack slide */
+    const isSoundtrack = active === 1;
+
+    return (
+        <AnimatedSection delay={100}>
+            <div style={{ maxWidth: 860, margin: "0 auto" }}>
+
+                {/* ── Media Frame 16:9 ── */}
+                <div
+                    style={{
+                        position: "relative",
+                        width: "100%",
+                        aspectRatio: "16/9",
+                        borderRadius: "var(--radius-lg)",
+                        overflow: "hidden",
+                        background: "var(--bg-deep)",
+                        border: "1.5px solid var(--border-warm)",
+                        boxShadow: "var(--shadow-elevated)",
+                        transition: "opacity 0.28s ease",
+                        opacity: fading ? 0 : 1,
+                    }}
+                >
+                    {/* Vignette */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            zIndex: 2,
+                            pointerEvents: "none",
+                            background: "radial-gradient(ellipse at center, transparent 55%, rgba(44,33,24,0.6) 100%)",
+                        }}
+                    />
+
+                    {/* Media content */}
+                    {hasVideo ? (
+                        <video
+                            ref={videoRef}
+                            key={slide.videoSrc}
+                            src={slide.videoSrc}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="none"
+                            poster={slide.imageSrc || undefined}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        />
+                    ) : hasGif ? (
+                        <img
+                            key={slide.gifSrc}
+                            src={slide.gifSrc}
+                            alt={slide.title}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        />
+                    ) : hasImage ? (
+                        <img
+                            key={slide.imageSrc}
+                            src={slide.imageSrc}
+                            alt={slide.title}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        />
+                    ) : (
+                        /* Placeholder */
+                        <div
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 16,
+                                background: "linear-gradient(135deg, #3b2f25 0%, #2c2118 100%)",
+                            }}
+                        >
+                            {isSoundtrack ? (
+                                /* Soundwave animation placeholder */
+                                <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 64 }}>
+                                    {[0.4, 0.75, 0.55, 1, 0.65, 0.9, 0.45, 0.85, 0.6, 0.95, 0.5, 0.8, 0.35, 0.7].map(
+                                        (h, i) => (
+                                            <div
+                                                key={i}
+                                                style={{
+                                                    width: 4,
+                                                    height: `${h * 100}%`,
+                                                    borderRadius: 3,
+                                                    background: `rgba(201,168,124,${0.4 + h * 0.4})`,
+                                                    animation: `soundwave-bounce 1.3s ease-in-out ${i * 0.09}s infinite alternate`,
+                                                }}
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            ) : (
+                                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,124,0.25)" strokeWidth={0.8}>
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                            )}
+                            <span
+                                style={{
+                                    fontSize: 11,
+                                    fontWeight: 600,
+                                    letterSpacing: "0.15em",
+                                    textTransform: "uppercase" as const,
+                                    color: "rgba(201,168,124,0.4)",
+                                }}
+                            >
+                                {slide.title} — Video Coming Soon
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Label badge top-left */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 16,
+                            left: 16,
+                            zIndex: 10,
+                            padding: "5px 14px",
+                            borderRadius: 999,
+                            background: "rgba(166,124,82,0.85)",
+                            backdropFilter: "blur(8px)",
+                            WebkitBackdropFilter: "blur(8px)",
+                            color: "#fff",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: "0.1em",
+                        }}
+                    >
+                        {slide.label}
+                    </div>
+
+                    {/* Index badge top-right */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 16,
+                            right: 16,
+                            zIndex: 10,
+                            padding: "5px 14px",
+                            borderRadius: 999,
+                            background: "rgba(245,239,230,0.12)",
+                            backdropFilter: "blur(8px)",
+                            WebkitBackdropFilter: "blur(8px)",
+                            border: "1px solid rgba(201,168,124,0.3)",
+                            color: "rgba(245,239,230,0.8)",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: "0.1em",
+                        }}
+                    >
+                        {String(active + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
+                    </div>
+                </div>
+
+                {/* ── Info Row + Arrows ── */}
+                <div
+                    style={{
+                        marginTop: 24,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 20,
+                        transition: "opacity 0.28s ease",
+                        opacity: fading ? 0 : 1,
+                    }}
+                >
+                    {/* Prev button */}
+                    <button
+                        onClick={prev}
+                        aria-label="Fitur sebelumnya"
+                        style={{
+                            flexShrink: 0,
+                            width: 44,
+                            height: 44,
+                            borderRadius: "50%",
+                            border: "1.5px solid var(--border-warm)",
+                            background: "var(--bg-card)",
+                            color: "var(--text-primary)",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.25s ease",
+                            boxShadow: "var(--shadow-soft)",
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = "var(--accent)";
+                            (e.currentTarget as HTMLElement).style.color = "#fff";
+                            (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
+                            (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
+                            (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)";
+                        }}
+                    >
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    {/* Feature Info */}
+                    <div style={{ flex: 1, textAlign: "center" }}>
+                        <h3
+                            style={{
+                                fontFamily: "var(--font-display)",
+                                fontStyle: "italic",
+                                fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
+                                fontWeight: 600,
+                                color: "var(--text-primary)",
+                                marginBottom: 8,
+                                lineHeight: 1.2,
+                            }}
+                        >
+                            {slide.title}
+                        </h3>
+                        <p
+                            className="body-text"
+                            style={{ fontSize: "0.9rem", margin: 0, lineHeight: 1.65 }}
+                        >
+                            {slide.description}
+                        </p>
+                    </div>
+
+                    {/* Next button */}
+                    <button
+                        onClick={next}
+                        aria-label="Fitur berikutnya"
+                        style={{
+                            flexShrink: 0,
+                            width: 44,
+                            height: 44,
+                            borderRadius: "50%",
+                            border: "1.5px solid var(--border-warm)",
+                            background: "var(--bg-card)",
+                            color: "var(--text-primary)",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.25s ease",
+                            boxShadow: "var(--shadow-soft)",
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = "var(--accent)";
+                            (e.currentTarget as HTMLElement).style.color = "#fff";
+                            (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
+                            (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
+                            (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)";
+                        }}
+                    >
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+
+                {/* ── Dot Navigation ── */}
+                <div
+                    style={{
+                        marginTop: 20,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 8,
+                    }}
+                >
+                    {FEATURE_SLIDES.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => goTo(i)}
+                            aria-label={FEATURE_SLIDES[i].title}
+                            style={{
+                                width: i === active ? 28 : 8,
+                                height: 8,
+                                borderRadius: 999,
+                                border: "none",
+                                background: i === active ? "var(--accent)" : "var(--border-warm)",
+                                cursor: "pointer",
+                                padding: 0,
+                                transition: "all 0.3s ease",
+                                opacity: i === active ? 1 : 0.55,
+                            }}
+                        />
+                    ))}
+                </div>
+
+            </div>
+        </AnimatedSection>
+    );
+}
+
+
 function FeatureCard({
-    icon,
     title,
     description,
     index,
+    videoSrc,
+    imageSrc,
+    gifSrc,
+    accentLabel,
+    mediaOverlay,
 }: {
-    icon: React.ReactNode;
     title: string;
     description: string;
     index: number;
+    videoSrc?: string;
+    imageSrc?: string;
+    gifSrc?: string;
+    accentLabel?: string;
+    mediaOverlay?: React.ReactNode;
 }) {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [videoFailed, setVideoFailed] = useState(false);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.play().catch(() => setVideoFailed(true));
+        }
+    }, []);
+
     return (
-        <AnimatedSection delay={index * 120}>
+        <AnimatedSection delay={index * 140}>
             <div
+                className="glass-surface"
                 style={{
+                    padding: 0,
+                    overflow: "hidden",
                     display: "flex",
-                    gap: 24,
-                    alignItems: "flex-start",
-                    padding: "36px 32px",
-                    borderRadius: "var(--radius-md)",
-                    background: "rgba(255,252,247,0.5)",
-                    border: "1px solid var(--border)",
+                    flexDirection: "column",
                     transition: "all 0.5s ease",
                 }}
                 onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-soft)";
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-elevated)";
                 }}
                 onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.5)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "none";
                     (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "none";
                 }}
             >
+                {/* ── Media Area ── */}
                 <div
                     style={{
+                        position: "relative",
+                        background: "var(--bg-deep)",
+                        aspectRatio: "4/3",
+                        overflow: "hidden",
                         flexShrink: 0,
-                        width: 48,
-                        height: 48,
-                        borderRadius: 14,
-                        background: "var(--accent-glow)",
-                        border: "1px solid var(--border-warm)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "var(--accent)",
                     }}
                 >
-                    {icon}
+                    {/* Video source (with image fallback) */}
+                    {videoSrc && !videoFailed ? (
+                        <video
+                            ref={videoRef}
+                            src={videoSrc}
+                            muted
+                            loop
+                            playsInline
+                            autoPlay
+                            onError={() => setVideoFailed(true)}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                display: "block",
+                            }}
+                        />
+                    ) : gifSrc ? (
+                        <img
+                            src={gifSrc}
+                            alt={title}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                display: "block",
+                            }}
+                        />
+                    ) : imageSrc ? (
+                        <img
+                            src={imageSrc}
+                            alt={title}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                display: "block",
+                            }}
+                        />
+                    ) : (
+                        /* Placeholder when no media provided */
+                        <div
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "linear-gradient(135deg, #3b2f25 0%, #2c2118 100%)",
+                            }}
+                        >
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,124,0.3)" strokeWidth={1}>
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+                        </div>
+                    )}
+
+                    {/* Gradient overlay */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            background: "linear-gradient(to top, rgba(44,33,24,0.55) 0%, transparent 55%)",
+                            pointerEvents: "none",
+                        }}
+                    />
+
+                    {/* Custom overlay content (e.g. soundwave animation) */}
+                    {mediaOverlay && (
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                display: "flex",
+                                alignItems: "flex-end",
+                                justifyContent: "center",
+                                paddingBottom: 20,
+                                pointerEvents: "none",
+                            }}
+                        >
+                            {mediaOverlay}
+                        </div>
+                    )}
+
+                    {/* Accent label badge (top-left) */}
+                    {accentLabel && (
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 14,
+                                left: 14,
+                                padding: "5px 12px",
+                                borderRadius: 999,
+                                background: "rgba(166,124,82,0.85)",
+                                backdropFilter: "blur(8px)",
+                                WebkitBackdropFilter: "blur(8px)",
+                                color: "#fff",
+                                fontSize: 10,
+                                fontWeight: 700,
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase" as const,
+                            }}
+                        >
+                            {accentLabel}
+                        </div>
+                    )}
                 </div>
-                <div>
+
+                {/* ── Text Area ── */}
+                <div style={{ padding: "24px 28px 30px" }}>
                     <h4
                         style={{
                             fontFamily: "var(--font-display)",
-                            fontSize: "1.25rem",
+                            fontStyle: "italic",
+                            fontSize: "1.35rem",
                             fontWeight: 600,
                             color: "var(--text-primary)",
-                            marginBottom: 8,
+                            marginBottom: 10,
+                            lineHeight: 1.2,
                         }}
                     >
                         {title}
                     </h4>
-                    <p className="body-text" style={{ fontSize: "0.88rem", margin: 0 }}>
+                    <p className="body-text" style={{ fontSize: "0.88rem", margin: 0, lineHeight: 1.65 }}>
                         {description}
                     </p>
                 </div>
@@ -946,82 +1426,11 @@ export default function VoicesLandingPage() {
                         </div>
                     </AnimatedSection>
 
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-                            gap: 20,
-                        }}
-                    >
-                        <FeatureCard
-                            index={0}
-                            icon={
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                                    <circle cx="12" cy="12" r="10" />
-                                    <circle cx="12" cy="12" r="3" />
-                                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
-                                </svg>
-                            }
-                            title="The Glass Viewport"
-                            description="Bingkai interaktif yang memutar foto kenangan satu per satu. Lengkap dengan teks cerita di setiap momen."
-                        />
-                        <FeatureCard
-                            index={1}
-                            icon={
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" />
-                                </svg>
-                            }
-                            title="The Golden Waveform"
-                            description="
-Gelombang emas yang bergerak mengikuti suara dan musik latar pilihanmu. Setiap kata terasa lebih hidup."
-                        />
-                        <FeatureCard
-                            index={2}
-                            icon={
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            }
-                            title="The Interactive Touch"
-                            description="Setiap tema punya cara uniknya sendiri — putar tuas, atau balik foto dan temukan pesan tersembunyi di baliknya."
-                        />
-                    </div>
+                    <FeatureShowcase />
 
-                    {/* Cinematic Quote */}
-                    <AnimatedSection delay={400}>
-                        <div
-                            style={{
-                                marginTop: 64,
-                                padding: "48px 40px",
-                                borderRadius: "var(--radius-lg)",
-                                background: "var(--bg-card)",
-                                border: "1px solid var(--border)",
-                                textAlign: "center",
-                            }}
-                        >
-                            <p
-                                style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontStyle: "italic",
-                                    fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
-                                    color: "var(--text-secondary)",
-                                    lineHeight: 1.6,
-                                    maxWidth: 600,
-                                    margin: "0 auto",
-                                }}
-                            >
-                                &ldquo;Foto bercerita lewat mata, suara menyentuh langsung ke hati. Gabungkan keduanya menjadi kado istimewa yang {" "}
-                                <span style={{ color: "var(--accent)", fontWeight: 600 }}>
-                                    takkan lekang oleh waktu.
-                                </span>
-                                &rdquo;
-                            </p>
-                        </div>
-                    </AnimatedSection>
                 </div>
-            </section >
+            </section>
+
 
             {/* ════════════════════════════════════
           CARA KERJA

@@ -413,6 +413,17 @@ body::after {
     }
 }
 
+@keyframes soundwave-bounce {
+    0% {
+        transform: scaleY(0.3);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
 .animate-fade-in-up {
     animation: fadeInUp 0.8s ease-out both;
 }
