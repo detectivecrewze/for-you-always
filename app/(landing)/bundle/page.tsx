@@ -120,7 +120,7 @@ function StepCard({
    Shared WhatsApp CTA link
    ───────────────────────────────────────────── */
 const WA_LINK =
-    "https://wa.me/6281381543981?text=Halo%20For%20You%2C%20Always!%20Saya%20tertarik%20untuk%20membeli%20*Voices%20Gift%20Bundle*%20(5%20kado%20Rp%2030.000).%20Mohon%20info%20selanjutnya.";
+    "https://wa.me/6281381543981?text=Halo%20For%20You%2C%20Always!%20Saya%20tertarik%20untuk%20membeli%20*Voices%20Gift%20Bundle*%20(Pembelian%20Pertama%20Rp%2030.000).%20Mohon%20info%20selanjutnya.";
 
 /* ─────────────────────────────────────────────
    useIsMobile hook
@@ -805,18 +805,39 @@ export default function BundleSalesPage() {
                                 </span>
                             </div>
 
-                            {/* Crossed price */}
-                            <div style={{ marginBottom: 28 }}>
-                                <span
+                            {/* Crossed price & FOMO Text */}
+                            <div style={{ marginBottom: 28, display: "flex", flexDirection: "column", gap: 8 }}>
+                                <div
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: 6,
+                                        padding: "4px 10px",
+                                        background: "rgba(166,124,82,0.15)",
+                                        border: "1px solid rgba(201,168,124,0.3)",
+                                        borderRadius: 6,
+                                        width: "fit-content",
+                                    }}
+                                >
+                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--accent-light)" strokeWidth={2.5}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-light)", letterSpacing: "0.05em" }}>
+                                        KHUSUS PEMBELIAN PERTAMA
+                                    </span>
+                                </div>
+                                <div
                                     style={{
                                         fontSize: 12,
-                                        color: "rgba(245,239,230,0.3)",
-                                        textDecoration: "line-through",
+                                        color: "rgba(245,239,230,0.65)",
                                         fontWeight: 500,
                                     }}
                                 >
-                                    Beli satuan 5× = Rp 50.000
-                                </span>
+                                    Pembelian berikutnya Rp 35.000 
+                                    <span style={{ textDecoration: "line-through", color: "rgba(245,239,230,0.3)", marginLeft: 6 }}>
+                                        (Harga asli Rp 50.000)
+                                    </span>
+                                </div>
                             </div>
 
                             {/* Feature list */}
