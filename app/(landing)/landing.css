@@ -350,26 +350,29 @@ body::after {
 
 @media (max-width: 480px) {
     .landing-nav {
-        padding: 12px 16px;
+        padding: 12px 10px;
     }
 
     .landing-nav-inner {
         flex-direction: row;
-        padding: 12px;
+        padding: 8px 10px;
         border-radius: var(--radius-md);
-        gap: 12px;
+        gap: 4px;
         justify-content: space-between;
+        flex-wrap: nowrap;
     }
 
     .landing-nav-logo {
         width: auto;
         justify-content: flex-start;
+        margin-right: 0 !important;
     }
 
     .landing-nav-links {
         width: auto;
-        justify-content: flex-end;
-        flex-wrap: wrap;
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 2px;
     }
 }
 
@@ -486,18 +489,26 @@ body::after {
         width: 32px !important;
         height: 32px !important;
         border-radius: 10px !important;
+        margin-right: 0 !important;
     }
 
     /* Nav links lebih compact */
     .landing-nav-link {
         padding: 6px 8px !important;
         font-size: 0.6rem !important;
-        letter-spacing: 0.04em !important;
+        letter-spacing: 0.02em !important;
+        white-space: nowrap !important;
     }
 
     /* Inner navbar padding lebih rapat */
     .landing-nav-inner {
-        padding: 10px 12px !important;
+        padding: 8px 12px !important;
         gap: 4px !important;
+        flex-wrap: nowrap !important;
+    }
+    
+    .landing-nav > div > a[href="#pesan"] {
+        padding: 8px 14px !important;
+        font-size: 0.65rem !important;
     }
 }
