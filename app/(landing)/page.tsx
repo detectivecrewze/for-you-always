@@ -129,9 +129,9 @@ const FEATURE_SLIDES = [
         title: "The Glass Viewport",
         description:
             "Bingkai interaktif yang memutar foto-foto kenangan satu per satu. Setiap foto hadir dengan teks cerita personal di setiap momennya.",
-        videoSrc: "",
+        videoSrc: "https://cdn.for-you-always.my.id/1774607226799-8snt8k.mp4",
         imageSrc: "",
-        gifSrc: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
+        gifSrc: "",
     },
     {
         label: "SUARA + MUSIK",
