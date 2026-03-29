@@ -137,7 +137,7 @@ const FEATURE_SLIDES = [
         label: "SUARA + MUSIK",
         title: "The Curated Soundtrack",
         description:
-            "Dua lapisan suara dalam satu kado — pesan suara pribadimu yang terekam, dibalut lagu latar pilihanmu sendiri. Pilih dari Spotify, YouTube, atau lagu apapun yang paling bermakna.",
+            "Padukan pesan suaramu dengan lagu latar, atau cukup gunakan musik favoritmu saja. Pilih dari library yang tersedia atau upload lagu pilihanmu sendiri untuk melengkapi kado pribadimu.",
         videoSrc: "https://cdn.for-you-always.my.id/1774606552857-l95uqf.mp4",
         imageSrc: "",
         gifSrc: "",
@@ -228,7 +228,16 @@ function FeatureShowcase() {
                             playsInline
                             preload="none"
                             poster={slide.imageSrc || undefined}
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            disablePictureInPicture
+                            controlsList="nodownload nofullscreen noremoteplayback"
+                            onContextMenu={(e) => e.preventDefault()}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                display: "block",
+                                pointerEvents: "none" // Prevents IDM overlay from appearing
+                            }}
                         />
                     ) : hasGif ? (
                         <img
