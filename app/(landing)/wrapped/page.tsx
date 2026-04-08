@@ -107,7 +107,7 @@ const WRAPPED_PAGES = [
     },
     {
         title: "Wrapped",
-        description: "Rangkuman perjalanan kalian dalam angka — berapa menit bersama, top places, core memories, dan 'Vibe' unik hubungan.",
+        description: "Rangkuman cerita kalian. Halaman rekap interaktif yang seluruh isinya—mulai dari rekap waktu, vibe, hingga daftar memori—sepenuhnya bebas di-custom sesuka hati.",
         color: "#c9184a",
     },
     {
@@ -117,7 +117,7 @@ const WRAPPED_PAGES = [
     },
     {
         title: "Invitation",
-        description: "Penutup yang manis — ajakan 'Will you be my Valentine?' dengan karakter beruang lucu yang interaktif dan confetti.",
+        description: "Penutup yang manis. Halaman ajakan interaktif berhias confetti dan karakter lucu. Bebas ubah sendiri teks pertanyaannya untuk momen apa saja.",
         color: "#ff4d6d",
     },
 ];
@@ -248,7 +248,7 @@ function FeatureShowcase() {
                                     el.defaultMuted = true;
                                     el.muted = true;
                                     el.playsInline = true;
-                                    el.play().catch(() => {});
+                                    el.play().catch(() => { });
                                 }
                             }}
                             key={media.video}
