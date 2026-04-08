@@ -114,7 +114,7 @@ function LandscapeProductCard({
                             autoPlay loop muted playsInline
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", pointerEvents: "none" }}
                         />
                     ) : mediaType === "gif" && mediaSrc ? (
                         <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />

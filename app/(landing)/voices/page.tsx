@@ -227,7 +227,6 @@ function FeatureShowcase() {
                             loop
                             muted
                             playsInline
-                            preload="none"
                             poster={slide.imageSrc || undefined}
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
@@ -565,6 +564,7 @@ function FeatureCard({
                                 height: "100%",
                                 objectFit: "cover",
                                 display: "block",
+                                pointerEvents: "none"
                             }}
                         />
                     ) : gifSrc ? (
@@ -767,7 +767,7 @@ function ProductCard({
                             loop
                             muted
                             playsInline
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
                         />
                     ) : (
                         <img
@@ -989,14 +989,14 @@ function StudioPreview() {
                     >
                         <video
                             ref={videoRef}
+                            autoPlay
                             loop
                             muted
                             playsInline
-                            preload="metadata"
                             x-webkit-airplay="deny"
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
                         >
                             <source src="https://cdn.for-you-always.my.id/1773611293880-nh6g6w.mp4" type="video/mp4" />
                         </video>

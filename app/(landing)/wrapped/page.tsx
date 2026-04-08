@@ -248,12 +248,11 @@ function FeatureShowcase() {
                             loop
                             muted
                             playsInline
-                            preload="none"
                             poster={media.image}
                             x-webkit-airplay="deny"
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
                         >
                             {media.video && <source src={media.video} type="video/mp4" />}
                         </video>

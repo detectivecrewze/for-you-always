@@ -266,12 +266,11 @@ function RoomShowcase() {
                                 loop
                                 muted
                                 playsInline
-                                preload="none"
                                 poster={ROOM_MEDIA.MainMenu.image}
                                 x-webkit-airplay="deny"
                                 disablePictureInPicture
                                 controlsList="nodownload nofullscreen noremoteplayback"
-                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
                             >
                                 {ROOM_MEDIA.MainMenu.video && <source src={ROOM_MEDIA.MainMenu.video} type="video/mp4" />}
                             </video>
@@ -308,12 +307,11 @@ function RoomShowcase() {
                             loop
                             muted
                             playsInline
-                            preload="none"
                             poster={media.image}
                             x-webkit-airplay="deny"
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
                         >
                             {media.video && <source src={media.video} type="video/mp4" />}
                         </video>
@@ -559,14 +557,14 @@ function ArcadeStudioPreview() {
                     }}>
                         <video
                             ref={videoRef}
+                            autoPlay
                             loop
                             muted
                             playsInline
-                            preload="metadata"
                             x-webkit-airplay="deny"
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
                         >
                             <source src="https://cdn.for-you-always.my.id/1773611293880-nh6g6w.mp4" type="video/mp4" />
                         </video>
