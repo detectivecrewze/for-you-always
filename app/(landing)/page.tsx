@@ -75,7 +75,7 @@ function LandscapeProductCard({
     useEffect(() => {
         const video = videoRef.current;
         if (!video || mediaType !== "video") return;
-        
+
         // Force strict iOS autoplay requirements
         video.defaultMuted = true;
         video.muted = true;
@@ -186,16 +186,90 @@ function LandscapeProductCard({
 
                     {/* Features List */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
-                        {features.map((feat) => (
-                            <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6b5c4e", fontWeight: 500 }}>
-                                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${accentColor}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth={3}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
+                        {features.map((feat) => {
+                            const isToggleFeature = feat.toLowerCase().includes("turn on / off");
+                            const isMusicFeature = feat.toLowerCase().includes("music pilihan");
+                            const isPageFeature = feat.toLowerCase().includes("berbeda");
+                            const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
+                            const isGalleryFeature = feat.toLowerCase().includes("galeri foto");
+
+                            return (
+                                <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6b5c4e", fontWeight: 500 }}>
+                                    <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${accentColor}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth={3}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span style={{ marginRight: 8 }}>{feat}</span>
+
+                                    {/* Animation: Toggle */}
+                                    {isToggleFeature && (
+                                        <div style={{
+                                            width: 28, height: 15, borderRadius: 99,
+                                            background: "rgba(0,0,0,0.06)", padding: 2,
+                                            display: "inline-flex", alignItems: "center",
+                                            position: "relative", overflow: "hidden",
+                                            animation: "toggle-bg 4s infinite",
+                                            flexShrink: 0,
+                                            // @ts-ignore
+                                            "--accent-color": accentColor
+                                        }}>
+                                            <div style={{
+                                                width: 11, height: 11, borderRadius: "50%",
+                                                background: "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                                                animation: "toggle-slide 4s infinite"
+                                            }} />
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Music Equalizer */}
+                                    {isMusicFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "flex-end", gap: 2, height: 14, paddingBottom: 1 }}>
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} style={{
+                                                    width: 3,
+                                                    background: accentColor,
+                                                    borderRadius: 1,
+                                                    animation: `eq-bar ${0.6 + i * 0.2}s ease-in-out infinite`,
+                                                    animationDelay: `${i * 0.15}s`
+                                                }} />
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Page Indicator */}
+                                    {isPageFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} style={{
+                                                    width: 4, height: 4,
+                                                    borderRadius: "50%",
+                                                    background: accentColor,
+                                                    animation: `page-indicator 1.5s infinite`,
+                                                    animationDelay: `${i * 0.3}s`
+                                                }} />
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Voice Pulse */}
+                                    {isVoiceFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 14, height: 14, position: "relative" }}>
+                                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: accentColor }} />
+                                            <div style={{ position: "absolute", width: "100%", height: "100%", borderRadius: "50%", border: `1.5px solid ${accentColor}`, animation: "voice-pulse 1.8s infinite" }} />
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Photo Shuffle */}
+                                    {isGalleryFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 16, height: 14, position: "relative" }}>
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#f5efe6" }} />
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `${accentColor}11` }} />
+                                        </div>
+                                    )}
                                 </div>
-                                {feat}
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
@@ -247,6 +321,33 @@ export default function MainHubPage() {
                 @keyframes pulse-dot {
                     0%, 100% { opacity: 0.4; transform: scale(1); }
                     50% { opacity: 1; transform: scale(1.15); }
+                }
+                @keyframes toggle-slide {
+                    0%, 20% { transform: translateX(0); }
+                    40%, 80% { transform: translateX(14px); }
+                    100% { transform: translateX(0); }
+                }
+                @keyframes toggle-bg {
+                    0%, 20% { background: rgba(0,0,0,0.1); }
+                    40%, 80% { background: var(--accent-color); }
+                    100% { background: rgba(0,0,0,0.1); }
+                }
+                @keyframes eq-bar {
+                    0%, 100% { height: 4px; }
+                    50% { height: 12px; }
+                }
+                @keyframes page-indicator {
+                    0%, 100% { transform: scale(1); opacity: 0.3; }
+                    33% { transform: scale(1.3); opacity: 1; }
+                }
+                @keyframes voice-pulse {
+                    0% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.4); opacity: 0; }
+                    100% { transform: scale(1); opacity: 0; }
+                }
+                @keyframes photo-shuffle {
+                    0%, 100% { transform: translate(0, 0); }
+                    50% { transform: translate(3px, -3px); }
                 }
             `}</style>
 
@@ -365,8 +466,8 @@ export default function MainHubPage() {
                             description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."
                             features={[
                                 "10 Ruangan Berbeda",
-                                "Bisa turn On / Off Room",
-                                "Pesan Penutup Personal"
+                                "Bisa Turn On / Off Room",
+                                "Background Music Pilihan"
                             ]}
                             price={
                                 <>
@@ -387,9 +488,9 @@ export default function MainHubPage() {
                             title="Memories Wrapped"
                             description="Kado digital 6 halaman interaktif ala Spotify Wrapped. Pilih lagu, galeri, rekap perjalanan, hingga pesan rahasia yang bisa diputar ulang kapan saja."
                             features={[
+                                "6 Halaman Berbeda",
                                 "Bisa Turn On / Off Halaman",
-                                "Music Player library & Lyrics / Quotes",
-                                "Galleries Memories"
+                                "Background Music Pilihan"
                             ]}
                             price={
                                 <>
