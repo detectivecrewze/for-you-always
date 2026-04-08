@@ -140,27 +140,27 @@ const ARCADE_ROOMS = [
     },
     {
         title: "Quiz",
-        description: "Tebak jawaban dari si penerima - penuh kejutan dan tawa di setiap pertanyaan.",
+        description: "Tebak jawaban dari kamu - penuh kejutan dan tawa di setiap pertanyaan.",
         color: "#c4a882",
     },
     {
         title: "Catcher",
-        description: "Mini-game interaktif menangkap bintang - seru, ringan, dan bikin senyum terus.",
+        description: "Mini-game interaktif menangkap bintang - seru dan ringan",
         color: "#d4b896",
     },
     {
         title: "Fortune",
-        description: "Ramalan romantis personal yang ditulis khusus - buka satu per satu untuk kejutan manis.",
+        description: "Ramalan romantis yang ditulis khusus - buka satu per satu untuk kata-kata manis.",
         color: "#b89878",
     },
     {
         title: "Things",
-        description: "Hal-hal kecil yang kamu cintai dari orang tersayang - tiap satu lebih manis dari sebelumnya.",
+        description: "Tulis h   al-hal kecil yang kamu cintai dari dia - because the little things matter most.",
         color: "#c4a882",
     },
     {
         title: "Bucket",
-        description: "Daftar impian bersama yang bisa di-check off - dari yang sederhana hingga yang berani.",
+        description: "Daftar impian bersama yang bisa di-check off - dari yang sederhana hingga yang besar.",
         color: "#a89070",
     },
     {
@@ -1159,7 +1159,7 @@ export default function ArcadeLandingPage() {
                             width: "100%",
                         }}>
 
-                             {/* ── Arcade Regular Card ── */}
+                            {/* ── Arcade Regular Card ── */}
                             <div style={{
                                 padding: "36px 28px",
                                 background: "var(--arc-surface-raised)",
@@ -1197,7 +1197,7 @@ export default function ArcadeLandingPage() {
                                 </a>
                             </div>
 
-                             {/* ── Arcade Premium Card (Featured) ── */}
+                            {/* ── Arcade Premium Card (Featured) ── */}
                             <div style={{
                                 padding: "36px 28px",
                                 background: "var(--arc-surface-raised)",

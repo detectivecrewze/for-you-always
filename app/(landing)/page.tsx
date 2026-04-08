@@ -78,7 +78,7 @@ function LandscapeProductCard({
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    video.play().catch(() => {});
+                    video.play().catch(() => { });
                 } else {
                     video.pause();
                 }
@@ -93,8 +93,8 @@ function LandscapeProductCard({
         <AnimatedSection delay={delay}>
             <div className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
                 {/* Media Section (16:9) */}
-                <a 
-                    href={href} 
+                <a
+                    href={href}
                     className="hub-showcase-media"
                     onMouseEnter={e => {
                         const el = e.currentTarget as HTMLElement;
@@ -167,7 +167,7 @@ function LandscapeProductCard({
                     }}>
                         {title}
                     </h3>
-                    
+
                     <p style={{
                         fontFamily: "var(--font-sans)",
                         fontSize: "clamp(0.95rem, 1.5vw, 1.1rem)",
@@ -200,8 +200,8 @@ function LandscapeProductCard({
                             textDecoration: "none", transition: "all 0.3s ease",
                             boxShadow: `0 8px 24px -4px ${accentColor}66`
                         }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
                             Lihat Produk
                         </a>
 
@@ -383,7 +383,7 @@ export default function MainHubPage() {
                             features={[
                                 "Relationship Stats",
                                 "Music Player & Lyrics",
-                                "Scratch Card Gallery"
+                                "Galleries Memories"
                             ]}
                             price={
                                 <>
@@ -391,8 +391,8 @@ export default function MainHubPage() {
                                     <span>Promo Rp 20.000</span>
                                 </>
                             }
-                            mediaSrc=""
-                            mediaType="placeholder"
+                            mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
+                            mediaType="video"
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
                             href="/wrapped"

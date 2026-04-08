@@ -61,7 +61,7 @@ const FeatureIcons: Record<string, React.ReactNode> = {
             <circle cx="18" cy="16" r="3" />
         </svg>
     ),
-    Gallery: (
+    "Galleries Memories": (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />
@@ -91,27 +91,27 @@ const FeatureIcons: Record<string, React.ReactNode> = {
    ───────────────────────────────────────────── */
 const WRAPPED_PAGES = [
     {
-        title: "Access Gate",
+        title: "Login",
         description: "Halaman pembuka dengan pesan selamat datang dan sistem keamanan passcode yang romantis.",
         color: "#ff4d6d",
     },
     {
-        title: "Music Player",
+        title: "Music",
         description: "Alunan lagu favorit pilihanmu, lengkap dengan lirik yang mengetik secara emosional dan visualizer yang menari.",
         color: "#ff85a1",
     },
     {
-        title: "Scratch Memory",
+        title: "Galleries Memories",
         description: "Momen SURPRISE! Gosok layar seperti scratch card untuk mengungkap foto kenangan dan ceritanya satu per satu.",
         color: "#ff4d6d",
     },
     {
-        title: "Memories Wrapped",
+        title: "Wrapped",
         description: "Rangkuman perjalanan kalian dalam angka — berapa menit bersama, top places, core memories, dan 'Vibe' unik hubungan.",
         color: "#c9184a",
     },
     {
-        title: "Love Letter",
+        title: "Letter",
         description: "Amplop virtual yang terbuka dengan animasi, mengungkap surat cinta dengan kertas bergaris dan tanda tangan elegan.",
         color: "#ff85a1",
     },
@@ -126,12 +126,12 @@ const WRAPPED_PAGES = [
    Media URLs — isi video/image saat siap
    ───────────────────────────────────────────── */
 const PAGE_MEDIA: Record<string, { video: string; image: string }> = {
-    Login: { video: "", image: "" },
-    Music: { video: "", image: "" },
-    Gallery: { video: "", image: "" },
-    Wrapped: { video: "", image: "" },
-    Letter: { video: "", image: "" },
-    Invitation: { video: "", image: "" },
+    Login: { video: "https://cdn.for-you-always.my.id/1775677163497-m2sjw.mp4", image: "" },
+    Music: { video: "https://cdn.for-you-always.my.id/1775677170491-x9o5bc.mp4", image: "" },
+    "Galleries Memories": { video: "https://cdn.for-you-always.my.id/1775677161653-h3gapg.mp4", image: "" },
+    Wrapped: { video: "https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4", image: "" },
+    Letter: { video: "https://cdn.for-you-always.my.id/1775677168482-ksz90k.mp4", image: "" },
+    Invitation: { video: "https://cdn.for-you-always.my.id/1775677166373-4sk074.mp4", image: "" },
 };
 
 function WrappedStepCard({ number, title, description, icon }: { number: string; title: string; description: string; icon: React.ReactNode }) {
@@ -775,7 +775,7 @@ export default function WrappedLandingPage() {
                                     "6 Halaman Interaktif (Bebas Turn ON/OFF)",
                                     "Memories Wrapped Recap",
                                     "Music Player & Lirik",
-                                    "Scratch Card Gallery",
+                                    "Galleries Memories",
                                     "Surat Cinta Digital",
                                     "Jadi dalam Hitungan Menit",
                                 ].map((feat) => (
