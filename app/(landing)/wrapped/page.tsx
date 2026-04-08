@@ -803,7 +803,7 @@ export default function WrappedLandingPage() {
                                 className="wrap-btn-primary"
                                 style={{ width: "100%", justifyContent: "center" }}
                             >
-                                Pesan Sekarang via WhatsApp
+                                Pesan Sekarang
                                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
