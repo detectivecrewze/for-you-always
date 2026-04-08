@@ -75,6 +75,12 @@ function LandscapeProductCard({
     useEffect(() => {
         const video = videoRef.current;
         if (!video || mediaType !== "video") return;
+        
+        // Force strict iOS autoplay requirements
+        video.defaultMuted = true;
+        video.muted = true;
+        video.playsInline = true;
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -359,8 +365,8 @@ export default function MainHubPage() {
                             description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."
                             features={[
                                 "10 Ruangan Berbeda",
-                                "Kuis Hubungan Mini",
-                                "Sertifikat Eksklusif"
+                                "Bisa turn On / Off Room",
+                                "Pesan Penutup Personal"
                             ]}
                             price={
                                 <>
@@ -379,10 +385,10 @@ export default function MainHubPage() {
                         <LandscapeProductCard
                             label="Wrapped Edition"
                             title="Memories Wrapped"
-                            description="Kado interaktif layaknya Spotify Wrapped. Menampilkan rekapitulasi waktu, momen terbaik, dan statistik hubunganmu."
+                            description="Kado digital 6 halaman interaktif ala Spotify Wrapped. Pilih lagu, galeri, rekap perjalanan, hingga pesan rahasia yang bisa diputar ulang kapan saja."
                             features={[
-                                "Relationship Stats",
-                                "Music Player & Lyrics",
+                                "Bisa Turn On / Off Halaman",
+                                "Music Player library & Lyrics / Quotes",
                                 "Galleries Memories"
                             ]}
                             price={

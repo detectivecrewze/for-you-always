@@ -220,7 +220,16 @@ function FeatureShowcase() {
                     {/* Media content */}
                     {hasVideo ? (
                         <video
-                            ref={videoRef}
+                            ref={(el) => {
+                                // Assign both React ref and do the forced defaults
+                                (videoRef as any).current = el;
+                                if (el) {
+                                    el.defaultMuted = true;
+                                    el.muted = true;
+                                    el.playsInline = true;
+                                    el.play().catch(() => {});
+                                }
+                            }}
                             key={slide.videoSrc}
                             src={slide.videoSrc}
                             autoPlay
@@ -1741,7 +1750,7 @@ export default function VoicesLandingPage() {
                                             lineHeight: 1.5,
                                         }}
                                     >
-                                        Beli 5 kuota Voices Gift sekaligus Ã¢â‚¬â€ cocok untuk reseller atau kamu yang ingin kasih kado ke banyak orang.
+                                        Beli 5 kuota Voices Gift sekaligus, cocok untuk reseller atau kamu yang ingin kasih kado ke banyak orang.
                                     </p>
                                 </div>
                             </div>

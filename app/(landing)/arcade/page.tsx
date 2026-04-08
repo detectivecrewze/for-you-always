@@ -261,6 +261,14 @@ function RoomShowcase() {
                         /* â”€â”€ Slide 0: Main Menu - video/image from ROOM_MEDIA.MainMenu â”€â”€ */
                         ROOM_MEDIA.MainMenu.video || ROOM_MEDIA.MainMenu.image ? (
                             <video
+                                ref={(el) => {
+                                    if (el) {
+                                        el.defaultMuted = true;
+                                        el.muted = true;
+                                        el.playsInline = true;
+                                        el.play().catch(() => {});
+                                    }
+                                }}
                                 key={ROOM_MEDIA.MainMenu.video}
                                 autoPlay
                                 loop
@@ -302,6 +310,14 @@ function RoomShowcase() {
                         )
                     ) : media && (media.video || media.image) ? (
                         <video
+                            ref={(el) => {
+                                if (el) {
+                                    el.defaultMuted = true;
+                                    el.muted = true;
+                                    el.playsInline = true;
+                                    el.play().catch(() => {});
+                                }
+                            }}
                             key={media.video}
                             autoPlay
                             loop

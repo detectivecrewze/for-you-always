@@ -243,6 +243,14 @@ function FeatureShowcase() {
 
                     {media && (media.video || media.image) ? (
                         <video
+                            ref={(el) => {
+                                if (el) {
+                                    el.defaultMuted = true;
+                                    el.muted = true;
+                                    el.playsInline = true;
+                                    el.play().catch(() => {});
+                                }
+                            }}
                             key={media.video}
                             autoPlay
                             loop
