@@ -120,10 +120,10 @@ function StepCard({
     );
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
-   Feature Showcase Ã¢â‚¬â€ Slideshow with navigation
-   (mirrors ArcadeÃ¢â‚¬â„¢s RoomShowcase pattern)
-   Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ----------------------------------------------------------------------------------------------------
+   Feature Showcase — Slideshow with navigation
+   (mirrors Arcade’s RoomShowcase pattern)
+   ---------------------------------------------------------------------------------------------------- */
 const FEATURE_SLIDES = [
     {
         label: "FOTO",
@@ -147,7 +147,7 @@ const FEATURE_SLIDES = [
         label: "KEJUTAN",
         title: "The Secret Epilogue",
         description:
-            "Sembunyikan foto rahasia dan pesan akhir yang baru terungkap setelah semua kenangan selesai diputar Ã¢â‚¬â€ atau pada waktu yang kamu tentukan sendiri.",
+            "Sembunyikan foto rahasia dan pesan akhir yang baru terungkap setelah semua kenangan selesai diputar — atau pada waktu yang kamu tentukan sendiri.",
         videoSrc: "https://cdn.for-you-always.my.id/1774604930423-enc3lb.mp4",
         imageSrc: "",
         gifSrc: "",
@@ -189,9 +189,35 @@ function FeatureShowcase() {
 
     return (
         <AnimatedSection delay={100}>
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes mini-eq-1 { 0%, 100% { height: 6px; } 50% { height: 16px; } }
+                @keyframes mini-eq-2 { 0%, 100% { height: 14px; } 50% { height: 8px; } }
+                @keyframes mini-eq-3 { 0%, 100% { height: 10px; } 50% { height: 18px; } }
+                @keyframes photo-shuffle-v {
+                    0% { transform: translate(0, 0) rotate(0deg); z-index: 1; }
+                    25% { transform: translate(4px, -4px) rotate(2deg); z-index: 1; }
+                    50% { transform: translate(-2px, 2px) rotate(-1deg); z-index: 2; }
+                    75% { transform: translate(2px, -2px) rotate(1deg); z-index: 1; }
+                    100% { transform: translate(0, 0) rotate(0deg); z-index: 1; }
+                }
+                @keyframes pulse-glow-v {
+                    0%, 100% { opacity: 0.5; transform: scale(1); }
+                    50% { opacity: 1; transform: scale(1.1); }
+                }
+                @keyframes icon-float-v {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-4px); }
+                }
+                @keyframes icon-spin-v {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                `
+            }} />
             <div style={{ maxWidth: 860, margin: "0 auto" }}>
 
-                {/* Ã¢â€â‚¬Ã¢â€â‚¬ Media Frame 16:9 Ã¢â€â‚¬Ã¢â€â‚¬ */}
+                {/* ── Media Frame 16:9 ── */}
                 <div
                     style={{
                         position: "relative",
@@ -310,7 +336,7 @@ function FeatureShowcase() {
                                     color: "rgba(201,168,124,0.4)",
                                 }}
                             >
-                                {slide.title} Ã¢â‚¬â€ Video Coming Soon
+                                {slide.title} — Video Coming Soon
                             </span>
                         </div>
                     )}
@@ -359,7 +385,7 @@ function FeatureShowcase() {
                     </div>
                 </div>
 
-                {/* Ã¢â€â‚¬Ã¢â€â‚¬ Info Row + Arrows Ã¢â€â‚¬Ã¢â€â‚¬ */}
+                {/* ── Info Row + Arrows ── */}
                 <div
                     style={{
                         marginTop: 24,
@@ -407,19 +433,42 @@ function FeatureShowcase() {
 
                     {/* Feature Info */}
                     <div style={{ flex: 1, textAlign: "center" }}>
-                        <h3
-                            style={{
-                                fontFamily: "var(--font-display)",
-                                fontStyle: "italic",
-                                fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
-                                fontWeight: 600,
-                                color: "var(--text-primary)",
-                                marginBottom: 8,
-                                lineHeight: 1.2,
-                            }}
-                        >
-                            {slide.title}
-                        </h3>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 8 }}>
+                            {active === 0 && (
+                                <div style={{ position: "relative", width: 24, height: 24, flexShrink: 0 }}>
+                                    <div style={{ position: "absolute", inset: 0, border: "1.5px solid var(--accent)", borderRadius: 4, animation: "photo-shuffle-v 3s infinite ease-in-out" }} />
+                                    <div style={{ position: "absolute", inset: "4px", border: "1.5px solid var(--accent-light)", borderRadius: 2, animation: "photo-shuffle-v 3s infinite ease-in-out 1.5s", opacity: 0.6 }} />
+                                </div>
+                            )}
+                            {active === 1 && (
+                                <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 20, width: 24, flexShrink: 0 }}>
+                                    <div style={{ width: 3, background: "var(--accent)", borderRadius: 10, animation: "mini-eq-1 0.8s infinite" }} />
+                                    <div style={{ width: 3, background: "var(--accent-light)", borderRadius: 10, animation: "mini-eq-2 1.2s infinite" }} />
+                                    <div style={{ width: 3, background: "var(--accent)", borderRadius: 10, animation: "mini-eq-3 1s infinite" }} />
+                                    <div style={{ width: 3, background: "var(--accent-light)", borderRadius: 10, animation: "mini-eq-1 1.4s infinite" }} />
+                                </div>
+                            )}
+                            {active === 2 && (
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, flexShrink: 0 }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)" style={{ animation: "pulse-glow-v 2s infinite ease-in-out" }}>
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </div>
+                            )}
+                            <h3
+                                style={{
+                                    fontFamily: "var(--font-display)",
+                                    fontStyle: "italic",
+                                    fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
+                                    fontWeight: 600,
+                                    color: "var(--text-primary)",
+                                    lineHeight: 1.2,
+                                    margin: 0
+                                }}
+                            >
+                                {slide.title}
+                            </h3>
+                        </div>
                         <p
                             className="body-text"
                             style={{ fontSize: "0.9rem", margin: 0, lineHeight: 1.65 }}
@@ -464,7 +513,7 @@ function FeatureShowcase() {
                     </button>
                 </div>
 
-                {/* Ã¢â€â‚¬Ã¢â€â‚¬ Dot Navigation Ã¢â€â‚¬Ã¢â€â‚¬ */}
+                {/* ── Dot Navigation ── */}
                 <div
                     style={{
                         marginTop: 20,
@@ -548,7 +597,7 @@ function FeatureCard({
                     (e.currentTarget as HTMLElement).style.boxShadow = "none";
                 }}
             >
-                {/* Ã¢â€â‚¬Ã¢â€â‚¬ Media Area Ã¢â€â‚¬Ã¢â€â‚¬ */}
+                {/* ── Media Area ── */}
                 <div
                     style={{
                         position: "relative",
@@ -669,7 +718,7 @@ function FeatureCard({
                     )}
                 </div>
 
-                {/* Ã¢â€â‚¬Ã¢â€â‚¬ Text Area Ã¢â€â‚¬Ã¢â€â‚¬ */}
+                {/* ── Text Area ── */}
                 <div style={{ padding: "24px 28px 30px" }}>
                     <h4
                         style={{
@@ -693,9 +742,9 @@ function FeatureCard({
     );
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+/* ----------------------------------------------------------------------------------------------------
    Product Card (Hero)
-   Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+   ---------------------------------------------------------------------------------------------------- */
 function ProductCard({
     label,
     title,
@@ -877,9 +926,9 @@ function ProductCard({
 
 
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+/* ----------------------------------------------------------------------------------------------------
    useIsMobile Hook
-   Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+   ---------------------------------------------------------------------------------------------------- */
 function useIsMobile() {
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -891,18 +940,18 @@ function useIsMobile() {
     return isMobile;
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+/* ----------------------------------------------------------------------------------------------------
    Testimoni Carousel
-   Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+   ---------------------------------------------------------------------------------------------------- */
 const TESTIMONI_DATA = [
     {
-        quote: "Lucuu banget, gemes deh! Makasih banyak ya kak, hasilnya melebihi ekspektasi aku Ã¢â„¢Â¡",
+        quote: "Lucuu banget, gemes deh! Makasih banyak ya kak, hasilnya melebihi ekspektasi aku ♡",
         name: "Nabila",
         label: "Untuk Pacarnya",
         initial: "N",
     },
     {
-        quote: "Makasih ya kak! Cowo aku terharu banget sama surprise aku, dia sama sekali ga expect bakal disurprise kayak gini Ã°Å¸Â¤Â²Ã°Å¸Â¥Â¹",
+        quote: "Makasih ya kak! Cowo aku terharu banget sama surprise aku, dia sama sekali ga expect bakal disurprise kayak gini 🥺😭",
         name: "Arini",
         label: "Untuk Pacarnya",
         initial: "A",
@@ -914,22 +963,22 @@ const TESTIMONI_DATA = [
         initial: "R",
     },
     {
-        quote: "Kakak makasih banyak yaa, adek aku seneng banget pas buka hadiah ini! Katanya unik dan beda dari kado biasa, lucuu pula Ã°Å¸Â¥Â¹Ã¢â„¢Â¡",
+        quote: "Kakak makasih banyak yaa, adek aku seneng banget pas buka hadiah ini! Katanya unik dan beda dari kado biasa, lucuu pula 😭♡",
         name: "Sinta",
         label: "Untuk Adiknya",
         initial: "S",
     },
     {
-        quote: "Makasih kak, mama aku sampe terharu lho pas liat fotonya satu-satu! Bilang ini kado paling berkesan yang pernah dia terima Ã¢â„¢Â¡",
+        quote: "Makasih kak, mama aku sampe terharu lho pas liat fotonya satu-satu! Bilang ini kado paling berkesan yang pernah dia terima ♡",
         name: "Dinda",
         label: "Untuk Mamahnya",
         initial: "D",
     },
 ];
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+/* ----------------------------------------------------------------------------------------------------
    Studio Preview Section
-   Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+   ---------------------------------------------------------------------------------------------------- */
 function StudioPreview() {
     const videoRef = React.useRef<HTMLVideoElement>(null);
 
@@ -977,7 +1026,7 @@ function StudioPreview() {
                             <span className="italic-accent">Semudah Ini.</span>
                         </h2>
                         <p className="body-text" style={{ maxWidth: 520, margin: "0 auto", fontSize: "1rem" }}>
-                            Tidak perlu skill coding. Tidak perlu nunggu admin. Isi sendiri, publish sendiri, kirim sendiri Ã¢â‚¬â€ dalam hitungan menit.
+                            Tidak perlu skill coding. Tidak perlu nunggu admin. Isi sendiri, publish sendiri, kirim sendiri — dalam hitungan menit.
                         </p>
                     </div>
                 </AnimatedSection>
@@ -1016,16 +1065,17 @@ function StudioPreview() {
                 <AnimatedSection delay={250}>
                     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
                         {[
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>, text: "Tidak perlu skill coding" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>, text: "Selesai dalam menit" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>, text: "Privat & aman" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>, text: "Bisa preview sebelum kirim" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>, text: "Upload foto bebas" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 19V6l12-3v13M9 19c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2zm12-3c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2z" /></svg>, text: "Pilih musik sendiri" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>, text: "Revisi bebas setelah publish" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ animation: "pulse-glow-v 2s infinite" }}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>, text: "Tidak perlu skill coding" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ animation: "icon-spin-v 10s linear infinite" }}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>, text: "Selesai dalam menit" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ animation: "pulse-glow-v 3s infinite" }}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>, text: "Privat & aman" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ animation: "icon-float-v 2s infinite ease-in-out" }}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>, text: "Bisa preview sebelum kirim" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ animation: "icon-float-v 1.5s infinite ease-in-out" }}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>, text: "Upload foto bebas" },
+                            { icon: <div style={{ display: "flex", alignItems: "flex-end", gap: 1, height: 12, animation: "icon-float-v 3s infinite ease-in-out" }}><div style={{ width: 2, height: "100%", background: "currentColor", animation: "mini-eq-1 0.7s infinite" }} /><div style={{ width: 2, height: "60%", background: "currentColor", animation: "mini-eq-2 1s infinite" }} /><div style={{ width: 2, height: "80%", background: "currentColor", animation: "mini-eq-3 0.8s infinite" }} /></div>, text: "Pilih musik sendiri" },
+                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ animation: "pulse-glow-v 2.5s infinite" }}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>, text: "Revisi bebas setelah publish" },
                         ].map((item, i) => (
                             <div
                                 key={i}
+                                className="feature-pill-animated"
                                 style={{
                                     display: "flex",
                                     alignItems: "center",
@@ -1038,9 +1088,10 @@ function StudioPreview() {
                                     fontWeight: 600,
                                     color: "var(--text-secondary)",
                                     boxShadow: "var(--shadow-soft)",
+                                    transition: "all 0.3s ease",
                                 }}
                             >
-                                <span style={{ color: "var(--accent)", flexShrink: 0 }}>{item.icon}</span>
+                                <span style={{ color: "var(--accent)", flexShrink: 0, display: "flex", alignItems: "center" }}>{item.icon}</span>
                                 {item.text}
                             </div>
                         ))}
@@ -1095,7 +1146,7 @@ function TestimoniCarousel() {
                 <AnimatedSection delay={100}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56, flexWrap: "wrap" }}>
                         {[
-                            { icon: <span style={{ color: "var(--accent-light)", fontSize: 14, letterSpacing: 2 }}>Ã¢Ëœâ€¦Ã¢Ëœâ€¦Ã¢Ëœâ€¦Ã¢Ëœâ€¦Ã¢Ëœâ€¦</span>, text: "5.0 Rating" },
+                            { icon: <span style={{ color: "var(--accent-light)", fontSize: 14, letterSpacing: 2 }}>★★★★★</span>, text: "5.0 Rating" },
                             { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>, text: "100+ Customer Puas" },
                             { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>, text: "Trusted Since 2025" },
                         ].map((item, i) => (
@@ -1126,7 +1177,7 @@ function TestimoniCarousel() {
                             </svg>
                         </button>
 
-                        {/* Card Ã¢â‚¬â€ no photo, quote only */}
+                        {/* Card — no photo, quote only */}
                         <div
                             className="glass-surface"
                             style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", transition: "opacity 0.25s ease", opacity: fading ? 0 : 1 }}
@@ -1195,7 +1246,7 @@ export default function VoicesLandingPage() {
     const isMobile = useIsMobile();
     return (
         <div style={{ minHeight: "100vh", position: "relative", overflowX: "clip", width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
-            {/* Ã¢â€â‚¬Ã¢â€â‚¬ Background Ambient Blobs Ã¢â€â‚¬Ã¢â€â‚¬ */}
+            {/* Background Ambient Blobs */}
             <div
                 style={{ position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: -1 }}
             >
