@@ -1,0 +1,709 @@
+/* ============================================================
+   Arcade Edition — "Ghibli Scenery"
+   Palette: Sky Blue / Meadow Green / Soft Cloud / Bud Yellow
+   Aesthetic: Studio Ghibli nature art, fresh, nostalgic, pixel-nature
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+    /* ── Backgrounds (Pastel Ghibli Meadow) ── */
+    --arc-bg-deep: #f0fff4; /* Ultra light mint-sky */
+    --arc-bg-warm: #f7fee7; /* Very soft lime breeze */
+    --arc-bg-mid: #ecfccb;  /* Soft meadow highlight */
+    --arc-surface: rgba(255, 255, 255, 0.9);
+    --arc-surface-raised: rgba(255, 255, 255, 0.98);
+
+    /* ── Nature tones (Bright & Soft) ── */
+    --arc-sky: #bae6fd;
+    --arc-meadow: #bef264; /* Soft Lime Ghibli Grass */
+    --arc-meadow-dark: #84cc16;
+    --arc-cloud: #ffffff;
+    --arc-flower: #fef08a; /* Soft Primrose Yellow */
+
+    /* ── Accent colors ── */
+    --arc-accent: #65a30d; /* Cheerful Leaf Green */
+    --arc-accent-light: #bef264;
+    --arc-accent-warm: #4d7c0f;
+    --arc-accent-glow: rgba(132, 204, 22, 0.15);
+    --arc-rose: #f472b6;
+    --arc-rose-light: #fbcfe8;
+    --arc-rose-glow: rgba(244, 114, 182, 0.08);
+    --arc-gold: #f59e0b;
+    --arc-gold-light: #fbbf24;
+    --arc-sage: #a3e635;
+    --arc-sage-light: #d9f99d;
+
+    /* ── Text (Soft Nature Darks) ── */
+    --arc-text-primary: #1a2e05; /* Soft Olive-Black for text */
+    --arc-text-secondary: #365314; 
+    --arc-text-muted: #64748b;
+    --arc-text-light: #f0fff4;
+    --arc-text-heading: #1a2e05;
+
+    /* ── Borders (Fresh & Soft) ── */
+    --arc-border-gold: rgba(245, 158, 11, 0.18);
+    --arc-border-rose: rgba(244, 114, 182, 0.12);
+    --arc-border-subtle: rgba(132, 204, 22, 0.12);
+
+    /* ── Shadows (Very light & airy) ── */
+    --arc-shadow-soft: 0 4px 20px -4px rgba(54, 83, 20, 0.06);
+    --arc-shadow-wood: 0 8px 32px -8px rgba(54, 83, 20, 0.1);
+    --arc-shadow-elevated: 0 20px 50px -15px rgba(54, 83, 20, 0.12);
+    --arc-shadow-glow: 0 0 30px -5px rgba(132, 204, 22, 0.18);
+    --arc-shadow-rose-glow: 0 0 30px -5px rgba(244, 114, 182, 0.12);
+
+    /* ── Radii ── */
+    --arc-radius-sm: 12px;
+    --arc-radius-md: 20px;
+    --arc-radius-lg: 32px;
+
+    /* ── Fonts ── */
+    --arc-font-pixel: 'Press Start 2P', monospace;
+    --arc-font-body: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+    --arc-font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+
+    /* ── Section helpers ── */
+    --arc-section-alt: rgba(34, 197, 94, 0.03);
+    --arc-footer-bg: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+
+    /* ── Button Nature tones ── */
+    --arc-bg-wood: #16a34a;
+    --arc-bg-wood-light: #22c55e;
+    --arc-bg-wood-dark: #14532d;
+}
+
+/* ── Page Base ── */
+.arcade-page {
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    width: 100%;
+    background: var(--arc-bg-deep);
+    font-family: var(--arc-font-body);
+    color: var(--arc-text-primary);
+}
+
+/* Ghibli ambient sunlight & meadows - Brightened */
+.arcade-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 55% 45% at 15% 10%, rgba(186, 230, 253, 0.3) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 85% 25%, rgba(190, 242, 100, 0.25) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 35% at 50% 95%, rgba(254, 240, 138, 0.15) 0%, transparent 60%);
+}
+
+/* Paper grain texture */
+.arcade-page::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
+/* ── Atmospheric floating motes ── */
+.arcade-clouds {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.cloud-1 {
+    width: 5px;
+    height: 5px;
+    top: 18%;
+    left: 22%;
+    background: var(--arc-rose-light);
+    opacity: 0;
+    animation: mote-drift 9s ease-in-out infinite, mote-glow 4.5s ease-in-out infinite;
+}
+
+.cloud-2 {
+    width: 4px;
+    height: 4px;
+    top: 45%;
+    right: 28%;
+    background: var(--arc-gold-light);
+    opacity: 0;
+    animation: mote-drift 11s ease-in-out infinite, mote-glow 5.5s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.cloud-3 {
+    width: 3px;
+    height: 3px;
+    top: 70%;
+    left: 38%;
+    background: var(--arc-sage-light);
+    opacity: 0;
+    animation: mote-drift 13s ease-in-out infinite, mote-glow 6.5s ease-in-out infinite;
+    animation-delay: 4.5s;
+}
+
+@keyframes mote-drift {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(12px, -18px);
+    }
+
+    50% {
+        transform: translate(-8px, -30px);
+    }
+
+    75% {
+        transform: translate(16px, -12px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes mote-glow {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 0.5;
+    }
+
+    65% {
+        opacity: 0.3;
+    }
+}
+
+/* ── Typography ── */
+.arc-heading-xl {
+    font-family: var(--arc-font-display);
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--arc-text-heading);
+    letter-spacing: -0.01em;
+}
+
+.arc-heading-lg {
+    font-family: var(--arc-font-display);
+    font-size: clamp(1.3rem, 3.2vw, 2.2rem);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--arc-text-heading);
+}
+
+.arc-heading-md {
+    font-family: var(--arc-font-pixel);
+    font-size: clamp(0.48rem, 1vw, 0.6rem);
+    line-height: 1.9;
+    color: var(--arc-accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.arc-body {
+    font-family: var(--arc-font-body);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--arc-text-secondary);
+}
+
+.arc-label {
+    font-family: var(--arc-font-pixel);
+    font-size: 0.42rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--arc-accent-warm);
+}
+
+.arc-italic {
+    font-family: var(--arc-font-display);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--arc-accent);
+}
+
+/* ── Hero Card (wood-sign) — light parchment ── */
+.wood-sign {
+    position: relative;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid var(--arc-accent-light);
+    border-radius: var(--arc-radius-lg);
+    box-shadow:
+        0 10px 40px -10px rgba(6, 78, 59, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.wood-sign:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 20px 60px -15px rgba(6, 78, 59, 0.12),
+        var(--arc-shadow-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-color: var(--arc-accent);
+}
+
+/* ── Parchment Card ── */
+.parchment-card {
+    background: var(--arc-surface);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-md);
+    box-shadow: var(--arc-shadow-soft);
+    transition: all 0.5s ease;
+}
+
+.parchment-card:hover {
+    box-shadow: var(--arc-shadow-elevated);
+    transform: translateY(-2px);
+}
+
+/* ── Room Card ── */
+.room-card {
+    background: var(--arc-surface-raised);
+    border: 1.5px solid var(--arc-border-subtle);
+    border-radius: var(--arc-radius-md);
+    padding: 24px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.room-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--arc-rose) 30%,
+            var(--arc-accent) 60%,
+            var(--arc-sage) 90%,
+            transparent 100%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.room-card:hover {
+    border-color: var(--arc-accent-light);
+    box-shadow: var(--arc-shadow-elevated), var(--arc-shadow-glow);
+    transform: translateY(-4px);
+}
+
+.room-card:hover::before {
+    opacity: 1;
+}
+
+/* ── Room Icon ── */
+.room-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--arc-bg-warm);
+    border: 1.5px solid var(--arc-border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--arc-accent);
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+}
+
+.room-card:hover .room-icon {
+    background: var(--arc-bg-mid);
+    border-color: var(--arc-accent-light);
+}
+
+/* ── Buttons ── */
+.arc-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 36px;
+    background: linear-gradient(135deg, var(--arc-meadow) 0%, var(--arc-meadow-dark) 100%);
+    color: white;
+    font-family: var(--arc-font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--arc-radius-md);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.3), 0 4px 0 var(--arc-bg-wood-dark);
+    position: relative;
+    top: 0;
+}
+
+.arc-btn-primary:hover {
+    top: -2px;
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4), var(--arc-shadow-glow), 0 6px 0 var(--arc-bg-wood-dark);
+    background: linear-gradient(135deg, var(--arc-meadow-dark) 0%, var(--arc-accent-warm) 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.arc-btn-primary:active {
+    top: 2px;
+    box-shadow: 0 2px 0 var(--arc-bg-wood-dark);
+}
+
+.arc-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--arc-text-primary);
+    font-family: var(--arc-font-pixel);
+    font-size: 0.45rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-md);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.arc-btn-secondary:hover {
+    border-color: var(--arc-accent);
+    background: var(--arc-accent-glow);
+    color: var(--arc-accent-warm);
+}
+
+/* ── Badge ── */
+.arc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1.5px solid var(--arc-meadow);
+    border-radius: 999px;
+    font-family: var(--arc-font-pixel);
+    font-size: 0.42rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--arc-meadow-dark);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.08);
+}
+
+/* ── Navbar ── */
+.arc-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 50;
+    padding: 20px 24px;
+}
+
+.arc-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-radius: var(--arc-radius-lg);
+    background: rgba(255, 255, 255, 0.85); /* Bright forest glass */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 40px rgba(6, 78, 59, 0.05);
+}
+
+.arc-nav-link {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-family: var(--arc-font-pixel);
+    font-size: 0.42rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.arc-nav-link--active {
+    background: var(--arc-accent-glow);
+    color: var(--arc-accent-warm);
+    border: 1.5px solid var(--arc-accent-light);
+}
+
+.arc-nav-link--inactive {
+    color: var(--arc-text-muted);
+    border: 1.5px solid transparent;
+}
+
+.arc-nav-link--inactive:hover {
+    color: var(--arc-text-primary);
+    background: rgba(132, 204, 22, 0.06);
+}
+
+/* ── Section Spacing ── */
+.arc-section {
+    padding: 60px 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Alt section bg (very subtle) ── */
+[id="rooms"] {
+    background: rgba(166, 124, 82, 0.03);
+}
+
+/* ── Bright & Airy CTA Section ── */
+.arc-dark-section {
+    background: linear-gradient(180deg, #ecfccb 0%, #f0fff4 50%, #ecfccb 100%);
+    position: relative;
+    overflow: hidden;
+    color: var(--arc-text-primary);
+}
+
+.arc-dark-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 40% 50% at 50% 20%, rgba(132, 204, 22, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 30% 80%, rgba(186, 230, 253, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 70% 70%, rgba(254, 240, 138, 0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* ── Pixel Stars (in dark section) ── */
+.pixel-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--arc-gold-light);
+    border-radius: 50%;
+    animation: twinkle 4s ease-in-out infinite;
+    box-shadow: 0 0 6px 1px rgba(201, 168, 76, 0.3);
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.15;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.3);
+    }
+}
+
+/* ── Step Card ── */
+.arc-step-card {
+    background: var(--arc-surface-raised);
+    border: 1.5px solid var(--arc-border-gold);
+    border-radius: var(--arc-radius-lg);
+    padding: 40px 32px;
+    box-shadow: var(--arc-shadow-soft);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.arc-step-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--arc-accent-glow);
+    border: 1.5px solid var(--arc-border-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--arc-accent);
+}
+
+.arc-step-card:hover {
+    box-shadow: var(--arc-shadow-elevated), var(--arc-shadow-glow);
+    transform: translateY(-4px);
+    border-color: rgba(166, 124, 82, 0.35);
+}
+
+/* ── Animations ── */
+@keyframes float-gentle {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.arc-float {
+    animation: float-gentle 5s ease-in-out infinite;
+}
+
+@keyframes arc-pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* ── Divider ornament ── */
+.arc-divider {
+    width: 60px;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--arc-accent), transparent);
+    opacity: 0.4;
+}
+
+/* ── Scrollbar ── */
+.arcade-page::-webkit-scrollbar {
+    width: 6px;
+}
+
+.arcade-page::-webkit-scrollbar-track {
+    background: var(--arc-bg-warm);
+}
+
+.arcade-page::-webkit-scrollbar-thumb {
+    background: var(--arc-accent-light);
+    border-radius: 999px;
+    border: 1px solid var(--arc-bg-warm);
+}
+
+.arcade-page::-webkit-scrollbar-thumb:hover {
+    background: var(--arc-accent);
+}
+
+/* ── Selection ── */
+.arcade-page ::selection {
+    background-color: rgba(196, 132, 138, 0.2);
+    color: var(--arc-text-primary);
+}
+
+/* ── Link transitions ── */
+.arcade-page a {
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .arc-section {
+        padding: 60px 0;
+    }
+
+    .arc-btn-primary {
+        padding: 14px 24px;
+        font-size: 0.45rem;
+    }
+
+    .arc-btn-secondary {
+        padding: 12px 20px;
+        font-size: 0.4rem;
+    }
+
+    .room-card {
+        padding: 24px 20px;
+    }
+
+    .arc-heading-xl {
+        font-size: clamp(1.4rem, 5.5vw, 2.2rem);
+    }
+
+    .arc-nav-inner {
+        padding: 12px 16px;
+    }
+
+    .arc-nav-link {
+        padding: 6px 12px;
+        font-size: 0.38rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .arc-step-card {
+        padding: 28px 20px;
+    }
+
+    .arc-heading-lg {
+        font-size: clamp(1.1rem, 5vw, 1.6rem);
+    }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+
+    .arc-float,
+    .cloud-1,
+    .cloud-2,
+    .cloud-3,
+    .pixel-star {
+        animation: none;
+    }
+
+    .wood-sign,
+    .room-card,
+    .parchment-card,
+    .arc-step-card,
+    .arc-btn-primary,
+    .arc-btn-secondary {
+        transition: none;
+    }
+}
+
+/* ── Navbar mobile — sembunyikan brand text ── */
+@media (max-width: 480px) {
+    .arc-nav-brand-text {
+        display: none !important;
+    }
+
+    .arc-nav-logo-img {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 10px !important;
+    }
+
+    .arc-nav-inner {
+        padding: 10px 12px !important;
+        gap: 4px !important;
+    }
+
+    .arc-nav-link {
+        padding: 5px 8px !important;
+        font-size: 0.35rem !important;
+    }
+}

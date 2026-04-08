@@ -1,5 +1,5 @@
 /* ============================================================
-   Voices. Gift — Landing Page Stylesheet
+   Voices. Gift — Product Page Stylesheet
    Palette: Beige / Warm Chocolate / Soft Gold
    ============================================================ */
 
@@ -285,13 +285,13 @@ body::after {
 .landing-nav-links {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .landing-nav-link {
-    padding: 9px 16px;
+    padding: 10px 20px;
     border-radius: 999px;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -300,33 +300,12 @@ body::after {
     background: transparent;
     color: var(--text-muted);
     border: 1px solid transparent;
-    white-space: nowrap;
 }
 
-.landing-nav-link:hover {
-    color: var(--text-secondary);
-    background: rgba(0,0,0,0.04);
-}
-
-/* Active state is set inline via JS theme tokens */
-
-/* ── CTA Produk Button ── */
-.landing-nav-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 18px;
-    color: #f5efe6;
-    border-radius: 999px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-    white-space: nowrap;
-    border: 1px solid rgba(255,255,255,0.12);
+.landing-nav-link.active {
+    background: var(--accent-glow);
+    color: var(--accent);
+    border-color: var(--border-warm);
 }
 
 /* ── Section Spacing ── */
@@ -352,39 +331,33 @@ body::after {
     }
 
     .landing-nav {
-        padding: 12px 10px;
+        padding: 16px 12px;
         width: 100vw;
     }
 
     .landing-nav-inner {
-        padding: 8px 12px;
-        gap: 6px;
+        padding: 12px 16px;
+        gap: 8px;
         width: 100%;
         box-sizing: border-box;
     }
 
     .landing-nav-link {
-        padding: 7px 10px;
-        font-size: 0.62rem;
-        letter-spacing: 0.04em;
-    }
-
-    .landing-nav-cta {
-        padding: 7px 13px;
-        font-size: 0.62rem;
+        padding: 8px 12px;
+        font-size: 0.65rem;
     }
 }
 
 @media (max-width: 480px) {
     .landing-nav {
-        padding: 10px 8px;
+        padding: 12px 10px;
     }
 
     .landing-nav-inner {
         flex-direction: row;
-        padding: 7px 10px;
+        padding: 8px 10px;
         border-radius: var(--radius-md);
-        gap: 3px;
+        gap: 4px;
         justify-content: space-between;
         flex-wrap: nowrap;
     }
@@ -399,24 +372,7 @@ body::after {
         width: auto;
         justify-content: center;
         flex-wrap: nowrap;
-        gap: 1px;
-    }
-
-    .landing-nav-link {
-        padding: 5px 7px !important;
-        font-size: 0.58rem !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .landing-nav-cta {
-        padding: 6px 10px !important;
-        font-size: 0.58rem !important;
-        gap: 3px !important;
-    }
-
-    /* Hide arrow icon on very small screens */
-    .landing-nav-cta svg {
-        display: none;
+        gap: 2px;
     }
 }
 
@@ -541,55 +497,29 @@ body::after {
 
     /* Logo image sedikit lebih kecil */
     .landing-nav-logo-img {
-        width: 30px !important;
-        height: 30px !important;
-        border-radius: 9px !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 10px !important;
         margin-right: 0 !important;
     }
-}
 
-/* ── Main Hub Collection Row (16:9) ── */
-.hub-showcase-row {
-    display: flex;
-    align-items: center;
-    gap: 56px;
-    margin-bottom: 120px;
-}
-
-.hub-showcase-row.reverse {
-    flex-direction: row-reverse;
-}
-
-.hub-showcase-media {
-    flex: 1.4;
-    position: relative;
-    aspect-ratio: 16/9;
-    background: #2c2118;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 32px 80px -20px rgba(59,47,37,0.15);
-    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), box-shadow 0.6s ease, border-color 0.6s ease;
-}
-
-.hub-showcase-row:hover .hub-showcase-media {
-    transform: translateY(-8px) scale(1.015);
-}
-
-.hub-showcase-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-@media (max-width: 960px) {
-    .hub-showcase-row, .hub-showcase-row.reverse {
-        flex-direction: column;
-        gap: 36px;
-        margin-bottom: 80px;
+    /* Nav links lebih compact */
+    .landing-nav-link {
+        padding: 6px 8px !important;
+        font-size: 0.6rem !important;
+        letter-spacing: 0.02em !important;
+        white-space: nowrap !important;
     }
-    .hub-showcase-media {
-        width: 100%;
-        border-radius: var(--radius-md);
+
+    /* Inner navbar padding lebih rapat */
+    .landing-nav-inner {
+        padding: 8px 12px !important;
+        gap: 4px !important;
+        flex-wrap: nowrap !important;
+    }
+    
+    .landing-nav > div > a[href="#pesan"] {
+        padding: 8px 14px !important;
+        font-size: 0.65rem !important;
     }
 }

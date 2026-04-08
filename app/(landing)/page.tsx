@@ -7,11 +7,9 @@ import React, { useEffect, useState, useRef } from "react";
    ───────────────────────────────────────────── */
 function AnimatedSection({
     children,
-    className = "",
     delay = 0,
 }: {
     children: React.ReactNode;
-    className?: string;
     delay?: number;
 }) {
     const [isVisible, setIsVisible] = useState(false);
@@ -22,7 +20,7 @@ function AnimatedSection({
             ([entry]) => {
                 if (entry.isIntersecting) setTimeout(() => setIsVisible(true), delay);
             },
-            { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+            { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
         );
         if (ref.current) observer.observe(ref.current);
         return () => observer.disconnect();
@@ -32,11 +30,10 @@ function AnimatedSection({
         <div
             ref={ref}
             style={{
-                transition: `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`,
+                transition: `all 0.9s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`,
                 opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "translateY(0)" : "translateY(32px)",
+                transform: isVisible ? "translateY(0)" : "translateY(36px)",
             }}
-            className={className}
         >
             {children}
         </div>
@@ -44,884 +41,44 @@ function AnimatedSection({
 }
 
 /* ─────────────────────────────────────────────
-   Step Card (Cara Kerja)
+   Landscape Product Card — New alternating design
    ───────────────────────────────────────────── */
-function StepCard({
-    number,
-    title,
-    description,
-    icon,
-}: {
-    number: string;
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-}) {
-    return (
-        <div className="glass-surface" style={{ padding: "40px 32px" }}>
-            {/* Step Badge */}
-            <div
-                style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "4px 14px",
-                    background: "var(--accent-glow)",
-                    borderRadius: 999,
-                    border: "1px solid var(--border-warm)",
-                    marginBottom: 28,
-                }}
-            >
-                <span className="label-text" style={{ color: "var(--accent)", margin: 0 }}>
-                    Step
-                </span>
-                <span
-                    style={{
-                        fontFamily: "var(--font-display)",
-                        fontStyle: "italic",
-                        fontWeight: 600,
-                        fontSize: 14,
-                        color: "var(--text-primary)",
-                    }}
-                >
-                    0{number}
-                </span>
-            </div>
-
-            {/* Icon */}
-            <div
-                style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 16,
-                    background: "var(--bg-card)",
-                    border: "1px solid var(--border)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 24,
-                    color: "var(--accent)",
-                }}
-            >
-                {icon}
-            </div>
-
-            <h3
-                className="heading-md"
-                style={{ marginBottom: 12, fontSize: "1.35rem" }}
-            >
-                {title}
-            </h3>
-            <p className="body-text" style={{ fontSize: "0.9rem" }}>
-                {description}
-            </p>
-        </div>
-    );
-}
-
-/* ─────────────────────────────────────────────
-   Feature Showcase — Slideshow with navigation
-   (mirrors Arcade’s RoomShowcase pattern)
-   ───────────────────────────────────────────── */
-const FEATURE_SLIDES = [
-    {
-        label: "FOTO",
-        title: "The Glass Viewport",
-        description:
-            "Bingkai interaktif yang memutar foto-foto kenangan satu per satu. Setiap foto hadir dengan teks cerita personal di setiap momennya.",
-        videoSrc: "",
-        imageSrc: "",
-        gifSrc: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
-    },
-    {
-        label: "SUARA + MUSIK",
-        title: "The Curated Soundtrack",
-        description:
-            "Padukan pesan suaramu dengan lagu latar, atau cukup gunakan musik favoritmu saja. Pilih dari library yang tersedia atau upload lagu pilihanmu sendiri untuk melengkapi kado pribadimu.",
-        videoSrc: "https://cdn.for-you-always.my.id/1774606552857-l95uqf.mp4",
-        imageSrc: "",
-        gifSrc: "",
-    },
-    {
-        label: "KEJUTAN",
-        title: "The Secret Epilogue",
-        description:
-            "Sembunyikan foto rahasia dan pesan akhir yang baru terungkap setelah semua kenangan selesai diputar — atau pada waktu yang kamu tentukan sendiri.",
-        videoSrc: "https://cdn.for-you-always.my.id/1774604930423-enc3lb.mp4",
-        imageSrc: "",
-        gifSrc: "",
-    },
-];
-
-function FeatureShowcase() {
-    const TOTAL = FEATURE_SLIDES.length;
-    const [active, setActive] = useState(0);
-    const [fading, setFading] = useState(false);
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    const goTo = (idx: number) => {
-        if (idx === active || fading) return;
-        setFading(true);
-        setTimeout(() => {
-            setActive(idx);
-            setFading(false);
-        }, 280);
-    };
-
-    const prev = () => goTo((active - 1 + TOTAL) % TOTAL);
-    const next = () => goTo((active + 1) % TOTAL);
-
-    useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.load();
-            videoRef.current.play().catch(() => { });
-        }
-    }, [active]);
-
-    const slide = FEATURE_SLIDES[active];
-    const hasVideo = !!slide.videoSrc;
-    const hasGif = !!slide.gifSrc;
-    const hasImage = !!slide.imageSrc;
-
-    /* soundwave bars for Soundtrack slide */
-    const isSoundtrack = active === 1;
-
-    return (
-        <AnimatedSection delay={100}>
-            <div style={{ maxWidth: 860, margin: "0 auto" }}>
-
-                {/* ── Media Frame 16:9 ── */}
-                <div
-                    style={{
-                        position: "relative",
-                        width: "100%",
-                        aspectRatio: "16/9",
-                        borderRadius: "var(--radius-lg)",
-                        overflow: "hidden",
-                        background: "var(--bg-deep)",
-                        border: "1.5px solid var(--border-warm)",
-                        boxShadow: "var(--shadow-elevated)",
-                        transition: "opacity 0.28s ease",
-                        opacity: fading ? 0 : 1,
-                    }}
-                >
-                    {/* Vignette */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            inset: 0,
-                            zIndex: 2,
-                            pointerEvents: "none",
-                            background: "radial-gradient(ellipse at center, transparent 55%, rgba(44,33,24,0.6) 100%)",
-                        }}
-                    />
-
-                    {/* Media content */}
-                    {hasVideo ? (
-                        <video
-                            ref={videoRef}
-                            key={slide.videoSrc}
-                            src={slide.videoSrc}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            preload="none"
-                            poster={slide.imageSrc || undefined}
-                            disablePictureInPicture
-                            controlsList="nodownload nofullscreen noremoteplayback"
-                            onContextMenu={(e) => e.preventDefault()}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                display: "block",
-                                pointerEvents: "none" // Prevents IDM overlay from appearing
-                            }}
-                        />
-                    ) : hasGif ? (
-                        <img
-                            key={slide.gifSrc}
-                            src={slide.gifSrc}
-                            alt={slide.title}
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                        />
-                    ) : hasImage ? (
-                        <img
-                            key={slide.imageSrc}
-                            src={slide.imageSrc}
-                            alt={slide.title}
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                        />
-                    ) : (
-                        /* Placeholder */
-                        <div
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 16,
-                                background: "linear-gradient(135deg, #3b2f25 0%, #2c2118 100%)",
-                            }}
-                        >
-                            {isSoundtrack ? (
-                                /* Soundwave animation placeholder */
-                                <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 64 }}>
-                                    {[0.4, 0.75, 0.55, 1, 0.65, 0.9, 0.45, 0.85, 0.6, 0.95, 0.5, 0.8, 0.35, 0.7].map(
-                                        (h, i) => (
-                                            <div
-                                                key={i}
-                                                style={{
-                                                    width: 4,
-                                                    height: `${h * 100}%`,
-                                                    borderRadius: 3,
-                                                    background: `rgba(201,168,124,${0.4 + h * 0.4})`,
-                                                    animation: `soundwave-bounce 1.3s ease-in-out ${i * 0.09}s infinite alternate`,
-                                                }}
-                                            />
-                                        )
-                                    )}
-                                </div>
-                            ) : (
-                                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,124,0.25)" strokeWidth={0.8}>
-                                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                                    <circle cx="8.5" cy="8.5" r="1.5" />
-                                    <polyline points="21 15 16 10 5 21" />
-                                </svg>
-                            )}
-                            <span
-                                style={{
-                                    fontSize: 11,
-                                    fontWeight: 600,
-                                    letterSpacing: "0.15em",
-                                    textTransform: "uppercase" as const,
-                                    color: "rgba(201,168,124,0.4)",
-                                }}
-                            >
-                                {slide.title} — Video Coming Soon
-                            </span>
-                        </div>
-                    )}
-
-                    {/* Label badge top-left */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: 16,
-                            left: 16,
-                            zIndex: 10,
-                            padding: "5px 14px",
-                            borderRadius: 999,
-                            background: "rgba(166,124,82,0.85)",
-                            backdropFilter: "blur(8px)",
-                            WebkitBackdropFilter: "blur(8px)",
-                            color: "#fff",
-                            fontSize: 10,
-                            fontWeight: 700,
-                            letterSpacing: "0.1em",
-                        }}
-                    >
-                        {slide.label}
-                    </div>
-
-                    {/* Index badge top-right */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: 16,
-                            right: 16,
-                            zIndex: 10,
-                            padding: "5px 14px",
-                            borderRadius: 999,
-                            background: "rgba(245,239,230,0.12)",
-                            backdropFilter: "blur(8px)",
-                            WebkitBackdropFilter: "blur(8px)",
-                            border: "1px solid rgba(201,168,124,0.3)",
-                            color: "rgba(245,239,230,0.8)",
-                            fontSize: 10,
-                            fontWeight: 700,
-                            letterSpacing: "0.1em",
-                        }}
-                    >
-                        {String(active + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
-                    </div>
-                </div>
-
-                {/* ── Info Row + Arrows ── */}
-                <div
-                    style={{
-                        marginTop: 24,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 20,
-                        transition: "opacity 0.28s ease",
-                        opacity: fading ? 0 : 1,
-                    }}
-                >
-                    {/* Prev button */}
-                    <button
-                        onClick={prev}
-                        aria-label="Fitur sebelumnya"
-                        style={{
-                            flexShrink: 0,
-                            width: 44,
-                            height: 44,
-                            borderRadius: "50%",
-                            border: "1.5px solid var(--border-warm)",
-                            background: "var(--bg-card)",
-                            color: "var(--text-primary)",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "all 0.25s ease",
-                            boxShadow: "var(--shadow-soft)",
-                        }}
-                        onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.background = "var(--accent)";
-                            (e.currentTarget as HTMLElement).style.color = "#fff";
-                            (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                        }}
-                        onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
-                            (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
-                            (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)";
-                        }}
-                    >
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
-                    {/* Feature Info */}
-                    <div style={{ flex: 1, textAlign: "center" }}>
-                        <h3
-                            style={{
-                                fontFamily: "var(--font-display)",
-                                fontStyle: "italic",
-                                fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
-                                fontWeight: 600,
-                                color: "var(--text-primary)",
-                                marginBottom: 8,
-                                lineHeight: 1.2,
-                            }}
-                        >
-                            {slide.title}
-                        </h3>
-                        <p
-                            className="body-text"
-                            style={{ fontSize: "0.9rem", margin: 0, lineHeight: 1.65 }}
-                        >
-                            {slide.description}
-                        </p>
-                    </div>
-
-                    {/* Next button */}
-                    <button
-                        onClick={next}
-                        aria-label="Fitur berikutnya"
-                        style={{
-                            flexShrink: 0,
-                            width: 44,
-                            height: 44,
-                            borderRadius: "50%",
-                            border: "1.5px solid var(--border-warm)",
-                            background: "var(--bg-card)",
-                            color: "var(--text-primary)",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "all 0.25s ease",
-                            boxShadow: "var(--shadow-soft)",
-                        }}
-                        onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.background = "var(--accent)";
-                            (e.currentTarget as HTMLElement).style.color = "#fff";
-                            (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                        }}
-                        onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
-                            (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
-                            (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)";
-                        }}
-                    >
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-
-                {/* ── Dot Navigation ── */}
-                <div
-                    style={{
-                        marginTop: 20,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 8,
-                    }}
-                >
-                    {FEATURE_SLIDES.map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => goTo(i)}
-                            aria-label={FEATURE_SLIDES[i].title}
-                            style={{
-                                width: i === active ? 28 : 8,
-                                height: 8,
-                                borderRadius: 999,
-                                border: "none",
-                                background: i === active ? "var(--accent)" : "var(--border-warm)",
-                                cursor: "pointer",
-                                padding: 0,
-                                transition: "all 0.3s ease",
-                                opacity: i === active ? 1 : 0.55,
-                            }}
-                        />
-                    ))}
-                </div>
-
-            </div>
-        </AnimatedSection>
-    );
-}
-
-
-function FeatureCard({
-    title,
-    description,
-    index,
-    videoSrc,
-    imageSrc,
-    gifSrc,
-    accentLabel,
-    mediaOverlay,
-}: {
-    title: string;
-    description: string;
-    index: number;
-    videoSrc?: string;
-    imageSrc?: string;
-    gifSrc?: string;
-    accentLabel?: string;
-    mediaOverlay?: React.ReactNode;
-}) {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const [videoFailed, setVideoFailed] = useState(false);
-
-    useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.play().catch(() => setVideoFailed(true));
-        }
-    }, []);
-
-    return (
-        <AnimatedSection delay={index * 140}>
-            <div
-                className="glass-surface"
-                style={{
-                    padding: 0,
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
-                    transition: "all 0.5s ease",
-                }}
-                onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-elevated)";
-                }}
-                onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                }}
-            >
-                {/* ── Media Area ── */}
-                <div
-                    style={{
-                        position: "relative",
-                        background: "var(--bg-deep)",
-                        aspectRatio: "4/3",
-                        overflow: "hidden",
-                        flexShrink: 0,
-                    }}
-                >
-                    {/* Video source (with image fallback) */}
-                    {videoSrc && !videoFailed ? (
-                        <video
-                            ref={videoRef}
-                            src={videoSrc}
-                            muted
-                            loop
-                            playsInline
-                            autoPlay
-                            onError={() => setVideoFailed(true)}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                display: "block",
-                            }}
-                        />
-                    ) : gifSrc ? (
-                        <img
-                            src={gifSrc}
-                            alt={title}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                display: "block",
-                            }}
-                        />
-                    ) : imageSrc ? (
-                        <img
-                            src={imageSrc}
-                            alt={title}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                display: "block",
-                            }}
-                        />
-                    ) : (
-                        /* Placeholder when no media provided */
-                        <div
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                background: "linear-gradient(135deg, #3b2f25 0%, #2c2118 100%)",
-                            }}
-                        >
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,124,0.3)" strokeWidth={1}>
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <circle cx="8.5" cy="8.5" r="1.5" />
-                                <polyline points="21 15 16 10 5 21" />
-                            </svg>
-                        </div>
-                    )}
-
-                    {/* Gradient overlay */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            inset: 0,
-                            background: "linear-gradient(to top, rgba(44,33,24,0.55) 0%, transparent 55%)",
-                            pointerEvents: "none",
-                        }}
-                    />
-
-                    {/* Custom overlay content (e.g. soundwave animation) */}
-                    {mediaOverlay && (
-                        <div
-                            style={{
-                                position: "absolute",
-                                inset: 0,
-                                display: "flex",
-                                alignItems: "flex-end",
-                                justifyContent: "center",
-                                paddingBottom: 20,
-                                pointerEvents: "none",
-                            }}
-                        >
-                            {mediaOverlay}
-                        </div>
-                    )}
-
-                    {/* Accent label badge (top-left) */}
-                    {accentLabel && (
-                        <div
-                            style={{
-                                position: "absolute",
-                                top: 14,
-                                left: 14,
-                                padding: "5px 12px",
-                                borderRadius: 999,
-                                background: "rgba(166,124,82,0.85)",
-                                backdropFilter: "blur(8px)",
-                                WebkitBackdropFilter: "blur(8px)",
-                                color: "#fff",
-                                fontSize: 10,
-                                fontWeight: 700,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase" as const,
-                            }}
-                        >
-                            {accentLabel}
-                        </div>
-                    )}
-                </div>
-
-                {/* ── Text Area ── */}
-                <div style={{ padding: "24px 28px 30px" }}>
-                    <h4
-                        style={{
-                            fontFamily: "var(--font-display)",
-                            fontStyle: "italic",
-                            fontSize: "1.35rem",
-                            fontWeight: 600,
-                            color: "var(--text-primary)",
-                            marginBottom: 10,
-                            lineHeight: 1.2,
-                        }}
-                    >
-                        {title}
-                    </h4>
-                    <p className="body-text" style={{ fontSize: "0.88rem", margin: 0, lineHeight: 1.65 }}>
-                        {description}
-                    </p>
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-}
-
-/* ─────────────────────────────────────────────
-   Product Card (Hero)
-   ───────────────────────────────────────────── */
-function ProductCard({
+function LandscapeProductCard({
     label,
     title,
     description,
     price,
-    gifSrc,
-    ctaHref,
-    ctaLabel,
-    isPlaceholder,
-    isNew,
-    delay,
+    features,
+    mediaSrc,
+    mediaType,
+    accentColor,
+    accentGlow,
+    href,
+    delay = 0,
+    reverse = false,
 }: {
-    label: string;
+    label: React.ReactNode;
     title: string;
     description: string;
-    price: string;
-    gifSrc: string;
-    ctaHref: string;
-    ctaLabel: string;
-    isPlaceholder?: boolean;
-    isNew?: boolean;
+    price: React.ReactNode;
+    features: string[];
+    mediaSrc: string;
+    mediaType: "video" | "gif" | "placeholder";
+    accentColor: string;
+    accentGlow: string;
+    href: string;
     delay?: number;
+    reverse?: boolean;
 }) {
-    return (
-        <AnimatedSection delay={delay || 0}>
-            <div
-                className="glass-surface"
-                style={{
-                    padding: 0,
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
-                }}
-            >
-                {/* GIF / Placeholder */}
-                <div
-                    style={{
-                        position: "relative",
-                        background: "var(--bg-deep)",
-                        aspectRatio: "4/5",
-                        overflow: "hidden",
-                    }}
-                >
-                    {isPlaceholder ? (
-                        <div
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 16,
-                                background: "linear-gradient(135deg, #3b2f25 0%, #2c2118 100%)",
-                            }}
-                        >
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,124,0.4)" strokeWidth={1}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span
-                                style={{
-                                    fontFamily: "var(--font-sans)",
-                                    fontSize: 11,
-                                    fontWeight: 600,
-                                    letterSpacing: "0.1em",
-                                    textTransform: "uppercase" as const,
-                                    color: "rgba(201,168,124,0.4)",
-                                }}
-                            >
-                                Coming Soon
-                            </span>
-                        </div>
-                    ) : (
-                        <img
-                            src={gifSrc}
-                            alt={title}
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        />
-                    )}
-                    {/* Overlay */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            inset: 0,
-                            background: "linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%)",
-                            pointerEvents: "none",
-                        }}
-                    />
-                    {/* New Badge */}
-                    {isNew && (
-                        <div
-                            style={{
-                                position: "absolute",
-                                top: 16,
-                                left: 16,
-                                padding: "6px 14px",
-                                borderRadius: 999,
-                                background: "rgba(166, 124, 82, 0.9)",
-                                backdropFilter: "blur(8px)",
-                                color: "#fff",
-                                fontSize: 12,
-                                fontWeight: 700,
-                                letterSpacing: "0.04em",
-                                zIndex: 10,
-                            }}
-                        >
-                            NEW
-                        </div>
-                    )}
-                    {/* Price Badge */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: 16,
-                            right: 16,
-                            padding: "6px 14px",
-                            borderRadius: 999,
-                            background: "rgba(166, 124, 82, 0.9)",
-                            backdropFilter: "blur(8px)",
-                            color: "#fff",
-                            fontSize: 12,
-                            fontWeight: 700,
-                            letterSpacing: "0.04em",
-                        }}
-                    >
-                        {price}
-                    </div>
-                </div>
+    const videoRef = useRef<HTMLVideoElement>(null);
 
-                {/* Text Info */}
-                <div style={{ padding: "28px 28px 32px" }}>
-                    <span
-                        className="label-text"
-                        style={{
-                            display: "inline-block",
-                            padding: "4px 12px",
-                            background: "var(--accent-glow)",
-                            border: "1px solid var(--border-warm)",
-                            borderRadius: 999,
-                            marginBottom: 16,
-                            color: "var(--accent)",
-                        }}
-                    >
-                        {label}
-                    </span>
-                    <h3
-                        className="heading-md"
-                        style={{ marginBottom: 8, fontSize: "1.35rem" }}
-                    >
-                        {title}
-                    </h3>
-                    <p
-                        className="body-text"
-                        style={{ fontSize: "0.88rem", marginBottom: 24 }}
-                    >
-                        {description}
-                    </p>
-                    <a href={ctaHref} className="btn-secondary" style={{ width: "100%", justifyContent: "center" }}>
-                        {ctaLabel}
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-}
-
-
-
-/* ─────────────────────────────────────────────
-   useIsMobile Hook
-   ───────────────────────────────────────────── */
-function useIsMobile() {
-    const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < 768);
-        check();
-        window.addEventListener("resize", check);
-        return () => window.removeEventListener("resize", check);
-    }, []);
-    return isMobile;
-}
-
-/* ─────────────────────────────────────────────
-   Testimoni Carousel
-   ───────────────────────────────────────────── */
-const TESTIMONI_DATA = [
-    {
-        quote: "Lucuu banget, gemes deh! Makasih banyak ya kak, hasilnya melebihi ekspektasi aku ♡",
-        name: "Nabila",
-        label: "Untuk Pacarnya",
-        initial: "N",
-    },
-    {
-        quote: "Makasih ya kak! Cowo aku terharu banget sama surprise aku, dia sama sekali ga expect bakal disurprise kayak gini 🤲🥹",
-        name: "Arini",
-        label: "Untuk Pacarnya",
-        initial: "A",
-    },
-    {
-        quote: "Huhuu makasih kak, lucuu banget hasilnya! Next time aku pasti bakal order di sini lagi pokoknya!",
-        name: "Rara",
-        label: "Untuk Sahabatnya",
-        initial: "R",
-    },
-    {
-        quote: "Kakak makasih banyak yaa, adek aku seneng banget pas buka hadiah ini! Katanya unik dan beda dari kado biasa, lucuu pula 🥹♡",
-        name: "Sinta",
-        label: "Untuk Adiknya",
-        initial: "S",
-    },
-    {
-        quote: "Makasih kak, mama aku sampe terharu lho pas liat fotonya satu-satu! Bilang ini kado paling berkesan yang pernah dia terima ♡",
-        name: "Dinda",
-        label: "Untuk Mamahnya",
-        initial: "D",
-    },
-];
-
-/* ─────────────────────────────────────────────
-   Studio Preview Section
-   ───────────────────────────────────────────── */
-function StudioPreview() {
-    const videoRef = React.useRef<HTMLVideoElement>(null);
-
-    React.useEffect(() => {
         const video = videoRef.current;
-        if (!video) return;
+        if (!video || mediaType !== "video") return;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    video.load();
-                    video.play().catch(() => { });
+                    video.play().catch(() => {});
                 } else {
                     video.pause();
                 }
@@ -930,1100 +87,526 @@ function StudioPreview() {
         );
         observer.observe(video);
         return () => observer.disconnect();
-    }, []);
+    }, [mediaType]);
 
     return (
-        <section
-            style={{
-                padding: "120px 0",
-                position: "relative",
-                background: "var(--bg-warm)",
-                overflow: "hidden",
-            }}
-        >
-            {/* Ambient blob */}
-            <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "min(500px, 70vw)", height: "min(500px, 70vw)", borderRadius: "50%", background: "rgba(166,124,82,0.06)", filter: "blur(100px)", pointerEvents: "none", zIndex: 0 }} />
-
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 24px)", position: "relative", zIndex: 1 }}>
-
-                {/* Header */}
-                <AnimatedSection>
-                    <div style={{ textAlign: "center", marginBottom: 64 }}>
-                        <span className="label-text" style={{ display: "inline-block", padding: "6px 16px", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", borderRadius: 999, marginBottom: 28, color: "var(--accent)" }}>
-                            Studio Editor
-                        </span>
-                        <h2 className="heading-lg" style={{ marginBottom: 16 }}>
-                            Kamu yang Buat Sendiri.
-                            <br />
-                            <span className="italic-accent">Semudah Ini.</span>
-                        </h2>
-                        <p className="body-text" style={{ maxWidth: 520, margin: "0 auto", fontSize: "1rem" }}>
-                            Tidak perlu skill coding. Tidak perlu nunggu admin. Isi sendiri, publish sendiri, kirim sendiri — dalam hitungan menit.
-                        </p>
-                    </div>
-                </AnimatedSection>
-
-                {/* Video Preview */}
-                <AnimatedSection delay={150}>
-                    <div
-                        style={{
-                            maxWidth: 960,
-                            margin: "0 auto 56px",
-                            borderRadius: "var(--radius-lg)",
-                            overflow: "hidden",
-                            border: "1.5px solid var(--border-warm)",
-                            boxShadow: "var(--shadow-elevated)",
-                            background: "var(--bg-deep)",
-                            aspectRatio: "2/1",
-                        }}
-                    >
+        <AnimatedSection delay={delay}>
+            <div className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
+                {/* Media Section (16:9) */}
+                <a 
+                    href={href} 
+                    className="hub-showcase-media"
+                    onMouseEnter={e => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.boxShadow = `0 48px 100px -20px ${accentGlow}`;
+                        el.style.borderColor = `${accentColor}66`;
+                    }}
+                    onMouseLeave={e => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
+                        el.style.borderColor = "rgba(255,255,255,0.15)";
+                    }}
+                >
+                    {mediaType === "video" && mediaSrc ? (
                         <video
                             ref={videoRef}
-                            loop
-                            muted
-                            playsInline
-                            preload="metadata"
-                            x-webkit-airplay="deny"
+                            src={mediaSrc}
+                            autoPlay loop muted playsInline
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                        >
-                            <source src="https://cdn.for-you-always.my.id/1773611293880-nh6g6w.mp4" type="video/mp4" />
-                        </video>
-                    </div>
-                </AnimatedSection>
-
-                {/* Feature pills */}
-                <AnimatedSection delay={250}>
-                    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
-                        {[
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>, text: "Tidak perlu skill coding" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>, text: "Selesai dalam menit" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>, text: "Privat & aman" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>, text: "Bisa preview sebelum kirim" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>, text: "Upload foto bebas" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M9 19V6l12-3v13M9 19c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2zm12-3c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2z" /></svg>, text: "Pilih musik sendiri" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>, text: "Revisi bebas setelah publish" },
-                        ].map((item, i) => (
-                            <div
-                                key={i}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                    padding: "10px 18px",
-                                    borderRadius: 999,
-                                    background: "var(--bg-card)",
-                                    border: "1px solid var(--border)",
-                                    fontSize: 13,
-                                    fontWeight: 600,
-                                    color: "var(--text-secondary)",
-                                    boxShadow: "var(--shadow-soft)",
-                                }}
-                            >
-                                <span style={{ color: "var(--accent)", flexShrink: 0 }}>{item.icon}</span>
-                                {item.text}
-                            </div>
-                        ))}
-                    </div>
-                </AnimatedSection>
-
-            </div>
-        </section>
-    );
-}
-
-function TestimoniCarousel() {
-    const [active, setActive] = useState(0);
-    const [fading, setFading] = useState(false);
-    const total = TESTIMONI_DATA.length;
-
-    const goTo = (idx: number) => {
-        if (idx === active || fading) return;
-        setFading(true);
-        setTimeout(() => {
-            setActive(idx);
-            setFading(false);
-        }, 250);
-    };
-
-    const prev = () => goTo((active - 1 + total) % total);
-    const next = () => goTo((active + 1) % total);
-    const t = TESTIMONI_DATA[active];
-
-    return (
-        <section style={{ padding: "120px 0", position: "relative", overflow: "hidden", background: "var(--bg)" }}>
-            {/* Ambient blob */}
-            <div style={{ position: "absolute", bottom: "-10%", right: "-5%", width: "min(400px,60vw)", height: "min(400px,60vw)", borderRadius: "50%", background: "rgba(166,124,82,0.05)", filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
-
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px,4vw,24px)", position: "relative", zIndex: 1 }}>
-
-                {/* Header */}
-                <AnimatedSection>
-                    <div style={{ textAlign: "center", marginBottom: 48 }}>
-                        <span className="label-text" style={{ display: "inline-block", padding: "6px 16px", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", borderRadius: 999, marginBottom: 28, color: "var(--accent)" }}>
-                            100+ Happy Customers
-                        </span>
-                        <h2 className="heading-lg" style={{ marginBottom: 0 }}>
-                            Mereka Sudah Merasakan.
-                            <br />
-                            <span className="italic-accent">Giliranmu Selanjutnya.</span>
-                        </h2>
-                    </div>
-                </AnimatedSection>
-
-                {/* Social proof bar */}
-                <AnimatedSection delay={100}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56, flexWrap: "wrap" }}>
-                        {[
-                            { icon: <span style={{ color: "var(--accent-light)", fontSize: 14, letterSpacing: 2 }}>★★★★★</span>, text: "5.0 Rating" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>, text: "100+ Customer Puas" },
-                            { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>, text: "Trusted Since 2025" },
-                        ].map((item, i) => (
-                            <React.Fragment key={i}>
-                                {i > 0 && <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--accent-light)", opacity: 0.4, flexShrink: 0 }} />}
-                                <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "var(--text-muted)" }}>
-                                    {item.icon}{item.text}
-                                </div>
-                            </React.Fragment>
-                        ))}
-                    </div>
-                </AnimatedSection>
-
-                {/* Carousel */}
-                <AnimatedSection delay={200}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16, maxWidth: 640, margin: "0 auto" }}>
-
-                        {/* Prev button */}
-                        <button
-                            onClick={prev}
-                            aria-label="Previous"
-                            style={{ flexShrink: 0, width: 44, height: 44, borderRadius: "50%", border: "1.5px solid var(--border-warm)", background: "var(--bg-card)", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.25s ease", boxShadow: "var(--shadow-soft)" }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)"; }}
-                        >
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        {/* Card — no photo, quote only */}
-                        <div
-                            className="glass-surface"
-                            style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", transition: "opacity 0.25s ease", opacity: fading ? 0 : 1 }}
-                        >
-                            <div style={{ padding: "36px 32px 32px" }}>
-                                {/* Quote mark */}
-                                <div style={{ fontFamily: "var(--font-display)", fontSize: 64, lineHeight: 1, color: "var(--accent-light)", opacity: 0.35, marginBottom: 8, userSelect: "none" }}>
-                                    &ldquo;
-                                </div>
-                                <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "1.15rem", color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: 32 }}>
-                                    {t.quote}
-                                </p>
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                        <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "var(--accent)", flexShrink: 0 }}>
-                                            {t.initial}
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", marginBottom: 2 }}>
-                                                {t.name}
-                                            </div>
-                                            <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500, letterSpacing: "0.05em" }}>
-                                                {t.label}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "var(--text-muted)" }}>
-                                        {active + 1} / {total}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Next button */}
-                        <button
-                            onClick={next}
-                            aria-label="Next"
-                            style={{ flexShrink: 0, width: 44, height: 44, borderRadius: "50%", border: "1.5px solid var(--border-warm)", background: "var(--bg-card)", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.25s ease", boxShadow: "var(--shadow-soft)" }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--accent)"; (e.currentTarget as HTMLElement).style.color = "#fff"; (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--bg-card)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border-warm)"; }}
-                        >
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    {/* Dot navigation */}
-                    <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 24 }}>
-                        {TESTIMONI_DATA.map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => goTo(i)}
-                                style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 999, border: "none", background: i === active ? "var(--accent)" : "var(--border-warm)", cursor: "pointer", padding: 0, transition: "all 0.3s ease" }}
-                            />
-                        ))}
-                    </div>
-                </AnimatedSection>
-
-            </div>
-        </section>
-    );
-}
-
-export default function VoicesLandingPage() {
-    const isMobile = useIsMobile();
-    return (
-        <div style={{ minHeight: "100vh", position: "relative", overflowX: "clip", width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
-            {/* ── Background Ambient Blobs ── */}
-            <div
-                style={{ position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: -1 }}
-            >
-                <div
-                    className="ambient-blob"
-                    style={{
-                        top: "-8%",
-                        left: "-8%",
-                        width: "50%",
-                        height: "50%",
-                        background: "rgba(201, 168, 124, 0.10)",
-                    }}
-                />
-                <div
-                    className="ambient-blob"
-                    style={{
-                        top: "30%",
-                        right: "-10%",
-                        width: "45%",
-                        height: "45%",
-                        background: "rgba(166, 124, 82, 0.06)",
-                    }}
-                />
-                <div
-                    className="ambient-blob"
-                    style={{
-                        bottom: "-10%",
-                        left: "20%",
-                        width: "50%",
-                        height: "50%",
-                        background: "rgba(122, 90, 58, 0.05)",
-                    }}
-                />
-            </div>
-
-
-
-            {/* ════════════════════════════════════
-          HERO SECTION
-         ════════════════════════════════════ */}
-            <section
-                style={{
-                    position: "relative",
-                    paddingTop: isMobile ? 96 : 160,
-                    paddingBottom: isMobile ? 56 : 100,
-                    overflow: "hidden",
-                }}
-            >
-                <div
-                    style={{
-                        width: "100%",
-                        maxWidth: 1100,
-                        margin: "0 auto",
-                        padding: "0 24px",
-                        display: "grid",
-                        gridTemplateColumns: "1fr",
-                        gap: 60,
-                        alignItems: "center",
-                    }}
-                >
-                    {/* Text Content */}
-                    <div style={{
-                        textAlign: "center",
-                        maxWidth: "100%",
-                        margin: "0 auto",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        width: "100%",
-                        overflow: "hidden"
-                    }}>
-                        <AnimatedSection>
-                            <div
-                                className="label-text"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                    padding: "6px 16px",
-                                    background: "var(--accent-glow)",
-                                    border: "1px solid var(--border-warm)",
-                                    borderRadius: 999,
-                                    marginBottom: 32,
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        width: 6,
-                                        height: 6,
-                                        borderRadius: "50%",
-                                        background: "var(--accent)",
-                                        animation: "pulse-warm 2s infinite",
-                                    }}
-                                />
-                                Voices. Gift — Digital Memoir
-                            </div>
-                        </AnimatedSection>
-
-                        <AnimatedSection delay={100}>
-                            <h1 className="heading-xl" style={{
-                                marginBottom: 28,
-                                maxWidth: "100%",
-                                wordWrap: "break-word"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }}
+                        />
+                    ) : mediaType === "gif" && mediaSrc ? (
+                        <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
+                    ) : (
+                        <div style={{
+                            width: "100%", height: "100%", aspectRatio: "16/9",
+                            background: `linear-gradient(160deg, rgba(30,20,12,0.97) 0%, ${accentGlow} 100%)`,
+                            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16,
+                        }}>
+                            <div style={{
+                                width: 72, height: 72, borderRadius: 20,
+                                background: `${accentColor}18`,
+                                border: `1.5px solid ${accentColor}44`,
+                                display: "flex", alignItems: "center", justifyContent: "center",
                             }}>
-                                Rangkai Memori.
-                                <br />
-                                <span className="italic-accent">Abadikan Selamanya.</span>
-                            </h1>
-                        </AnimatedSection>
-
-                        <AnimatedSection delay={200}>
-                            <p
-                                className="body-text"
-                                style={{
-                                    fontSize: "1.1rem",
-                                    maxWidth: "100%",
-                                    width: "100%",
-                                    margin: "0 auto 40px",
-                                    padding: "0 10px",
-                                    boxSizing: "border-box"
-                                }}
-                            >
-                                Sebuah mesin waktu digital. Rangkai foto-foto penuh memori dan
-                                rekam pesan suara Anda sendiri menjadi kado personal yang{" "}
-                                <strong
-                                    className="italic-accent"
-                                    style={{
-                                        fontWeight: 600,
-                                        color: "var(--accent)"
-                                    }}
-                                >
-                                    sangat istimewa.
-                                </strong>
-                            </p>
-                        </AnimatedSection>
-
-                        <AnimatedSection delay={300}>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 16,
-                                    alignItems: "center",
-                                    width: "100%",
-                                    maxWidth: "100%",
-                                }}
-                            >
-                                <a href="#pesan" className="btn-primary" style={{ width: "100%", maxWidth: "300px" }}>
-                                    <span>Mulai Merangkai Kenangan</span>
-                                    <svg
-                                        width="18"
-                                        height="18"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        style={{ position: "relative", zIndex: 1 }}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                        />
-                                    </svg>
-                                </a>
-                                <a href="#showcase" className="btn-secondary" style={{ width: "100%", maxWidth: "300px" }}>
-                                    Lihat Lebih Dekat
-                                    <svg
-                                        width="16"
-                                        height="16"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M19 9l-7 7-7-7"
-                                        />
-                                    </svg>
-                                </a>
+                                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke={accentColor} strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+                                </svg>
                             </div>
-                        </AnimatedSection>
-                    </div>
-
-                    {/* Hero Product Cards */}
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(min(250px, 100%), 1fr))",
-                            gap: 24,
-                            maxWidth: 800,
-                            margin: "0 auto",
-                            width: "100%",
-                        }}
-                    >
-                        <ProductCard
-                            label="Voices Gift"
-                            title="Kado Suara & Foto"
-                            description="Rangkai foto kenangan + rekam pesan suara pribadimu. Lengkap dengan musik latar pilihan."
-                            price="Mulai Rp 10.000"
-                            gifSrc="https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"
-                            ctaHref="#showcase"
-                            ctaLabel="Lihat Detail"
-                            delay={400}
-                        />
-                        <ProductCard
-                            label="Arcade Edition"
-                            title="10 Rooms of Memories"
-                            description="Kado digital interaktif dengan 10 ruangan unik — dari Quiz, Journey, Atlas, hingga Star Catcher."
-                            price="Rp 20.000"
-                            gifSrc="https://cdn.for-you-always.my.id/1773426766916-7k8labq.gif"
-                            ctaHref="/arcade"
-                            ctaLabel="Lihat Detail"
-                            isNew
-                            delay={550}
-                        />
-                    </div>
-
-                </div>
-            </section >
-
-            {/* ════════════════════════════════════
-          SHOWCASE — Art of Sound
-         ════════════════════════════════════ */}
-            <section
-                id="showcase"
-                className="section-spacing"
-                style={{ position: "relative", background: "var(--bg-warm)", overflow: "hidden" }}
-            >
-                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 24px)", boxSizing: "border-box", width: "100%" }}>
-                    {/* Section Header */}
-                    <AnimatedSection>
-                        <div style={{ textAlign: "center", marginBottom: 64 }}>
-                            <span
-                                className="label-text"
-                                style={{
-                                    display: "inline-block",
-                                    padding: "6px 16px",
-                                    background: "var(--bg-card)",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: 999,
-                                    marginBottom: 28,
-                                }}
-                            >
-                                Apa yang Mereka Terima
+                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: `${accentColor}99` }}>
+                                Coming Soon
                             </span>
-                            <h2 className="heading-lg">
-                                Bukan Sekadar Kado.
-                                <br />
-                                <span className="italic-accent">
-                                    Ini Kapsul Waktu Digital.
-                                </span>
-                            </h2>
                         </div>
-                    </AnimatedSection>
+                    )}
+                </a>
 
-                    <FeatureShowcase />
-
-                </div>
-            </section>
-
-
-            {/* ════════════════════════════════════
-          CARA KERJA
-         ════════════════════════════════════ */}
-            < section
-                id="cara-kerja"
-                className="section-spacing"
-                style={{ position: "relative", overflow: "hidden" }}
-            >
-                {/* Ambient decorations */}
-                < div
-                    className="ambient-blob"
-                    style={{
-                        top: 0,
-                        right: 0,
-                        width: "min(500px, 80vw)",
-                        height: "min(500px, 80vw)",
-                        background: "rgba(166,124,82,0.05)",
-                        transform: "translate(10%, -30%)",
-                    }}
-                />
-
-                < div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 24px)", boxSizing: "border-box", width: "100%" }}>
-                    <AnimatedSection>
-                        <div
-                            style={{
-                                textAlign: "center",
-                                marginBottom: 64,
-                                maxWidth: 600,
-                                margin: "0 auto 64px",
-                            }}
-                        >
-                            <span
-                                className="label-text"
-                                style={{
-                                    display: "inline-block",
-                                    padding: "6px 16px",
-                                    background: "var(--accent-glow)",
-                                    border: "1px solid var(--border-warm)",
-                                    borderRadius: 999,
-                                    marginBottom: 28,
-                                }}
-                            >
-                                Cara Kerja
-                            </span>
-                            <h2 className="heading-lg" style={{ marginBottom: 16 }}>
-                                Sempurnakan Momen
-                                <br />
-                                <span className="italic-accent">Melalui Sentuhan Digital.</span>
-                            </h2>
-                            <p className="body-text">
-                                Hadirkan kebahagiaan dalam genggaman dengan proses yang
-                                dirancang khusus untuk setiap cerita berharga Anda.
-                            </p>
-                        </div>
-                    </AnimatedSection>
-
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
-                            gap: 24,
-                        }}
-                    >
-                        <AnimatedSection delay={100}>
-                            <StepCard
-                                number="1"
-                                title="Pesan via WhatsApp"
-                                description="Hubungi admin via WhatsApp untuk melakukan pemesanan dan dapatkan akses eksklusif ke studio editor kami."
-                                icon={
-                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                    </svg>
-                                }
-                            />
-                        </AnimatedSection>
-                        <AnimatedSection delay={200}>
-                            <StepCard
-                                number="2"
-                                title="Kustomisasi"
-                                description="Akses studio editor untuk memilih tema warna, unggah foto kenangan, dan rekam pesan suara Anda."
-                                icon={
-                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-                                    </svg>
-                                }
-                            />
-                        </AnimatedSection>
-                        <AnimatedSection delay={300}>
-                            <StepCard
-                                number="3"
-                                title="Bagikan"
-                                description="Dapatkan link unik yang dilindungi password dan bagikan keajaiban hadiah digital Anda seketika kepada orang tercinta."
-                                icon={
-                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0-10.628a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5zm0 10.628a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5z" />
-                                    </svg>
-                                }
-                            />
-                        </AnimatedSection>
+                {/* Text Content */}
+                <div className="hub-showcase-content">
+                    {/* Label Badge */}
+                    <div style={{
+                        alignSelf: "flex-start",
+                        padding: "6px 14px", borderRadius: 999,
+                        background: `${accentColor}15`,
+                        border: `1px solid ${accentColor}33`,
+                        color: accentColor, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em",
+                        textTransform: "uppercase" as const,
+                        marginBottom: 24,
+                    }}>
+                        {label}
                     </div>
-                </div >
-            </section >
 
-            {/* ════════════════════════════════════
-          STUDIO PREVIEW (HIDDEN TEMP)
-         ════════════════════════════════════ */}
-            {/* <StudioPreview /> */}
+                    <h3 style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: "clamp(1.8rem, 4vw, 2.7rem)",
+                        fontWeight: 400,
+                        color: "#2c2118",
+                        lineHeight: 1.15,
+                        marginBottom: 16,
+                    }}>
+                        {title}
+                    </h3>
+                    
+                    <p style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(0.95rem, 1.5vw, 1.1rem)",
+                        color: "#6b5c4e",
+                        lineHeight: 1.6,
+                        marginBottom: 24,
+                    }}>
+                        {description}
+                    </p>
 
-            {/* ════════════════════════════════════
-          TESTIMONI — Carousel
-         ════════════════════════════════════ */}
-            <TestimoniCarousel />
+                    {/* Features List */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
+                        {features.map((feat) => (
+                            <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6b5c4e", fontWeight: 500 }}>
+                                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${accentColor}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth={3}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                {feat}
+                            </div>
+                        ))}
+                    </div>
 
-            {/* ════════════════════════════════════
-          FINAL CTA — Dark Section
-         ════════════════════════════════════ */}
-            < section
-                id="pesan"
-                className="dark-section section-spacing"
-            >
-                <div
-                    style={{
-                        maxWidth: 800,
-                        margin: "0 auto",
-                        padding: "0 24px",
-                        textAlign: "center",
-                        position: "relative",
-                        zIndex: 1,
-                    }}
-                >
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
+                        <a href={href} style={{
+                            padding: "12px 28px", borderRadius: 999,
+                            background: accentColor, color: "#fff",
+                            fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                            textDecoration: "none", transition: "all 0.3s ease",
+                            boxShadow: `0 8px 24px -4px ${accentColor}66`
+                        }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
+                            Lihat Produk
+                        </a>
+
+                        <div style={{
+                            padding: "10px 20px", borderRadius: 999,
+                            background: `linear-gradient(135deg, rgba(255,255,255,0.95), ${accentColor}1A)`,
+                            border: `1px solid ${accentColor}44`,
+                            boxShadow: `inset 0 2px 4px rgba(255,255,255,0.8), 0 6px 16px -4px ${accentColor}44`,
+                            fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: accentColor,
+                            display: "flex", alignItems: "center", gap: 8
+                        }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                <line x1="7" y1="7" x2="7.01" y2="7" />
+                            </svg>
+                            {price}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </AnimatedSection>
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN HUB PAGE
+   ═══════════════════════════════════════════════════════════ */
+export default function MainHubPage() {
+    return (
+        <div style={{ minHeight: "100vh", background: "#f5efe6", overflowX: "clip" }}>
+
+            <style>{`
+                @keyframes bounce-soft {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(8px); }
+                }
+                @keyframes pulse-dot {
+                    0%, 100% { opacity: 0.4; transform: scale(1); }
+                    50% { opacity: 1; transform: scale(1.15); }
+                }
+            `}</style>
+
+            {/* Ambient Blobs */}
+            <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(201,168,124,0.09)", filter: "blur(100px)" }} />
+                <div style={{ position: "absolute", top: "40%", right: "-10%", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(166,124,82,0.055)", filter: "blur(90px)" }} />
+                <div style={{ position: "absolute", bottom: "-10%", left: "25%", width: "45vw", height: "45vw", borderRadius: "50%", background: "rgba(122,90,58,0.045)", filter: "blur(80px)" }} />
+            </div>
+
+            {/* ── HERO ── */}
+            <section style={{ position: "relative", zIndex: 1, paddingTop: "clamp(140px, 20vh, 200px)", paddingBottom: "clamp(80px, 12vh, 130px)", textAlign: "center" }}>
+                <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 24px" }}>
+
                     <AnimatedSection>
-                        <span
-                            style={{
-                                display: "inline-block",
-                                padding: "6px 16px",
-                                background: "rgba(166,124,82,0.15)",
-                                border: "1px solid rgba(166,124,82,0.25)",
-                                borderRadius: 999,
-                                fontSize: 10,
-                                fontWeight: 700,
-                                letterSpacing: "0.2em",
-                                textTransform: "uppercase" as const,
-                                color: "var(--accent-light)",
-                                marginBottom: 36,
-                            }}
-                        >
-                            Harga Spesial
-                        </span>
+                        <div style={{
+                            display: "inline-flex", alignItems: "center", gap: 8,
+                            padding: "7px 18px",
+                            background: "rgba(166,124,82,0.1)",
+                            border: "1px solid rgba(166,124,82,0.2)",
+                            borderRadius: 999, marginBottom: 36,
+                        }}>
+                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#a67c52", animation: "pulse-dot 2s infinite", display: "inline-block" }} />
+                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#a67c52" }}>
+                                Digital Atelier · For you, Always.
+                            </span>
+                        </div>
                     </AnimatedSection>
 
                     <AnimatedSection delay={100}>
-                        <h2
-                            style={{
-                                fontFamily: "var(--font-display)",
-                                fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
-                                fontWeight: 400,
-                                color: "#f5efe6",
-                                lineHeight: 1.15,
-                                marginBottom: 20,
-                            }}
-                        >
-                            Satu Hadiah.
-                            <br />
-                            <span
-                                style={{
-                                    fontStyle: "italic",
-                                    color: "var(--accent-light)",
-                                }}
-                            >
-                                Satu Juta Makna.
-                            </span>
-                        </h2>
+                        <h1 style={{
+                            fontFamily: "var(--font-display)",
+                            fontSize: "clamp(2.8rem, 9vw, 6rem)",
+                            fontWeight: 400, lineHeight: 1.05,
+                            letterSpacing: "-0.025em", color: "#2c2118", marginBottom: 28,
+                        }}>
+                            The Art of<br />
+                            <span style={{ fontStyle: "italic", color: "#a67c52" }}>Gifting Memories.</span>
+                        </h1>
                     </AnimatedSection>
 
                     <AnimatedSection delay={200}>
-                        <p
-                            style={{
-                                fontSize: "1.05rem",
-                                color: "rgba(245,239,230,0.6)",
-                                lineHeight: 1.7,
-                                maxWidth: 480,
-                                margin: "0 auto 48px",
-                            }}
-                        >
-                            Cukup satu kali investasi untuk kebahagiaan yang tak lekang oleh
-                            waktu. Tanpa langganan. Akses selamanya.
+                        <p style={{
+                            fontFamily: "var(--font-sans)",
+                            fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
+                            color: "#6b5c4e", lineHeight: 1.75,
+                            maxWidth: 560, margin: "0 auto 48px",
+                        }}>
+                            Tiga cara berbeda untuk mengabadikan satu cerita.
+                            Pilih produk yang paling mencerminkan perasaanmu.
                         </p>
                     </AnimatedSection>
 
-                    {/* Pricing Cards — 2 column grid */}
                     <AnimatedSection delay={300}>
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))",
-                            gap: 20,
-                            maxWidth: 720,
-                            margin: "0 auto 48px",
-                        }}>
-
-                            {/* ── Voices Regular Card ── */}
-                            <div style={{
-                                padding: "36px 32px",
-                                borderRadius: "var(--radius-lg)",
-                                background: "rgba(255,252,247,0.06)",
-                                border: "1px solid rgba(166,124,82,0.2)",
-                                backdropFilter: "blur(12px)",
-                                WebkitBackdropFilter: "blur(12px)",
-                                display: "flex",
-                                flexDirection: "column",
-                            }}>
-                                <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, color: "var(--accent-light)", marginBottom: 8 }}>
-                                    Voices. Regular
-                                </div>
-                                <div style={{ marginBottom: 24 }}>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>10</span>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
-                                </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1 }}>
-                                    {["Maksimal 10 foto", "Pesan suara personal", "5 Pilihan Tema Warna", "Link standar (untuk dikirim)", "Akses selamanya"].map((f, i) => (
-                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.7)", lineHeight: 1.4 }}>
-                                            <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.2)", border: "1px solid rgba(166,124,82,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                            </div>
-                                            {f}
-                                        </div>
-                                    ))}
-                                </div>
-                                <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Regular)*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                                    target="_blank" rel="noopener noreferrer"
-                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "rgba(166,124,82,0.15)", border: "1px solid rgba(166,124,82,0.3)", color: "var(--accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease", textAlign: "center" }}
-                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.25)"; }}
-                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.15)"; }}
-                                >
-                                    Pesan Sekarang
-                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                                </a>
-                            </div>
-
-                            {/* ── Voices Premium Card (Featured) ── */}
-                            <div style={{
-                                padding: "36px 32px",
-                                borderRadius: "var(--radius-lg)",
-                                background: "rgba(255,252,247,0.1)",
-                                border: "1.5px solid rgba(201,168,124,0.5)",
-                                backdropFilter: "blur(12px)",
-                                WebkitBackdropFilter: "blur(12px)",
-                                display: "flex",
-                                flexDirection: "column",
-                                position: "relative" as const,
-                            }}>
-                                {/* Featured badge */}
-                                <div style={{
-                                    position: "absolute" as const,
-                                    top: -14,
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    background: "var(--accent-light)",
-                                    color: "#2c1e12",
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    padding: "4px 16px",
-                                    borderRadius: 999,
-                                    letterSpacing: "0.1em",
-                                    textTransform: "uppercase" as const,
-                                    whiteSpace: "nowrap" as const,
-                                }}>
-                                    ✦ Lebih Eksklusif
-                                </div>
-                                <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, color: "var(--accent-light)", marginBottom: 8 }}>
-                                    Voices. Premium
-                                </div>
-                                <div style={{ marginBottom: 6 }}>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>15</span>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
-                                </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1, marginTop: 14 }}>
-                                    {["Maksimal 20 foto", "Pesan suara personal", "5 Pilihan Tema Warna", "Link khusus", "Akses selamanya"].map((f, i) => (
-                                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(245,239,230,0.85)", lineHeight: 1.4 }}>
-                                            <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: "rgba(166,124,82,0.25)", border: "1px solid rgba(201,168,124,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                            </div>
-                                            {f}
-                                        </div>
-                                    ))}
-                                </div>
-                                <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Premium)*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                                    target="_blank" rel="noopener noreferrer"
-                                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.4s ease", boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)", textAlign: "center" }}
-                                >
-                                    Pesan Sekarang
-                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                                </a>
-                            </div>
-
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 60 }}>
+                            <div style={{ height: 1, width: 60, background: "linear-gradient(to right, transparent, rgba(166,124,82,0.3))" }} />
+                            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#c9a87c" }} />
+                            <div style={{ height: 1, width: 60, background: "linear-gradient(to left, transparent, rgba(166,124,82,0.3))" }} />
                         </div>
                     </AnimatedSection>
 
-                    {/* ── Bundle Teaser Banner ── */}
-                    <AnimatedSection delay={380}>
-                        <a
-                            href="/bundle"
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                gap: 20,
-                                maxWidth: 720,
-                                margin: "0 auto 48px",
-                                padding: "24px 32px",
-                                borderRadius: "var(--radius-md)",
-                                background: "rgba(255,252,247,0.05)",
-                                border: "1px solid rgba(201,168,124,0.2)",
-                                backdropFilter: "blur(12px)",
-                                WebkitBackdropFilter: "blur(12px)",
-                                textDecoration: "none",
-                                transition: "all 0.4s ease",
-                                flexWrap: "wrap",
-                                cursor: "pointer",
-                            }}
-                            onMouseEnter={e => {
-                                (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.09)";
-                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.4)";
-                                (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                            }}
-                            onMouseLeave={e => {
-                                (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.05)";
-                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.2)";
-                                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                            }}
-                        >
-                            {/* Left — icon + text */}
-                            <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
-                                {/* Bundle icon box */}
-                                <div
-                                    style={{
-                                        flexShrink: 0,
-                                        width: 44,
-                                        height: 44,
-                                        borderRadius: 14,
-                                        background: "rgba(166,124,82,0.15)",
-                                        border: "1px solid rgba(201,168,124,0.25)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        color: "var(--accent-light)",
-                                    }}
-                                >
-                                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                                        <polyline points="20 12 20 22 4 22 4 12" />
-                                        <rect x="2" y="7" width="20" height="5" />
-                                        <line x1="12" y1="22" x2="12" y2="7" />
-                                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-                                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                                        <span
-                                            style={{
-                                                fontFamily: "var(--font-display)",
-                                                fontStyle: "italic",
-                                                fontSize: 17,
-                                                color: "var(--accent-light)",
-                                            }}
-                                        >
-                                            Voices. Bundle
-                                        </span>
-                                        <span
-                                            style={{
-                                                fontSize: 9,
-                                                fontWeight: 700,
-                                                letterSpacing: "0.1em",
-                                                textTransform: "uppercase" as const,
-                                                padding: "3px 8px",
-                                                borderRadius: 999,
-                                                background: "rgba(166,124,82,0.2)",
-                                                border: "1px solid rgba(201,168,124,0.3)",
-                                                color: "var(--accent-light)",
-                                            }}
-                                        >
-                                            5 kado
-                                        </span>
-                                    </div>
-                                    <p
-                                        style={{
-                                            fontSize: 13,
-                                            color: "rgba(245,239,230,0.5)",
-                                            margin: 0,
-                                            lineHeight: 1.5,
-                                        }}
-                                    >
-                                        Beli 5 kuota Voices Gift sekaligus — cocok untuk reseller atau kamu yang ingin kasih kado ke banyak orang.
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Right — price + arrow */}
-                            <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
-                                <div style={{ textAlign: "right" as const }}>
-                                    <div
-                                        style={{
-                                            fontFamily: "var(--font-display)",
-                                            fontSize: 22,
-                                            fontWeight: 600,
-                                            color: "#f5efe6",
-                                            letterSpacing: "-0.02em",
-                                        }}
-                                    >
-                                        Rp 30.000
-                                    </div>
-                                    <div
-                                        style={{
-                                            fontSize: 10,
-                                            color: "rgba(245,239,230,0.3)",
-                                            textDecoration: "line-through",
-                                        }}
-                                    >
-                                        satuan 5× = Rp 50.000
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        width: 36,
-                                        height: 36,
-                                        borderRadius: "50%",
-                                        border: "1px solid rgba(201,168,124,0.25)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        color: "var(--accent-light)",
-                                        flexShrink: 0,
-                                    }}
-                                >
-                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-                    </AnimatedSection>
-
-                    <AnimatedSection delay={400}>
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 20,
-                                fontSize: 11,
-                                color: "rgba(245,239,230,0.35)",
-                                fontWeight: 600,
-                                letterSpacing: "0.12em",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                <span
-                                    style={{
-                                        width: 5,
-                                        height: 5,
-                                        borderRadius: "50%",
-                                        background: "rgba(201,168,124,0.5)",
-                                    }}
-                                />
-                                SECURE PAYMENT
-                            </span>
-                            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                <span
-                                    style={{
-                                        width: 5,
-                                        height: 5,
-                                        borderRadius: "50%",
-                                        background: "rgba(201,168,124,0.5)",
-                                    }}
-                                />
-                                PASSWORD PROTECTED
-                            </span>
-                            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                <span
-                                    style={{
-                                        width: 5,
-                                        height: 5,
-                                        borderRadius: "50%",
-                                        background: "rgba(201,168,124,0.5)",
-                                    }}
-                                />
-                                LIFETIME ACCESS
-                            </span>
+                    <AnimatedSection delay={500}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: 0.5, animation: "bounce-soft 2s ease-in-out infinite" }}>
+                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "#9c8b7a" }}>Scroll</span>
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#9c8b7a" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </div>
                     </AnimatedSection>
                 </div>
-            </section >
+            </section>
 
-            {/* ════════════════════════════════════
-          FOOTER
-         ════════════════════════════════════ */}
-            < footer
-                style={{
-                    padding: "48px 24px",
-                    background: "var(--bg)",
-                    borderTop: "1px solid var(--border)",
-                    textAlign: "center",
-                }}
-            >
-                <a
-                    href="/"
-                    style={{
-                        display: "inline-flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: 8,
-                        textDecoration: "none",
-                        marginBottom: 20,
-                    }}
-                >
-                    <div
-                        style={{
-                            width: 36,
-                            height: 36,
-                            borderRadius: 12,
-                            overflow: "hidden",
-                            border: "1px solid var(--border)",
-                        }}
-                    >
-                        <img
-                            src="/logo.png"
-                            alt="Logo"
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            {/* ── THE COLLECTION ── */}
+            <section id="collection" style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
+                <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
+
+                    <AnimatedSection>
+                        <div style={{ textAlign: "center", marginBottom: 64 }}>
+                            <span style={{
+                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
+                                letterSpacing: "0.25em", textTransform: "uppercase" as const,
+                                color: "#9c8b7a", display: "inline-block",
+                                padding: "6px 18px", border: "1px solid rgba(166,124,82,0.2)",
+                                borderRadius: 999, background: "rgba(166,124,82,0.07)",
+                            }}>
+                                The Collection
+                            </span>
+                        </div>
+                    </AnimatedSection>
+
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <LandscapeProductCard
+                            label={
+                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                    Voices Gift <span style={{ opacity: 0.5 }}>•</span> Best Seller
+                                </div>
+                            }
+                            title="Kado Suara & Foto"
+                            description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik. Ungkapkan perasaanmu secara langsung."
+                            features={[
+                                "Rekam Suara & Custom Pesan",
+                                "Galeri Foto Sinematik",
+                                "Background Music Pilihan"
+                            ]}
+                            price="Mulai Rp 10.000"
+                            mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
+                            mediaType="video"
+                            accentColor="#a67c52"
+                            accentGlow="rgba(166,124,82,0.2)"
+                            href="/voices"
+                            delay={100}
+                        />
+                        <LandscapeProductCard
+                            label="Arcade Edition"
+                            title="10 Rooms of Memories"
+                            description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."
+                            features={[
+                                "10 Ruangan Berbeda",
+                                "Kuis Hubungan Mini",
+                                "Sertifikat Eksklusif"
+                            ]}
+                            price={
+                                <>
+                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
+                                    <span>Promo Rp 20.000</span>
+                                </>
+                            }
+                            mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
+                            mediaType="video"
+                            accentColor="#5c8c5c"
+                            accentGlow="rgba(92,140,92,0.2)"
+                            href="/arcade"
+                            delay={200}
+                            reverse={true}
+                        />
+                        <LandscapeProductCard
+                            label="Wrapped Edition"
+                            title="Memories Wrapped"
+                            description="Kado interaktif layaknya Spotify Wrapped. Menampilkan rekapitulasi waktu, momen terbaik, dan statistik hubunganmu."
+                            features={[
+                                "Relationship Stats",
+                                "Music Player & Lyrics",
+                                "Scratch Card Gallery"
+                            ]}
+                            price={
+                                <>
+                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
+                                    <span>Promo Rp 20.000</span>
+                                </>
+                            }
+                            mediaSrc=""
+                            mediaType="placeholder"
+                            accentColor="#c9184a"
+                            accentGlow="rgba(201,24,74,0.15)"
+                            href="/wrapped"
+                            delay={300}
                         />
                     </div>
-                    <span
-                        style={{
-                            fontFamily: "var(--font-display)",
-                            fontStyle: "italic",
-                            fontWeight: 600,
-                            fontSize: 15,
-                            color: "var(--text-primary)",
-                        }}
-                    >
-                        For you, Always.
-                    </span>
-                </a>
+                </div>
+            </section>
 
-                <p
-                    style={{
-                        fontSize: 10,
-                        color: "var(--text-muted)",
-                        fontWeight: 500,
-                    }}
-                >
-                    © 2026 For you, Always. — Preserving Memories Digitally
-                </p>
-            </footer>
+            {/* ── CARA KERJA ── */}
+            <section style={{ position: "relative", zIndex: 1, padding: "100px 0", background: "#ebe3d5", overflow: "hidden" }}>
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.035 }} />
+                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
 
-            {/* ── Floating WhatsApp Button ── */}
-            <a
-                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20Voices%20Gift."
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Hubungi via WhatsApp"
-                style={{
-                    position: "fixed",
-                    bottom: 24,
-                    right: 24,
-                    zIndex: 50,
-                    width: 56,
-                    height: 56,
-                    borderRadius: "50%",
-                    background: "#594a3e", // Warm chocolate brown
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 8px 24px -4px rgba(89, 74, 62, 0.4)",
-                    transition: "all 0.3s ease",
-                    textDecoration: "none",
-                }}
-            >
-                <svg width="26" height="26" fill="white" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    <AnimatedSection>
+                        <div style={{ textAlign: "center", marginBottom: 72 }}>
+                            <span style={{
+                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
+                                letterSpacing: "0.25em", textTransform: "uppercase" as const, color: "#9c8b7a",
+                                display: "inline-block", padding: "6px 18px",
+                                border: "1px solid rgba(166,124,82,0.2)", borderRadius: 999,
+                                background: "rgba(166,124,82,0.08)", marginBottom: 28,
+                            }}>
+                                Cara Kerja
+                            </span>
+                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 5vw, 3rem)", fontWeight: 400, color: "#2c2118", lineHeight: 1.15 }}>
+                                Kamu yang Buat Sendiri.
+                                <br /><span style={{ fontStyle: "italic", color: "#a67c52" }}>Semudah Ini.</span>
+                            </h2>
+                        </div>
+                    </AnimatedSection>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: 2 }}>
+                        {[
+                            {
+                                num: "01", title: "Pilih Produk",
+                                desc: "Pilih dari Voices, Arcade, atau Wrapped — sesuai cerita yang ingin kamu sampaikan.",
+                                icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                            },
+                            {
+                                num: "02", title: "Isi di Studio",
+                                desc: "Upload foto, rekam suara, pilih musik — semua dari browser-mu. Tidak perlu skill apapun.",
+                                icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" /></svg>
+                            },
+                            {
+                                num: "03", title: "Kirim & Surprise",
+                                desc: "Dapat link unik dengan passcode. Kirim ke orang tersayang, dan lihat reaksinya.",
+                                icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0-10.628a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5zm0 10.628a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5z" /></svg>
+                            },
+                        ].map((step, i) => (
+                            <AnimatedSection key={i} delay={i * 120}>
+                                <div style={{
+                                    padding: "40px 36px",
+                                    background: i === 1 ? "#3b2f25" : "rgba(255,252,247,0.6)",
+                                    backdropFilter: "blur(20px)",
+                                    borderRadius: 28,
+                                    border: i === 1 ? "none" : "1px solid rgba(255,255,255,0.5)",
+                                    boxShadow: i === 1 ? "0 24px 60px -10px rgba(59,47,37,0.25)" : "0 8px 32px -8px rgba(59,47,37,0.06)",
+                                    height: "100%",
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+                                        <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 13, color: i === 1 ? "rgba(201,168,124,0.5)" : "#c9a87c", fontWeight: 400 }}>{step.num}</span>
+                                        <div style={{ flex: 1, height: 1, background: i === 1 ? "rgba(201,168,124,0.15)" : "rgba(166,124,82,0.15)" }} />
+                                        <div style={{ width: 44, height: 44, borderRadius: 14, background: i === 1 ? "rgba(201,168,124,0.12)" : "rgba(166,124,82,0.1)", border: `1px solid ${i === 1 ? "rgba(201,168,124,0.2)" : "rgba(166,124,82,0.2)"}`, display: "flex", alignItems: "center", justifyContent: "center", color: i === 1 ? "#c9a87c" : "#a67c52" }}>
+                                            {step.icon}
+                                        </div>
+                                    </div>
+                                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem", fontWeight: 600, color: i === 1 ? "#f5efe6" : "#2c2118", marginBottom: 12, lineHeight: 1.2 }}>{step.title}</h3>
+                                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.88rem", color: i === 1 ? "rgba(245,239,230,0.6)" : "#6b5c4e", lineHeight: 1.7, margin: 0 }}>{step.desc}</p>
+                                </div>
+                            </AnimatedSection>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── TESTIMONIALS (terakhir sebelum footer) ── */}
+            <section style={{ position: "relative", zIndex: 1, padding: "100px 0", background: "#3b2f25", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: "10%", left: "5%", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(201,168,124,0.05)", filter: "blur(80px)", pointerEvents: "none" }} />
+                <div style={{ position: "absolute", bottom: "5%", right: "5%", width: "30vw", height: "30vw", borderRadius: "50%", background: "rgba(166,124,82,0.06)", filter: "blur(60px)", pointerEvents: "none" }} />
+
+                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
+                    <AnimatedSection>
+                        <div style={{ textAlign: "center", marginBottom: 64 }}>
+                            <span style={{
+                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
+                                letterSpacing: "0.25em", textTransform: "uppercase" as const,
+                                color: "rgba(201,168,124,0.6)", display: "inline-block",
+                                padding: "6px 18px", border: "1px solid rgba(201,168,124,0.15)",
+                                borderRadius: 999, background: "rgba(201,168,124,0.07)", marginBottom: 28,
+                            }}>
+                                Dari Mereka yang Sudah Merasakan
+                            </span>
+                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 5vw, 3rem)", fontWeight: 400, color: "#f5efe6", lineHeight: 1.15 }}>
+                                Kata Mereka
+                                <span style={{ fontStyle: "italic", color: "#c9a87c" }}> yang Sudah Merasakan.</span>
+                            </h2>
+                        </div>
+                    </AnimatedSection>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))", gap: 20 }}>
+                        {[
+                            { name: "Rara A.", product: "Voices Gift", text: "Pacarku nangis pas buka ini. Beneran ga nyangka bisa segitu indahnya. Foto-fotonya berasa kayak film pendek.", rating: 5, delay: 80 },
+                            { name: "Kevin M.", product: "Arcade Edition", text: "Buat ulang tahun pacar, dia main sampe lupa waktu. 10 ruangan semua seru banget, apalagi bagian kejutan di akhir.", rating: 5, delay: 160 },
+                            { name: "Sella D.", product: "Voices Gift", text: "Murah banget tapi hasilnya premium. Temen-temenku pada tanya beli dimana, kirain bikin sendiri.", rating: 5, delay: 240 },
+                            { name: "Bagas P.", product: "Voices Gift", text: "Awalnya skeptis, tapi begitu kirim ke dia... dia langsung video call sambil nangis. Worth every penny.", rating: 5, delay: 320 },
+                        ].map((r, i) => (
+                            <AnimatedSection key={i} delay={r.delay}>
+                                <div style={{
+                                    padding: "32px 28px", borderRadius: 24,
+                                    background: "rgba(255,252,247,0.05)",
+                                    border: "1px solid rgba(201,168,124,0.12)",
+                                    backdropFilter: "blur(12px)",
+                                    height: "100%", display: "flex", flexDirection: "column", gap: 16,
+                                    transition: "all 0.4s ease",
+                                }}
+                                    onMouseEnter={e => {
+                                        (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.08)";
+                                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.22)";
+                                    }}
+                                    onMouseLeave={e => {
+                                        (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.05)";
+                                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.12)";
+                                    }}
+                                >
+                                    <div style={{ display: "flex", gap: 3 }}>
+                                        {Array.from({ length: r.rating }).map((_, s) => (
+                                            <span key={s} style={{ color: "#c9a87c", fontSize: 13 }}>★</span>
+                                        ))}
+                                    </div>
+                                    <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "1.05rem", color: "rgba(245,239,230,0.85)", lineHeight: 1.65, margin: 0, flex: 1 }}>
+                                        &ldquo;{r.text}&rdquo;
+                                    </p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 8, borderTop: "1px solid rgba(201,168,124,0.1)" }}>
+                                        <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(166,124,82,0.18)", border: "1px solid rgba(166,124,82,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                            <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 14, color: "#c9a87c" }}>{r.name[0]}</span>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, color: "#f5efe6", marginBottom: 2 }}>{r.name}</div>
+                                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(201,168,124,0.5)" }}>via {r.product}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </AnimatedSection>
+                        ))}
+                    </div>
+
+                    <AnimatedSection delay={400}>
+                        <div style={{ marginTop: 60, display: "flex", justifyContent: "center", gap: "clamp(32px, 6vw, 80px)", flexWrap: "wrap" }}>
+                            {[
+                                { num: "100+", label: "Kado Terkirim" },
+                                { num: "5.0", label: "Rating Rata-rata" },
+                                { num: "3", label: "Produk Unik" },
+                            ].map((stat, i) => (
+                                <div key={i} style={{ textAlign: "center" }}>
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 600, color: "#c9a87c", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
+                                    <div style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(245,239,230,0.35)" }}>{stat.label}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </AnimatedSection>
+                </div>
+            </section>
+
+            {/* ── FOOTER ── */}
+            <section style={{ position: "relative", zIndex: 1, padding: "80px 24px 60px", background: "#f5efe6", textAlign: "center" }}>
+
+                <AnimatedSection>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 60 }}>
+                        {[
+                            { icon: "★★★★★", label: "5.0 Rating" },
+                            { icon: "♡", label: "100+ Kado Terkirim" },
+                            { icon: "⏱", label: "Selesai dalam Menit" },
+                            { icon: "🔒", label: "Password Protected" },
+                        ].map((badge, i) => (
+                            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, background: "rgba(166,124,82,0.07)", border: "1px solid rgba(166,124,82,0.15)", fontSize: 12, fontWeight: 600, color: "#6b5c4e", letterSpacing: "0.04em" }}>
+                                <span style={{ color: "#a67c52" }}>{badge.icon}</span>
+                                {badge.label}
+                            </div>
+                        ))}
+                    </div>
+                </AnimatedSection>
+
+                <AnimatedSection delay={100}>
+                    <div style={{ marginBottom: 20 }}>
+                        <div style={{ width: 44, height: 44, borderRadius: 14, overflow: "hidden", border: "1px solid rgba(166,124,82,0.2)", margin: "0 auto 12px" }}>
+                            <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        </div>
+                        <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600, fontSize: 18, color: "#2c2118", marginBottom: 4 }}>For you, Always.</div>
+                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#9c8b7a" }}>Digital Atelier</div>
+                    </div>
+
+                    <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
+                        {[{ label: "Voices", href: "/voices" }, { label: "Arcade", href: "/arcade" }, { label: "Wrapped", href: "/wrapped" }].map(link => (
+                            <a key={link.href} href={link.href} style={{ padding: "8px 18px", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, border: "1px solid rgba(166,124,82,0.18)", borderRadius: 999, color: "#a67c52", textDecoration: "none", transition: "all 0.3s ease" }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.1)"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+                                {link.label}
+                            </a>
+                        ))}
+                    </div>
+
+                    <p style={{ fontSize: 10, color: "#9c8b7a", fontWeight: 500 }}>© 2026 For you, Always. — Preserving Memories Digitally</p>
+                </AnimatedSection>
+            </section>
+
+            {/* Floating WhatsApp */}
+            <a href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
+                style={{ position: "fixed", bottom: 24, right: 24, zIndex: 100, width: 52, height: 52, borderRadius: "50%", background: "#3b2f25", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(59,47,37,0.35)", transition: "all 0.3s ease", textDecoration: "none" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; (e.currentTarget as HTMLElement).style.background = "#a67c52"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.background = "#3b2f25"; }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#f5efe6">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
                 </svg>
             </a>
         </div>

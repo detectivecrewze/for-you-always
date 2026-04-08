@@ -1,0 +1,204 @@
+/* ============================================================
+   Wrapped Edition — "Nostalgic Receipt"
+   Palette: Deep Chocolate / Cream / Warm Gold / Rose
+   Aesthetic: Spotify Wrapped, Instax, Vintage Printer
+   ============================================================ */
+
+/* ── Design Tokens ── */
+:root {
+    /* ── Backgrounds (Blush Silk & Velvet) ── */
+    --wrap-bg-deep: #fdf5f6; /* Very soft blush silk */
+    --wrap-bg-base: #faf0f2; /* Lightest warm blush */
+    --wrap-surface: rgba(255, 255, 255, 0.7); /* Frosted glass */
+    --wrap-surface-raised: rgba(255, 255, 255, 0.9);
+
+    /* ── Accent colors (Rose Gold / Burgundy) ── */
+    --wrap-accent: #c9184a; /* Deep elegant rose */
+    --wrap-accent-light: #ff4d6d; /* Vibrant ruby accent */
+    --wrap-accent-glow: rgba(201, 24, 74, 0.08); /* Subtle rose glow */
+    --wrap-pink: #ffb3c6;
+    --wrap-rose: #a01a58;
+
+    /* ── Text (Darks for contrast on blush bg) ── */
+    --wrap-text-primary: #4a044e; /* Deep plum/burgundy for luxury text */
+    --wrap-text-secondary: #701a75; 
+    --wrap-text-muted: #9d174d;
+
+    /* ── Borders & Decor ── */
+    --wrap-border: rgba(160, 26, 88, 0.15); /* Soft rose gold border */
+    --wrap-radius-lg: 32px;
+    --wrap-radius-md: 20px;
+
+    --wrap-font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
+    --wrap-font-body: var(--font-dm-sans), 'DM Sans', sans-serif;
+}
+
+.wrapped-page {
+    min-height: 100vh;
+    background: var(--wrap-bg-deep);
+    color: var(--wrap-text-primary);
+    font-family: var(--wrap-font-body);
+    overflow-x: hidden;
+}
+
+/* Ambient glow */
+.wrapped-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: 
+        radial-gradient(circle at 10% 10%, rgba(255, 133, 161, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(255, 77, 109, 0.15) 0%, transparent 60%);
+}
+
+.wrap-section {
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.wrap-heading-xl {
+    font-family: var(--wrap-font-display);
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.wrap-heading-lg {
+    font-family: var(--wrap-font-display);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 400;
+}
+
+.wrap-italic {
+    font-style: italic;
+    color: var(--wrap-accent-light);
+}
+
+.wrap-badge {
+    display: inline-flex;
+    padding: 6px 16px;
+    background: var(--wrap-accent-glow);
+    border: 1px solid var(--wrap-border);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--wrap-accent);
+}
+
+.wrap-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
+    color: white;
+    border-radius: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px -10px rgba(255, 77, 109, 0.6);
+}
+
+.wrap-btn-primary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ff758c 0%, #ff4d6d 100%);
+    box-shadow: 0 15px 35px -10px rgba(255, 77, 109, 0.7);
+}
+
+/* Navbar specific to Wrapped */
+.wrap-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 24px;
+}
+
+.wrap-nav-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.82); /* Bright glassmorphism */
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--wrap-border);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(255, 77, 109, 0.08);
+}
+
+.wrap-nav-links {
+    display: flex;
+    gap: 8px;
+}
+
+.wrap-nav-link {
+    padding: 8px 16px;
+    color: var(--wrap-text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.wrap-nav-link:hover {
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--wrap-accent);
+}
+
+.wrap-nav-link.active {
+    background: var(--wrap-accent);
+    color: white;
+}
+
+/* Showcase Slide styles */
+.wrap-media-frame {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: var(--wrap-radius-lg);
+    background: white;
+    border: 1px solid var(--wrap-border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px -15px rgba(255, 77, 109, 0.1);
+}
+
+/* ── Dark CTA Section ── */
+.wrap-dark-section {
+    background: linear-gradient(180deg, #590d22 0%, #3d0a18 100%);
+    color: #fff0f3;
+    position: relative;
+    overflow: hidden;
+}
+
+.wrap-dark-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255, 77, 109, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 133, 161, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.wrap-dark-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .wrap-section {
+        padding: 60px 20px;
+    }
+}

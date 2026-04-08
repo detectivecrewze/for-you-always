@@ -1,29 +1,86 @@
 "use client";
 
 import React from "react";
-import { usePathname } from "next/navigation";
 import "./landing.css";
+
+import { usePathname } from "next/navigation";
+
+/* ─── Per-page theme tokens ─────────────────────────────── */
+type PageTheme = {
+    activeBg: string;
+    activeColor: string;
+    activeBorder: string;
+    ctaBg: string;
+    ctaHoverBg: string;
+    ctaLink: string;
+};
+
+const PAGE_THEMES: Record<string, PageTheme> = {
+    "/voices": {
+        activeBg: "#3b2f25",
+        activeColor: "#f5efe6",
+        activeBorder: "rgba(166,124,82,0.3)",
+        ctaBg: "#3b2f25",
+        ctaHoverBg: "#a67c52",
+        ctaLink: "/voices#pesan",
+    },
+    "/arcade": {
+        activeBg: "#1a3a2a",
+        activeColor: "#e8f5e0",
+        activeBorder: "rgba(74,124,85,0.35)",
+        ctaBg: "#1a3a2a",
+        ctaHoverBg: "#2d6a4f",
+        ctaLink: "/arcade#pesan",
+    },
+    "/wrapped": {
+        activeBg: "#4a044e",
+        activeColor: "#fdf5f6",
+        activeBorder: "rgba(160,26,88,0.3)",
+        ctaBg: "#4a044e",
+        ctaHoverBg: "#c9184a",
+        ctaLink: "/wrapped#order",
+    },
+    "/": {
+        activeBg: "#3b2f25",
+        activeColor: "#f5efe6",
+        activeBorder: "rgba(166,124,82,0.3)",
+        ctaBg: "#3b2f25",
+        ctaHoverBg: "#a67c52",
+        ctaLink: "/#collection",
+    },
+};
 
 function Navbar() {
     const pathname = usePathname();
 
-    const navLinks = [
-        { label: "Voices", href: "/" },
-        { label: "Arcade", href: "/arcade" },
-        { label: "Bundle", href: "/bundle" },
-    ];
+    // Resolve active theme — fallback to voices/default
+    const theme: PageTheme = PAGE_THEMES[pathname] ?? PAGE_THEMES["/"];
+
+    const getLinkStyle = (path: string) => {
+        const isActive = pathname === path;
+        return {
+            className: "landing-nav-link" + (isActive ? " nav-link-active" : ""),
+            style: isActive
+                ? {
+                    background: theme.activeBg,
+                    color: theme.activeColor,
+                    border: `1px solid ${theme.activeBorder}`,
+                }
+                : {},
+        };
+    };
 
     return (
         <nav className="landing-nav">
             <div className="landing-nav-inner">
-                {/* Logo + Nav Links (kiri) */}
+                {/* Logo (kiri) */}
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <a href="/" className="landing-nav-logo" style={{ marginRight: 4 }}>
                         <div
                             style={{
-                                width: 40,
-                                height: 40,
-                                borderRadius: 14,
+                                width: 36,
+                                height: 36,
+                                borderRadius: 12,
                                 overflow: "hidden",
                                 border: "1px solid var(--border)",
                                 flexShrink: 0,
@@ -46,60 +103,32 @@ function Navbar() {
                         </div>
                     </a>
 
-                    {/* Nav Links — hidden on mobile */}
-                    <div
-                        className="landing-nav-links"
-                        style={{ display: "flex" }}
-                    >
-                        {navLinks.map((link) => {
-                            const isActive = pathname === link.href;
-                            return (
-                                <a
-                                    key={link.href}
-                                    href={link.href}
-                                    className={`landing-nav-link ${isActive ? "active" : ""}`}
-                                    style={{
-                                        // Hide on small screens via inline media — handled by CSS below
-                                    }}
-                                >
-                                    {link.label}
-                                </a>
-                            );
-                        })}
+                    {/* Nav Links — 3 Products */}
+                    <div className="landing-nav-links" style={{ display: "flex" }}>
+                        <a href="/voices" {...getLinkStyle("/voices")}>Voices</a>
+                        <a href="/arcade" {...getLinkStyle("/arcade")}>Arcade</a>
+                        <a href="/wrapped" {...getLinkStyle("/wrapped")}>Wrapped</a>
                     </div>
                 </div>
 
-                {/* Order Button (kanan) */}
+                {/* CTA Button (kanan) — theme-aware + compact on mobile */}
                 <a
-                    href="#pesan"
+                    href={theme.ctaLink}
+                    className="landing-nav-cta"
                     style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        padding: "9px 20px",
-                        background: "var(--bg-deep)",
-                        color: "var(--text-light)",
-                        borderRadius: 999,
-                        fontSize: "0.7rem",
-                        fontWeight: 700,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        textDecoration: "none",
-                        transition: "all 0.3s ease",
-                        flexShrink: 0,
-                        whiteSpace: "nowrap",
-                    }}
+                        background: theme.ctaBg,
+                    } as React.CSSProperties}
                     onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.background = "var(--accent)";
+                        (e.currentTarget as HTMLElement).style.background = theme.ctaHoverBg;
                         (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
                     }}
                     onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.background = "var(--bg-deep)";
+                        (e.currentTarget as HTMLElement).style.background = theme.ctaBg;
                         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                     }}
                 >
-                    Order
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                    <span className="landing-nav-cta-text">Order</span>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </a>

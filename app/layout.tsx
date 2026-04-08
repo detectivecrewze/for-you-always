@@ -17,11 +17,11 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Voices. Gift — Digital Memoir",
-  description: "Rangkai memori. Hadirkan kembali. Sebuah mesin waktu digital untuk merangkai foto kenangan dan pesan suara menjadi kado yang istimewa.",
+  title: "For you, Always. — Digital Atelier",
+  description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
   openGraph: {
-    title: "Voices. Gift — Digital Memoir",
-    description: "Rangkai memori. Hadirkan kembali. Sebuah mesin waktu digital untuk merangkai foto kenangan dan pesan suara menjadi kado yang istimewa.",
+    title: "For you, Always. — Digital Atelier",
+    description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
     url: "https://for-you-always.my.id",
     siteName: "For you, Always.",
     images: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
         url: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
         width: 800,
         height: 1000,
-        alt: "Voices. Gift Preview",
+        alt: "For you, Always. — Digital Atelier Preview",
       },
     ],
     locale: "id_ID",
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Voices. Gift — Digital Memoir",
-    description: "Rangkai memori. Hadirkan kembali. Sebuah mesin waktu digital untuk merangkai foto kenangan dan pesan suara menjadi kado yang istimewa.",
+    title: "For you, Always. — Digital Atelier",
+    description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
     images: ["https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"],
   },
   icons: {
