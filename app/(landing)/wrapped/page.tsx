@@ -799,7 +799,7 @@ export default function WrappedLandingPage() {
 
                             {/* CTA */}
                             <a
-                                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20memesan%20*Wrapped%20Edition*."
+                                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Wrapped%20Edition*%20seharga%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
                                 className="wrap-btn-primary"
                                 style={{ width: "100%", justifyContent: "center" }}
                             >
