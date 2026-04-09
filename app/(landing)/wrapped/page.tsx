@@ -61,7 +61,7 @@ const FeatureIcons: Record<string, React.ReactNode> = {
             <circle cx="18" cy="16" r="3" />
         </svg>
     ),
-    "Galleries Memories": (
+    Galleries: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />
@@ -101,13 +101,13 @@ const WRAPPED_PAGES = [
         color: "#ff85a1",
     },
     {
-        title: "Galleries Memories",
-        description: "Momen SURPRISE! Gosok layar seperti scratch card untuk mengungkap foto kenangan dan ceritanya satu per satu.",
+        title: "Galleries",
+        description: "Momen SURPRISE! Gosok layar seperti scratch card untuk mengungkap foto / video kenangan dan ceritanya satu per satu.",
         color: "#ff4d6d",
     },
     {
         title: "Wrapped",
-        description: "Rangkuman cerita kalian. Halaman rekap interaktif yang seluruh isinya—mulai dari rekap waktu, vibe, hingga daftar memori—sepenuhnya bebas di-custom sesuka hati.",
+        description: "Bikin wrapped memori ala Spotify versi kalian! Interaktif dan bisa di-custom sesuka hati.",
         color: "#c9184a",
     },
     {
@@ -128,7 +128,7 @@ const WRAPPED_PAGES = [
 const PAGE_MEDIA: Record<string, { video: string; image: string }> = {
     Login: { video: "https://cdn.for-you-always.my.id/1775677163497-m2sjw.mp4", image: "" },
     Music: { video: "https://cdn.for-you-always.my.id/1775677170491-x9o5bc.mp4", image: "" },
-    "Galleries Memories": { video: "https://cdn.for-you-always.my.id/1775677161653-h3gapg.mp4", image: "" },
+    Galleries: { video: "https://cdn.for-you-always.my.id/1775677161653-h3gapg.mp4", image: "" },
     Wrapped: { video: "https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4", image: "" },
     Letter: { video: "https://cdn.for-you-always.my.id/1775677168482-ksz90k.mp4", image: "" },
     Invitation: { video: "https://cdn.for-you-always.my.id/1775677166373-4sk074.mp4", image: "" },

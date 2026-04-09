@@ -492,7 +492,7 @@ export default function MainHubPage() {
                         <LandscapeProductCard
                             label="Wrapped Edition"
                             title="Memories Wrapped"
-                            description="Kado digital 6 halaman interaktif ala Spotify Wrapped. Pilih lagu, galeri, rekap perjalanan, hingga pesan rahasia yang bisa diputar ulang kapan saja."
+                            description="Kado digital 6 halaman interaktif. Pilih lagu, galeri, rekap perjalanan, hingga surat yang bisa dibuka kapan saja."
                             features={[
                                 "6 Halaman Berbeda",
                                 "Bisa Turn On / Off Halaman",
