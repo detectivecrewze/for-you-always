@@ -149,7 +149,13 @@ function LandscapeProductCard({
                 </a>
 
                 {/* Text Content */}
-                <div className="hub-showcase-content">
+                <div className="hub-showcase-content" style={{
+                    backgroundColor: `${accentColor}26`,  /* Increased from 0F (~9%) to 26 (~15%) for a bolder color */
+                    border: `1.5px solid ${accentColor}40`, /* Increased from 2A (~16%) to 40 (~25%) + thicker border */
+                    borderRadius: "var(--radius-lg)",
+                    padding: "clamp(32px, 4.5vw, 48px)",
+                    boxShadow: `0 24px 48px -16px ${accentColor}26` /* Also increased shadow opacity slightly */
+                }}>
                     {/* Label Badge */}
                     <div style={{
                         alignSelf: "flex-start",
@@ -167,7 +173,7 @@ function LandscapeProductCard({
                         fontFamily: "var(--font-display)",
                         fontSize: "clamp(1.8rem, 4vw, 2.7rem)",
                         fontWeight: 400,
-                        color: "#2c2118",
+                        color: accentColor, /* Modified: Menggunakan accentColor khusus setiap produk */
                         lineHeight: 1.15,
                         marginBottom: 16,
                     }}>
