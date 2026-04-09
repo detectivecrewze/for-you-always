@@ -182,16 +182,16 @@ function LandscapeProductCard({
 
                     <p style={{
                         fontFamily: "var(--font-sans)",
-                        fontSize: "clamp(0.95rem, 1.5vw, 1.1rem)",
-                        color: "#6b5c4e",
-                        lineHeight: 1.6,
-                        marginBottom: 24,
+                        fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
+                        color: "#6e5c53",
+                        lineHeight: 1.7,
+                        marginBottom: 28,
                     }}>
                         {description}
                     </p>
 
                     {/* Features List */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
                         {features.map((feat) => {
                             const isToggleFeature = feat.toLowerCase().includes("turn on / off");
                             const isMusicFeature = feat.toLowerCase().includes("music pilihan");
@@ -200,7 +200,7 @@ function LandscapeProductCard({
                             const isGalleryFeature = feat.toLowerCase().includes("galeri foto");
 
                             return (
-                                <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6b5c4e", fontWeight: 500 }}>
+                                <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
                                     <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${accentColor}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth={3}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -269,8 +269,8 @@ function LandscapeProductCard({
                                     {/* Animation: Photo Shuffle */}
                                     {isGalleryFeature && (
                                         <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 16, height: 14, position: "relative" }}>
-                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#f5efe6" }} />
-                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `${accentColor}11` }} />
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#faf7f2" }} />
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `transparent` }} />
                                         </div>
                                     )}
                                 </div>
@@ -317,7 +317,7 @@ function LandscapeProductCard({
    ═══════════════════════════════════════════════════════════ */
 export default function MainHubPage() {
     return (
-        <div style={{ minHeight: "100vh", background: "#f5efe6", overflowX: "clip" }}>
+        <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
 
             <style>{`
                 @keyframes bounce-soft {
@@ -357,11 +357,10 @@ export default function MainHubPage() {
                 }
             `}</style>
 
-            {/* Ambient Blobs */}
+            {/* Ambient Blobs — Frosted Champagne */}
             <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(201,168,124,0.09)", filter: "blur(100px)" }} />
-                <div style={{ position: "absolute", top: "40%", right: "-10%", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(166,124,82,0.055)", filter: "blur(90px)" }} />
-                <div style={{ position: "absolute", bottom: "-10%", left: "25%", width: "45vw", height: "45vw", borderRadius: "50%", background: "rgba(122,90,58,0.045)", filter: "blur(80px)" }} />
+                <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.06)", filter: "blur(120px)" }} />
+                <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.04)", filter: "blur(120px)" }} />
             </div>
 
             {/* ── HERO ── */}
@@ -371,13 +370,13 @@ export default function MainHubPage() {
                     <AnimatedSection>
                         <div style={{
                             display: "inline-flex", alignItems: "center", gap: 8,
-                            padding: "7px 18px",
-                            background: "rgba(166,124,82,0.1)",
-                            border: "1px solid rgba(166,124,82,0.2)",
+                            padding: "6px 16px",
+                            background: "rgba(205,171,143,0.08)",
+                            border: "1.2px solid rgba(205,171,143,0.2)",
                             borderRadius: 999, marginBottom: 36,
                         }}>
-                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#a67c52", animation: "pulse-dot 2s infinite", display: "inline-block" }} />
-                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#a67c52" }}>
+                            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#cdab8f", animation: "pulse-dot 2s infinite", display: "inline-block" }} />
+                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#a88365" }}>
                                 Digital Atelier · For you, Always.
                             </span>
                         </div>
@@ -386,21 +385,22 @@ export default function MainHubPage() {
                     <AnimatedSection delay={100}>
                         <h1 style={{
                             fontFamily: "var(--font-display)",
-                            fontSize: "clamp(2.8rem, 9vw, 6rem)",
-                            fontWeight: 400, lineHeight: 1.05,
-                            letterSpacing: "-0.025em", color: "#2c2118", marginBottom: 28,
+                            fontSize: "clamp(3.2rem, 10vw, 7rem)",
+                            fontWeight: 400, lineHeight: 0.95,
+                            letterSpacing: "-0.04em", color: "#382a24", marginBottom: 32,
                         }}>
                             The Art of<br />
-                            <span style={{ fontStyle: "italic", color: "#a67c52" }}>Gifting Memories.</span>
+                            <span style={{ fontStyle: "italic", marginLeft: "0.2em", color: "#cdab8f" }}>Gifting Memories.</span>
                         </h1>
                     </AnimatedSection>
 
                     <AnimatedSection delay={200}>
                         <p style={{
                             fontFamily: "var(--font-sans)",
-                            fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
-                            color: "#6b5c4e", lineHeight: 1.75,
-                            maxWidth: 560, margin: "0 auto 48px",
+                            fontSize: "clamp(1rem, 2.2vw, 1.1rem)",
+                            color: "#6e5c53", lineHeight: 1.8,
+                            maxWidth: 500, margin: "0 auto 56px",
+                            letterSpacing: "-0.01em"
                         }}>
                             Tiga cara berbeda untuk mengabadikan satu cerita.
                             Pilih produk yang paling mencerminkan perasaanmu.
@@ -408,17 +408,17 @@ export default function MainHubPage() {
                     </AnimatedSection>
 
                     <AnimatedSection delay={300}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 60 }}>
-                            <div style={{ height: 1, width: 60, background: "linear-gradient(to right, transparent, rgba(166,124,82,0.3))" }} />
-                            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#c9a87c" }} />
-                            <div style={{ height: 1, width: 60, background: "linear-gradient(to left, transparent, rgba(166,124,82,0.3))" }} />
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 80 }}>
+                            <div style={{ height: 1, width: 40, background: "rgba(205,171,143,0.3)" }} />
+                            <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#cdab8f" }} />
+                            <div style={{ height: 1, width: 40, background: "rgba(205,171,143,0.3)" }} />
                         </div>
                     </AnimatedSection>
 
                     <AnimatedSection delay={500}>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: 0.5, animation: "bounce-soft 2s ease-in-out infinite" }}>
-                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "#9c8b7a" }}>Scroll</span>
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#9c8b7a" strokeWidth={2}>
+                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 8.5, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#a6968c" }}>Explore</span>
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#a6968c" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
                         </div>
@@ -431,13 +431,13 @@ export default function MainHubPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
 
                     <AnimatedSection>
-                        <div style={{ textAlign: "center", marginBottom: 64 }}>
+                        <div style={{ textAlign: "center", marginBottom: 80 }}>
                             <span style={{
-                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
-                                letterSpacing: "0.25em", textTransform: "uppercase" as const,
-                                color: "#9c8b7a", display: "inline-block",
-                                padding: "6px 18px", border: "1px solid rgba(166,124,82,0.2)",
-                                borderRadius: 999, background: "rgba(166,124,82,0.07)",
+                                fontFamily: "var(--font-sans)", fontSize: 8.5, fontWeight: 700,
+                                letterSpacing: "0.22em", textTransform: "uppercase" as const,
+                                color: "#a88365", display: "inline-block",
+                                padding: "6px 20px", border: "1.2px solid rgba(205,171,143,0.3)",
+                                borderRadius: 999, background: "rgba(205,171,143,0.06)",
                             }}>
                                 The Collection
                             </span>
@@ -516,24 +516,24 @@ export default function MainHubPage() {
             </section>
 
             {/* ── CARA KERJA ── */}
-            <section style={{ position: "relative", zIndex: 1, padding: "100px 0", background: "#ebe3d5", overflow: "hidden" }}>
+            <section style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#f2ebe1", overflow: "hidden" }}>
                 <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.035 }} />
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
 
                     <AnimatedSection>
-                        <div style={{ textAlign: "center", marginBottom: 72 }}>
+                        <div style={{ textAlign: "center", marginBottom: 80 }}>
                             <span style={{
-                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
-                                letterSpacing: "0.25em", textTransform: "uppercase" as const, color: "#9c8b7a",
-                                display: "inline-block", padding: "6px 18px",
-                                border: "1px solid rgba(166,124,82,0.2)", borderRadius: 999,
-                                background: "rgba(166,124,82,0.08)", marginBottom: 28,
+                                fontFamily: "var(--font-sans)", fontSize: 8.5, fontWeight: 700,
+                                letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#a88365",
+                                display: "inline-block", padding: "6px 20px",
+                                border: "1.2px solid rgba(205,171,143,0.2)", borderRadius: 999,
+                                background: "rgba(205,171,143,0.08)", marginBottom: 28,
                             }}>
-                                Cara Kerja
+                                Workflow
                             </span>
-                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 5vw, 3rem)", fontWeight: 400, color: "#2c2118", lineHeight: 1.15 }}>
-                                Kamu yang Buat Sendiri.
-                                <br /><span style={{ fontStyle: "italic", color: "#a67c52" }}>Semudah Ini.</span>
+                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 6vw, 4rem)", fontWeight: 400, color: "#382a24", lineHeight: 0.95, letterSpacing: "-0.03em" }}>
+                                Semudah<br />
+                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}> Tiga Langkah.</span>
                             </h2>
                         </div>
                     </AnimatedSection>
@@ -558,23 +558,21 @@ export default function MainHubPage() {
                         ].map((step, i) => (
                             <AnimatedSection key={i} delay={i * 120}>
                                 <div style={{
-                                    padding: "40px 36px",
-                                    background: i === 1 ? "#3b2f25" : "rgba(255,252,247,0.6)",
+                                    padding: "50px 40px",
+                                    background: i === 1 ? "#1d1816" : "rgba(255,255,255,0.6)",
                                     backdropFilter: "blur(20px)",
-                                    borderRadius: 28,
-                                    border: i === 1 ? "none" : "1px solid rgba(255,255,255,0.5)",
-                                    boxShadow: i === 1 ? "0 24px 60px -10px rgba(59,47,37,0.25)" : "0 8px 32px -8px rgba(59,47,37,0.06)",
+                                    borderRadius: 24,
+                                    border: i === 1 ? "1px solid rgba(205,171,143,0.15)" : "1px solid rgba(255,255,255,0.8)",
+                                    boxShadow: i === 1 ? "0 30px 60px -15px rgba(29,24,22,0.4)" : "0 8px 32px -8px rgba(29,24,22,0.05)",
                                     height: "100%",
+                                    transition: "all 0.5s ease"
                                 }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-                                        <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 13, color: i === 1 ? "rgba(201,168,124,0.5)" : "#c9a87c", fontWeight: 400 }}>{step.num}</span>
-                                        <div style={{ flex: 1, height: 1, background: i === 1 ? "rgba(201,168,124,0.15)" : "rgba(166,124,82,0.15)" }} />
-                                        <div style={{ width: 44, height: 44, borderRadius: 14, background: i === 1 ? "rgba(201,168,124,0.12)" : "rgba(166,124,82,0.1)", border: `1px solid ${i === 1 ? "rgba(201,168,124,0.2)" : "rgba(166,124,82,0.2)"}`, display: "flex", alignItems: "center", justifyContent: "center", color: i === 1 ? "#c9a87c" : "#a67c52" }}>
-                                            {step.icon}
-                                        </div>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
+                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, color: i === 1 ? "rgba(205,171,143,0.5)" : "#a6968c", fontWeight: 700, letterSpacing: "0.1em" }}>{step.num}</span>
+                                        <div style={{ flex: 1, height: 1, background: i === 1 ? "rgba(205,171,143,0.1)" : "rgba(205,171,143,0.15)" }} />
                                     </div>
-                                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem", fontWeight: 600, color: i === 1 ? "#f5efe6" : "#2c2118", marginBottom: 12, lineHeight: 1.2 }}>{step.title}</h3>
-                                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.88rem", color: i === 1 ? "rgba(245,239,230,0.6)" : "#6b5c4e", lineHeight: 1.7, margin: 0 }}>{step.desc}</p>
+                                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.7rem", fontWeight: 400, color: i === 1 ? "#faf7f2" : "#382a24", marginBottom: 16, lineHeight: 1.1, letterSpacing: "-0.02em" }}>{step.title}</h3>
+                                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: i === 1 ? "rgba(250,247,242,0.6)" : "#6e5c53", lineHeight: 1.7, margin: 0 }}>{step.desc}</p>
                                 </div>
                             </AnimatedSection>
                         ))}
@@ -582,26 +580,26 @@ export default function MainHubPage() {
                 </div>
             </section>
 
-            {/* ── TESTIMONIALS (terakhir sebelum footer) ── */}
-            <section style={{ position: "relative", zIndex: 1, padding: "100px 0", background: "#3b2f25", overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: "10%", left: "5%", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(201,168,124,0.05)", filter: "blur(80px)", pointerEvents: "none" }} />
-                <div style={{ position: "absolute", bottom: "5%", right: "5%", width: "30vw", height: "30vw", borderRadius: "50%", background: "rgba(166,124,82,0.06)", filter: "blur(60px)", pointerEvents: "none" }} />
+            {/* ── TESTIMONIALS ── */}
+            <section style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#1d1816", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: "10%", left: "5%", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(212,191,160,0.05)", filter: "blur(80px)", pointerEvents: "none" }} />
+                <div style={{ position: "absolute", bottom: "5%", right: "5%", width: "30vw", height: "30vw", borderRadius: "50%", background: "rgba(192,168,130,0.04)", filter: "blur(60px)", pointerEvents: "none" }} />
 
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
                     <AnimatedSection>
-                        <div style={{ textAlign: "center", marginBottom: 64 }}>
+                        <div style={{ textAlign: "center", marginBottom: 80 }}>
                             <span style={{
-                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
-                                letterSpacing: "0.25em", textTransform: "uppercase" as const,
-                                color: "rgba(201,168,124,0.6)", display: "inline-block",
-                                padding: "6px 18px", border: "1px solid rgba(201,168,124,0.15)",
-                                borderRadius: 999, background: "rgba(201,168,124,0.07)", marginBottom: 28,
+                                fontFamily: "var(--font-sans)", fontSize: 8, fontWeight: 700,
+                                letterSpacing: "0.22em", textTransform: "uppercase" as const,
+                                color: "rgba(205,171,143,0.6)", display: "inline-block",
+                                padding: "6px 20px", border: "1px solid rgba(205,171,143,0.2)",
+                                borderRadius: 999, background: "rgba(205,171,143,0.08)", marginBottom: 28,
                             }}>
-                                Dari Mereka yang Sudah Merasakan
+                                Community
                             </span>
-                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 5vw, 3rem)", fontWeight: 400, color: "#f5efe6", lineHeight: 1.15 }}>
-                                Kata Mereka
-                                <span style={{ fontStyle: "italic", color: "#c9a87c" }}> yang Sudah Merasakan.</span>
+                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 400, color: "#faf7f2", lineHeight: 0.95, letterSpacing: "-0.03em" }}>
+                                Kind Words.<br />
+                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}> Authentic Stories.</span>
                             </h2>
                         </div>
                     </AnimatedSection>
@@ -615,37 +613,37 @@ export default function MainHubPage() {
                         ].map((r, i) => (
                             <AnimatedSection key={i} delay={r.delay}>
                                 <div style={{
-                                    padding: "32px 28px", borderRadius: 24,
-                                    background: "rgba(255,252,247,0.05)",
-                                    border: "1px solid rgba(201,168,124,0.12)",
+                                    padding: "32px 28px", borderRadius: 20,
+                                    background: "rgba(250,247,242,0.03)",
+                                    border: "1px solid rgba(205,171,143,0.08)",
                                     backdropFilter: "blur(12px)",
                                     height: "100%", display: "flex", flexDirection: "column", gap: 16,
                                     transition: "all 0.4s ease",
                                 }}
                                     onMouseEnter={e => {
-                                        (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.08)";
-                                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.22)";
+                                        (e.currentTarget as HTMLElement).style.background = "rgba(250,247,242,0.06)";
+                                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(205,171,143,0.2)";
                                     }}
                                     onMouseLeave={e => {
-                                        (e.currentTarget as HTMLElement).style.background = "rgba(255,252,247,0.05)";
-                                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,124,0.12)";
+                                        (e.currentTarget as HTMLElement).style.background = "rgba(250,247,242,0.03)";
+                                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(205,171,143,0.08)";
                                     }}
                                 >
                                     <div style={{ display: "flex", gap: 3 }}>
                                         {Array.from({ length: r.rating }).map((_, s) => (
-                                            <span key={s} style={{ color: "#c9a87c", fontSize: 13 }}>★</span>
+                                            <span key={s} style={{ color: "#cdab8f", fontSize: 10 }}>★</span>
                                         ))}
                                     </div>
-                                    <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "1.05rem", color: "rgba(245,239,230,0.85)", lineHeight: 1.65, margin: 0, flex: 1 }}>
+                                    <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "1.1rem", color: "rgba(250,247,242,0.9)", lineHeight: 1.6, margin: 0, flex: 1 }}>
                                         &ldquo;{r.text}&rdquo;
                                     </p>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 8, borderTop: "1px solid rgba(201,168,124,0.1)" }}>
-                                        <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(166,124,82,0.18)", border: "1px solid rgba(166,124,82,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                            <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 14, color: "#c9a87c" }}>{r.name[0]}</span>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 16, borderTop: "1px solid rgba(205,171,143,0.1)" }}>
+                                        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(205,171,143,0.1)", border: "1px solid rgba(205,171,143,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                            <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 12, color: "#cdab8f" }}>{r.name[0]}</span>
                                         </div>
                                         <div>
-                                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, color: "#f5efe6", marginBottom: 2 }}>{r.name}</div>
-                                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(201,168,124,0.5)" }}>via {r.product}</div>
+                                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700, color: "#faf7f2", marginBottom: 2 }}>{r.name}</div>
+                                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" as const, color: "rgba(205,171,143,0.5)" }}>via {r.product}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -654,15 +652,15 @@ export default function MainHubPage() {
                     </div>
 
                     <AnimatedSection delay={400}>
-                        <div style={{ marginTop: 60, display: "flex", justifyContent: "center", gap: "clamp(32px, 6vw, 80px)", flexWrap: "wrap" }}>
+                        <div style={{ marginTop: 80, display: "flex", justifyContent: "center", gap: "clamp(32px, 8vw, 100px)", flexWrap: "wrap" }}>
                             {[
-                                { num: "100+", label: "Kado Terkirim" },
-                                { num: "5.0", label: "Rating Rata-rata" },
-                                { num: "3", label: "Produk Unik" },
+                                { num: "100+", label: "Delivered" },
+                                { num: "5.0", label: "Average Rating" },
+                                { num: "3", label: "Foundations" },
                             ].map((stat, i) => (
                                 <div key={i} style={{ textAlign: "center" }}>
-                                    <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 600, color: "#c9a87c", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
-                                    <div style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(245,239,230,0.35)" }}>{stat.label}</div>
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 400, color: "#faf7f2", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
+                                    <div style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(205,171,143,0.5)" }}>{stat.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -671,18 +669,17 @@ export default function MainHubPage() {
             </section>
 
             {/* ── FOOTER ── */}
-            <section style={{ position: "relative", zIndex: 1, padding: "80px 24px 60px", background: "#f5efe6", textAlign: "center" }}>
+            <section style={{ position: "relative", zIndex: 1, padding: "120px 24px 80px", background: "#faf7f2", textAlign: "center" }}>
 
                 <AnimatedSection>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 60 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 80 }}>
                         {[
-                            { icon: "★★★★★", label: "5.0 Rating" },
-                            { icon: "♡", label: "100+ Kado Terkirim" },
-                            { icon: "⏱", label: "Selesai dalam Menit" },
-                            { icon: "🔒", label: "Password Protected" },
+                            { icon: "○", label: "5.0 Rating" },
+                            { icon: "○", label: "100+ Stories" },
+                            { icon: "○", label: "Instant Access" },
+                            { icon: "○", label: "Private Link" },
                         ].map((badge, i) => (
-                            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, background: "rgba(166,124,82,0.07)", border: "1px solid rgba(166,124,82,0.15)", fontSize: 12, fontWeight: 600, color: "#6b5c4e", letterSpacing: "0.04em" }}>
-                                <span style={{ color: "#a67c52" }}>{badge.icon}</span>
+                            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 24px", borderRadius: 999, border: "1px solid rgba(205,171,143,0.3)", fontSize: 11, fontWeight: 700, color: "#6e5c53", letterSpacing: "0.06em", textTransform: "uppercase" }}>
                                 {badge.label}
                             </div>
                         ))}
@@ -690,34 +687,34 @@ export default function MainHubPage() {
                 </AnimatedSection>
 
                 <AnimatedSection delay={100}>
-                    <div style={{ marginBottom: 20 }}>
-                        <div style={{ width: 44, height: 44, borderRadius: 14, overflow: "hidden", border: "1px solid rgba(166,124,82,0.2)", margin: "0 auto 12px" }}>
-                            <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ marginBottom: 40 }}>
+                        <div style={{ width: 44, height: 44, borderRadius: 14, overflow: "hidden", border: "1.2px solid rgba(205,171,143,0.3)", margin: "0 auto 20px" }}>
+                            <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover", filter: "sepia(0.15) opacity(0.85)" }} />
                         </div>
-                        <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600, fontSize: 18, color: "#2c2118", marginBottom: 4 }}>For you, Always.</div>
-                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#9c8b7a" }}>Digital Atelier</div>
+                        <div style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: 24, color: "#382a24", marginBottom: 8, letterSpacing: "-0.02em" }}>For you, Always.</div>
+                        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase" as const, color: "#a6968c" }}>Preserving Memories Digitally</div>
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
+                    <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 48 }}>
                         {[{ label: "Voices", href: "/voices" }, { label: "Arcade", href: "/arcade" }, { label: "Wrapped", href: "/wrapped" }].map(link => (
-                            <a key={link.href} href={link.href} style={{ padding: "8px 18px", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, border: "1px solid rgba(166,124,82,0.18)", borderRadius: 999, color: "#a67c52", textDecoration: "none", transition: "all 0.3s ease" }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.1)"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+                            <a key={link.href} href={link.href} style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "#6e5c53", textDecoration: "none", borderBottom: "1.5px solid transparent", transition: "all 0.3s ease" }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#cdab8f"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "transparent"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}>
                                 {link.label}
                             </a>
                         ))}
                     </div>
 
-                    <p style={{ fontSize: 10, color: "#9c8b7a", fontWeight: 500 }}>© 2026 For you, Always. — Preserving Memories Digitally</p>
+                    <p style={{ fontSize: 9, color: "#a6968c", fontWeight: 500, letterSpacing: "0.05em" }}>© 2026 FOR YOU, ALWAYS. — ALL RIGHTS RESERVED.</p>
                 </AnimatedSection>
             </section>
 
-            {/* Floating WhatsApp */}
+            {/* Floating WhatsApp — Champagne Truffle Style */}
             <a href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-                style={{ position: "fixed", bottom: 24, right: 24, zIndex: 100, width: 52, height: 52, borderRadius: "50%", background: "#3b2f25", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(59,47,37,0.35)", transition: "all 0.3s ease", textDecoration: "none" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; (e.currentTarget as HTMLElement).style.background = "#a67c52"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.background = "#3b2f25"; }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="#f5efe6">
+                style={{ position: "fixed", bottom: 32, right: 32, zIndex: 100, width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 20px 40px rgba(29,24,22,0.2)", transition: "all 0.3s ease", textDecoration: "none" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1) rotate(5deg)"; (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1) rotate(0deg)"; (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#faf7f2">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                     <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
                 </svg>
