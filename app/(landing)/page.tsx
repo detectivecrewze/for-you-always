@@ -478,7 +478,7 @@ export default function MainHubPage() {
                             price={
                                 <>
                                     <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
-                                    <span style={{ marginLeft: 8 }}>Rp 20.000</span>
+                                    <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }
                             mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
@@ -501,7 +501,7 @@ export default function MainHubPage() {
                             price={
                                 <>
                                     <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
-                                    <span style={{ marginLeft: 8 }}>Rp 20.000</span>
+                                    <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }
                             mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
