@@ -150,11 +150,11 @@ function LandscapeProductCard({
 
                 {/* Text Content */}
                 <div className="hub-showcase-content" style={{
-                    backgroundColor: `${accentColor}26`,  /* Increased from 0F (~9%) to 26 (~15%) for a bolder color */
-                    border: `1.5px solid ${accentColor}40`, /* Increased from 2A (~16%) to 40 (~25%) + thicker border */
+                    backgroundColor: accentColor === '#c9184a' ? `${accentColor}0D` : `${accentColor}26`,  /* Wrapped (Pink) reduced further to ~5% */
+                    border: `1.5px solid ${accentColor === '#c9184a' ? `${accentColor}26` : `${accentColor}40`}`, /* Thinner border for Wrapped */
                     borderRadius: "var(--radius-lg)",
                     padding: "clamp(32px, 4.5vw, 48px)",
-                    boxShadow: `0 24px 48px -16px ${accentColor}26` /* Also increased shadow opacity slightly */
+                    boxShadow: `0 24px 48px -16px ${accentColor === '#c9184a' ? `${accentColor}14` : `${accentColor}26`}`
                 }}>
                     {/* Label Badge */}
                     <div style={{
@@ -478,7 +478,7 @@ export default function MainHubPage() {
                             price={
                                 <>
                                     <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
-                                    <span>Promo Rp 20.000</span>
+                                    <span style={{ marginLeft: 8 }}>Rp 20.000</span>
                                 </>
                             }
                             mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
@@ -501,7 +501,7 @@ export default function MainHubPage() {
                             price={
                                 <>
                                     <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
-                                    <span>Promo Rp 20.000</span>
+                                    <span style={{ marginLeft: 8 }}>Rp 20.000</span>
                                 </>
                             }
                             mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
