@@ -147,7 +147,7 @@ const FEATURE_SLIDES = [
         label: "KEJUTAN",
         title: "The Secret Epilogue",
         description:
-            "Sembunyikan foto rahasia dan pesan akhir yang baru terungkap setelah semua kenangan selesai diputar — atau pada waktu yang kamu tentukan sendiri.",
+            "Sembunyikan foto rahasia dan pesan akhir yang baru terungkap setelah pesan suara selesai diputar — atau pada waktu yang kamu tentukan sendiri.",
         videoSrc: "https://cdn.for-you-always.my.id/1774604930423-enc3lb.mp4",
         imageSrc: "",
         gifSrc: "",
@@ -253,7 +253,7 @@ function FeatureShowcase() {
                                     el.defaultMuted = true;
                                     el.muted = true;
                                     el.playsInline = true;
-                                    el.play().catch(() => {});
+                                    el.play().catch(() => { });
                                 }
                             }}
                             key={slide.videoSrc}
