@@ -531,6 +531,12 @@ function ThemeSwitcher({ active, onChange }: { active: ThemeKey; onChange: (k: T
 
 function ThemeGallery({ active, onChange }: { active: ThemeKey; onChange: (k: ThemeKey) => void }) {
     const themes = Object.keys(THEMES) as ThemeKey[];
+    const activeIndex = themes.indexOf(active);
+    
+    const nextTheme = () => onChange(themes[(activeIndex + 1) % themes.length]);
+    const prevTheme = () => onChange(themes[(activeIndex - 1 + themes.length) % themes.length]);
+    const t = THEMES[active];
+
     return (
         <section id="pilih-nuansa" className="section-spacing" style={{ background: "var(--bg-warm)", position: "relative", overflow: "hidden" }}>
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px,4vw,24px)", boxSizing: "border-box" as const }}>
@@ -538,45 +544,52 @@ function ThemeGallery({ active, onChange }: { active: ThemeKey; onChange: (k: Th
                     <div style={{ textAlign: "center", marginBottom: 56 }}>
                         <span className="label-text" style={{ display: "inline-block", padding: "6px 16px", background: "var(--accent-glow)", border: "1px solid var(--border-warm)", borderRadius: 999, marginBottom: 24 }}>Pilih Nuansamu</span>
                         <h2 className="heading-lg">Setiap Surat,<br /><span className="italic-accent">Punya Suasananya Sendiri.</span></h2>
-                        <p className="body-text" style={{ maxWidth: 480, margin: "16px auto 0" }}>Pilih tema yang paling cocok dengan perasaan dan momen yang ingin kamu abadikan. Klik untuk melihat pratinjau langsung.</p>
+                        <p className="body-text" style={{ maxWidth: 480, margin: "16px auto 0" }}>Geser untuk melihat opsi tema yang paling cocok dengan perasaan dan momen yang ingin kamu abadikan.</p>
                     </div>
                 </AnimatedSection>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(210px,100%), 1fr))", gap: 20 }}>
-                    {themes.map((key, i) => {
-                        const t = THEMES[key];
-                        const isActive = active === key;
-                        return (
-                            <AnimatedSection key={key} delay={i * 80}>
-                                <button onClick={() => onChange(key)} style={{ width: "100%", border: "none", padding: 0, background: "none", cursor: "pointer", borderRadius: "var(--radius-lg)", overflow: "hidden", transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)", transform: isActive ? "translateY(-8px) scale(1.02)" : "translateY(0) scale(1)", boxShadow: isActive ? `0 24px 60px -12px ${t.accent}60` : "0 8px 24px -6px rgba(0,0,0,0.08)" }}>
-                                    <div style={{ background: t.bg, border: `2px solid ${isActive ? t.accent : "transparent"} `, borderRadius: "var(--radius-lg)", overflow: "hidden", transition: "border-color 0.3s ease" }}>
-                                        <div style={{ padding: "28px 20px 20px", background: t.bgWarm, minHeight: 160, display: "flex", flexDirection: "column" as const, alignItems: "center", justifyContent: "center", gap: 14, position: "relative" as const }}>
-                                            <div style={{ width: "100%", maxWidth: 150, background: t.bgCard, borderRadius: 14, padding: "14px 12px", border: `1px solid ${t.borderWarm}` }}>
-                                                <div style={{ width: "55%", height: 4, borderRadius: 999, background: t.accent, marginBottom: 8 }} />
-                                                <div style={{ width: "88%", height: 3, borderRadius: 999, background: t.textMuted, opacity: 0.35, marginBottom: 5 }} />
-                                                <div style={{ width: "72%", height: 3, borderRadius: 999, background: t.textMuted, opacity: 0.35, marginBottom: 5 }} />
-                                                <div style={{ width: "82%", height: 3, borderRadius: 999, background: t.textMuted, opacity: 0.35 }} />
-                                            </div>
-                                            <div style={{ width: 24, height: 24, borderRadius: "50%", background: t.swatch, border: `2px solid ${t.borderWarm}`, boxShadow: `0 4px 12px ${t.accent}50` }} />
-                                        </div>
-                                        <div style={{ padding: "14px 18px", background: t.bg, borderTop: `1px solid ${t.borderWarm}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                            <div style={{ textAlign: "left" as const }}>
-                                                <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 16, fontWeight: 600, color: t.textPrimary, lineHeight: 1, display: "flex", alignItems: "center", gap: 6 }}>
-                                                    <span style={{ color: t.accent, display: "flex", flexShrink: 0 }}>{t.icon}</span>
-                                                    {t.name}
-                                                </div>
-                                                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: t.textMuted, marginTop: 4 }}>Klik untuk preview</div>
-                                            </div>
-                                            {isActive && (
-                                                <div style={{ width: 22, height: 22, borderRadius: "50%", background: t.accent, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                                </div>
-                                            )}
-                                        </div>
+                
+                <div style={{ maxWidth: 360, margin: "0 auto", position: "relative" }}>
+                    <AnimatedSection>
+                        <div style={{ width: "100%", borderRadius: "var(--radius-lg)", overflow: "hidden", boxShadow: `0 24px 60px -12px ${t.accent}60`, transition: "all 0.5s ease" }}>
+                            <div style={{ background: t.bg, border: `2px solid ${t.accent}`, borderRadius: "var(--radius-lg)", overflow: "hidden", transition: "all 0.5s ease" }}>
+                                <div style={{ padding: "32px 20px 24px", background: t.bgWarm, minHeight: 200, display: "flex", flexDirection: "column" as const, alignItems: "center", justifyContent: "center", gap: 18, position: "relative" as const, transition: "background 0.5s ease" }}>
+                                    <div style={{ width: "100%", maxWidth: 180, background: t.bgCard, borderRadius: 14, padding: "16px 14px", border: `1px solid ${t.borderWarm}`, transition: "all 0.5s ease" }}>
+                                        <div style={{ width: "55%", height: 5, borderRadius: 999, background: t.accent, marginBottom: 10, transition: "background 0.5s ease" }} />
+                                        <div style={{ width: "88%", height: 4, borderRadius: 999, background: t.textMuted, opacity: 0.35, marginBottom: 6, transition: "background 0.5s ease" }} />
+                                        <div style={{ width: "72%", height: 4, borderRadius: 999, background: t.textMuted, opacity: 0.35, marginBottom: 6, transition: "background 0.5s ease" }} />
+                                        <div style={{ width: "82%", height: 4, borderRadius: 999, background: t.textMuted, opacity: 0.35, transition: "background 0.5s ease" }} />
                                     </div>
-                                </button>
-                            </AnimatedSection>
-                        );
-                    })}
+                                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: t.swatch, border: `2px solid ${t.borderWarm}`, boxShadow: `0 4px 12px ${t.accent}50`, transition: "all 0.5s ease" }} />
+                                </div>
+                                <div style={{ padding: "18px 24px", background: t.bg, borderTop: `1px solid ${t.borderWarm}`, display: "flex", alignItems: "center", justifyContent: "space-between", transition: "all 0.5s ease" }}>
+                                    <div style={{ textAlign: "left" as const }}>
+                                        <div style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, fontWeight: 600, color: t.textPrimary, lineHeight: 1, display: "flex", alignItems: "center", gap: 8, transition: "color 0.5s ease" }}>
+                                            <span style={{ color: t.accent, display: "flex", flexShrink: 0, transition: "color 0.5s ease" }}>{t.icon}</span>
+                                            {t.name}
+                                        </div>
+                                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: t.textMuted, marginTop: 6, transition: "color 0.5s ease" }}>Tema Aktif</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </AnimatedSection>
+                </div>
+                
+                {/* Navigation Controls */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, marginTop: 32 }}>
+                    <button onClick={prevTheme} style={{ width: 44, height: 44, borderRadius: "50%", background: t.bgCard, border: `1px solid ${t.borderWarm}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: t.textPrimary, transition: "all 0.3s ease" }} aria-label="Tema sebelumnya">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    
+                    <div style={{ display: "flex", gap: 8 }}>
+                        {themes.map((key) => (
+                            <button key={key} onClick={() => onChange(key)} aria-label={`Pilih tema ${THEMES[key].name}`} style={{ width: active === key ? 24 : 8, height: 8, borderRadius: 999, background: active === key ? t.accent : THEMES[key].swatch, border: active === key ? "none" : `1px solid ${t.borderWarm}`, padding: 0, cursor: "pointer", transition: "all 0.3s ease" }} />
+                        ))}
+                    </div>
+
+                    <button onClick={nextTheme} style={{ width: 44, height: 44, borderRadius: "50%", background: t.bgCard, border: `1px solid ${t.borderWarm}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: t.textPrimary, transition: "all 0.3s ease" }} aria-label="Tema selanjutnya">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </button>
                 </div>
             </div>
         </section>
