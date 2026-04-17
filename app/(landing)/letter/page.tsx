@@ -156,7 +156,7 @@ const FEATURE_SLIDES = [
             "Kejutan dimulai bahkan sebelum surat dibaca. Amplop digital interaktif yang membawa kesan personal dan mendalam bagi penerimanya.",
         videoSrc: {
             blush: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4",
-            rose: "https://cdn.for-you-always.my.id/1776432142893-mecr16.mp4",
+            rose: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4",
             sage: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4",
             midnight: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4"
         } as ThemeMedia,
@@ -170,7 +170,7 @@ const FEATURE_SLIDES = [
             "Setiap kata tampil perlahan bagai diketik langsung di depan mata. Menciptakan alur emosional yang mendalam dalam setiap kalimat yang terjalin.",
         videoSrc: {
             blush: "https://cdn.for-you-always.my.id/1776429224320-hd30d.mp4",
-            rose: "https://cdn.for-you-always.my.id/1776429365241-hftum.mp4",
+            rose: "https://cdn.for-you-always.my.id/1776432142893-mecr16.mp4",
             sage: "https://cdn.for-you-always.my.id/1776432341572-74gp9s.mp4",
             midnight: "https://cdn.for-you-always.my.id/1776432547434-xoehyn.mp4"
         } as ThemeMedia,
