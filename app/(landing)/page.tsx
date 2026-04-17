@@ -198,6 +198,8 @@ function LandscapeProductCard({
                             const isPageFeature = feat.toLowerCase().includes("berbeda");
                             const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
                             const isGalleryFeature = feat.toLowerCase().includes("galeri foto");
+                            const isEnvelopeFeature = feat.toLowerCase().includes("amplop");
+                            const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -271,6 +273,35 @@ function LandscapeProductCard({
                                         <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 16, height: 14, position: "relative" }}>
                                             <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#faf7f2" }} />
                                             <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `transparent` }} />
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Envelope */}
+                                    {isEnvelopeFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 2.5s infinite ease-in-out" }}>
+                                            <svg width="15" height="12" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7" />
+                                                <rect x="3" y="5" width="18" height="14" rx="2" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Typewriter Text */}
+                                    {isTypewriterFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", height: 14 }}>
+                                            <div style={{ 
+                                                fontFamily: "monospace", 
+                                                fontSize: 10, 
+                                                fontWeight: 700,
+                                                color: accentColor, 
+                                                overflow: "hidden", 
+                                                whiteSpace: "nowrap", 
+                                                borderRight: `2px solid ${accentColor}`,
+                                                paddingRight: 1,
+                                                animation: "typewriter-text 5s steps(17) infinite, typewriter-blink 0.5s step-end infinite alternate"
+                                            }}>
+                                                Dearest Lyxelle, 
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -354,6 +385,19 @@ export default function MainHubPage() {
                 @keyframes photo-shuffle {
                     0%, 100% { transform: translate(0, 0); }
                     50% { transform: translate(3px, -3px); }
+                }
+                @keyframes typewriter-blink {
+                    0%, 100% { border-color: transparent; }
+                    50% { border-color: inherit; }
+                }
+                @keyframes typewriter-text {
+                    0%, 15% { width: 0; }
+                    40%, 65% { width: 17ch; }
+                    85%, 100% { width: 0; }
+                }
+                @keyframes envelope-bob {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-3px); }
                 }
             `}</style>
 
@@ -467,6 +511,24 @@ export default function MainHubPage() {
                             delay={100}
                         />
                         <LandscapeProductCard
+                            label="Letter Edition"
+                            title="Surat Digital Aesthetic"
+                            description="Sampaikan pesan bermakna melalui surat digital bernuansa sinematik. Hadir dengan amplop interaktif, efek typewriter klasik, dan kustomisasi tema eksklusif."
+                            features={[
+                                "Amplop Digital Interaktif",
+                                "Efek Typewriter Sinematik",
+                                "Background Music Pilihan"
+                            ]}
+                            price="Promo Rp 10.000"
+                            mediaSrc="https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4"
+                            mediaType="video"
+                            accentColor="#c4858a"
+                            accentGlow="rgba(196,133,138,0.2)"
+                            href="/letter"
+                            delay={200}
+                            reverse={true}
+                        />
+                        <LandscapeProductCard
                             label="Arcade Edition"
                             title="10 Rooms of Memories"
                             description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."
@@ -486,8 +548,8 @@ export default function MainHubPage() {
                             accentColor="#5c8c5c"
                             accentGlow="rgba(92,140,92,0.2)"
                             href="/arcade"
-                            delay={200}
-                            reverse={true}
+                            delay={300}
+                            reverse={false}
                         />
                         <LandscapeProductCard
                             label="Wrapped Edition"
@@ -509,7 +571,8 @@ export default function MainHubPage() {
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
                             href="/wrapped"
-                            delay={300}
+                            delay={400}
+                            reverse={true}
                         />
                     </div>
                 </div>

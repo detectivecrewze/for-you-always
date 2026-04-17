@@ -24,6 +24,14 @@ const PAGE_THEMES: Record<string, PageTheme> = {
         ctaHoverBg: "#a67c52",
         ctaLink: "/voices#pesan",
     },
+    "/letter": {
+        activeBg: "#3b2010",
+        activeColor: "#fef8f2",
+        activeBorder: "rgba(201,149,108,0.3)",
+        ctaBg: "#3b2010",
+        ctaHoverBg: "#c9956c",
+        ctaLink: "/letter#pesan",
+    },
     "/arcade": {
         activeBg: "#1a3a2a",
         activeColor: "#e8f5e0",
@@ -103,9 +111,10 @@ function Navbar() {
                         </div>
                     </a>
 
-                    {/* Nav Links — 3 Products */}
+                    {/* Nav Links — 4 Products */}
                     <div className="landing-nav-links" style={{ display: "flex" }}>
                         <a href="/voices" {...getLinkStyle("/voices")}>Voices</a>
+                        <a href="/letter" {...getLinkStyle("/letter")}>Letter</a>
                         <a href="/arcade" {...getLinkStyle("/arcade")}>Arcade</a>
                         <a href="/wrapped" {...getLinkStyle("/wrapped")}>Wrapped</a>
                     </div>
