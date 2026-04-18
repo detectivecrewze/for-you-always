@@ -310,7 +310,7 @@ function LandscapeProductCard({
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
-                        <a href={href} style={{
+                        <a href={href} target="_blank" rel="noopener noreferrer" style={{
                             padding: "12px 28px", borderRadius: 999,
                             background: accentColor, color: "#fff",
                             fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
@@ -319,7 +319,7 @@ function LandscapeProductCard({
                         }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                            Lihat Produk
+                            Order
                         </a>
 
                         <div style={{
@@ -502,12 +502,12 @@ export default function MainHubPage() {
                                 "Galeri Foto Sinematik",
                                 "Background Music Pilihan"
                             ]}
-                            price="Mulai Rp 10.000"
+                            price="Promo Rp 15.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
                             mediaType="video"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
-                            href="/voices"
+                            href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             delay={100}
                         />
                         <LandscapeProductCard
@@ -524,7 +524,7 @@ export default function MainHubPage() {
                             mediaType="video"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
-                            href="/letter"
+                            href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             delay={200}
                             reverse={true}
                         />
@@ -547,7 +547,7 @@ export default function MainHubPage() {
                             mediaType="video"
                             accentColor="#5c8c5c"
                             accentGlow="rgba(92,140,92,0.2)"
-                            href="/arcade"
+                            href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             delay={300}
                             reverse={false}
                         />
@@ -570,7 +570,7 @@ export default function MainHubPage() {
                             mediaType="video"
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
-                            href="/wrapped"
+                            href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Wrapped%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             delay={400}
                             reverse={true}
                         />

@@ -42,9 +42,14 @@ export const metadata: Metadata = {
     images: ["https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"],
   },
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/assets/favicon/favicon.ico" },
+      { url: "/assets/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/assets/favicon/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/assets/favicon/apple-touch-icon.png",
   },
+  manifest: "/assets/favicon/site.webmanifest",
 };
 
 export const viewport = {
@@ -61,8 +66,10 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${dmSans.variable} ${cormorant.variable}`}>
       <head>
-        <link rel="icon" href="/logo.png" sizes="any" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
+        <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
+        <link rel="manifest" href="/assets/favicon/site.webmanifest" />
       </head>
       <body className="font-sans antialiased">
         {children}

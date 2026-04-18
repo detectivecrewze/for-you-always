@@ -111,8 +111,8 @@ function Navbar() {
                         </div>
                     </a>
 
-                    {/* Nav Links — 4 Products */}
-                    <div className="landing-nav-links" style={{ display: "flex" }}>
+                    {/* Nav Links — 4 Products (HIDDEN TEMPORARILY) */}
+                    <div className="landing-nav-links" style={{ display: "none" }}>
                         <a href="/voices" {...getLinkStyle("/voices")}>Voices</a>
                         <a href="/letter" {...getLinkStyle("/letter")}>Letter</a>
                         <a href="/arcade" {...getLinkStyle("/arcade")}>Arcade</a>
