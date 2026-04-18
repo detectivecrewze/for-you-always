@@ -153,7 +153,7 @@ export default function LandingLayout({
 }>) {
     return (
         <>
-            <Navbar />
+            {/* <Navbar /> */}
             {children}
         </>
     );
