@@ -68,7 +68,7 @@ function LandscapeProductCard({
     accentColor: string;
     accentGlow: string;
     href: string;
-    themes?: { name: string, desc: string }[];
+    themes?: { name: string, desc: string, color?: string }[];
     delay?: number;
     reverse?: boolean;
 }) {
@@ -347,38 +347,57 @@ function LandscapeProductCard({
                                 <div style={{ flex: 1, height: 1, background: `${accentColor}22` }} />
                             </div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                                {themes.map((theme, i) => (
-                                    <div key={i} style={{ 
-                                        padding: "12px 14px", 
-                                        borderRadius: 14, 
-                                        background: `${accentColor}08`, 
-                                        border: `1px solid ${accentColor}1A`,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: 4,
-                                        transition: "all 0.3s ease",
-                                    }}>
-                                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                            <div style={{ position: "relative", width: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                <div style={{ 
-                                                    width: 6, height: 6, borderRadius: "50%", background: accentColor,
-                                                    position: "absolute", zIndex: 1
-                                                }} />
-                                                <div style={{ 
-                                                    width: 14, height: 14, borderRadius: "50%", border: `1.5px solid ${accentColor}`,
-                                                    animation: `voice-pulse 2s infinite ${i * 0.4}s`,
-                                                    opacity: 0.6
-                                                }} />
+                                {themes.map((theme, i) => {
+                                    const themeColor = theme.color || accentColor;
+                                    return (
+                                        <div key={i} style={{ 
+                                            padding: "14px", 
+                                            borderRadius: 16, 
+                                            background: "rgba(255, 255, 255, 0.75)", 
+                                            backdropFilter: "blur(12px)",
+                                            border: `1.5px solid ${themeColor}33`,
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: 4,
+                                            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                            boxShadow: `0 4px 12px -2px ${themeColor}15`,
+                                        }}
+                                        onMouseEnter={e => {
+                                            const el = e.currentTarget as HTMLElement;
+                                            el.style.transform = "translateY(-3px)";
+                                            el.style.borderColor = `${themeColor}66`;
+                                            el.style.background = "#ffffff";
+                                            el.style.boxShadow = `0 12px 24px -4px ${themeColor}26`;
+                                        }}
+                                        onMouseLeave={e => {
+                                            const el = e.currentTarget as HTMLElement;
+                                            el.style.transform = "translateY(0)";
+                                            el.style.borderColor = `${themeColor}33`;
+                                            el.style.background = "rgba(255, 255, 255, 0.75)";
+                                            el.style.boxShadow = `0 4px 12px -2px ${themeColor}15`;
+                                        }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                                <div style={{ position: "relative", width: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                    <div style={{ 
+                                                        width: 6, height: 6, borderRadius: "50%", background: themeColor,
+                                                        position: "absolute", zIndex: 1
+                                                    }} />
+                                                    <div style={{ 
+                                                        width: 14, height: 14, borderRadius: "50%", border: `1.5px solid ${themeColor}`,
+                                                        animation: `voice-pulse 2s infinite ${i * 0.4}s`,
+                                                        opacity: 0.8
+                                                    }} />
+                                                </div>
+                                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, color: "#382a24", letterSpacing: "0.01em" }}>
+                                                    {theme.name}
+                                                </span>
                                             </div>
-                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, color: "#382a24" }}>
-                                                {theme.name}
+                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, color: "#6e5c53", lineHeight: 1.4, paddingLeft: 24, fontWeight: 500 }}>
+                                                {theme.desc}
                                             </span>
                                         </div>
-                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, color: "#6e5c53", lineHeight: 1.4, paddingLeft: 22 }}>
-                                            {theme.desc}
-                                        </span>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
@@ -622,8 +641,8 @@ export default function MainHubPage() {
                             accentGlow="rgba(166,124,82,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Music Box", desc: "Nuansa kotak musik klasik" },
-                                { name: "Camera", desc: "Tampilan bergaya retro camera" }
+                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52" },
+                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#333333" }
                             ]}
                             delay={100}
                         />
@@ -643,10 +662,10 @@ export default function MainHubPage() {
                             accentGlow="rgba(196,133,138,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Blush", desc: "Nuansa pink lembut yang romantis" },
-                                { name: "Sage", desc: "Warna hijau menenangkan yang natural" },
-                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar" },
-                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif" }
+                                { name: "Blush", desc: "Nuansa pink lembut yang romantis", color: "#f4d0d4" },
+                                { name: "Sage", desc: "Warna hijau menenangkan yang natural", color: "#9CAF88" },
+                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar", color: "#D69A9E" },
+                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#1B263B" }
                             ]}
                             delay={200}
                             reverse={true}
