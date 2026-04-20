@@ -54,6 +54,7 @@ function LandscapeProductCard({
     accentColor,
     accentGlow,
     href,
+    themes,
     delay = 0,
     reverse = false,
 }: {
@@ -67,6 +68,7 @@ function LandscapeProductCard({
     accentColor: string;
     accentGlow: string;
     href: string;
+    themes?: { name: string, desc: string }[];
     delay?: number;
     reverse?: boolean;
 }) {
@@ -101,16 +103,23 @@ function LandscapeProductCard({
                 {/* Media Section (16:9) */}
                 <a
                     href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hub-showcase-media"
+                    style={{ position: "relative" }}
                     onMouseEnter={e => {
                         const el = e.currentTarget as HTMLElement;
                         el.style.boxShadow = `0 48px 100px -20px ${accentGlow}`;
                         el.style.borderColor = `${accentColor}66`;
+                        const overlay = el.querySelector('.video-hover-overlay') as HTMLElement;
+                        if (overlay) overlay.style.opacity = '1';
                     }}
                     onMouseLeave={e => {
                         const el = e.currentTarget as HTMLElement;
                         el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
                         el.style.borderColor = "rgba(255,255,255,0.15)";
+                        const overlay = el.querySelector('.video-hover-overlay') as HTMLElement;
+                        if (overlay) overlay.style.opacity = '0';
                     }}
                 >
                     {mediaType === "video" && mediaSrc ? (
@@ -146,6 +155,25 @@ function LandscapeProductCard({
                             </span>
                         </div>
                     )}
+                    {/* Hover Overlay */}
+                    <div className="video-hover-overlay" style={{
+                        position: "absolute", inset: 0, zIndex: 2,
+                        background: "rgba(29,24,22,0.5)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        opacity: 0, transition: "opacity 0.3s ease",
+                        pointerEvents: "none",
+                    }}>
+                        <div style={{
+                            display: "inline-flex", alignItems: "center", gap: 8,
+                            padding: "12px 28px", borderRadius: 999,
+                            background: accentColor, color: "#fff",
+                            fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                            boxShadow: `0 8px 24px -4px ${accentColor}88`
+                        }}>
+                            Order via WhatsApp
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" /></svg>
+                        </div>
+                    </div>
                 </a>
 
                 {/* Text Content */}
@@ -309,6 +337,52 @@ function LandscapeProductCard({
                         })}
                     </div>
 
+                    {/* Themes Section */}
+                    {themes && (
+                        <div style={{ marginBottom: 32, marginTop: 8 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: accentColor, opacity: 0.8 }}>
+                                    Koleksi Tema
+                                </span>
+                                <div style={{ flex: 1, height: 1, background: `${accentColor}22` }} />
+                            </div>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                                {themes.map((theme, i) => (
+                                    <div key={i} style={{ 
+                                        padding: "12px 14px", 
+                                        borderRadius: 14, 
+                                        background: `${accentColor}08`, 
+                                        border: `1px solid ${accentColor}1A`,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 4,
+                                        transition: "all 0.3s ease",
+                                    }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                            <div style={{ position: "relative", width: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <div style={{ 
+                                                    width: 6, height: 6, borderRadius: "50%", background: accentColor,
+                                                    position: "absolute", zIndex: 1
+                                                }} />
+                                                <div style={{ 
+                                                    width: 14, height: 14, borderRadius: "50%", border: `1.5px solid ${accentColor}`,
+                                                    animation: `voice-pulse 2s infinite ${i * 0.4}s`,
+                                                    opacity: 0.6
+                                                }} />
+                                            </div>
+                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, color: "#382a24" }}>
+                                                {theme.name}
+                                            </span>
+                                        </div>
+                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, color: "#6e5c53", lineHeight: 1.4, paddingLeft: 22 }}>
+                                            {theme.desc}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
                         <a href={href} target="_blank" rel="noopener noreferrer" style={{
                             padding: "12px 28px", borderRadius: 999,
@@ -408,7 +482,7 @@ export default function MainHubPage() {
             </div>
 
             {/* ── HERO ── */}
-            <section style={{ position: "relative", zIndex: 1, paddingTop: "clamp(140px, 20vh, 200px)", paddingBottom: "clamp(80px, 12vh, 130px)", textAlign: "center" }}>
+            <section style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(80px, 12vh, 130px)", textAlign: "center" }}>
                 <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 24px" }}>
 
                     <AnimatedSection>
@@ -446,16 +520,55 @@ export default function MainHubPage() {
                             maxWidth: 500, margin: "0 auto 56px",
                             letterSpacing: "-0.01em"
                         }}>
-                            Tiga cara berbeda untuk mengabadikan satu cerita.
+                            Empat cara berbeda untuk mengabadikan satu cerita.
                             Pilih produk yang paling mencerminkan perasaanmu.
                         </p>
                     </AnimatedSection>
 
                     <AnimatedSection delay={300}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 80 }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 40 }}>
                             <div style={{ height: 1, width: 40, background: "rgba(205,171,143,0.3)" }} />
                             <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#cdab8f" }} />
                             <div style={{ height: 1, width: 40, background: "rgba(205,171,143,0.3)" }} />
+                        </div>
+                    </AnimatedSection>
+
+                    {/* Hero CTA Buttons */}
+                    <AnimatedSection delay={350}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 60 }}>
+                            <a
+                                href="#collection"
+                                style={{
+                                    display: "inline-flex", alignItems: "center", gap: 8,
+                                    padding: "14px 32px", borderRadius: 999,
+                                    background: "#1d1816", color: "#faf7f2",
+                                    fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                    textDecoration: "none", transition: "all 0.3s ease",
+                                    boxShadow: "0 8px 32px -8px rgba(29,24,22,0.25)"
+                                }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
+                            >
+                                Lihat Koleksi
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                            </a>
+                            <a
+                                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20tahu%20lebih%20lanjut%20tentang%20produk%20kalian."
+                                target="_blank" rel="noopener noreferrer"
+                                style={{
+                                    display: "inline-flex", alignItems: "center", gap: 8,
+                                    padding: "14px 32px", borderRadius: 999,
+                                    background: "transparent", color: "#6e5c53",
+                                    fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                    textDecoration: "none", transition: "all 0.3s ease",
+                                    border: "1.5px solid rgba(205,171,143,0.35)",
+                                }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#a88365"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(205,171,143,0.35)"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                            >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" /></svg>
+                                Tanya via WhatsApp
+                            </a>
                         </div>
                     </AnimatedSection>
 
@@ -508,6 +621,10 @@ export default function MainHubPage() {
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            themes={[
+                                { name: "Music Box", desc: "Nuansa kotak musik klasik" },
+                                { name: "Camera", desc: "Tampilan bergaya retro camera" }
+                            ]}
                             delay={100}
                         />
                         <LandscapeProductCard
@@ -520,11 +637,17 @@ export default function MainHubPage() {
                                 "Background Music Pilihan"
                             ]}
                             price="Promo Rp 10.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4"
+                            mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
                             mediaType="video"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            themes={[
+                                { name: "Blush", desc: "Nuansa pink lembut yang romantis" },
+                                { name: "Sage", desc: "Warna hijau menenangkan yang natural" },
+                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar" },
+                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif" }
+                            ]}
                             delay={200}
                             reverse={true}
                         />
@@ -605,7 +728,7 @@ export default function MainHubPage() {
                         {[
                             {
                                 num: "01", title: "Pilih Produk",
-                                desc: "Pilih dari Voices, Arcade, atau Wrapped — sesuai cerita yang ingin kamu sampaikan.",
+                                desc: "Pilih dari empat format kado digital kami — sesuai cerita yang ingin kamu sampaikan.",
                                 icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
                             },
                             {
@@ -719,13 +842,109 @@ export default function MainHubPage() {
                             {[
                                 { num: "100+", label: "Delivered" },
                                 { num: "5.0", label: "Average Rating" },
-                                { num: "3", label: "Foundations" },
+                                { num: "4", label: "Formats" },
                             ].map((stat, i) => (
                                 <div key={i} style={{ textAlign: "center" }}>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 400, color: "#faf7f2", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
                                     <div style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(205,171,143,0.5)" }}>{stat.label}</div>
                                 </div>
                             ))}
+                        </div>
+                    </AnimatedSection>
+                </div>
+            </section>
+
+            {/* ── FAQ ── */}
+            <section style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#faf7f2" }}>
+                <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
+                    <AnimatedSection>
+                        <div style={{ textAlign: "center", marginBottom: 64 }}>
+                            <span style={{
+                                fontFamily: "var(--font-sans)", fontSize: 8.5, fontWeight: 700,
+                                letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#a88365",
+                                display: "inline-block", padding: "6px 20px",
+                                border: "1.2px solid rgba(205,171,143,0.2)", borderRadius: 999,
+                                background: "rgba(205,171,143,0.08)", marginBottom: 24,
+                            }}>
+                                FAQ
+                            </span>
+                            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 400, color: "#382a24", lineHeight: 1, letterSpacing: "-0.03em" }}>
+                                Pertanyaan <span style={{ fontStyle: "italic", color: "#cdab8f" }}>yang Sering Ditanya.</span>
+                            </h2>
+                        </div>
+                    </AnimatedSection>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        {[
+                            {
+                                q: "Berapa lama proses pengerjaan?",
+                                a: "Untuk produk Free/Regular, kamu langsung mendapat link setelah isi studio sendiri — prosesnya instan. Untuk link pribadi (custom domain), proses pengerjaan 1×24 jam setelah pembayaran dan data diterima."
+                            },
+
+                            {
+                                q: "Bagaimana cara pembayaran?",
+                                a: "Pembayaran dapat dilakukan via scan QR, transfer bank, atau dompet digital (GoPay, OVO, Dana). Setelah order via WhatsApp, admin akan mengirimkan detail dan QR pembayaran langsung ke chat."
+                            },
+                            {
+                                q: "Apakah bisa request custom desain atau tema?",
+                                a: "Untuk saat ini tema dan desain sudah tersedia di dalam studio. Jika ada kebutuhan khusus, silakan tanyakan langsung via WhatsApp dan kami akan bantu sesuaikan."
+                            },
+                            {
+                                q: "Apakah penerima perlu punya akun untuk membukanya?",
+                                a: "Tidak perlu. Penerima hanya perlu membuka link dan memasukkan passcode yang kamu tentukan sendiri. Sangat mudah dan tidak perlu registrasi apapun."
+                            },
+                        ].map((item, i) => (
+                            <AnimatedSection key={i} delay={i * 80}>
+                                <details style={{
+                                    borderBottom: "1px solid rgba(205,171,143,0.2)",
+                                    padding: "24px 0",
+                                    cursor: "pointer",
+                                    listStyle: "none",
+                                }}>
+                                    <summary style={{
+                                        fontFamily: "var(--font-sans)", fontSize: "0.95rem",
+                                        fontWeight: 700, color: "#382a24",
+                                        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16,
+                                        cursor: "pointer", userSelect: "none" as const,
+                                        listStyle: "none",
+                                    }}>
+                                        {item.q}
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth={2.5} style={{ flexShrink: 0 }}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </summary>
+                                    <p style={{
+                                        fontFamily: "var(--font-sans)", fontSize: "0.9rem",
+                                        color: "#6e5c53", lineHeight: 1.75,
+                                        marginTop: 16, paddingRight: 32,
+                                    }}>
+                                        {item.a}
+                                    </p>
+                                </details>
+                            </AnimatedSection>
+                        ))}
+                    </div>
+
+                    <AnimatedSection delay={500}>
+                        <div style={{ textAlign: "center", marginTop: 56 }}>
+                            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "#a6968c", marginBottom: 16 }}>
+                                Masih ada pertanyaan lain?
+                            </p>
+                            <a
+                                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20punya%20pertanyaan%20tentang%20produk%20kalian."
+                                target="_blank" rel="noopener noreferrer"
+                                style={{
+                                    display: "inline-flex", alignItems: "center", gap: 8,
+                                    padding: "12px 28px", borderRadius: 999,
+                                    background: "#1d1816", color: "#faf7f2",
+                                    fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                    textDecoration: "none", transition: "all 0.3s ease",
+                                }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
+                            >
+                                Chat via WhatsApp
+                            </a>
                         </div>
                     </AnimatedSection>
                 </div>
@@ -759,8 +978,13 @@ export default function MainHubPage() {
                     </div>
 
                     <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 48 }}>
-                        {[{ label: "Voices", href: "/voices" }, { label: "Arcade", href: "/arcade" }, { label: "Wrapped", href: "/wrapped" }].map(link => (
-                            <a key={link.href} href={link.href} style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "#6e5c53", textDecoration: "none", borderBottom: "1.5px solid transparent", transition: "all 0.3s ease" }}
+                        {[
+                            { label: "Voices", href: "https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                            { label: "Letter", href: "https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                            { label: "Arcade", href: "https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                            { label: "Wrapped", href: "https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Wrapped%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                        ].map(link => (
+                            <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "#6e5c53", textDecoration: "none", borderBottom: "1.5px solid transparent", transition: "all 0.3s ease" }}
                                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#cdab8f"; }}
                                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "transparent"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}>
                                 {link.label}
@@ -772,15 +996,33 @@ export default function MainHubPage() {
                 </AnimatedSection>
             </section>
 
-            {/* Floating WhatsApp — Champagne Truffle Style */}
+            {/* Floating WhatsApp with label */}
             <a href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-                style={{ position: "fixed", bottom: 32, right: 32, zIndex: 100, width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 20px 40px rgba(29,24,22,0.2)", transition: "all 0.3s ease", textDecoration: "none" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1) rotate(5deg)"; (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1) rotate(0deg)"; (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#faf7f2">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
-                </svg>
+                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
+            >
+                <div style={{
+                    padding: "8px 16px", borderRadius: 999,
+                    background: "#1d1816", color: "#cdab8f",
+                    fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                    boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)",
+                    transition: "all 0.3s ease",
+                    whiteSpace: "nowrap" as const,
+                }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#1d1816"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; (e.currentTarget as HTMLElement).style.color = "#cdab8f"; }}
+                >
+                    Order
+                </div>
+                <div
+                    style={{ width: 44, height: 44, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s ease", flexShrink: 0 }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#faf7f2">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
+                    </svg>
+                </div>
             </a>
         </div>
     );
