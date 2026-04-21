@@ -73,6 +73,15 @@ function LandscapeProductCard({
     reverse?: boolean;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const [activeAccent, setActiveAccent] = useState(accentColor);
+    const [activeGlow, setActiveGlow] = useState(accentGlow);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+    useEffect(() => {
+        setActiveAccent(accentColor);
+        setActiveGlow(accentGlow);
+        setSelectedIndex(null);
+    }, [accentColor, accentGlow]);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -109,8 +118,8 @@ function LandscapeProductCard({
                     style={{ position: "relative" }}
                     onMouseEnter={e => {
                         const el = e.currentTarget as HTMLElement;
-                        el.style.boxShadow = `0 48px 100px -20px ${accentGlow}`;
-                        el.style.borderColor = `${accentColor}66`;
+                        el.style.boxShadow = `0 48px 100px -20px ${activeGlow}`;
+                        el.style.borderColor = `${activeAccent}66`;
                         const overlay = el.querySelector('.video-hover-overlay') as HTMLElement;
                         if (overlay) overlay.style.opacity = '1';
                     }}
@@ -136,21 +145,21 @@ function LandscapeProductCard({
                     ) : (
                         <div style={{
                             width: "100%", height: "100%", aspectRatio: "16/9",
-                            background: `linear-gradient(160deg, rgba(30,20,12,0.97) 0%, ${accentGlow} 100%)`,
+                            background: `linear-gradient(160deg, rgba(30,20,12,0.97) 0%, ${activeGlow} 100%)`,
                             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16,
                         }}>
                             <div style={{
                                 width: 72, height: 72, borderRadius: 20,
-                                background: `${accentColor}18`,
-                                border: `1.5px solid ${accentColor}44`,
+                                background: `${activeAccent}18`,
+                                border: `1.5px solid ${activeAccent}44`,
                                 display: "flex", alignItems: "center", justifyContent: "center",
                             }}>
-                                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke={accentColor} strokeWidth={1.5}>
+                                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke={activeAccent} strokeWidth={1.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
                                 </svg>
                             </div>
-                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: `${accentColor}99` }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: `${activeAccent}99` }}>
                                 Coming Soon
                             </span>
                         </div>
@@ -166,9 +175,9 @@ function LandscapeProductCard({
                         <div style={{
                             display: "inline-flex", alignItems: "center", gap: 8,
                             padding: "12px 28px", borderRadius: 999,
-                            background: accentColor, color: "#fff",
+                            background: activeAccent, color: "#fff",
                             fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                            boxShadow: `0 8px 24px -4px ${accentColor}88`
+                            boxShadow: `0 8px 24px -4px ${activeAccent}88`
                         }}>
                             Order via WhatsApp
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" /></svg>
@@ -178,21 +187,23 @@ function LandscapeProductCard({
 
                 {/* Text Content */}
                 <div className="hub-showcase-content" style={{
-                    backgroundColor: accentColor === '#c9184a' ? `${accentColor}0D` : `${accentColor}26`,  /* Wrapped (Pink) reduced further to ~5% */
-                    border: `1.5px solid ${accentColor === '#c9184a' ? `${accentColor}26` : `${accentColor}40`}`, /* Thinner border for Wrapped */
+                    backgroundColor: activeAccent === '#c9184a' ? `${activeAccent}0D` : `${activeAccent}26`, 
+                    border: `1.5px solid ${activeAccent === '#c9184a' ? `${activeAccent}26` : `${activeAccent}40`}`,
                     borderRadius: "var(--radius-lg)",
                     padding: "clamp(32px, 4.5vw, 48px)",
-                    boxShadow: `0 24px 48px -16px ${accentColor === '#c9184a' ? `${accentColor}14` : `${accentColor}26`}`
+                    boxShadow: `0 24px 48px -16px ${activeAccent === '#c9184a' ? `${activeAccent}14` : `${activeAccent}26`}`,
+                    transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
                 }}>
                     {/* Label Badge */}
                     <div style={{
                         alignSelf: "flex-start",
                         padding: "6px 14px", borderRadius: 999,
-                        background: `${accentColor}15`,
-                        border: `1px solid ${accentColor}33`,
-                        color: accentColor, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em",
+                        background: `${activeAccent}15`,
+                        border: `1px solid ${activeAccent}33`,
+                        color: activeAccent, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em",
                         textTransform: "uppercase" as const,
                         marginBottom: 24,
+                        transition: "all 0.5s ease"
                     }}>
                         {label}
                     </div>
@@ -201,9 +212,10 @@ function LandscapeProductCard({
                         fontFamily: "var(--font-display)",
                         fontSize: "clamp(1.8rem, 4vw, 2.7rem)",
                         fontWeight: 400,
-                        color: accentColor, /* Modified: Menggunakan accentColor khusus setiap produk */
+                        color: activeAccent,
                         lineHeight: 1.15,
                         marginBottom: 16,
+                        transition: "color 0.5s ease"
                     }}>
                         {title}
                     </h3>
@@ -231,8 +243,8 @@ function LandscapeProductCard({
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
-                                    <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${accentColor}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth={3}>
+                                    <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${activeAccent}22`, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.5s ease" }}>
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth={3} style={{ transition: "stroke 0.5s ease" }}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
@@ -248,7 +260,7 @@ function LandscapeProductCard({
                                             animation: "toggle-bg 4s infinite",
                                             flexShrink: 0,
                                             // @ts-ignore
-                                            "--accent-color": accentColor
+                                            "--accent-color": activeAccent
                                         }}>
                                             <div style={{
                                                 width: 11, height: 11, borderRadius: "50%",
@@ -264,10 +276,11 @@ function LandscapeProductCard({
                                             {[1, 2, 3].map(i => (
                                                 <div key={i} style={{
                                                     width: 3,
-                                                    background: accentColor,
+                                                    background: activeAccent,
                                                     borderRadius: 1,
                                                     animation: `eq-bar ${0.6 + i * 0.2}s ease-in-out infinite`,
-                                                    animationDelay: `${i * 0.15}s`
+                                                    animationDelay: `${i * 0.15}s`,
+                                                    transition: "background 0.5s ease"
                                                 }} />
                                             ))}
                                         </div>
@@ -280,9 +293,10 @@ function LandscapeProductCard({
                                                 <div key={i} style={{
                                                     width: 4, height: 4,
                                                     borderRadius: "50%",
-                                                    background: accentColor,
+                                                    background: activeAccent,
                                                     animation: `page-indicator 1.5s infinite`,
-                                                    animationDelay: `${i * 0.3}s`
+                                                    animationDelay: `${i * 0.3}s`,
+                                                    transition: "background 0.5s ease"
                                                 }} />
                                             ))}
                                         </div>
@@ -291,23 +305,23 @@ function LandscapeProductCard({
                                     {/* Animation: Voice Pulse */}
                                     {isVoiceFeature && (
                                         <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 14, height: 14, position: "relative" }}>
-                                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: accentColor }} />
-                                            <div style={{ position: "absolute", width: "100%", height: "100%", borderRadius: "50%", border: `1.5px solid ${accentColor}`, animation: "voice-pulse 1.8s infinite" }} />
+                                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: activeAccent, transition: "background 0.5s ease" }} />
+                                            <div style={{ position: "absolute", width: "100%", height: "100%", borderRadius: "50%", border: `1.5px solid ${activeAccent}`, animation: "voice-pulse 1.8s infinite", transition: "border-color 0.5s ease" }} />
                                         </div>
                                     )}
 
                                     {/* Animation: Photo Shuffle */}
                                     {isGalleryFeature && (
                                         <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 16, height: 14, position: "relative" }}>
-                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#faf7f2" }} />
-                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${accentColor}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `transparent` }} />
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${activeAccent}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#faf7f2", transition: "border-color 0.5s ease" }} />
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${activeAccent}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `transparent`, transition: "border-color 0.5s ease" }} />
                                         </div>
                                     )}
 
                                     {/* Animation: Envelope */}
                                     {isEnvelopeFeature && (
                                         <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 2.5s infinite ease-in-out" }}>
-                                            <svg width="15" height="12" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="15" height="12" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
                                                 <path d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7" />
                                                 <rect x="3" y="5" width="18" height="14" rx="2" />
                                             </svg>
@@ -321,12 +335,13 @@ function LandscapeProductCard({
                                                 fontFamily: "monospace", 
                                                 fontSize: 10, 
                                                 fontWeight: 700,
-                                                color: accentColor, 
+                                                color: activeAccent, 
                                                 overflow: "hidden", 
                                                 whiteSpace: "nowrap", 
-                                                borderRight: `2px solid ${accentColor}`,
+                                                borderRight: `2px solid ${activeAccent}`,
                                                 paddingRight: 1,
-                                                animation: "typewriter-text 5s steps(17) infinite, typewriter-blink 0.5s step-end infinite alternate"
+                                                animation: "typewriter-text 5s steps(17) infinite, typewriter-blink 0.5s step-end infinite alternate",
+                                                transition: "color 0.5s ease, border-color 0.5s ease"
                                             }}>
                                                 Dearest Lyxelle, 
                                             </div>
@@ -341,28 +356,39 @@ function LandscapeProductCard({
                     {themes && (
                         <div style={{ marginBottom: 32, marginTop: 8 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: accentColor, opacity: 0.8 }}>
+                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: activeAccent, opacity: 0.8, transition: "color 0.5s ease" }}>
                                     Koleksi Tema
                                 </span>
-                                <div style={{ flex: 1, height: 1, background: `${accentColor}22` }} />
+                                <div style={{ flex: 1, height: 1, background: `${activeAccent}22`, transition: "background 0.5s ease" }} />
                             </div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                                 {themes.map((theme, i) => {
                                     const themeColor = theme.color || accentColor;
+                                    const isSelected = selectedIndex === i;
+
                                     return (
-                                        <div key={i} style={{ 
+                                        <div key={i} 
+                                        onClick={() => {
+                                            setSelectedIndex(i);
+                                            setActiveAccent(themeColor);
+                                            setActiveGlow(`${themeColor}33`);
+                                        }}
+                                        style={{ 
                                             padding: "14px", 
                                             borderRadius: 16, 
-                                            background: "rgba(255, 255, 255, 0.75)", 
+                                            background: isSelected ? "#fff" : "rgba(255, 255, 255, 0.75)", 
                                             backdropFilter: "blur(12px)",
-                                            border: `1.5px solid ${themeColor}33`,
+                                            border: `1.5px solid ${isSelected ? themeColor : themeColor + '33'}`,
                                             display: "flex",
                                             flexDirection: "column",
                                             gap: 4,
+                                            cursor: "pointer",
                                             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                                            boxShadow: `0 4px 12px -2px ${themeColor}15`,
+                                            boxShadow: isSelected ? `0 12px 24px -4px ${themeColor}26` : `0 4px 12px -2px ${themeColor}15`,
+                                            transform: isSelected ? "translateY(-3px)" : "translateY(0)",
                                         }}
                                         onMouseEnter={e => {
+                                            if (isSelected) return;
                                             const el = e.currentTarget as HTMLElement;
                                             el.style.transform = "translateY(-3px)";
                                             el.style.borderColor = `${themeColor}66`;
@@ -370,6 +396,7 @@ function LandscapeProductCard({
                                             el.style.boxShadow = `0 12px 24px -4px ${themeColor}26`;
                                         }}
                                         onMouseLeave={e => {
+                                            if (isSelected) return;
                                             const el = e.currentTarget as HTMLElement;
                                             el.style.transform = "translateY(0)";
                                             el.style.borderColor = `${themeColor}33`;
@@ -388,11 +415,16 @@ function LandscapeProductCard({
                                                         opacity: 0.8
                                                     }} />
                                                 </div>
-                                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, color: "#382a24", letterSpacing: "0.01em" }}>
+                                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, color: isSelected ? themeColor : "#382a24", letterSpacing: "0.01em", transition: "color 0.3s ease" }}>
                                                     {theme.name}
                                                 </span>
+                                                {isSelected && (
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth={4} style={{ marginLeft: "auto" }}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                )}
                                             </div>
-                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, color: "#6e5c53", lineHeight: 1.4, paddingLeft: 24, fontWeight: 500 }}>
+                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, color: isSelected ? "#382a24" : "#6e5c53", lineHeight: 1.4, paddingLeft: 24, fontWeight: isSelected ? 600 : 500, transition: "color 0.3s ease" }}>
                                                 {theme.desc}
                                             </span>
                                         </div>
@@ -405,10 +437,10 @@ function LandscapeProductCard({
                     <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
                         <a href={href} target="_blank" rel="noopener noreferrer" style={{
                             padding: "12px 28px", borderRadius: 999,
-                            background: accentColor, color: "#fff",
+                            background: activeAccent, color: "#fff",
                             fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
-                            textDecoration: "none", transition: "all 0.3s ease",
-                            boxShadow: `0 8px 24px -4px ${accentColor}66`
+                            textDecoration: "none", transition: "all 0.5s ease",
+                            boxShadow: `0 8px 24px -4px ${activeAccent}66`
                         }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
@@ -417,11 +449,12 @@ function LandscapeProductCard({
 
                         <div style={{
                             padding: "10px 20px", borderRadius: 999,
-                            background: `linear-gradient(135deg, rgba(255,255,255,0.95), ${accentColor}1A)`,
-                            border: `1px solid ${accentColor}44`,
-                            boxShadow: `inset 0 2px 4px rgba(255,255,255,0.8), 0 6px 16px -4px ${accentColor}44`,
-                            fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: accentColor,
-                            display: "flex", alignItems: "center", gap: 8
+                            background: `linear-gradient(135deg, rgba(255,255,255,0.95), ${activeAccent}1A)`,
+                            border: `1px solid ${activeAccent}44`,
+                            boxShadow: `inset 0 2px 4px rgba(255,255,255,0.8), 0 6px 16px -4px ${activeAccent}44`,
+                            fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: activeAccent,
+                            display: "flex", alignItems: "center", gap: 8,
+                            transition: "all 0.5s ease"
                         }}>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
@@ -662,10 +695,10 @@ export default function MainHubPage() {
                             accentGlow="rgba(196,133,138,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Blush", desc: "Nuansa pink lembut yang romantis", color: "#f4d0d4" },
-                                { name: "Sage", desc: "Warna hijau menenangkan yang natural", color: "#9CAF88" },
-                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar", color: "#D69A9E" },
-                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#1B263B" }
+                                { name: "Blush", desc: "Nuansa pink lembut yang romantis", color: "#d4a5a5" },
+                                { name: "Sage", desc: "Warna hijau menenangkan yang natural", color: "#7a9e7e" },
+                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar", color: "#c4858a" },
+                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#0f1729" }
                             ]}
                             delay={200}
                             reverse={true}
