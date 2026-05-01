@@ -68,20 +68,23 @@ function LandscapeProductCard({
     accentColor: string;
     accentGlow: string;
     href: string;
-    themes?: { name: string, desc: string, color?: string }[];
+    themes?: { name: string, desc: string, color?: string, videoSrc?: string }[];
     delay?: number;
     reverse?: boolean;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [activeAccent, setActiveAccent] = useState(accentColor);
     const [activeGlow, setActiveGlow] = useState(accentGlow);
+    const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
     useEffect(() => {
         setActiveAccent(accentColor);
         setActiveGlow(accentGlow);
+        setActiveVideoSrc(mediaSrc);
         setSelectedIndex(null);
-    }, [accentColor, accentGlow]);
+    }, [accentColor, accentGlow, mediaSrc]);
+
 
     useEffect(() => {
         const video = videoRef.current;
@@ -131,10 +134,11 @@ function LandscapeProductCard({
                         if (overlay) overlay.style.opacity = '0';
                     }}
                 >
-                    {mediaType === "video" && mediaSrc ? (
+                    {mediaType === "video" && activeVideoSrc ? (
                         <video
+                            key={activeVideoSrc} // Force remount on src change to ensure new video loads and plays
                             ref={videoRef}
-                            src={mediaSrc}
+                            src={activeVideoSrc}
                             autoPlay loop muted playsInline
                             disablePictureInPicture
                             controlsList="nodownload nofullscreen noremoteplayback"
@@ -240,6 +244,7 @@ function LandscapeProductCard({
                             const isGalleryFeature = feat.toLowerCase().includes("galeri foto");
                             const isEnvelopeFeature = feat.toLowerCase().includes("amplop");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
+                            const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -347,6 +352,23 @@ function LandscapeProductCard({
                                             </div>
                                         </div>
                                     )}
+
+                                    {/* Animation: Photo / Video */}
+                                    {isPhotoVideoFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+                                            {/* Film frame */}
+                                            <svg width="15" height="13" viewBox="0 0 24 20" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease", animation: "photo-shuffle 3s ease-in-out infinite" }}>
+                                                <rect x="1" y="1" width="22" height="18" rx="2" />
+                                                <line x1="1" y1="6" x2="23" y2="6" />
+                                                <line x1="1" y1="14" x2="23" y2="14" />
+                                                <line x1="7" y1="1" x2="7" y2="6" />
+                                                <line x1="17" y1="1" x2="17" y2="6" />
+                                                <line x1="7" y1="14" x2="7" y2="19" />
+                                                <line x1="17" y1="14" x2="17" y2="19" />
+                                                <polygon points="9.5,8 9.5,12 14.5,10" fill={activeAccent} stroke="none" />
+                                            </svg>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}
@@ -372,6 +394,8 @@ function LandscapeProductCard({
                                             setSelectedIndex(i);
                                             setActiveAccent(themeColor);
                                             setActiveGlow(`${themeColor}33`);
+                                            if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
+                                            else setActiveVideoSrc(mediaSrc);
                                         }}
                                         style={{ 
                                             padding: "14px", 
@@ -686,19 +710,20 @@ export default function MainHubPage() {
                             features={[
                                 "Amplop Digital Interaktif",
                                 "Efek Typewriter Sinematik",
+                                "Foto / Video di Akhir Surat",
                                 "Background Music Pilihan"
                             ]}
-                            price="Promo Rp 10.000"
+                            price="Rp 15.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
                             mediaType="video"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
-                            href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Blush", desc: "Nuansa pink lembut yang romantis", color: "#d4a5a5" },
-                                { name: "Sage", desc: "Warna hijau menenangkan yang natural", color: "#7a9e7e" },
-                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar", color: "#c4858a" },
-                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#0f1729" }
+                                { name: "Blush",    desc: "Nuansa pink lembut yang romantis",     color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4" },
+                                { name: "Sage",     desc: "Warna hijau menenangkan yang natural",  color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4" },
+                                { name: "Rose",     desc: "Klasik dengan elemen bunga mawar",     color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4" },
+                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#0f1729", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4" }
                             ]}
                             delay={200}
                             reverse={true}
