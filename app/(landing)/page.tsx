@@ -698,8 +698,8 @@ export default function MainHubPage() {
                             accentGlow="rgba(166,124,82,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52" },
-                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#333333" }
+                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", videoSrc: "https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4" },
+                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#333333", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4" }
                             ]}
                             delay={100}
                         />
