@@ -767,6 +767,7 @@ export default function MainHubPage() {
                                 </>
                             }
                             mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
                             mediaType="video"
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
