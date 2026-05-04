@@ -50,6 +50,7 @@ function LandscapeProductCard({
     price,
     features,
     mediaSrc,
+    fallbackImgSrc,
     mediaType,
     accentColor,
     accentGlow,
@@ -64,11 +65,12 @@ function LandscapeProductCard({
     price: React.ReactNode;
     features: string[];
     mediaSrc: string;
+    fallbackImgSrc?: string;
     mediaType: "video" | "gif" | "placeholder";
     accentColor: string;
     accentGlow: string;
     href: string;
-    themes?: { name: string, desc: string, color?: string, videoSrc?: string }[];
+    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[];
     delay?: number;
     reverse?: boolean;
 }) {
@@ -76,14 +78,26 @@ function LandscapeProductCard({
     const [activeAccent, setActiveAccent] = useState(accentColor);
     const [activeGlow, setActiveGlow] = useState(accentGlow);
     const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
+    const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [isTikTok, setIsTikTok] = useState(false);
+
+    useEffect(() => {
+        if (typeof navigator !== 'undefined') {
+            const ua = navigator.userAgent || navigator.vendor;
+            if (/Bytedance|musical_ly|TikTok/i.test(ua)) {
+                setIsTikTok(true);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         setActiveAccent(accentColor);
         setActiveGlow(accentGlow);
         setActiveVideoSrc(mediaSrc);
+        setActiveFallbackImgSrc(fallbackImgSrc);
         setSelectedIndex(null);
-    }, [accentColor, accentGlow, mediaSrc]);
+    }, [accentColor, accentGlow, mediaSrc, fallbackImgSrc]);
 
 
     useEffect(() => {
@@ -113,28 +127,28 @@ function LandscapeProductCard({
         <AnimatedSection delay={delay}>
             <div className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
                 {/* Media Section (16:9) */}
-                <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <div
                     className="hub-showcase-media"
                     style={{ position: "relative" }}
                     onMouseEnter={e => {
                         const el = e.currentTarget as HTMLElement;
                         el.style.boxShadow = `0 48px 100px -20px ${activeGlow}`;
                         el.style.borderColor = `${activeAccent}66`;
-                        const overlay = el.querySelector('.video-hover-overlay') as HTMLElement;
-                        if (overlay) overlay.style.opacity = '1';
                     }}
                     onMouseLeave={e => {
                         const el = e.currentTarget as HTMLElement;
                         el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
                         el.style.borderColor = "rgba(255,255,255,0.15)";
-                        const overlay = el.querySelector('.video-hover-overlay') as HTMLElement;
-                        if (overlay) overlay.style.opacity = '0';
                     }}
                 >
-                    {mediaType === "video" && activeVideoSrc ? (
+                    {mediaType === "video" && isTikTok && activeFallbackImgSrc ? (
+                        <img 
+                            key={activeFallbackImgSrc}
+                            src={activeFallbackImgSrc} 
+                            alt={title} 
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} 
+                        />
+                    ) : mediaType === "video" && activeVideoSrc && (!isTikTok || !activeFallbackImgSrc) ? (
                         <video
                             key={activeVideoSrc} // Force remount on src change to ensure new video loads and plays
                             ref={videoRef}
@@ -168,26 +182,7 @@ function LandscapeProductCard({
                             </span>
                         </div>
                     )}
-                    {/* Hover Overlay */}
-                    <div className="video-hover-overlay" style={{
-                        position: "absolute", inset: 0, zIndex: 2,
-                        background: "rgba(29,24,22,0.5)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        opacity: 0, transition: "opacity 0.3s ease",
-                        pointerEvents: "none",
-                    }}>
-                        <div style={{
-                            display: "inline-flex", alignItems: "center", gap: 8,
-                            padding: "12px 28px", borderRadius: 999,
-                            background: activeAccent, color: "#fff",
-                            fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                            boxShadow: `0 8px 24px -4px ${activeAccent}88`
-                        }}>
-                            Order via WhatsApp
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" /></svg>
-                        </div>
-                    </div>
-                </a>
+                </div>
 
                 {/* Text Content */}
                 <div className="hub-showcase-content" style={{
@@ -396,6 +391,8 @@ function LandscapeProductCard({
                                             setActiveGlow(`${themeColor}33`);
                                             if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
                                             else setActiveVideoSrc(mediaSrc);
+                                            if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
+                                            else setActiveFallbackImgSrc(fallbackImgSrc);
                                         }}
                                         style={{ 
                                             padding: "14px", 
@@ -693,13 +690,14 @@ export default function MainHubPage() {
                             ]}
                             price="Promo Rp 15.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
                             mediaType="video"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", videoSrc: "https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4" },
-                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#333333", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4" }
+                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", videoSrc: "https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
+                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png" }
                             ]}
                             delay={100}
                         />
@@ -715,15 +713,16 @@ export default function MainHubPage() {
                             ]}
                             price="Rp 15.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777883949551-wyv56.webp"
                             mediaType="video"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
                             href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Blush",    desc: "Nuansa pink lembut yang romantis",     color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4" },
-                                { name: "Sage",     desc: "Warna hijau menenangkan yang natural",  color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4" },
-                                { name: "Rose",     desc: "Klasik dengan elemen bunga mawar",     color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4" },
-                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#0f1729", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4" }
+                                { name: "Blush",    desc: "Nuansa pink lembut yang romantis",     color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
+                                { name: "Sage",     desc: "Warna hijau menenangkan yang natural",  color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
+                                { name: "Rose",     desc: "Klasik dengan elemen bunga mawar",     color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
+                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" }
                             ]}
                             delay={200}
                             reverse={true}
@@ -744,6 +743,7 @@ export default function MainHubPage() {
                                 </>
                             }
                             mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
                             mediaType="video"
                             accentColor="#5c8c5c"
                             accentGlow="rgba(92,140,92,0.2)"
