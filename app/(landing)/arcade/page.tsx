@@ -1201,7 +1201,7 @@ export default function ArcadeLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition%20(Regular)*%20seharga%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition%20(Regular)*%20seharga%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
                                     className="arc-btn-secondary"
                                     style={{ width: "100%", justifyContent: "center", padding: "15px 0", textAlign: "center" }}
@@ -1244,7 +1244,7 @@ export default function ArcadeLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition%20(Premium)*%20seharga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition%20(Premium)*%20seharga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
                                     className="arc-btn-primary"
                                     style={{ width: "100%", justifyContent: "center", padding: "15px 0", textAlign: "center" }}
@@ -1365,7 +1365,7 @@ export default function ArcadeLandingPage() {
 
             {/* â”€â”€ Floating WhatsApp Button â”€â”€ */}
             <a
-                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20Arcade%20Edition."
+                href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20Arcade%20Edition."
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Hubungi via WhatsApp"

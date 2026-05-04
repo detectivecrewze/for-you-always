@@ -967,7 +967,7 @@ export default function Home() {
                       </ul>
 
                       <a
-                        href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20%E2%9C%A8%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20%E2%9C%A8%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20dengan%20harga%20spesial%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-full py-4 bg-amber-500 text-white font-bold rounded-2xl
@@ -1029,7 +1029,7 @@ export default function Home() {
                       </ul>
 
                       <a
-                        href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20%E2%9C%A8%20Saya%20tertarik%20untuk%20memesan%20hadiah%20digital%20yang%20*Abadi%20%26%20Bermakna*.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
+                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20%E2%9C%A8%20Saya%20tertarik%20untuk%20memesan%20hadiah%20digital%20yang%20*Abadi%20%26%20Bermakna*.%0A%0AMohon%20info%20langkah%20selanjutnya%20untuk%20proses%20pemesanannya%20ya.%20Terima%20kasih!"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-full py-4 bg-slate-900 text-white font-bold rounded-2xl
@@ -1093,7 +1093,7 @@ export default function Home() {
           <div className="mt-16 text-center">
             <p className="text-xs text-slate-400 font-medium mb-6">Masih punya pertanyaan lain?</p>
             <a
-              href="https://wa.me/6281381381543981"
+              href="https://wa.me/6281936109076"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-100 rounded-2xl text-xs font-bold text-slate-600 hover:text-rose-600 hover:border-rose-100 transition-all shadow-sm"
             >
               Tanya Admin via WhatsApp
@@ -1131,7 +1131,7 @@ export default function Home() {
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
                   <a
-                    href="https://wa.me/6281381543981?text=Halo%20Admin!%20%F0%9F%8C%B9%20Saya%20ingin%20membuat%20kejutan%20spesial%20dengan%20hadiah%20digital.%0A%0ABisa%20bantu%20jelaskan%20cara%20pemesanan%20dan%20pilihan%20temanya?%20Terima%20kasih!"
+                    href="https://wa.me/6281936109076?text=Halo%20Admin!%20%F0%9F%8C%B9%20Saya%20ingin%20membuat%20kejutan%20spesial%20dengan%20hadiah%20digital.%0A%0ABisa%20bantu%20jelaskan%20cara%20pemesanan%20dan%20pilihan%20temanya?%20Terima%20kasih!"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto px-12 py-5 bg-slate-900 text-white font-bold rounded-2xl
@@ -1179,7 +1179,7 @@ export default function Home() {
             <Link href="#tema" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Tema</Link>
             <Link href="#cara-kerja" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Cara Kerja</Link>
             <Link href="#faq" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">Q&A</Link>
-            <a href="https://wa.me/6281381381543981?text=Halo%20Digital%20Atelier!%20Saya%20butuh%20bantuan%20terkait%20layanan%20hadiah%20digital." target="_blank" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">WA Center</a>
+            <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20butuh%20bantuan%20terkait%20layanan%20hadiah%20digital." target="_blank" className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">WA Center</a>
           </nav>
 
           {/* Bottom Bar */}
@@ -1193,7 +1193,7 @@ export default function Home() {
 
       {/* --- FLOATING WHATSAPP BUTTON --- */}
       <a
-        href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20%F0%9F%91%8B%20Saya%20ingin%20bertanya%20tentang%20layanan%20hadiah%20digital."
+        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20%F0%9F%91%8B%20Saya%20ingin%20bertanya%20tentang%20layanan%20hadiah%20digital."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_8px_24px_-4px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_12px_32px_-4px_rgba(37,211,102,0.5)] transition-all duration-300 group"

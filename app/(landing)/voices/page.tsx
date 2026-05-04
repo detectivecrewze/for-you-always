@@ -1635,7 +1635,7 @@ export default function VoicesLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Regular)*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Regular)*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
                                     style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "rgba(166,124,82,0.15)", border: "1px solid rgba(166,124,82,0.3)", color: "var(--accent-light)", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.3s ease", textAlign: "center" }}
                                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(166,124,82,0.25)"; }}
@@ -1695,7 +1695,7 @@ export default function VoicesLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Premium)*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Premium)*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
                                     style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.4s ease", boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)", textAlign: "center" }}
                                 >
@@ -1966,7 +1966,7 @@ export default function VoicesLandingPage() {
 
             {/* Ã¢â€â‚¬Ã¢â€â‚¬ Floating WhatsApp Button Ã¢â€â‚¬Ã¢â€â‚¬ */}
             <a
-                href="https://wa.me/6281381543981?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20Voices%20Gift."
+                href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20Voices%20Gift."
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Hubungi via WhatsApp"

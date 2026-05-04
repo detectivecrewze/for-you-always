@@ -120,7 +120,7 @@ function StepCard({
    Shared WhatsApp CTA link
    ───────────────────────────────────────────── */
 const WA_LINK =
-    "https://wa.me/6281381543981?text=Halo%20For%20You%2C%20Always!%20Saya%20tertarik%20untuk%20membeli%20*Voices%20Gift%20Bundle*%20(Pembelian%20Pertama%20Rp%2030.000).%20Mohon%20info%20selanjutnya.";
+    "https://wa.me/6281936109076?text=Halo%20For%20You%2C%20Always!%20Saya%20tertarik%20untuk%20membeli%20*Voices%20Gift%20Bundle*%20(Pembelian%20Pertama%20Rp%2030.000).%20Mohon%20info%20selanjutnya.";
 
 /* ─────────────────────────────────────────────
    useIsMobile hook
