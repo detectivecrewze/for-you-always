@@ -141,14 +141,14 @@ function LandscapeProductCard({
                         el.style.borderColor = "rgba(255,255,255,0.15)";
                     }}
                 >
-                    {mediaType === "video" && isTikTok && activeFallbackImgSrc ? (
+                    {(mediaType === "video" && (isTikTok || !activeVideoSrc) && activeFallbackImgSrc) ? (
                         <img 
                             key={activeFallbackImgSrc}
                             src={activeFallbackImgSrc} 
                             alt={title} 
                             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} 
                         />
-                    ) : mediaType === "video" && activeVideoSrc && (!isTikTok || !activeFallbackImgSrc) ? (
+                    ) : (mediaType === "video" && activeVideoSrc) ? (
                         <video
                             key={activeVideoSrc} // Force remount on src change to ensure new video loads and plays
                             ref={videoRef}
@@ -160,6 +160,8 @@ function LandscapeProductCard({
                         />
                     ) : mediaType === "gif" && mediaSrc ? (
                         <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
+                    ) : activeFallbackImgSrc ? (
+                        <img src={activeFallbackImgSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
                     ) : (
                         <div style={{
                             width: "100%", height: "100%", aspectRatio: "16/9",
@@ -378,80 +380,114 @@ function LandscapeProductCard({
                                 </span>
                                 <div style={{ flex: 1, height: 1, background: `${activeAccent}22`, transition: "background 0.5s ease" }} />
                             </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                                {themes.map((theme, i) => {
-                                    const themeColor = theme.color || accentColor;
-                                    const isSelected = selectedIndex === i;
-
-                                    return (
-                                        <div key={i} 
+                            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                                {/* Single Active Theme Display with Arrows */}
+                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                    <button 
                                         onClick={() => {
-                                            setSelectedIndex(i);
-                                            setActiveAccent(themeColor);
-                                            setActiveGlow(`${themeColor}33`);
-                                            if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
+                                            const prevIndex = selectedIndex === null ? 0 : selectedIndex;
+                                            const newIndex = prevIndex === 0 ? themes.length - 1 : prevIndex - 1;
+                                            setSelectedIndex(newIndex);
+                                            const t = themes[newIndex];
+                                            const tColor = t.color || accentColor;
+                                            setActiveAccent(tColor);
+                                            setActiveGlow(`${tColor}33`);
+                                            // Only use parent video if theme has NO video AND NO fallback image
+                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc); 
+                                            else if (t.fallbackImgSrc) setActiveVideoSrc(""); 
                                             else setActiveVideoSrc(mediaSrc);
-                                            if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
-                                            else setActiveFallbackImgSrc(fallbackImgSrc);
+                                            
+                                            if (t.fallbackImgSrc) setActiveFallbackImgSrc(t.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                         }}
                                         style={{ 
-                                            padding: "14px", 
-                                            borderRadius: 16, 
-                                            background: isSelected ? "#fff" : "rgba(255, 255, 255, 0.75)", 
-                                            backdropFilter: "blur(12px)",
-                                            border: `1.5px solid ${isSelected ? themeColor : themeColor + '33'}`,
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            gap: 4,
-                                            cursor: "pointer",
-                                            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                                            boxShadow: isSelected ? `0 12px 24px -4px ${themeColor}26` : `0 4px 12px -2px ${themeColor}15`,
-                                            transform: isSelected ? "translateY(-3px)" : "translateY(0)",
+                                            width: 40, height: 40, borderRadius: "50%", 
+                                            background: "rgba(255,255,255,0.8)", border: `1.5px solid ${activeAccent}33`,
+                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                                            color: activeAccent, flexShrink: 0
                                         }}
-                                        onMouseEnter={e => {
-                                            if (isSelected) return;
-                                            const el = e.currentTarget as HTMLElement;
-                                            el.style.transform = "translateY(-3px)";
-                                            el.style.borderColor = `${themeColor}66`;
-                                            el.style.background = "#ffffff";
-                                            el.style.boxShadow = `0 12px 24px -4px ${themeColor}26`;
-                                        }}
-                                        onMouseLeave={e => {
-                                            if (isSelected) return;
-                                            const el = e.currentTarget as HTMLElement;
-                                            el.style.transform = "translateY(0)";
-                                            el.style.borderColor = `${themeColor}33`;
-                                            el.style.background = "rgba(255, 255, 255, 0.75)";
-                                            el.style.boxShadow = `0 4px 12px -2px ${themeColor}15`;
-                                        }}>
-                                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                                <div style={{ position: "relative", width: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                    <div style={{ 
-                                                        width: 6, height: 6, borderRadius: "50%", background: themeColor,
-                                                        position: "absolute", zIndex: 1
-                                                    }} />
-                                                    <div style={{ 
-                                                        width: 14, height: 14, borderRadius: "50%", border: `1.5px solid ${themeColor}`,
-                                                        animation: `voice-pulse 2s infinite ${i * 0.4}s`,
-                                                        opacity: 0.8
-                                                    }} />
-                                                </div>
-                                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, color: isSelected ? themeColor : "#382a24", letterSpacing: "0.01em", transition: "color 0.3s ease" }}>
-                                                    {theme.name}
-                                                </span>
-                                                {isSelected && (
-                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth={4} style={{ marginLeft: "auto" }}>
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                )}
-                                            </div>
-                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, color: isSelected ? "#382a24" : "#6e5c53", lineHeight: 1.4, paddingLeft: 24, fontWeight: isSelected ? 600 : 500, transition: "color 0.3s ease" }}>
-                                                {theme.desc}
+                                    >
+                                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                                    </button>
+
+                                    <div style={{ 
+                                        flex: 1, padding: "16px", borderRadius: 16, 
+                                        background: "#fff", backdropFilter: "blur(12px)",
+                                        border: `1.5px solid ${activeAccent}`,
+                                        display: "flex", flexDirection: "column", gap: 4,
+                                        boxShadow: `0 12px 24px -4px ${activeAccent}26`,
+                                        textAlign: "center", alignItems: "center"
+                                    }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                            <div style={{ width: 12, height: 12, borderRadius: "50%", background: activeAccent }} />
+                                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, color: "#1d1d1f" }}>
+                                                {selectedIndex !== null ? themes[selectedIndex].name : themes[0].name}
                                             </span>
                                         </div>
-                                    );
-                                })}
+                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, color: "#86868b", lineHeight: 1.4 }}>
+                                            {selectedIndex !== null ? themes[selectedIndex].desc : themes[0].desc}
+                                        </span>
+                                    </div>
+
+                                    <button 
+                                        onClick={() => {
+                                            const prevIndex = selectedIndex === null ? 0 : selectedIndex;
+                                            const newIndex = prevIndex === themes.length - 1 ? 0 : prevIndex + 1;
+                                            setSelectedIndex(newIndex);
+                                            const t = themes[newIndex];
+                                            const tColor = t.color || accentColor;
+                                            setActiveAccent(tColor);
+                                            setActiveGlow(`${tColor}33`);
+                                            // Only use parent video if theme has NO video AND NO fallback image
+                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc); 
+                                            else if (t.fallbackImgSrc) setActiveVideoSrc(""); 
+                                            else setActiveVideoSrc(mediaSrc);
+
+                                            if (t.fallbackImgSrc) setActiveFallbackImgSrc(t.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
+                                        }}
+                                        style={{ 
+                                            width: 40, height: 40, borderRadius: "50%", 
+                                            background: "rgba(255,255,255,0.8)", border: `1.5px solid ${activeAccent}33`,
+                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                                            color: activeAccent, flexShrink: 0
+                                        }}
+                                    >
+                                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                    </button>
+                                </div>
+
+                                {/* Color Dots Indicator */}
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+                                    {themes.map((theme, i) => {
+                                        const themeColor = theme.color || accentColor;
+                                        const isSelected = (selectedIndex === null && i === 0) || selectedIndex === i;
+                                        return (
+                                            <div 
+                                                key={i}
+                                                onClick={() => {
+                                                    setSelectedIndex(i);
+                                                    setActiveAccent(themeColor);
+                                                    setActiveGlow(`${themeColor}33`);
+                                                    // Only use parent video if theme has NO video AND NO fallback image
+                                                    if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc); 
+                                                    else if (theme.fallbackImgSrc) setActiveVideoSrc(""); 
+                                                    else setActiveVideoSrc(mediaSrc);
+
+                                                    if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
+                                                }}
+                                                style={{
+                                                    width: 24, height: 24, borderRadius: "50%", background: themeColor,
+                                                    cursor: "pointer", border: isSelected ? `3px solid #fff` : `2px solid transparent`,
+                                                    boxShadow: isSelected ? `0 0 0 2px ${themeColor}, 0 4px 8px ${themeColor}66` : `0 2px 4px rgba(0,0,0,0.1)`,
+                                                    transition: "all 0.3s ease",
+                                                    transform: isSelected ? "scale(1.1)" : "scale(1)"
+                                                }}
+                                                title={theme.name}
+                                            />
+                                        )
+                                    })}
+                                </div>
                             </div>
+
                         </div>
                     )}
 
@@ -722,7 +758,9 @@ export default function MainHubPage() {
                                 { name: "Blush",    desc: "Nuansa pink lembut yang romantis",     color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
                                 { name: "Sage",     desc: "Warna hijau menenangkan yang natural",  color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
                                 { name: "Rose",     desc: "Klasik dengan elemen bunga mawar",     color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
-                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" }
+                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
+                                { name: "Crimson",  desc: "Nuansa merah anggur (wine) yang elegan", color: "#a82035", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
+                                { name: "Obsidian", desc: "Hitam pekat dengan sentuhan hijau emerald", color: "#0a100c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
                             ]}
                             delay={200}
                             reverse={true}
