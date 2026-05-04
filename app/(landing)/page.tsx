@@ -713,7 +713,7 @@ export default function MainHubPage() {
                             ]}
                             price="Rp 15.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777883949551-wyv56.webp"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
                             mediaType="video"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
