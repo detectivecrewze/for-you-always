@@ -57,6 +57,7 @@ function LandscapeProductCard({
     href,
     themesLabel = "Koleksi Tema",
     themes,
+    initialSelectedIndex,
     delay = 0,
     reverse = false,
 }: {
@@ -73,6 +74,7 @@ function LandscapeProductCard({
     href: string;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[];
+    initialSelectedIndex?: number;
     delay?: number;
     reverse?: boolean;
 }) {
@@ -81,7 +83,7 @@ function LandscapeProductCard({
     const [activeGlow, setActiveGlow] = useState(accentGlow);
     const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
     const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     const [isTikTok, setIsTikTok] = useState(false);
     const [isInView, setIsInView] = useState(false);
 
@@ -95,12 +97,20 @@ function LandscapeProductCard({
     }, []);
 
     useEffect(() => {
-        setActiveAccent(accentColor);
-        setActiveGlow(accentGlow);
-        setActiveVideoSrc(mediaSrc);
-        setActiveFallbackImgSrc(fallbackImgSrc);
-        setSelectedIndex(null);
-    }, [accentColor, accentGlow, mediaSrc, fallbackImgSrc]);
+        if (initialSelectedIndex !== undefined && themes && themes[initialSelectedIndex]) {
+            const theme = themes[initialSelectedIndex];
+            setActiveAccent(theme.color || accentColor);
+            setActiveGlow(theme.color ? `${theme.color}33` : accentGlow);
+            setActiveVideoSrc(theme.videoSrc || mediaSrc);
+            setActiveFallbackImgSrc(theme.fallbackImgSrc || fallbackImgSrc);
+        } else {
+            setActiveAccent(accentColor);
+            setActiveGlow(accentGlow);
+            setActiveVideoSrc(mediaSrc);
+            setActiveFallbackImgSrc(fallbackImgSrc);
+        }
+        setSelectedIndex(initialSelectedIndex ?? null);
+    }, [accentColor, accentGlow, mediaSrc, fallbackImgSrc, initialSelectedIndex, themes]);
 
 
     useEffect(() => {
@@ -761,6 +771,7 @@ export default function MainHubPage() {
                                 { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png" }
                             ]}
                             delay={100}
+                            initialSelectedIndex={0}
                         />
                         <LandscapeProductCard
                             label="Letter Edition"
@@ -789,6 +800,7 @@ export default function MainHubPage() {
                             ]}
                             delay={200}
                             reverse={true}
+                            initialSelectedIndex={0}
                         />
                         <LandscapeProductCard
                             label="Arcade Edition"
@@ -827,6 +839,7 @@ export default function MainHubPage() {
                             ]}
                             delay={300}
                             reverse={false}
+                            initialSelectedIndex={0}
                         />
                         <LandscapeProductCard
                             label="Wrapped Edition"
@@ -860,6 +873,7 @@ export default function MainHubPage() {
                             ]}
                             delay={400}
                             reverse={true}
+                            initialSelectedIndex={3}
                         />
                     </div>
                 </div>
