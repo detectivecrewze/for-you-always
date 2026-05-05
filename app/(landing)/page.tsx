@@ -55,6 +55,7 @@ function LandscapeProductCard({
     accentColor,
     accentGlow,
     href,
+    themesLabel = "Koleksi Tema",
     themes,
     delay = 0,
     reverse = false,
@@ -70,6 +71,7 @@ function LandscapeProductCard({
     accentColor: string;
     accentGlow: string;
     href: string;
+    themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[];
     delay?: number;
     reverse?: boolean;
@@ -81,6 +83,7 @@ function LandscapeProductCard({
     const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isTikTok, setIsTikTok] = useState(false);
+    const [isInView, setIsInView] = useState(false);
 
     useEffect(() => {
         if (typeof navigator !== 'undefined') {
@@ -112,12 +115,13 @@ function LandscapeProductCard({
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
+                    setIsInView(true);
                     video.play().catch(() => { });
                 } else {
                     video.pause();
                 }
             },
-            { threshold: 0.2 }
+            { threshold: 0.1 }
         );
         observer.observe(video);
         return () => observer.disconnect();
@@ -129,70 +133,72 @@ function LandscapeProductCard({
 
                 {/* Media Column Wrapper */}
                 <div className="hub-showcase-media-wrapper" style={{ gap: 24 }}>
-                {/* Media Section (16:9) */}
-                <div
-                    className="hub-showcase-media"
-                    style={{ position: "relative", flex: "none", width: "100%" }}
-                    onMouseEnter={e => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.boxShadow = `0 48px 100px -20px ${activeGlow}`;
-                        el.style.borderColor = `${activeAccent}66`;
-                    }}
-                    onMouseLeave={e => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
-                        el.style.borderColor = "rgba(255,255,255,0.15)";
-                    }}
-                >
-                    {(mediaType === "video" && (isTikTok || !activeVideoSrc) && activeFallbackImgSrc) ? (
-                        <img 
-                            key={activeFallbackImgSrc}
-                            src={activeFallbackImgSrc} 
-                            alt={title} 
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} 
-                        />
-                    ) : (mediaType === "video" && activeVideoSrc) ? (
-                        <video
-                            key={activeVideoSrc} // Force remount on src change to ensure new video loads and plays
-                            ref={videoRef}
-                            src={activeVideoSrc}
-                            autoPlay loop muted playsInline
-                            disablePictureInPicture
-                            controlsList="nodownload nofullscreen noremoteplayback"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", pointerEvents: "none" }}
-                        />
-                    ) : mediaType === "gif" && mediaSrc ? (
-                        <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
-                    ) : activeFallbackImgSrc ? (
-                        <img src={activeFallbackImgSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
-                    ) : (
-                        <div style={{
-                            width: "100%", height: "100%", aspectRatio: "16/9",
-                            background: `linear-gradient(160deg, rgba(30,20,12,0.97) 0%, ${activeGlow} 100%)`,
-                            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16,
-                        }}>
+                    {/* Media Section (16:9) */}
+                    <div
+                        className="hub-showcase-media"
+                        style={{ position: "relative", flex: "none", width: "100%" }}
+                        onMouseEnter={e => {
+                            const el = e.currentTarget as HTMLElement;
+                            el.style.boxShadow = `0 48px 100px -20px ${activeGlow}`;
+                            el.style.borderColor = `${activeAccent}66`;
+                        }}
+                        onMouseLeave={e => {
+                            const el = e.currentTarget as HTMLElement;
+                            el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
+                            el.style.borderColor = "rgba(255,255,255,0.15)";
+                        }}
+                    >
+                        {(mediaType === "video" && (isTikTok || !activeVideoSrc) && activeFallbackImgSrc) ? (
+                            <img
+                                key={activeFallbackImgSrc}
+                                src={activeFallbackImgSrc}
+                                alt={title}
+                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }}
+                            />
+                        ) : (mediaType === "video" && activeVideoSrc) ? (
+                            <video
+                                key={activeVideoSrc} // Force remount on src change to ensure new video loads and plays
+                                ref={videoRef}
+                                src={isInView ? activeVideoSrc : ""}
+                                poster={activeFallbackImgSrc}
+                                preload="none"
+                                autoPlay loop muted playsInline
+                                disablePictureInPicture
+                                controlsList="nodownload nofullscreen noremoteplayback"
+                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", pointerEvents: "none" }}
+                            />
+                        ) : mediaType === "gif" && mediaSrc ? (
+                            <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
+                        ) : activeFallbackImgSrc ? (
+                            <img src={activeFallbackImgSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
+                        ) : (
                             <div style={{
-                                width: 72, height: 72, borderRadius: 20,
-                                background: `${activeAccent}18`,
-                                border: `1.5px solid ${activeAccent}44`,
-                                display: "flex", alignItems: "center", justifyContent: "center",
+                                width: "100%", height: "100%", aspectRatio: "16/9",
+                                background: `linear-gradient(160deg, rgba(30,20,12,0.97) 0%, ${activeGlow} 100%)`,
+                                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16,
                             }}>
-                                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke={activeAccent} strokeWidth={1.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-                                </svg>
+                                <div style={{
+                                    width: 72, height: 72, borderRadius: 20,
+                                    background: `${activeAccent}18`,
+                                    border: `1.5px solid ${activeAccent}44`,
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                }}>
+                                    <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke={activeAccent} strokeWidth={1.5}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+                                    </svg>
+                                </div>
+                                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: `${activeAccent}99` }}>
+                                    Coming Soon
+                                </span>
                             </div>
-                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: `${activeAccent}99` }}>
-                                Coming Soon
-                            </span>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
 
 
                     {/* Themes Section */}
                     {themes && (
-                        <div style={{ 
+                        <div style={{
                             marginTop: 16,
                             padding: "24px",
                             background: "rgba(255, 255, 255, 0.45)",
@@ -204,14 +210,14 @@ function LandscapeProductCard({
                         }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
                                 <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: activeAccent, opacity: 0.8, transition: "color 0.5s ease" }}>
-                                    Koleksi Tema
+                                    {themesLabel}
                                 </span>
                                 <div style={{ flex: 1, height: 1, background: `${activeAccent}15`, transition: "background 0.5s ease" }} />
                             </div>
                             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                                 {/* Single Active Theme Display with Arrows */}
                                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                    <button 
+                                    <button
                                         onClick={() => {
                                             const prevIndex = selectedIndex === null ? 0 : selectedIndex;
                                             const newIndex = prevIndex === 0 ? themes.length - 1 : prevIndex - 1;
@@ -221,14 +227,14 @@ function LandscapeProductCard({
                                             setActiveAccent(tColor);
                                             setActiveGlow(`${tColor}33`);
                                             // Only use parent video if theme has NO video AND NO fallback image
-                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc); 
-                                            else if (t.fallbackImgSrc) setActiveVideoSrc(""); 
+                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc);
+                                            else if (t.fallbackImgSrc) setActiveVideoSrc("");
                                             else setActiveVideoSrc(mediaSrc);
-                                            
+
                                             if (t.fallbackImgSrc) setActiveFallbackImgSrc(t.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                         }}
-                                        style={{ 
-                                            width: 36, height: 36, borderRadius: "50%", 
+                                        style={{
+                                            width: 36, height: 36, borderRadius: "50%",
                                             background: "#fff", border: `1px solid ${activeAccent}22`,
                                             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
                                             color: activeAccent, flexShrink: 0,
@@ -241,8 +247,8 @@ function LandscapeProductCard({
                                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                                     </button>
 
-                                    <div style={{ 
-                                        flex: 1, 
+                                    <div style={{
+                                        flex: 1,
                                         display: "flex", flexDirection: "column", gap: 2,
                                         textAlign: "center", alignItems: "center"
                                     }}>
@@ -254,7 +260,7 @@ function LandscapeProductCard({
                                         </span>
                                     </div>
 
-                                    <button 
+                                    <button
                                         onClick={() => {
                                             const prevIndex = selectedIndex === null ? 0 : selectedIndex;
                                             const newIndex = prevIndex === themes.length - 1 ? 0 : prevIndex + 1;
@@ -264,14 +270,14 @@ function LandscapeProductCard({
                                             setActiveAccent(tColor);
                                             setActiveGlow(`${tColor}33`);
                                             // Only use parent video if theme has NO video AND NO fallback image
-                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc); 
-                                            else if (t.fallbackImgSrc) setActiveVideoSrc(""); 
+                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc);
+                                            else if (t.fallbackImgSrc) setActiveVideoSrc("");
                                             else setActiveVideoSrc(mediaSrc);
 
                                             if (t.fallbackImgSrc) setActiveFallbackImgSrc(t.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                         }}
-                                        style={{ 
-                                            width: 36, height: 36, borderRadius: "50%", 
+                                        style={{
+                                            width: 36, height: 36, borderRadius: "50%",
                                             background: "#fff", border: `1px solid ${activeAccent}22`,
                                             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
                                             color: activeAccent, flexShrink: 0,
@@ -291,22 +297,22 @@ function LandscapeProductCard({
                                         const themeColor = theme.color || accentColor;
                                         const isSelected = (selectedIndex === null && i === 0) || selectedIndex === i;
                                         return (
-                                            <div 
+                                            <div
                                                 key={i}
                                                 onClick={() => {
                                                     setSelectedIndex(i);
                                                     setActiveAccent(themeColor);
                                                     setActiveGlow(`${themeColor}33`);
                                                     // Only use parent video if theme has NO video AND NO fallback image
-                                                    if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc); 
-                                                    else if (theme.fallbackImgSrc) setActiveVideoSrc(""); 
+                                                    if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
+                                                    else if (theme.fallbackImgSrc) setActiveVideoSrc("");
                                                     else setActiveVideoSrc(mediaSrc);
 
                                                     if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                                 }}
                                                 style={{
                                                     width: 10, height: 10, borderRadius: "50%", background: themeColor,
-                                                    cursor: "pointer", 
+                                                    cursor: "pointer",
                                                     border: isSelected ? `2px solid #fff` : `none`,
                                                     boxShadow: isSelected ? `0 0 0 1.5px ${themeColor}` : `none`,
                                                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -327,7 +333,7 @@ function LandscapeProductCard({
 
                 {/* Text Content */}
                 <div className="hub-showcase-content" style={{
-                    backgroundColor: activeAccent === '#c9184a' ? `${activeAccent}0D` : `${activeAccent}26`, 
+                    backgroundColor: activeAccent === '#c9184a' ? `${activeAccent}0D` : `${activeAccent}26`,
                     border: `1.5px solid ${activeAccent === '#c9184a' ? `${activeAccent}26` : `${activeAccent}40`}`,
                     borderRadius: "var(--radius-lg)",
                     padding: "clamp(32px, 4.5vw, 48px)",
@@ -472,19 +478,19 @@ function LandscapeProductCard({
                                     {/* Animation: Typewriter Text */}
                                     {isTypewriterFeature && (
                                         <div style={{ display: "inline-flex", alignItems: "center", height: 14 }}>
-                                            <div style={{ 
-                                                fontFamily: "monospace", 
-                                                fontSize: 10, 
+                                            <div style={{
+                                                fontFamily: "monospace",
+                                                fontSize: 10,
                                                 fontWeight: 700,
-                                                color: activeAccent, 
-                                                overflow: "hidden", 
-                                                whiteSpace: "nowrap", 
+                                                color: activeAccent,
+                                                overflow: "hidden",
+                                                whiteSpace: "nowrap",
                                                 borderRight: `2px solid ${activeAccent}`,
                                                 paddingRight: 1,
                                                 animation: "typewriter-text 5s steps(17) infinite, typewriter-blink 0.5s step-end infinite alternate",
                                                 transition: "color 0.5s ease, border-color 0.5s ease"
                                             }}>
-                                                Dearest Lyxelle, 
+                                                Dearest Lyxelle,
                                             </div>
                                         </div>
                                     )}
@@ -774,11 +780,11 @@ export default function MainHubPage() {
                             accentGlow="rgba(196,133,138,0.2)"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themes={[
-                                { name: "Blush",    desc: "Nuansa pink lembut yang romantis",     color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
-                                { name: "Sage",     desc: "Warna hijau menenangkan yang natural",  color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
-                                { name: "Rose",     desc: "Klasik dengan elemen bunga mawar",     color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
+                                { name: "Blush", desc: "Nuansa pink lembut yang romantis", color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
+                                { name: "Sage", desc: "Warna hijau menenangkan yang natural", color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
+                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar", color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
                                 { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
-                                { name: "Crimson",  desc: "Nuansa merah anggur (wine) yang elegan", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
+                                { name: "Crimson", desc: "Nuansa merah anggur (wine) yang elegan", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
                                 { name: "Obsidian", desc: "Hitam pekat dengan sentuhan hijau emerald", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
                             ]}
                             delay={200}
@@ -805,6 +811,20 @@ export default function MainHubPage() {
                             accentColor="#5c8c5c"
                             accentGlow="rgba(92,140,92,0.2)"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            themesLabel="Koleksi Ruangan"
+                            themes={[
+                                { name: "Main Menu", desc: "Tampilan utama Arcade", videoSrc: "https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4" },
+                                { name: "Atlas", desc: "Peta lokasi kenangan", videoSrc: "https://cdn.for-you-always.my.id/1773525779608-nzn9pr.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764592-ca91hs.webp" },
+                                { name: "Music", desc: "Ruangan musik interaktif", videoSrc: "https://cdn.for-you-always.my.id/1773426110433-1feui.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015765012-bsu6r.webp" },
+                                { name: "Journey", desc: "Lini masa perjalanan", videoSrc: "https://cdn.for-you-always.my.id/1773426101549-nd559h.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764186-4os3t9.webp" },
+                                { name: "Moments", desc: "Galeri memori berharga", videoSrc: "https://cdn.for-you-always.my.id/1773426107508-yc067a.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763822-vcvc9c.webp" },
+                                { name: "Quiz", desc: "Kuis kenangan bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426113479-uu9xep.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762633-9y59gi.webp" },
+                                { name: "Catcher", desc: "Mini game penangkap", videoSrc: "https://cdn.for-you-always.my.id/1773426115531-1f4i3u.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762272-i7zhec.webp" },
+                                { name: "Fortune", desc: "Pesan keberuntungan", videoSrc: "https://cdn.for-you-always.my.id/1773426099696-jzm23i.mp4" },
+                                { name: "Things", desc: "Hal-hal yang kamu sukain dari dia", videoSrc: "https://cdn.for-you-always.my.id/1773426093227-u7iyto.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015761318-x6271.webp" },
+                                { name: "Bucket", desc: "Daftar impian bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426095486-zsqvxo.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763359-9obyye.webp" },
+                                { name: "Message", desc: "Pesan rahasia spesial", videoSrc: "https://cdn.for-you-always.my.id/1773426105222-2tovrh.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763020-0nfkam.webp" }
+                            ]}
                             delay={300}
                             reverse={false}
                         />
@@ -829,6 +849,15 @@ export default function MainHubPage() {
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Wrapped%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            themesLabel="Koleksi Halaman"
+                            themes={[
+                                { name: "Login", desc: "Halaman masuk", videoSrc: "https://cdn.for-you-always.my.id/1775677163497-m2sjw.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },
+                                { name: "Music", desc: "Pilihan lagu favorit", videoSrc: "https://cdn.for-you-always.my.id/1775677170491-x9o5bc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209591-bgprs5.webp" },
+                                { name: "Galleries", desc: "Kumpulan foto & video manis", videoSrc: "https://cdn.for-you-always.my.id/1775677161653-h3gapg.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015208474-m5rlwh.webp" },
+                                { name: "Wrapped", desc: "Ringkasan momen spesial", videoSrc: "https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015210238-kw2r9r.webp" },
+                                { name: "Letter", desc: "Surat cinta dari hati", videoSrc: "https://cdn.for-you-always.my.id/1775677168482-ksz90k.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015210238-kw2r9r.webp" },
+                                { name: "Invitation", desc: "Pertanyaan Lucu Dan Romantis", videoSrc: "https://cdn.for-you-always.my.id/1775677166373-4sk074.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209910-p31n5.webp" }
+                            ]}
                             delay={400}
                             reverse={true}
                         />
