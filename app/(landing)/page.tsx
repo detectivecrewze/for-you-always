@@ -392,6 +392,7 @@ function LandscapeProductCard({
                             const isEnvelopeFeature = feat.toLowerCase().includes("amplop");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
                             const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
+                            const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -476,6 +477,19 @@ function LandscapeProductCard({
                                             <svg width="15" height="12" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
                                                 <path d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7" />
                                                 <rect x="3" y="5" width="18" height="14" rx="2" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Anonymous */}
+                                    {isAnonymousFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 3s infinite ease-in-out", opacity: 0.9 }}>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <path d="M3 10h18" />
+                                                <path d="M7 10V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4" />
+                                                <circle cx="8" cy="16" r="3" />
+                                                <circle cx="16" cy="16" r="3" />
+                                                <path d="M11 16h2" />
                                             </svg>
                                         </div>
                                     )}
@@ -776,6 +790,7 @@ export default function MainHubPage() {
                             features={[
                                 "Amplop Digital Interaktif",
                                 "Efek Typewriter Sinematik",
+                                "Bisa Kirim Pesan Anonymous",
                                 "Foto / Video di Akhir Surat",
                                 "Background Music Pilihan"
                             ]}
