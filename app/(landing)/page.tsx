@@ -135,7 +135,7 @@ function LandscapeProductCard({
         );
         observer.observe(video);
         return () => observer.disconnect();
-    }, [mediaType]);
+    }, [mediaType, activeVideoSrc]);
 
     return (
         <AnimatedSection delay={delay}>
