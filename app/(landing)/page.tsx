@@ -58,6 +58,7 @@ function LandscapeProductCard({
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
+    autoCycle = false,
     delay = 0,
     reverse = false,
 }: {
@@ -75,6 +76,7 @@ function LandscapeProductCard({
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[];
     initialSelectedIndex?: number;
+    autoCycle?: boolean;
     delay?: number;
     reverse?: boolean;
 }) {
@@ -96,21 +98,42 @@ function LandscapeProductCard({
         }
     }, []);
 
+    // Sync media and accents whenever selectedIndex changes
     useEffect(() => {
-        if (initialSelectedIndex !== undefined && themes && themes[initialSelectedIndex]) {
-            const theme = themes[initialSelectedIndex];
+        if (selectedIndex !== null && themes && themes[selectedIndex]) {
+            const theme = themes[selectedIndex];
             setActiveAccent(theme.color || accentColor);
             setActiveGlow(theme.color ? `${theme.color}33` : accentGlow);
-            setActiveVideoSrc(theme.videoSrc || mediaSrc);
-            setActiveFallbackImgSrc(theme.fallbackImgSrc || fallbackImgSrc);
+
+            // Logic to determine video source
+            if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
+            else if (theme.fallbackImgSrc) setActiveVideoSrc("");
+            else setActiveVideoSrc(mediaSrc);
+
+            // Logic to determine fallback image
+            if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
+            else setActiveFallbackImgSrc(fallbackImgSrc);
         } else {
             setActiveAccent(accentColor);
             setActiveGlow(accentGlow);
             setActiveVideoSrc(mediaSrc);
             setActiveFallbackImgSrc(fallbackImgSrc);
         }
-        setSelectedIndex(initialSelectedIndex ?? null);
-    }, [accentColor, accentGlow, mediaSrc, fallbackImgSrc, initialSelectedIndex, themes]);
+    }, [selectedIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc]);
+
+    // Handle Auto Cycling
+    useEffect(() => {
+        if (!autoCycle || !themes || themes.length <= 1 || !isInView) return;
+
+        const interval = setInterval(() => {
+            setSelectedIndex(prev => {
+                const next = (prev === null ? 0 : prev + 1) % themes.length;
+                return next;
+            });
+        }, 5000); // Change every 5 seconds for better viewing experience
+
+        return () => clearInterval(interval);
+    }, [autoCycle, themes, isInView]);
 
 
     useEffect(() => {
@@ -232,16 +255,6 @@ function LandscapeProductCard({
                                             const prevIndex = selectedIndex === null ? 0 : selectedIndex;
                                             const newIndex = prevIndex === 0 ? themes.length - 1 : prevIndex - 1;
                                             setSelectedIndex(newIndex);
-                                            const t = themes[newIndex];
-                                            const tColor = t.color || accentColor;
-                                            setActiveAccent(tColor);
-                                            setActiveGlow(`${tColor}33`);
-                                            // Only use parent video if theme has NO video AND NO fallback image
-                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc);
-                                            else if (t.fallbackImgSrc) setActiveVideoSrc("");
-                                            else setActiveVideoSrc(mediaSrc);
-
-                                            if (t.fallbackImgSrc) setActiveFallbackImgSrc(t.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                         }}
                                         style={{
                                             width: 36, height: 36, borderRadius: "50%",
@@ -275,16 +288,6 @@ function LandscapeProductCard({
                                             const prevIndex = selectedIndex === null ? 0 : selectedIndex;
                                             const newIndex = prevIndex === themes.length - 1 ? 0 : prevIndex + 1;
                                             setSelectedIndex(newIndex);
-                                            const t = themes[newIndex];
-                                            const tColor = t.color || accentColor;
-                                            setActiveAccent(tColor);
-                                            setActiveGlow(`${tColor}33`);
-                                            // Only use parent video if theme has NO video AND NO fallback image
-                                            if (t.videoSrc) setActiveVideoSrc(t.videoSrc);
-                                            else if (t.fallbackImgSrc) setActiveVideoSrc("");
-                                            else setActiveVideoSrc(mediaSrc);
-
-                                            if (t.fallbackImgSrc) setActiveFallbackImgSrc(t.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                         }}
                                         style={{
                                             width: 36, height: 36, borderRadius: "50%",
@@ -311,14 +314,6 @@ function LandscapeProductCard({
                                                 key={i}
                                                 onClick={() => {
                                                     setSelectedIndex(i);
-                                                    setActiveAccent(themeColor);
-                                                    setActiveGlow(`${themeColor}33`);
-                                                    // Only use parent video if theme has NO video AND NO fallback image
-                                                    if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
-                                                    else if (theme.fallbackImgSrc) setActiveVideoSrc("");
-                                                    else setActiveVideoSrc(mediaSrc);
-
-                                                    if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc); else setActiveFallbackImgSrc(fallbackImgSrc);
                                                 }}
                                                 style={{
                                                     width: 10, height: 10, borderRadius: "50%", background: themeColor,
@@ -772,6 +767,7 @@ export default function MainHubPage() {
                             ]}
                             delay={100}
                             initialSelectedIndex={0}
+                            autoCycle={true}
                         />
                         <LandscapeProductCard
                             label="Letter Edition"
@@ -801,6 +797,7 @@ export default function MainHubPage() {
                             delay={200}
                             reverse={true}
                             initialSelectedIndex={2}
+                            autoCycle={true}
                         />
                         <LandscapeProductCard
                             label="Arcade Edition"
