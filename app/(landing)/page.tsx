@@ -800,7 +800,7 @@ export default function MainHubPage() {
                             ]}
                             delay={200}
                             reverse={true}
-                            initialSelectedIndex={0}
+                            initialSelectedIndex={2}
                         />
                         <LandscapeProductCard
                             label="Arcade Edition"
