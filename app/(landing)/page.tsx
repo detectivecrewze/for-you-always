@@ -393,6 +393,10 @@ function LandscapeProductCard({
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
                             const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
+                            const isRetroFeature = feat.toLowerCase().includes("retro windows");
+                            const isNostalgiaGallery = feat.toLowerCase().includes("nostalgia");
+                            const isMobileFeature = feat.toLowerCase().includes("mobile");
+                            const isQuotesFeature = feat.toLowerCase().includes("quotes");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -490,6 +494,51 @@ function LandscapeProductCard({
                                                 <circle cx="8" cy="16" r="3" />
                                                 <circle cx="16" cy="16" r="3" />
                                                 <path d="M11 16h2" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Retro Windows */}
+                                    {isRetroFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 3s infinite ease-in-out" }}>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <rect x="2" y="3" width="20" height="14" rx="2" />
+                                                <line x1="2" y1="7" x2="22" y2="7" />
+                                                <circle cx="5" cy="5" r="0.8" fill={activeAccent} stroke="none" />
+                                                <circle cx="7.5" cy="5" r="0.8" fill={activeAccent} stroke="none" />
+                                                <circle cx="10" cy="5" r="0.8" fill={activeAccent} stroke="none" />
+                                                <line x1="8" y1="21" x2="16" y2="21" />
+                                                <line x1="12" y1="17" x2="12" y2="21" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Nostalgia Gallery */}
+                                    {isNostalgiaGallery && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease", animation: "photo-shuffle 2.5s ease-in-out infinite" }}>
+                                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                                <polyline points="21 15 16 10 5 21" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Mobile */}
+                                    {isMobileFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 2.8s infinite ease-in-out" }}>
+                                            <svg width="12" height="16" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <rect x="5" y="2" width="14" height="20" rx="2" />
+                                                <line x1="12" y1="18" x2="12" y2="18" strokeWidth="3" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Quotes */}
+                                    {isQuotesFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 3s infinite ease-in-out", opacity: 0.9 }}>
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                                             </svg>
                                         </div>
                                     )}
@@ -673,7 +722,7 @@ export default function MainHubPage() {
                             maxWidth: 500, margin: "0 auto 56px",
                             letterSpacing: "-0.01em"
                         }}>
-                            Empat cara berbeda untuk mengabadikan satu cerita.
+                            Lima cara berbeda untuk mengabadikan satu cerita.
                             Pilih produk yang paling mencerminkan perasaanmu.
                         </p>
                     </AnimatedSection>
@@ -815,6 +864,40 @@ export default function MainHubPage() {
                             autoCycle={true}
                         />
                         <LandscapeProductCard
+                            label={
+                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                    Birthday Retro <span style={{ opacity: 0.5 }}>•</span> NEW
+                                </div>
+                            }
+                            title="Retro Birthday Card"
+                            description="Ucapan ulang tahun bergaya Windows 98/XP yang nostalgia. Lengkap dengan efek klasik, pesan personal, dan musik untuk kejutan yang tak terlupakan."
+                            features={[
+                                "Tampilan Retro Windows 98",
+                                "5 Stages of Surprises",
+                                "Support Mobile Experiences",
+                                "Foto / Galeri beserta Quotes-nya",
+                                "Background Music Pilihan"
+                            ]}
+                            price="Rp 15.000"
+                            mediaSrc="https://cdn.for-you-always.my.id/1778444022368-wu278.mp4"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
+                            mediaType="video"
+                            accentColor="#008689"
+                            accentGlow="rgba(0,134,137,0.2)"
+                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Birthday%20Retro%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            themesLabel="Koleksi Halaman"
+                            themes={[
+                                { name: "Greeting", desc: "Tampilan awal ucapan ulang tahun", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444022368-wu278.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
+                                { name: "Music Player", desc: "Pemutar musik bergaya Winamp retro", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444904917-83vbnc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055394-kwtv5o.png" },
+                                { name: "Notepad.exe", desc: "Surat birthday bergaya editor klasik", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444905827-1feuiq.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055893-z63rma.png" },
+                                { name: "Secret Gallery", desc: "Galeri rahasia yang muncul di akhir pesan", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444906361-ehz9q.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445056536-xvpcth.png" }
+                            ]}
+                            delay={250}
+                            reverse={false}
+                            initialSelectedIndex={0}
+                            autoCycle={false}
+                        />
+                        <LandscapeProductCard
                             label="Arcade Edition"
                             title="10 Rooms of Memories"
                             description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."
@@ -849,8 +932,8 @@ export default function MainHubPage() {
                                 { name: "Bucket", desc: "Daftar impian bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426095486-zsqvxo.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763359-9obyye.webp" },
                                 { name: "Message", desc: "Pesan rahasia spesial", videoSrc: "https://cdn.for-you-always.my.id/1773426105222-2tovrh.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763020-0nfkam.webp" }
                             ]}
-                            delay={300}
-                            reverse={false}
+                            delay={350}
+                            reverse={true}
                             initialSelectedIndex={0}
                         />
                         <LandscapeProductCard
@@ -883,8 +966,8 @@ export default function MainHubPage() {
                                 { name: "Letter", desc: "Surat cinta dari hati", videoSrc: "https://cdn.for-you-always.my.id/1775677168482-ksz90k.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052950263-rgp29.webp" },
                                 { name: "Invitation", desc: "Pertanyaan Lucu Dan Romantis", videoSrc: "https://cdn.for-you-always.my.id/1775677166373-4sk074.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209910-p31n5.webp" }
                             ]}
-                            delay={400}
-                            reverse={true}
+                            delay={450}
+                            reverse={false}
                             initialSelectedIndex={3}
                         />
                     </div>
@@ -918,7 +1001,7 @@ export default function MainHubPage() {
                         {[
                             {
                                 num: "01", title: "Pilih Produk",
-                                desc: "Pilih dari empat format kado digital kami — sesuai cerita yang ingin kamu sampaikan.",
+                                desc: "Pilih dari lima format kado digital kami — sesuai cerita yang ingin kamu sampaikan.",
                                 icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
                             },
                             {
@@ -1030,9 +1113,9 @@ export default function MainHubPage() {
                     <AnimatedSection delay={400}>
                         <div style={{ marginTop: 80, display: "flex", justifyContent: "center", gap: "clamp(32px, 8vw, 100px)", flexWrap: "wrap" }}>
                             {[
-                                { num: "100+", label: "Delivered" },
+                                { num: "800++", label: "Happy Customers" },
                                 { num: "5.0", label: "Average Rating" },
-                                { num: "4", label: "Formats" },
+                                { num: "5", label: "Formats" },
                             ].map((stat, i) => (
                                 <div key={i} style={{ textAlign: "center" }}>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 400, color: "#faf7f2", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
@@ -1147,7 +1230,7 @@ export default function MainHubPage() {
                     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 80 }}>
                         {[
                             { icon: "○", label: "5.0 Rating" },
-                            { icon: "○", label: "100+ Stories" },
+                            { icon: "○", label: "800++ Stories" },
                             { icon: "○", label: "Instant Access" },
                             { icon: "○", label: "Private Link" },
                         ].map((badge, i) => (
