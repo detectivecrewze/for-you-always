@@ -866,30 +866,35 @@ export default function MainHubPage() {
                         <LandscapeProductCard
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Birthday Retro <span style={{ opacity: 0.5 }}>•</span> NEW
+                                    Retro Edition <span style={{ opacity: 0.5 }}>•</span> NEW
                                 </div>
                             }
-                            title="Retro Birthday Card"
-                            description="Ucapan ulang tahun bergaya Windows 98/XP yang nostalgia. Lengkap dengan efek klasik, pesan personal, dan musik untuk kejutan yang tak terlupakan."
+                            title="Retro Gift Card"
+                            description="Kado digital bergaya Windows 98/XP yang nostalgia. Cocok untuk birthday, apology, atau momen spesial apapun. Lengkap dengan GIF pilihan, surat digital, dan musik."
                             features={[
                                 "Tampilan Retro Windows 98",
+                                "Custom GIF Pilihan",
                                 "5 Stages of Surprises",
                                 "Support Mobile Experiences",
-                                "Foto / Galeri beserta Quotes-nya",
                                 "Background Music Pilihan"
                             ]}
-                            price="Rp 15.000"
+                            price={
+                                <>
+                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 20.000</span>
+                                    <span style={{ marginLeft: 8 }}>Promo Rp 15.000</span>
+                                </>
+                            }
                             mediaSrc="https://cdn.for-you-always.my.id/1778444022368-wu278.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
                             mediaType="video"
                             accentColor="#008689"
                             accentGlow="rgba(0,134,137,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Birthday%20Retro%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Retro%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                             themesLabel="Koleksi Halaman"
                             themes={[
-                                { name: "Greeting", desc: "Tampilan awal ucapan ulang tahun", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444022368-wu278.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
+                                { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444022368-wu278.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
                                 { name: "Music Player", desc: "Pemutar musik bergaya Winamp retro", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444904917-83vbnc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055394-kwtv5o.png" },
-                                { name: "Notepad.exe", desc: "Surat birthday bergaya editor klasik", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444905827-1feuiq.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055893-z63rma.png" },
+                                { name: "Notepad.exe", desc: "Surat digital bergaya editor klasik", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444905827-1feuiq.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055893-z63rma.png" },
                                 { name: "Secret Gallery", desc: "Galeri rahasia yang muncul di akhir pesan", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444906361-ehz9q.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445056536-xvpcth.png" }
                             ]}
                             delay={250}
