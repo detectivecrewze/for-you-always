@@ -69,7 +69,7 @@ function LandscapeProductCard({
     features: string[];
     mediaSrc: string;
     fallbackImgSrc?: string;
-    mediaType: "video" | "gif" | "placeholder";
+    mediaType: "video" | "gif" | "image" | "placeholder";
     accentColor: string;
     accentGlow: string;
     href: string;
