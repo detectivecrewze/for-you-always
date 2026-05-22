@@ -74,7 +74,7 @@ function LandscapeProductCard({
     accentGlow: string;
     href: string;
     themesLabel?: string;
-    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[];
+    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[] }[];
     initialSelectedIndex?: number;
     autoCycle?: boolean;
     delay?: number;
@@ -86,6 +86,10 @@ function LandscapeProductCard({
     const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
     const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
+    const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
+        const initIdx = initialSelectedIndex ?? 0;
+        return themes?.[initIdx]?.defaultSubThemeIndex || 0;
+    });
     const [isTikTok, setIsTikTok] = useState(false);
     const [isInView, setIsInView] = useState(false);
 
@@ -98,20 +102,36 @@ function LandscapeProductCard({
         }
     }, []);
 
+    // Reset subTheme index when main theme changes
+    useEffect(() => {
+        if (selectedIndex !== null && themes && themes[selectedIndex]) {
+            setSelectedSubThemeIndex(themes[selectedIndex].defaultSubThemeIndex || 0);
+        } else {
+            setSelectedSubThemeIndex(0);
+        }
+    }, [selectedIndex, themes]);
+
     // Sync media and accents whenever selectedIndex changes
     useEffect(() => {
         if (selectedIndex !== null && themes && themes[selectedIndex]) {
             const theme = themes[selectedIndex];
-            setActiveAccent(theme.color || accentColor);
-            setActiveGlow(theme.color ? `${theme.color}33` : accentGlow);
+            const activeTheme = (theme.subThemes && theme.subThemes.length > 0) 
+                ? theme.subThemes[selectedSubThemeIndex] || theme 
+                : theme;
+
+            const resolvedColor = activeTheme.color || theme.color || accentColor;
+            setActiveAccent(resolvedColor);
+            setActiveGlow(resolvedColor ? `${resolvedColor}33` : accentGlow);
 
             // Logic to determine video source
-            if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
-            else if (theme.fallbackImgSrc) setActiveVideoSrc("");
+            if (activeTheme.videoSrc) setActiveVideoSrc(activeTheme.videoSrc);
+            else if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
+            else if (activeTheme.fallbackImgSrc || theme.fallbackImgSrc) setActiveVideoSrc("");
             else setActiveVideoSrc(mediaSrc);
 
             // Logic to determine fallback image
-            if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
+            if (activeTheme.fallbackImgSrc) setActiveFallbackImgSrc(activeTheme.fallbackImgSrc);
+            else if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
             else setActiveFallbackImgSrc(fallbackImgSrc);
         } else {
             setActiveAccent(accentColor);
@@ -119,7 +139,7 @@ function LandscapeProductCard({
             setActiveVideoSrc(mediaSrc);
             setActiveFallbackImgSrc(fallbackImgSrc);
         }
-    }, [selectedIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc]);
+    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc]);
 
     // Handle Auto Cycling
     useEffect(() => {
@@ -304,22 +324,22 @@ function LandscapeProductCard({
                                     </button>
                                 </div>
 
-                                {/* Color Dots Indicator */}
+                                {/* Main Dots Indicator */}
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
                                     {themes.map((theme, i) => {
                                         const themeColor = theme.color || accentColor;
                                         const isSelected = (selectedIndex === null && i === 0) || selectedIndex === i;
+                                        const isSubThemed = theme.subThemes && theme.subThemes.length > 0;
                                         return (
                                             <div
                                                 key={i}
-                                                onClick={() => {
-                                                    setSelectedIndex(i);
-                                                }}
+                                                onClick={() => setSelectedIndex(i)}
                                                 style={{
-                                                    width: 10, height: 10, borderRadius: "50%", background: themeColor,
+                                                    width: 10, height: 10, borderRadius: "50%",
+                                                    background: isSubThemed ? (isSelected ? activeAccent : "#d1d5db") : themeColor,
                                                     cursor: "pointer",
                                                     border: isSelected ? `2px solid #fff` : `none`,
-                                                    boxShadow: isSelected ? `0 0 0 1.5px ${themeColor}` : `none`,
+                                                    boxShadow: isSelected ? `0 0 0 1.5px ${isSubThemed ? activeAccent : themeColor}` : `none`,
                                                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                                                     transform: isSelected ? "scale(1.4)" : "scale(1)",
                                                     opacity: isSelected ? 1 : 0.4
@@ -329,6 +349,83 @@ function LandscapeProductCard({
                                         )
                                     })}
                                 </div>
+
+                                {/* SubThemes Color Dots Indicator */}
+                                {(() => {
+                                    const currentTheme = themes[selectedIndex !== null ? selectedIndex : 0];
+                                    if (currentTheme?.subThemes && currentTheme.subThemes.length > 0) {
+                                        return (
+                                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 16, gap: 8 }}>
+                                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: activeAccent, opacity: 0.7, textTransform: "uppercase" }}>
+                                                    Pilih Warna
+                                                </span>
+                                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+                                                    <button
+                                                        onClick={() => {
+                                                            const prevIndex = selectedSubThemeIndex;
+                                                            const newIndex = prevIndex === 0 ? currentTheme.subThemes!.length - 1 : prevIndex - 1;
+                                                            setSelectedSubThemeIndex(newIndex);
+                                                        }}
+                                                        style={{
+                                                            width: 24, height: 24, borderRadius: "50%",
+                                                            background: "transparent", border: "none",
+                                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                                                            color: activeAccent, opacity: 0.6,
+                                                            transition: "all 0.3s ease"
+                                                        }}
+                                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; }}
+                                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
+                                                    >
+                                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                                                    </button>
+
+                                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                                                        {currentTheme.subThemes.map((subTheme, i) => {
+                                                            const themeColor = subTheme.color || activeAccent;
+                                                            const isSelected = selectedSubThemeIndex === i;
+                                                            return (
+                                                                <div
+                                                                    key={i}
+                                                                    onClick={() => setSelectedSubThemeIndex(i)}
+                                                                    style={{
+                                                                        width: 12, height: 12, borderRadius: "50%", background: themeColor,
+                                                                        cursor: "pointer",
+                                                                        border: isSelected ? `2px solid #fff` : `none`,
+                                                                        boxShadow: isSelected ? `0 0 0 1.5px ${themeColor}` : `none`,
+                                                                        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                                        transform: isSelected ? "scale(1.3)" : "scale(1)",
+                                                                        opacity: isSelected ? 1 : 0.4
+                                                                    }}
+                                                                    title={subTheme.name}
+                                                                />
+                                                            )
+                                                        })}
+                                                    </div>
+
+                                                    <button
+                                                        onClick={() => {
+                                                            const prevIndex = selectedSubThemeIndex;
+                                                            const newIndex = prevIndex === currentTheme.subThemes!.length - 1 ? 0 : prevIndex + 1;
+                                                            setSelectedSubThemeIndex(newIndex);
+                                                        }}
+                                                        style={{
+                                                            width: 24, height: 24, borderRadius: "50%",
+                                                            background: "transparent", border: "none",
+                                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                                                            color: activeAccent, opacity: 0.6,
+                                                            transition: "all 0.3s ease"
+                                                        }}
+                                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; }}
+                                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
+                                                    >
+                                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                })()}
                             </div>
                         </div>
                     )}
@@ -850,17 +947,37 @@ export default function MainHubPage() {
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            themesLabel="Koleksi Template"
                             themes={[
-                                { name: "Blush", desc: "Nuansa pink lembut yang romantis", color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
-                                { name: "Sage", desc: "Warna hijau menenangkan yang natural", color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
-                                { name: "Rose", desc: "Klasik dengan elemen bunga mawar", color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
-                                { name: "Midnight", desc: "Tampilan gelap yang elegan & eksklusif", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
-                                { name: "Crimson", desc: "Nuansa merah anggur (wine) yang elegan", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
-                                { name: "Obsidian", desc: "Hitam pekat dengan sentuhan hijau emerald", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
+                                {
+                                    name: "Classic Envelope",
+                                    desc: "Desain amplop klasik dengan segel wax",
+                                    defaultSubThemeIndex: 2,
+                                    subThemes: [
+                                        { name: "Blush", color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
+                                        { name: "Sage", color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
+                                        { name: "Rose", color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
+                                        { name: "Midnight", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
+                                        { name: "Crimson", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
+                                        { name: "Obsidian", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
+                                    ]
+                                },
+                                {
+                                    name: "Vintage Airmail",
+                                    desc: "Desain surat pos udara klasik",
+                                    subThemes: [
+                                        { name: "Parchment", color: "#a68a64", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464837721-ukwgwd.webp" },
+                                        { name: "Lilac", color: "#d4cadd", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464836965-9zahl.webp" },
+                                        { name: "Sage", color: "#7a9e7e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464838382-funvvg.webp" },
+                                        { name: "Rose", color: "#c4858a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464838087-ztk2sl.webp" },
+                                        { name: "Midnight", color: "#2a3d5c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464837348-a40rot.webp" },
+                                        { name: "Bordeaux", color: "#581824", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464838763-2y25so.webp" }
+                                    ]
+                                }
                             ]}
                             delay={200}
                             reverse={true}
-                            initialSelectedIndex={2}
+                            initialSelectedIndex={0}
                             autoCycle={true}
                         />
                         <LandscapeProductCard
