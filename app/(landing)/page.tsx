@@ -222,6 +222,27 @@ function LandscapeProductCard({
                             />
                         ) : mediaType === "gif" && mediaSrc ? (
                             <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
+                        ) : themes && themes.length > 0 && themes.some(t => t.fallbackImgSrc) ? (
+                            <div style={{ width: "100%", height: "100%", position: "relative", aspectRatio: "16/9" }}>
+                                {themes.map((t, i) => {
+                                    const imgSrc = t.fallbackImgSrc || activeFallbackImgSrc;
+                                    const isActive = (selectedIndex === null ? 0 : selectedIndex) === i;
+                                    return (
+                                        <img
+                                            key={i}
+                                            src={imgSrc}
+                                            alt={t.name || title}
+                                            style={{
+                                                position: "absolute", inset: 0,
+                                                width: "100%", height: "100%", objectFit: "cover", display: "block",
+                                                opacity: isActive ? 1 : 0,
+                                                transition: "opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: isActive ? "auto" : "none"
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </div>
                         ) : activeFallbackImgSrc ? (
                             <img src={activeFallbackImgSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
                         ) : (
