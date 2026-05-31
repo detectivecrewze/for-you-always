@@ -1048,16 +1048,55 @@ export default function MainHubPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
 
                     <AnimatedSection>
-                        <div style={{ textAlign: "center", marginBottom: 80 }}>
-                            <span style={{
-                                fontFamily: "var(--font-sans)", fontSize: 8.5, fontWeight: 700,
-                                letterSpacing: "0.22em", textTransform: "uppercase" as const,
-                                color: "#a88365", display: "inline-block",
+                        <div style={{ textAlign: "center", marginBottom: 70 }}>
+                            <div style={{
+                                display: "inline-flex", alignItems: "center", gap: 10,
                                 padding: "6px 20px", border: "1.2px solid rgba(205,171,143,0.3)",
-                                borderRadius: 999, background: "rgba(205,171,143,0.06)",
+                                borderRadius: 999, marginBottom: 24,
+                                background: "linear-gradient(135deg, rgba(205,171,143,0.08), rgba(205,171,143,0.02))",
+                                boxShadow: "0 8px 24px -8px rgba(205,171,143,0.25)"
                             }}>
-                                Self-Edit Collection
-                            </span>
+                                <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#a88365", animation: "pulse-dot 2s infinite" }} />
+                                <span style={{
+                                    fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700,
+                                    letterSpacing: "0.24em", textTransform: "uppercase" as const,
+                                    color: "#a88365"
+                                }}>
+                                    Instant Access
+                                </span>
+                                <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#a88365", animation: "pulse-dot 2s infinite", animationDelay: "1s" }} />
+                            </div>
+
+                            <h2 style={{
+                                fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem, 7vw, 4.8rem)",
+                                fontWeight: 400, color: "#3B2F25", lineHeight: 1.1, letterSpacing: "-0.03em",
+                                marginBottom: 0
+                            }}>
+                                Self-Edit <span style={{ 
+                                    fontStyle: "italic", 
+                                    background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                    display: "inline-block",
+                                    paddingRight: "0.1em"
+                                }}>Collection.</span>
+                            </h2>
+                            
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, margin: "28px 0" }}>
+                                <div style={{ height: 1, width: 40, background: "linear-gradient(90deg, transparent, rgba(205,171,143,0.6))" }} />
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a88365" strokeWidth="1.5">
+                                    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="rgba(168, 131, 101, 0.15)" />
+                                </svg>
+                                <div style={{ height: 1, width: 40, background: "linear-gradient(270deg, transparent, rgba(205,171,143,0.6))" }} />
+                            </div>
+
+                            <p style={{
+                                fontFamily: "var(--font-sans)", fontSize: "clamp(1rem, 2vw, 1.15rem)", color: "#6e5c53",
+                                maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
+                                letterSpacing: "0.01em"
+                            }}>
+                                Rancang momen spesial Anda secara mandiri. Bebas pilih dari berbagai template premium kami dan sesuaikan setiap detailnya dengan sentuhan personal Anda.
+                            </p>
                         </div>
                     </AnimatedSection>
 
