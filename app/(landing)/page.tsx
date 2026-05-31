@@ -1057,7 +1057,7 @@ export default function MainHubPage() {
                         href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20dengan%20*Loves%20Edition*%20(Premium%20Done-For-You).%20Boleh%20minta%20katalog/pricelistnya?"
                         themesLabel="Koleksi Pages"
                         themes={[
-                            { name: "Opening Gate", desc: "Animasi amplop pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
+                            { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
                             { name: "Opening Section", desc: "Sapaan & musik latar", color: "#faf7f2", fallbackImgSrc: "/assets/opening_section.webp" },
                             { name: "Time Section", desc: "Hitung mundur momen", color: "#faf7f2", fallbackImgSrc: "/assets/time_section.webp" },
                             { name: "Letter Section", desc: "Pesan menyentuh hati", color: "#faf7f2", fallbackImgSrc: "/assets/letter_section.webp" },
