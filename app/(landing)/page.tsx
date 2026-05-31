@@ -843,7 +843,7 @@ export default function MainHubPage() {
                             maxWidth: 500, margin: "0 auto 56px",
                             letterSpacing: "-0.01em"
                         }}>
-                            Lima cara berbeda untuk mengabadikan satu cerita.
+                            Enam cara berbeda untuk mengabadikan satu cerita.
                             Pilih produk yang paling mencerminkan perasaanmu.
                         </p>
                     </AnimatedSection>
@@ -892,6 +892,37 @@ export default function MainHubPage() {
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" /></svg>
                                 Tanya via WhatsApp
                             </a>
+                        </div>
+                    </AnimatedSection>
+
+                    <AnimatedSection delay={400}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 50 }}>
+                            <div style={{ display: "flex" }}>
+                                {/* Elegant minimalist anonymous avatars */}
+                                {[
+                                    "linear-gradient(135deg, #e3d5c9, #d5c8be)",
+                                    "linear-gradient(135deg, #dfd0c4, #b4a397)",
+                                    "linear-gradient(135deg, #eeded2, #c8b7aa)",
+                                    "linear-gradient(135deg, #e3d5c9, #b9a99f)"
+                                ].map((bg, i) => (
+                                    <div key={i} style={{ 
+                                        width: 32, height: 32, borderRadius: "50%", 
+                                        border: "2.5px solid #faf7f2", marginLeft: i === 0 ? 0 : -12,
+                                        background: bg,
+                                        display: "flex", alignItems: "center", justifyContent: "center",
+                                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                                        zIndex: 4 - i
+                                    }}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.9 }}>
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                            <circle cx="12" cy="7" r="4" />
+                                        </svg>
+                                    </div>
+                                ))}
+                            </div>
+                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 13.5, color: "#6e5c53", fontWeight: 500 }}>
+                                Dipercaya oleh <span style={{ fontWeight: 700, color: "#3B2F25" }}>1000++</span> customer.
+                            </div>
                         </div>
                     </AnimatedSection>
 
@@ -1072,7 +1103,7 @@ export default function MainHubPage() {
                                 fontWeight: 400, color: "#3B2F25", lineHeight: 1.1, letterSpacing: "-0.03em",
                                 marginBottom: 0
                             }}>
-                                Self-Edit <span style={{ 
+                                Self<span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.85em", display: "inline-block", transform: "translateY(-0.15em)", margin: "0 0.02em", opacity: 0.9 }}>-</span>Edit <span style={{ 
                                     fontStyle: "italic", 
                                     background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
                                     WebkitBackgroundClip: "text",
@@ -1448,9 +1479,9 @@ export default function MainHubPage() {
                     <AnimatedSection delay={400}>
                         <div style={{ marginTop: 80, display: "flex", justifyContent: "center", gap: "clamp(32px, 8vw, 100px)", flexWrap: "wrap" }}>
                             {[
-                                { num: "800++", label: "Happy Customers" },
+                                { num: "1000++", label: "Happy Customers" },
                                 { num: "5.0", label: "Average Rating" },
-                                { num: "5", label: "Formats" },
+                                { num: "6", label: "Formats" },
                             ].map((stat, i) => (
                                 <div key={i} style={{ textAlign: "center" }}>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 400, color: "#faf7f2", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
@@ -1486,7 +1517,7 @@ export default function MainHubPage() {
                         {[
                             {
                                 q: "Berapa lama proses pengerjaan?",
-                                a: "Untuk produk Free/Regular, kamu langsung mendapat link setelah isi studio sendiri — prosesnya instan. Untuk link pribadi (custom domain), proses pengerjaan 1×24 jam setelah pembayaran dan data diterima."
+                                a: "Untuk produk Self-Edit, Anda akan langsung mendapatkan akses instan seketika setelah pembayaran. Untuk layanan Terima Jadi (Memoria), proses pengerjaan adalah maksimal 1x24 jam setelah semua materi dan data kami terima."
                             },
 
                             {
@@ -1565,7 +1596,7 @@ export default function MainHubPage() {
                     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 80 }}>
                         {[
                             { icon: "○", label: "5.0 Rating" },
-                            { icon: "○", label: "800++ Stories" },
+                            { icon: "○", label: "1000++ Stories" },
                             { icon: "○", label: "Instant Access" },
                             { icon: "○", label: "Private Link" },
                         ].map((badge, i) => (
