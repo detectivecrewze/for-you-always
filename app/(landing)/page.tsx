@@ -492,10 +492,10 @@ function LandscapeProductCard({
                         {features.map((feat) => {
                             const isToggleFeature = feat.toLowerCase().includes("turn on / off") || feat.toLowerCase().includes("animasi interaktif");
                             const isMusicFeature = feat.toLowerCase().includes("music pilihan");
-                            const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema");
+                            const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema") || feat.toLowerCase().includes("premium & eksklusif");
                             const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
-                            const isGalleryFeature = feat.toLowerCase().includes("galeri foto");
-                            const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim");
+                            const isGalleryFeature = feat.toLowerCase().includes("galeri foto") || feat.toLowerCase().includes("kustomisasi galeri");
+                            const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim") || feat.toLowerCase().includes("dikerjakan langsung");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
                             const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
@@ -987,7 +987,7 @@ export default function MainHubPage() {
                                 maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
                                 letterSpacing: "0.01em"
                             }}>
-                                Kado digital premium yang dikerjakan 100% oleh tim kami. Sempurna untuk anniversary, ulang tahun, atau hari spesial lainnya.
+                                Rayakan momen Anda dalam bentuk mahakarya digital. Memoria dirancang secara custom dengan detail animasi memukau, tipografi elegan, dan galeri interaktif.
                             </p>
                         </div>
                     </AnimatedSection>
@@ -998,13 +998,13 @@ export default function MainHubPage() {
                                 Done For You <span style={{ opacity: 0.5 }}>•</span> Premium
                             </div>
                         }
-                        title="Chapters of Us"
-                        description="Kado digital premium yang dikerjakan 100% oleh tim kami. Dilengkapi dengan animasi pembuka, transisi themes, galeri eksklusif, dan pemutar musik. Cukup kirimkan materinya, kami yang rakit semuanya menjadi karya seni digital."
+                        title="Memoria"
+                        description="Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda."
                         features={[
-                            "Desain Premium Multi-Tema",
-                            "Animasi Interaktif & Partikel",
-                            "Galeri Foto Eksklusif",
-                            "100% Diurus Tim Digital Atelier"
+                            "Desain Premium & Eksklusif",
+                            "Animasi Visual Interaktif",
+                            "Kustomisasi Galeri & Musik Audio",
+                            "Dikerjakan Langsung oleh Kami"
                         ]}
                         price="Rp 50.000"
                         mediaSrc=""
