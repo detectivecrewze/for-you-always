@@ -490,13 +490,14 @@ function LandscapeProductCard({
                     {/* Features List */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
                         {features.map((feat) => {
-                            const isToggleFeature = feat.toLowerCase().includes("turn on / off") || feat.toLowerCase().includes("animasi interaktif");
+                            const isToggleFeature = feat.toLowerCase().includes("turn on / off") || feat.toLowerCase().includes("animasi interaktif") || feat.toLowerCase().includes("animasi visual");
                             const isMusicFeature = feat.toLowerCase().includes("music pilihan");
-                            const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema") || feat.toLowerCase().includes("premium & eksklusif");
+                            const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema") || feat.toLowerCase().includes("kustomisasi tema");
                             const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
                             const isGalleryFeature = feat.toLowerCase().includes("galeri foto") || feat.toLowerCase().includes("kustomisasi galeri");
                             const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim") || feat.toLowerCase().includes("dikerjakan langsung");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
+                            const isPremiumFeature = feat.toLowerCase().includes("premium & eksklusif");
                             const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
                             const isRetroFeature = feat.toLowerCase().includes("retro windows");
@@ -530,6 +531,15 @@ function LandscapeProductCard({
                                                 background: "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                                                 animation: "toggle-slide 4s infinite"
                                             }} />
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Premium Sparkle */}
+                                    {isPremiumFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 16, height: 16, animation: "photo-shuffle 3s infinite ease-in-out" }}>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "all 0.5s ease" }}>
+                                                <path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill={`${activeAccent}33`} />
+                                            </svg>
                                         </div>
                                     )}
 
@@ -1002,6 +1012,7 @@ export default function MainHubPage() {
                         description="Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda."
                         features={[
                             "Desain Premium & Eksklusif",
+                            "Bebas Kustomisasi Tema & Teks",
                             "Animasi Visual Interaktif",
                             "Kustomisasi Galeri & Musik Audio",
                             "Dikerjakan Langsung oleh Kami"
