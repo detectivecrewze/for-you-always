@@ -481,12 +481,12 @@ function LandscapeProductCard({
                     {/* Features List */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
                         {features.map((feat) => {
-                            const isToggleFeature = feat.toLowerCase().includes("turn on / off");
+                            const isToggleFeature = feat.toLowerCase().includes("turn on / off") || feat.toLowerCase().includes("animasi interaktif");
                             const isMusicFeature = feat.toLowerCase().includes("music pilihan");
-                            const isPageFeature = feat.toLowerCase().includes("berbeda");
+                            const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema");
                             const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
                             const isGalleryFeature = feat.toLowerCase().includes("galeri foto");
-                            const isEnvelopeFeature = feat.toLowerCase().includes("amplop");
+                            const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
                             const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
@@ -567,7 +567,7 @@ function LandscapeProductCard({
                                     {/* Animation: Photo Shuffle */}
                                     {isGalleryFeature && (
                                         <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 16, height: 14, position: "relative" }}>
-                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${activeAccent}`, borderRadius: 2, position: "absolute", zIndex: 1, background: "#faf7f2", transition: "border-color 0.5s ease" }} />
+                                            <div style={{ width: 10, height: 10, border: `1.5px solid ${activeAccent}`, borderRadius: 2, position: "absolute", zIndex: 1, background: activeAccent === "#faf7f2" ? "#2D141E" : "#faf7f2", transition: "border-color 0.5s ease" }} />
                                             <div style={{ width: 10, height: 10, border: `1.5px solid ${activeAccent}`, borderRadius: 2, position: "absolute", animation: "photo-shuffle 2s infinite ease-in-out", background: `transparent`, transition: "border-color 0.5s ease" }} />
                                         </div>
                                     )}
@@ -836,7 +836,7 @@ export default function MainHubPage() {
                     <AnimatedSection delay={350}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 60 }}>
                             <a
-                                href="#collection"
+                                href="#loves-edition"
                                 style={{
                                     display: "inline-flex", alignItems: "center", gap: 8,
                                     padding: "14px 32px", borderRadius: 999,
@@ -882,7 +882,143 @@ export default function MainHubPage() {
                 </div>
             </section>
 
-            {/* ── THE COLLECTION ── */}
+            {/* ── LOVES EDITION HIGHLIGHT ── */}
+            <section id="loves-edition" style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
+                <style>{`
+                    #loves-edition .hub-showcase-media {
+                        background-color: #faf7f2 !important;
+                    }
+                    #loves-edition .hub-showcase-content {
+                        background-color: #2D141E !important;
+                        border-color: rgba(250, 247, 242, 0.25) !important;
+                    }
+                    #loves-edition .hub-showcase-content h3 { color: #faf7f2 !important; }
+                    #loves-edition .hub-showcase-content p { color: rgba(250, 247, 242, 0.85) !important; }
+                    #loves-edition .hub-showcase-content > div > div > span { color: #faf7f2 !important; opacity: 1 !important; }
+                    
+                    /* Price & Action Section */
+                    #loves-edition .hub-showcase-content > div:last-child > a {
+                        color: #2D141E !important; /* Dark text on the white activeAccent button */
+                        font-weight: 800 !important;
+                    }
+                    #loves-edition .hub-showcase-content > div:last-child > div {
+                        background: rgba(250, 247, 242, 0.15) !important; /* Dark glass background */
+                        color: #faf7f2 !important; /* White text */
+                        border-color: rgba(250, 247, 242, 0.3) !important;
+                        box-shadow: none !important;
+                    }
+                    /* Themes Section */
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child {
+                        background: #2D141E !important;
+                        border-color: rgba(250, 247, 242, 0.25) !important;
+                    }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child button {
+                        background: rgba(255, 255, 255, 0.2) !important;
+                        border-color: rgba(255, 255, 255, 0.4) !important;
+                        color: #faf7f2 !important;
+                    }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child button:hover {
+                        background: rgba(255, 255, 255, 0.3) !important;
+                        border-color: rgba(255, 255, 255, 0.6) !important;
+                    }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child span { color: #faf7f2 !important; }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child span[style*="opacity: 0.8"] { color: rgba(250, 247, 242, 0.85) !important; opacity: 1 !important; }
+                `}</style>
+                <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
+                    <AnimatedSection>
+                        <div style={{ textAlign: "center", marginBottom: 70 }}>
+                            <div style={{
+                                display: "inline-flex", alignItems: "center", gap: 10,
+                                padding: "6px 20px", border: "1.2px solid rgba(205,171,143,0.3)",
+                                borderRadius: 999, marginBottom: 24,
+                                background: "linear-gradient(135deg, rgba(205,171,143,0.08), rgba(205,171,143,0.02))",
+                                boxShadow: "0 8px 24px -8px rgba(205,171,143,0.25)"
+                            }}>
+                                <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#a88365", animation: "pulse-dot 2s infinite" }} />
+                                <span style={{
+                                    fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700,
+                                    letterSpacing: "0.24em", textTransform: "uppercase" as const,
+                                    color: "#a88365"
+                                }}>
+                                    Premium Collection
+                                </span>
+                                <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#a88365", animation: "pulse-dot 2s infinite", animationDelay: "1s" }} />
+                            </div>
+
+                            <h2 style={{
+                                fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem, 7vw, 4.8rem)",
+                                fontWeight: 400, color: "#2D141E", lineHeight: 1.1, letterSpacing: "-0.03em",
+                                marginBottom: 0
+                            }}>
+                                Loves <span style={{ 
+                                    fontStyle: "italic", 
+                                    background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                    display: "inline-block",
+                                    paddingRight: "0.1em"
+                                }}>Edition.</span>
+                            </h2>
+                            
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, margin: "28px 0" }}>
+                                <div style={{ height: 1, width: 40, background: "linear-gradient(90deg, transparent, rgba(205,171,143,0.6))" }} />
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a88365" strokeWidth="1.5">
+                                    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="rgba(168, 131, 101, 0.15)" />
+                                </svg>
+                                <div style={{ height: 1, width: 40, background: "linear-gradient(270deg, transparent, rgba(205,171,143,0.6))" }} />
+                            </div>
+
+                            <p style={{
+                                fontFamily: "var(--font-sans)", fontSize: "clamp(1rem, 2vw, 1.15rem)", color: "#5A3A46",
+                                maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
+                                letterSpacing: "0.01em"
+                            }}>
+                                Kado digital super premium yang dikerjakan 100% oleh tim kami. Sempurna untuk anniversary, ulang tahun, atau hari spesial lainnya.
+                            </p>
+                        </div>
+                    </AnimatedSection>
+
+                    <LandscapeProductCard
+                        label={
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                Done For You <span style={{ opacity: 0.5 }}>•</span> Premium
+                            </div>
+                        }
+                        title="Chapters of Us"
+                        description="Kado digital super premium yang dikerjakan 100% oleh tim kami. Dilengkapi dengan animasi pembuka, transisi musim, galeri eksklusif, dan pemutar musik. Cukup kirimkan materinya, kami yang rakit semuanya menjadi karya seni digital."
+                        features={[
+                            "Desain Premium Multi-Tema",
+                            "Animasi Interaktif & Partikel",
+                            "Galeri Foto Eksklusif",
+                            "100% Diurus Tim Digital Atelier"
+                        ]}
+                        price="Rp 50.000"
+                        mediaSrc=""
+                        fallbackImgSrc="/assets/opening_gate.png"
+                        mediaType="image"
+                        accentColor="#faf7f2"
+                        accentGlow="rgba(250,247,242,0.15)"
+                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20dengan%20*Loves%20Edition*%20(Premium%20Done-For-You).%20Boleh%20minta%20katalog/pricelistnya?"
+                        themesLabel="Koleksi Pages"
+                        themes={[
+                            { name: "Opening Gate", desc: "Animasi amplop pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
+                            { name: "Opening Section", desc: "Sapaan & musik latar", color: "#faf7f2", fallbackImgSrc: "/assets/opening_section.png" },
+                            { name: "Time Section", desc: "Hitung mundur momen", color: "#faf7f2", fallbackImgSrc: "/assets/time_section.png" },
+                            { name: "Letter Section", desc: "Pesan menyentuh hati", color: "#faf7f2", fallbackImgSrc: "/assets/letter_section.png" },
+                            { name: "Reason Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/reason_section.png" },
+                            { name: "Garden Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/metafora-gardeon_section.png" },
+                            { name: "Gallery Section", desc: "Koleksi memori indah", color: "#faf7f2", fallbackImgSrc: "/assets/gallery_section.png" },
+                            { name: "Closing Section", desc: "Penutup yang manis", color: "#faf7f2", fallbackImgSrc: "/assets/closing%20section.png" }
+                        ]}
+                        delay={100}
+                        reverse={false}
+                        initialSelectedIndex={0}
+                        autoCycle={false}
+                    />
+                </div>
+            </section>
+
+            {/* ── THE COLLECTION (SELF-EDIT) ── */}
             <section id="collection" style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
 
@@ -895,7 +1031,7 @@ export default function MainHubPage() {
                                 padding: "6px 20px", border: "1.2px solid rgba(205,171,143,0.3)",
                                 borderRadius: 999, background: "rgba(205,171,143,0.06)",
                             }}>
-                                The Collection
+                                Self-Edit Collection
                             </span>
                         </div>
                     </AnimatedSection>
