@@ -987,7 +987,7 @@ export default function MainHubPage() {
                                 maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
                                 letterSpacing: "0.01em"
                             }}>
-                                Kado digital super premium yang dikerjakan 100% oleh tim kami. Sempurna untuk anniversary, ulang tahun, atau hari spesial lainnya.
+                                Kado digital premium yang dikerjakan 100% oleh tim kami. Sempurna untuk anniversary, ulang tahun, atau hari spesial lainnya.
                             </p>
                         </div>
                     </AnimatedSection>
@@ -999,7 +999,7 @@ export default function MainHubPage() {
                             </div>
                         }
                         title="Chapters of Us"
-                        description="Kado digital super premium yang dikerjakan 100% oleh tim kami. Dilengkapi dengan animasi pembuka, transisi musim, galeri eksklusif, dan pemutar musik. Cukup kirimkan materinya, kami yang rakit semuanya menjadi karya seni digital."
+                        description="Kado digital premium yang dikerjakan 100% oleh tim kami. Dilengkapi dengan animasi pembuka, transisi themes, galeri eksklusif, dan pemutar musik. Cukup kirimkan materinya, kami yang rakit semuanya menjadi karya seni digital."
                         features={[
                             "Desain Premium Multi-Tema",
                             "Animasi Interaktif & Partikel",
