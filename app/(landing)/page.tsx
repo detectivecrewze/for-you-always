@@ -222,29 +222,17 @@ function LandscapeProductCard({
                             />
                         ) : mediaType === "gif" && mediaSrc ? (
                             <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
-                        ) : themes && themes.length > 0 && themes.some(t => t.fallbackImgSrc) ? (
-                            <div style={{ width: "100%", height: "100%", position: "relative", aspectRatio: "16/9" }}>
-                                {themes.map((t, i) => {
-                                    const imgSrc = t.fallbackImgSrc || activeFallbackImgSrc;
-                                    const isActive = (selectedIndex === null ? 0 : selectedIndex) === i;
-                                    return (
-                                        <img
-                                            key={i}
-                                            src={imgSrc}
-                                            alt={t.name || title}
-                                            style={{
-                                                position: "absolute", inset: 0,
-                                                width: "100%", height: "100%", objectFit: "cover", display: "block",
-                                                opacity: isActive ? 1 : 0,
-                                                transition: "opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-                                                pointerEvents: isActive ? "auto" : "none"
-                                            }}
-                                        />
-                                    );
-                                })}
-                            </div>
                         ) : activeFallbackImgSrc ? (
-                            <img src={activeFallbackImgSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
+                            <img
+                                key={activeFallbackImgSrc}
+                                src={activeFallbackImgSrc}
+                                alt={title}
+                                loading="lazy"
+                                style={{
+                                    width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9",
+                                    animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)"
+                                }}
+                            />
                         ) : (
                             <div style={{
                                 width: "100%", height: "100%", aspectRatio: "16/9",
@@ -777,8 +765,13 @@ export default function MainHubPage() {
                     100% { transform: scale(1); opacity: 0; }
                 }
                 @keyframes photo-shuffle {
-                    0%, 100% { transform: translate(0, 0); }
-                    50% { transform: translate(3px, -3px); }
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    25% { transform: translateY(-3px) rotate(-2deg); }
+                    75% { transform: translateY(3px) rotate(2deg); }
+                }
+                @keyframes image-fade-in {
+                    from { opacity: 0; filter: blur(4px); }
+                    to { opacity: 1; filter: blur(0); }
                 }
                 @keyframes typewriter-blink {
                     0%, 100% { border-color: transparent; }
