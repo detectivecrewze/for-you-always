@@ -921,7 +921,7 @@ export default function MainHubPage() {
                                 ))}
                             </div>
                             <div style={{ fontFamily: "var(--font-sans)", fontSize: 13.5, color: "#6e5c53", fontWeight: 500 }}>
-                                Dipercaya oleh <span style={{ fontWeight: 700, color: "#3B2F25" }}>1000++</span> customer.
+                                Dipercaya oleh <span style={{ fontWeight: 700, color: "#3B2F25" }}>1000+</span> customer.
                             </div>
                         </div>
                     </AnimatedSection>
@@ -1479,7 +1479,7 @@ export default function MainHubPage() {
                     <AnimatedSection delay={400}>
                         <div style={{ marginTop: 80, display: "flex", justifyContent: "center", gap: "clamp(32px, 8vw, 100px)", flexWrap: "wrap" }}>
                             {[
-                                { num: "1000++", label: "Happy Customers" },
+                                { num: "1000+", label: "Happy Customers" },
                                 { num: "5.0", label: "Average Rating" },
                                 { num: "6", label: "Formats" },
                             ].map((stat, i) => (
@@ -1596,7 +1596,7 @@ export default function MainHubPage() {
                     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 80 }}>
                         {[
                             { icon: "○", label: "5.0 Rating" },
-                            { icon: "○", label: "1000++ Stories" },
+                            { icon: "○", label: "1000+ Stories" },
                             { icon: "○", label: "Instant Access" },
                             { icon: "○", label: "Private Link" },
                         ].map((badge, i) => (
