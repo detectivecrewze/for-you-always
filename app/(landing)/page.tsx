@@ -1103,7 +1103,7 @@ export default function MainHubPage() {
                                 fontWeight: 400, color: "#3B2F25", lineHeight: 1.1, letterSpacing: "-0.03em",
                                 marginBottom: 0
                             }}>
-                                Self<span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.85em", display: "inline-block", transform: "translateY(-0.15em)", margin: "0 0.02em", opacity: 0.9 }}>-</span>Edit <span style={{ 
+                                Self-Edit <span style={{ 
                                     fontStyle: "italic", 
                                     background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
                                     WebkitBackgroundClip: "text",
