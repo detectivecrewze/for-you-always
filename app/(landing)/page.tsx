@@ -1048,7 +1048,7 @@ export default function MainHubPage() {
                             "Kustomisasi Galeri & Musik Audio",
                             "Dikerjakan Langsung oleh Kami"
                         ]}
-                        price="Rp 50.000"
+                        price="Rp 40.000"
                         mediaSrc=""
                         fallbackImgSrc="/assets/opening_gate.png"
                         mediaType="image"
