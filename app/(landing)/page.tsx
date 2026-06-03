@@ -3,8 +3,157 @@
 import React, { useEffect, useState, useRef } from "react";
 
 /* ─────────────────────────────────────────────
-   Animated Section (Intersection Observer)
+   Navbar
    ───────────────────────────────────────────── */
+function Navbar() {
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 40);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
+    const links = [
+        { label: "Premium Edition", href: "#loves-edition" },
+        { label: "Self-Edit", href: "#collection" },
+        { label: "Cara Kerja", href: "#cara-kerja" },
+        { label: "Testimoni", href: "#testimoni" },
+        { label: "FAQ", href: "#faq" },
+    ];
+
+    const navStyle: React.CSSProperties = {
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 999,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "0 clamp(20px, 4vw, 48px)",
+        height: 60,
+        background: "rgba(250,247,242,0.95)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        borderBottom: "1px solid rgba(205,171,143,0.2)",
+        boxShadow: scrolled ? "0 4px 24px -4px rgba(29,24,22,0.08)" : "none",
+        transition: "box-shadow 0.4s ease",
+    };
+
+    return (
+        <>
+            <nav style={navStyle}>
+                {/* Logo */}
+                <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
+                        <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </div>
+                    <span style={{ fontFamily: "var(--font-display)", fontSize: 14, color: "#382a24", letterSpacing: "-0.02em" }}>
+                        For you, Always.
+                    </span>
+                </a>
+
+                {/* Desktop links */}
+                <div style={{ display: "flex", alignItems: "center", gap: 32 }} className="nav-desktop-links">
+                    {links.map(l => (
+                        <a key={l.href} href={l.href} style={{
+                            fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700,
+                            letterSpacing: "0.08em", textTransform: "uppercase",
+                            color: "#6e5c53", textDecoration: "none",
+                            transition: "color 0.2s ease",
+                        }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#cdab8f"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                        >
+                            {l.label}
+                        </a>
+                    ))}
+                </div>
+
+                {/* CTA + Hamburger */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
+                        style={{
+                            padding: "8px 20px", borderRadius: 999,
+                            background: "#1d1816", color: "#faf7f2",
+                            fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                            textDecoration: "none", transition: "all 0.3s ease",
+                        }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#1d1816"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; (e.currentTarget as HTMLElement).style.color = "#faf7f2"; }}
+                        className="nav-cta"
+                    >
+                        Order
+                    </a>
+                    {/* Hamburger */}
+                    <button
+                        onClick={() => setMobileOpen(v => !v)}
+                        className="nav-hamburger"
+                        style={{
+                            background: "none", border: "none", cursor: "pointer", padding: 6,
+                            display: "flex", flexDirection: "column", gap: 4.5, alignItems: "center", justifyContent: "center",
+                        }}
+                        aria-label="Toggle menu"
+                    >
+                        <span style={{ display: "block", width: 20, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(6px) rotate(45deg)" : "none" }} />
+                        <span style={{ display: "block", width: 20, height: 1.5, background: "#382a24", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
+                        <span style={{ display: "block", width: 20, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(-6px) rotate(-45deg)" : "none" }} />
+                    </button>
+                </div>
+            </nav>
+
+            {/* Mobile menu */}
+            <div style={{
+                position: "fixed", top: 60, left: 0, right: 0, zIndex: 998,
+                background: "rgba(250,247,242,0.96)", backdropFilter: "blur(20px)",
+                borderBottom: "1px solid rgba(205,171,143,0.2)",
+                padding: mobileOpen ? "20px clamp(20px, 4vw, 48px) 28px" : "0 clamp(20px, 4vw, 48px)",
+                maxHeight: mobileOpen ? 400 : 0,
+                overflow: "hidden",
+                transition: "all 0.4s ease",
+            }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                    {links.map(l => (
+                        <a key={l.href} href={l.href}
+                            onClick={() => setMobileOpen(false)}
+                            style={{
+                                fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700,
+                                letterSpacing: "0.08em", textTransform: "uppercase",
+                                color: "#382a24", textDecoration: "none",
+                                padding: "14px 0",
+                                borderBottom: "1px solid rgba(205,171,143,0.15)",
+                                transition: "color 0.2s ease",
+                            }}
+                        >
+                            {l.label}
+                        </a>
+                    ))}
+                    <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
+                        onClick={() => setMobileOpen(false)}
+                        style={{
+                            marginTop: 16, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            padding: "12px 28px", borderRadius: 999,
+                            background: "#1d1816", color: "#faf7f2",
+                            fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                            textDecoration: "none",
+                        }}
+                    >
+                        Order via WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .nav-desktop-links { display: none !important; }
+                    .nav-cta { display: none !important; }
+                    .nav-hamburger { display: flex !important; }
+                }
+                @media (min-width: 769px) {
+                    .nav-hamburger { display: none !important; }
+                }
+            `}</style>
+        </>
+    );
+}
+
+
 function AnimatedSection({
     children,
     delay = 0,
@@ -821,8 +970,10 @@ export default function MainHubPage() {
                 <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.04)", filter: "blur(120px)" }} />
             </div>
 
+            <Navbar />
+
             {/* ── HERO ── */}
-            <section style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(80px, 12vh, 130px)", textAlign: "center" }}>
+            <section id="hero" style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(80px, 12vh, 130px)", textAlign: "center" }}>
                 <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 24px" }}>
 
                     <AnimatedSection>
@@ -1333,7 +1484,7 @@ export default function MainHubPage() {
             </section>
 
             {/* ── CARA KERJA ── */}
-            <section style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#f2ebe1", overflow: "hidden" }}>
+            <section id="cara-kerja" style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#f2ebe1", overflow: "hidden" }}>
                 <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.035 }} />
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
 
@@ -1398,7 +1549,7 @@ export default function MainHubPage() {
             </section>
 
             {/* ── TESTIMONIALS ── */}
-            <section style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#1d1816", overflow: "hidden" }}>
+            <section id="testimoni" style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#1d1816", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: "10%", left: "5%", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(212,191,160,0.05)", filter: "blur(80px)", pointerEvents: "none" }} />
                 <div style={{ position: "absolute", bottom: "5%", right: "5%", width: "30vw", height: "30vw", borderRadius: "50%", background: "rgba(192,168,130,0.04)", filter: "blur(60px)", pointerEvents: "none" }} />
 
@@ -1486,7 +1637,7 @@ export default function MainHubPage() {
             </section>
 
             {/* ── FAQ ── */}
-            <section style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#faf7f2" }}>
+            <section id="faq" style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#faf7f2" }}>
                 <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <AnimatedSection>
                         <div style={{ textAlign: "center", marginBottom: 64 }}>
