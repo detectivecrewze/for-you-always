@@ -352,37 +352,19 @@ function LandscapeProductCard({
                             el.style.borderColor = "rgba(255,255,255,0.15)";
                         }}
                     >
-                        {(mediaType === "video" && (isTikTok || !activeVideoSrc) && activeFallbackImgSrc) ? (
+                        {activeFallbackImgSrc ? (
                             <img
                                 key={activeFallbackImgSrc}
                                 src={activeFallbackImgSrc}
                                 alt={title}
-                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }}
+                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
-                        ) : (mediaType === "video" && activeVideoSrc) ? (
-                            <video
-                                key={activeVideoSrc} // Force remount on src change to ensure new video loads and plays
-                                ref={videoRef}
-                                src={isInView ? activeVideoSrc : ""}
-                                poster={activeFallbackImgSrc}
-                                preload="none"
-                                autoPlay loop muted playsInline
-                                disablePictureInPicture
-                                controlsList="nodownload nofullscreen noremoteplayback"
-                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", pointerEvents: "none" }}
-                            />
-                        ) : mediaType === "gif" && mediaSrc ? (
-                            <img src={mediaSrc} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9" }} />
-                        ) : activeFallbackImgSrc ? (
+                        ) : mediaSrc ? (
                             <img
-                                key={activeFallbackImgSrc}
-                                src={activeFallbackImgSrc}
+                                key={mediaSrc}
+                                src={mediaSrc}
                                 alt={title}
-                                loading="lazy"
-                                style={{
-                                    width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9",
-                                    animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)"
-                                }}
+                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
                         ) : (
                             <div style={{
