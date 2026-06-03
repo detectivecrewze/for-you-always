@@ -992,7 +992,7 @@ export default function MainHubPage() {
                                 fontWeight: 400, color: "#2D141E", lineHeight: 1.1, letterSpacing: "-0.03em",
                                 marginBottom: 0
                             }}>
-                                Loves <span style={{ 
+                                Premium <span style={{ 
                                     fontStyle: "italic", 
                                     background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
                                     WebkitBackgroundClip: "text",
@@ -1015,7 +1015,7 @@ export default function MainHubPage() {
                                 maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
                                 letterSpacing: "0.01em"
                             }}>
-                                Rayakan momen Anda dalam bentuk mahakarya digital. Memoria dirancang secara custom dengan detail animasi memukau, tipografi elegan, dan galeri interaktif.
+                                Rayakan momen Anda dalam bentuk digital. Memoria adalah layanan <strong>Terima Jadi (Done-For-You)</strong> yang dirancang secara custom dengan detail animasi memukau, tipografi elegan, dan galeri interaktif.
                             </p>
                         </div>
                     </AnimatedSection>
