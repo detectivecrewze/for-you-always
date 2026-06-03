@@ -61,6 +61,7 @@ function LandscapeProductCard({
     autoCycle = false,
     delay = 0,
     reverse = false,
+    addonText,
 }: {
     label: React.ReactNode;
     title: string;
@@ -79,6 +80,7 @@ function LandscapeProductCard({
     autoCycle?: boolean;
     delay?: number;
     reverse?: boolean;
+    addonText?: string;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [activeAccent, setActiveAccent] = useState(accentColor);
@@ -729,6 +731,21 @@ function LandscapeProductCard({
                             {price}
                         </div>
                     </div>
+                    {addonText && (
+                        <div style={{
+                            marginTop: 12, display: "inline-flex", alignItems: "center", gap: 6,
+                            padding: "5px 12px", borderRadius: 999,
+                            background: `${activeAccent}18`,
+                            border: `1px dashed ${activeAccent}80`,
+                            fontSize: 11, fontWeight: 600, color: activeAccent,
+                            fontFamily: "var(--font-sans)", letterSpacing: "0.02em"
+                        }}>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            {addonText}
+                        </div>
+                    )}
                 </div>
             </div>
         </AnimatedSection>
@@ -895,36 +912,6 @@ export default function MainHubPage() {
                         </div>
                     </AnimatedSection>
 
-                    <AnimatedSection delay={400}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 50 }}>
-                            <div style={{ display: "flex" }}>
-                                {/* Elegant minimalist anonymous avatars */}
-                                {[
-                                    "linear-gradient(135deg, #e3d5c9, #d5c8be)",
-                                    "linear-gradient(135deg, #dfd0c4, #b4a397)",
-                                    "linear-gradient(135deg, #eeded2, #c8b7aa)",
-                                    "linear-gradient(135deg, #e3d5c9, #b9a99f)"
-                                ].map((bg, i) => (
-                                    <div key={i} style={{ 
-                                        width: 32, height: 32, borderRadius: "50%", 
-                                        border: "2.5px solid #faf7f2", marginLeft: i === 0 ? 0 : -12,
-                                        background: bg,
-                                        display: "flex", alignItems: "center", justifyContent: "center",
-                                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                                        zIndex: 4 - i
-                                    }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.9 }}>
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                            <circle cx="12" cy="7" r="4" />
-                                        </svg>
-                                    </div>
-                                ))}
-                            </div>
-                            <div style={{ fontFamily: "var(--font-sans)", fontSize: 13.5, color: "#6e5c53", fontWeight: 500 }}>
-                                Dipercaya oleh <span style={{ fontWeight: 700, color: "#3B2F25" }}>1000+</span> customer.
-                            </div>
-                        </div>
-                    </AnimatedSection>
 
                     <AnimatedSection delay={500}>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: 0.5, animation: "bounce-soft 2s ease-in-out infinite" }}>
@@ -1146,6 +1133,7 @@ export default function MainHubPage() {
                                 "Background Music Pilihan"
                             ]}
                             price="Promo Rp 15.000"
+                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
                             mediaType="image"
@@ -1172,6 +1160,7 @@ export default function MainHubPage() {
                                 "Background Music Pilihan"
                             ]}
                             price="Rp 15.000"
+                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
                             mediaType="image"
@@ -1245,6 +1234,7 @@ export default function MainHubPage() {
                                     <span style={{ marginLeft: 8 }}>Promo Rp 15.000</span>
                                 </>
                             }
+                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1778444022368-wu278.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
                             mediaType="image"
@@ -1278,6 +1268,7 @@ export default function MainHubPage() {
                                     <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }
+                            addonText="Tersedia opsi Terima Jadi: Rp 40.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
                             mediaType="image"
@@ -1317,6 +1308,7 @@ export default function MainHubPage() {
                                     <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }
+                            addonText="Tersedia opsi Terima Jadi: Rp 40.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
                             mediaType="image"
