@@ -865,7 +865,7 @@ function LandscapeProductCard({
                         })}
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
+                    <div className="price-action-container" style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
                         {/* Order — always dark bg for Memoria (light accent), otherwise use accent */}
                         <a href={href} target="_blank" rel="noopener noreferrer" style={{
                             padding: "12px 28px", borderRadius: 999,
@@ -1145,17 +1145,7 @@ export default function MainHubPage() {
                     #loves-edition .hub-showcase-content p { color: rgba(250, 247, 242, 0.85) !important; }
                     #loves-edition .hub-showcase-content > div > div > span { color: #faf7f2 !important; opacity: 1 !important; }
                     
-                    /* Price & Action Section */
-                    #loves-edition .hub-showcase-content > div:last-child > a {
-                        color: #2D141E !important; /* Dark text on the white activeAccent button */
-                        font-weight: 800 !important;
-                    }
-                    #loves-edition .hub-showcase-content > div:last-child > div {
-                        background: rgba(250, 247, 242, 0.15) !important; /* Dark glass background */
-                        color: #faf7f2 !important; /* White text */
-                        border-color: rgba(250, 247, 242, 0.3) !important;
-                        box-shadow: none !important;
-                    }
+                    /* The Price & Action Section now uses dynamic inline styles based on activeAccent, so we don't need CSS overrides. */
                     /* Themes Section */
                     #loves-edition .hub-showcase-media-wrapper > div:last-child {
                         background: #2D141E !important;
