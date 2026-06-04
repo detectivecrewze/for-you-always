@@ -914,12 +914,13 @@ function LandscapeProductCard({
                         </div>
                     )}
                     {tiktokHref && (() => {
-                        // Memoria has a light cream accent (#faf7f2) so we must use a dark colour for contrast
+                        // Memoria uses cream accent (#faf7f2) but the panel background is DARK,
+                        // so we use light/cream colours for contrast — NOT dark brown.
                         const isLight = activeAccent === "#faf7f2";
-                        const btnColor  = isLight ? "#6e5c53" : activeAccent;
-                        const btnBorder = isLight ? "rgba(110,92,83,0.4)" : `${activeAccent}66`;
-                        const btnHoverBg = isLight ? "rgba(110,92,83,0.08)" : `${activeAccent}1A`;
-                        const btnHoverBorder = isLight ? "rgba(110,92,83,0.7)" : activeAccent;
+                        const btnColor   = isLight ? "rgba(250,247,242,0.8)" : activeAccent;
+                        const btnBorder  = isLight ? "rgba(250,247,242,0.3)" : `${activeAccent}66`;
+                        const hoverBg    = isLight ? "rgba(250,247,242,0.1)" : `${activeAccent}1A`;
+                        const hoverBorder= isLight ? "rgba(250,247,242,0.6)" : activeAccent;
                         return (
                             <div style={{ marginTop: 12 }}>
                                 <a href={tiktokHref} target="_blank" rel="noopener noreferrer" style={{
@@ -933,8 +934,8 @@ function LandscapeProductCard({
                                 }}
                                     onMouseEnter={e => {
                                         const el = e.currentTarget as HTMLElement;
-                                        el.style.background = btnHoverBg;
-                                        el.style.borderColor = btnHoverBorder;
+                                        el.style.background = hoverBg;
+                                        el.style.borderColor = hoverBorder;
                                     }}
                                     onMouseLeave={e => {
                                         const el = e.currentTarget as HTMLElement;
