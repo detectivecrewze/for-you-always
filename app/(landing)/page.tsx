@@ -885,24 +885,28 @@ function LandscapeProductCard({
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
+                        {/* Order — always dark bg for Memoria (light accent), otherwise use accent */}
                         <a href={href} target="_blank" rel="noopener noreferrer" style={{
                             padding: "12px 28px", borderRadius: 999,
-                            background: activeAccent, color: "#fff",
+                            background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
+                            color: "#fff",
                             fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
                             textDecoration: "none", transition: "all 0.5s ease",
-                            boxShadow: `0 8px 24px -4px ${activeAccent}66`
+                            boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`
                         }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
                             Order
                         </a>
 
+                        {/* Price badge — always readable */}
                         <div style={{
                             padding: "10px 20px", borderRadius: 999,
-                            background: `linear-gradient(135deg, rgba(255,255,255,0.95), ${activeAccent}1A)`,
-                            border: `1px solid ${activeAccent}44`,
-                            boxShadow: `inset 0 2px 4px rgba(255,255,255,0.8), 0 6px 16px -4px ${activeAccent}44`,
-                            fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: activeAccent,
+                            background: "rgba(255,255,255,0.9)",
+                            border: "1px solid rgba(205,171,143,0.35)",
+                            boxShadow: "inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 12px rgba(205,171,143,0.15)",
+                            fontSize: 12, fontWeight: 700, letterSpacing: "0.05em",
+                            color: "#6e5c53",
                             display: "flex", alignItems: "center", gap: 8,
                             transition: "all 0.5s ease"
                         }}>
@@ -917,9 +921,9 @@ function LandscapeProductCard({
                         <div style={{
                             marginTop: 12, display: "inline-flex", alignItems: "center", gap: 6,
                             padding: "5px 12px", borderRadius: 999,
-                            background: `${activeAccent}18`,
-                            border: `1px dashed ${activeAccent}80`,
-                            fontSize: 11, fontWeight: 600, color: activeAccent,
+                            background: "rgba(205,171,143,0.1)",
+                            border: "1px dashed rgba(205,171,143,0.5)",
+                            fontSize: 11, fontWeight: 600, color: "#8a7060",
                             fontFamily: "var(--font-sans)", letterSpacing: "0.02em"
                         }}>
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -929,34 +933,35 @@ function LandscapeProductCard({
                         </div>
                     )}
                     {tiktokHref && (
-                        <a href={tiktokHref} target="_blank" rel="noopener noreferrer" style={{
-                            marginTop: 10, display: "inline-flex", alignItems: "center", gap: 7,
-                            padding: "7px 14px", borderRadius: 999,
-                            background: "transparent",
-                            border: `1px solid ${activeAccent}40`,
-                            fontSize: 11, fontWeight: 600, color: "#6e5c53",
-                            fontFamily: "var(--font-sans)", letterSpacing: "0.02em",
-                            textDecoration: "none", transition: "all 0.25s ease",
-                        }}
-                            onMouseEnter={e => {
-                                const el = e.currentTarget as HTMLElement;
-                                el.style.background = `${activeAccent}14`;
-                                el.style.borderColor = activeAccent;
-                                el.style.color = activeAccent;
+                        <div style={{ marginTop: 12 }}>
+                            <a href={tiktokHref} target="_blank" rel="noopener noreferrer" style={{
+                                display: "inline-flex", alignItems: "center", gap: 7,
+                                padding: "7px 16px", borderRadius: 999,
+                                background: "transparent",
+                                border: "1px solid rgba(205,171,143,0.4)",
+                                fontSize: 11, fontWeight: 600, color: "#8a7060",
+                                fontFamily: "var(--font-sans)", letterSpacing: "0.03em",
+                                textDecoration: "none", transition: "all 0.25s ease",
                             }}
-                            onMouseLeave={e => {
-                                const el = e.currentTarget as HTMLElement;
-                                el.style.background = "transparent";
-                                el.style.borderColor = `${activeAccent}40`;
-                                el.style.color = "#6e5c53";
-                            }}
-                        >
-                            {/* TikTok icon */}
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
-                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.54V6.78a4.85 4.85 0 0 1-1.07-.09z"/>
-                            </svg>
-                            Lihat Preview di TikTok
-                        </a>
+                                onMouseEnter={e => {
+                                    const el = e.currentTarget as HTMLElement;
+                                    el.style.background = "rgba(205,171,143,0.12)";
+                                    el.style.borderColor = "rgba(205,171,143,0.7)";
+                                    el.style.color = "#6e5c53";
+                                }}
+                                onMouseLeave={e => {
+                                    const el = e.currentTarget as HTMLElement;
+                                    el.style.background = "transparent";
+                                    el.style.borderColor = "rgba(205,171,143,0.4)";
+                                    el.style.color = "#8a7060";
+                                }}
+                            >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0, opacity: 0.8 }}>
+                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.54V6.78a4.85 4.85 0 0 1-1.07-.09z"/>
+                                </svg>
+                                Lihat Preview di TikTok
+                            </a>
+                        </div>
                     )}
                 </div>
             </div>
