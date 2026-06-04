@@ -23,101 +23,147 @@ function Navbar() {
         { label: "FAQ", href: "#faq" },
     ];
 
-    const navStyle: React.CSSProperties = {
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 999,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(20px, 4vw, 48px)",
-        height: 60,
-        background: "rgba(250,247,242,0.95)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
-        borderBottom: "1px solid rgba(205,171,143,0.2)",
-        boxShadow: scrolled ? "0 4px 24px -4px rgba(29,24,22,0.08)" : "none",
-        transition: "box-shadow 0.4s ease",
-    };
+    const mobileLinks = [
+        { label: "Premium", href: "#loves-edition" },
+        { label: "Self-Edit", href: "#collection" },
+        { label: "FAQ", href: "#faq" },
+    ];
 
     return (
         <>
-            <nav style={navStyle}>
-                {/* Logo */}
-                <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
-                        <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    </div>
-                    <span style={{ fontFamily: "var(--font-display)", fontSize: 14, color: "#382a24", letterSpacing: "-0.02em" }}>
-                        For you, Always.
-                    </span>
-                </a>
-
-                {/* Desktop links */}
-                <div style={{ display: "flex", alignItems: "center", gap: 32 }} className="nav-desktop-links">
-                    {links.map(l => (
-                        <a key={l.href} href={l.href} style={{
-                            fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700,
-                            letterSpacing: "0.08em", textTransform: "uppercase",
-                            color: "#6e5c53", textDecoration: "none",
-                            transition: "color 0.2s ease",
-                        }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#cdab8f"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
-                        >
-                            {l.label}
-                        </a>
-                    ))}
-                </div>
-
-                {/* CTA + Hamburger */}
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
-                        style={{
-                            padding: "8px 20px", borderRadius: 999,
-                            background: "#1d1816", color: "#faf7f2",
-                            fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                            textDecoration: "none", transition: "all 0.3s ease",
-                        }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#1d1816"; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; (e.currentTarget as HTMLElement).style.color = "#faf7f2"; }}
-                        className="nav-cta"
-                    >
-                        Order
-                    </a>
-                    {/* Hamburger */}
-                    <button
-                        onClick={() => setMobileOpen(v => !v)}
-                        className="nav-hamburger"
-                        style={{
-                            background: "none", border: "none", cursor: "pointer", padding: 6,
-                            display: "flex", flexDirection: "column", gap: 4.5, alignItems: "center", justifyContent: "center",
-                        }}
-                        aria-label="Toggle menu"
-                    >
-                        <span style={{ display: "block", width: 20, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(6px) rotate(45deg)" : "none" }} />
-                        <span style={{ display: "block", width: 20, height: 1.5, background: "#382a24", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
-                        <span style={{ display: "block", width: 20, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(-6px) rotate(-45deg)" : "none" }} />
-                    </button>
-                </div>
-            </nav>
-
-            {/* Mobile menu */}
+            {/* ── Wrapper: full width container, centers the pill ── */}
             <div style={{
-                position: "fixed", top: 60, left: 0, right: 0, zIndex: 998,
-                background: "rgba(250,247,242,0.96)", backdropFilter: "blur(20px)",
-                borderBottom: "1px solid rgba(205,171,143,0.2)",
-                padding: mobileOpen ? "20px clamp(20px, 4vw, 48px) 28px" : "0 clamp(20px, 4vw, 48px)",
+                position: "fixed", top: 0, left: 0, right: 0, zIndex: 999,
+                display: "flex", justifyContent: "center",
+                padding: scrolled ? "10px 20px" : "16px 20px",
+                transition: "padding 0.4s ease",
+                pointerEvents: "none",
+            }}>
+                <nav style={{
+                    pointerEvents: "auto",
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    width: "100%",
+                    maxWidth: 1100,
+                    height: 52,
+                    padding: "0 16px 0 16px",
+                    background: "rgba(250,247,242,0.96)",
+                    backdropFilter: "blur(24px) saturate(180%)",
+                    WebkitBackdropFilter: "blur(24px) saturate(180%)",
+                    border: "1px solid rgba(205,171,143,0.25)",
+                    borderRadius: 999,
+                    boxShadow: scrolled
+                        ? "0 8px 32px -8px rgba(29,24,22,0.14), 0 2px 8px -2px rgba(29,24,22,0.06)"
+                        : "0 4px 16px -4px rgba(29,24,22,0.08)",
+                    transition: "all 0.4s ease",
+                }}>
+                    {/* Logo */}
+                    <a href="#" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0 }}>
+                        <div style={{ width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
+                            <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        </div>
+                        <span style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "#382a24", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
+                            For you, Always.
+                        </span>
+                    </a>
+
+                    {/* Desktop links — center */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 28 }} className="nav-desktop-links">
+                        {links.map(l => (
+                            <a key={l.href} href={l.href} style={{
+                                fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                                letterSpacing: "0.1em", textTransform: "uppercase",
+                                color: "#6e5c53", textDecoration: "none",
+                                transition: "color 0.2s ease",
+                            }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#a67c52"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                            >
+                                {l.label}
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Mobile center quick-links */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, justifyContent: "center" }} className="nav-mobile-quicklinks">
+                        {mobileLinks.map(l => (
+                            <a key={l.href} href={l.href} style={{
+                                fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
+                                letterSpacing: "0.08em", textTransform: "uppercase",
+                                color: "#6e5c53", textDecoration: "none",
+                                padding: "5px 10px",
+                                borderRadius: 999,
+                                border: "1px solid rgba(205,171,143,0.3)",
+                                background: "rgba(205,171,143,0.08)",
+                                whiteSpace: "nowrap",
+                                transition: "all 0.2s ease",
+                            }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.2)"; (e.currentTarget as HTMLElement).style.color = "#382a24"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.08)"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                            >
+                                {l.label}
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* CTA + Hamburger */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                        <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
+                            style={{
+                                padding: "7px 18px", borderRadius: 999,
+                                background: "#1d1816", color: "#faf7f2",
+                                fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                                textDecoration: "none", transition: "all 0.3s ease", whiteSpace: "nowrap",
+                            }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#a67c52"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
+                            className="nav-cta"
+                        >
+                            Order
+                        </a>
+                        {/* Hamburger */}
+                        <button
+                            onClick={() => setMobileOpen(v => !v)}
+                            className="nav-hamburger"
+                            style={{
+                                background: "rgba(205,171,143,0.12)", border: "1px solid rgba(205,171,143,0.25)",
+                                borderRadius: 999, cursor: "pointer",
+                                width: 34, height: 34,
+                                display: "flex", flexDirection: "column", gap: 4, alignItems: "center", justifyContent: "center",
+                                transition: "background 0.2s ease",
+                            }}
+                            aria-label="Toggle menu"
+                        >
+                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(5.5px) rotate(45deg)" : "none" }} />
+                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
+                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(-5.5px) rotate(-45deg)" : "none" }} />
+                        </button>
+                    </div>
+                </nav>
+            </div>
+
+            {/* Mobile dropdown menu */}
+            <div style={{
+                position: "fixed", top: scrolled ? 74 : 80, left: 20, right: 20, zIndex: 998,
+                background: "rgba(250,247,242,0.98)", backdropFilter: "blur(24px)",
+                border: "1px solid rgba(205,171,143,0.25)",
+                borderRadius: 20,
+                padding: mobileOpen ? "20px 24px 24px" : "0 24px",
                 maxHeight: mobileOpen ? 400 : 0,
                 overflow: "hidden",
-                transition: "all 0.4s ease",
-            }}>
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: "0 12px 40px -8px rgba(29,24,22,0.16)",
+                pointerEvents: mobileOpen ? "auto" : "none",
+            }} className="nav-mobile-dropdown">
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                     {links.map(l => (
                         <a key={l.href} href={l.href}
                             onClick={() => setMobileOpen(false)}
                             style={{
-                                fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700,
+                                fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
                                 letterSpacing: "0.08em", textTransform: "uppercase",
                                 color: "#382a24", textDecoration: "none",
-                                padding: "14px 0",
-                                borderBottom: "1px solid rgba(205,171,143,0.15)",
+                                padding: "13px 0",
+                                borderBottom: "1px solid rgba(205,171,143,0.12)",
                                 transition: "color 0.2s ease",
                             }}
                         >
@@ -144,9 +190,12 @@ function Navbar() {
                     .nav-desktop-links { display: none !important; }
                     .nav-cta { display: none !important; }
                     .nav-hamburger { display: flex !important; }
+                    .nav-mobile-quicklinks { display: flex !important; }
                 }
                 @media (min-width: 769px) {
                     .nav-hamburger { display: none !important; }
+                    .nav-mobile-dropdown { display: none !important; }
+                    .nav-mobile-quicklinks { display: none !important; }
                 }
             `}</style>
         </>
@@ -1741,7 +1790,7 @@ export default function MainHubPage() {
                         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase" as const, color: "#a6968c" }}>Preserving Memories Digitally</div>
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 48 }}>
+                    <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
                         {[
                             { label: "Voices", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
                             { label: "Letter", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
@@ -1754,6 +1803,31 @@ export default function MainHubPage() {
                                 {link.label}
                             </a>
                         ))}
+                    </div>
+
+                    <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 48 }}>
+                        <a href="https://instagram.com/foryoualways.id" target="_blank" rel="noopener noreferrer" style={{
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            width: 40, height: 40, borderRadius: "50%",
+                            background: "rgba(205,171,143,0.1)", border: "1px solid rgba(205,171,143,0.3)",
+                            color: "#6e5c53", textDecoration: "none", transition: "all 0.3s ease",
+                        }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#faf7f2"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.1)"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <a href="https://tiktok.com/@foryoualways.id" target="_blank" rel="noopener noreferrer" style={{
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            width: 40, height: 40, borderRadius: "50%",
+                            background: "rgba(205,171,143,0.1)", border: "1px solid rgba(205,171,143,0.3)",
+                            color: "#6e5c53", textDecoration: "none", transition: "all 0.3s ease",
+                        }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#faf7f2"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.1)"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                        </a>
                     </div>
 
                     <p style={{ fontSize: 9, color: "#a6968c", fontWeight: 500, letterSpacing: "0.05em" }}>© 2026 FOR YOU, ALWAYS. — ALL RIGHTS RESERVED.</p>
