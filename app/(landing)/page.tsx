@@ -260,6 +260,7 @@ function LandscapeProductCard({
     delay = 0,
     reverse = false,
     addonText,
+    tiktokHref,
 }: {
     label: React.ReactNode;
     title: string;
@@ -279,6 +280,7 @@ function LandscapeProductCard({
     delay?: number;
     reverse?: boolean;
     addonText?: string;
+    tiktokHref?: string;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [activeAccent, setActiveAccent] = useState(accentColor);
@@ -926,6 +928,36 @@ function LandscapeProductCard({
                             {addonText}
                         </div>
                     )}
+                    {tiktokHref && (
+                        <a href={tiktokHref} target="_blank" rel="noopener noreferrer" style={{
+                            marginTop: 10, display: "inline-flex", alignItems: "center", gap: 7,
+                            padding: "7px 14px", borderRadius: 999,
+                            background: "transparent",
+                            border: `1px solid ${activeAccent}40`,
+                            fontSize: 11, fontWeight: 600, color: "#6e5c53",
+                            fontFamily: "var(--font-sans)", letterSpacing: "0.02em",
+                            textDecoration: "none", transition: "all 0.25s ease",
+                        }}
+                            onMouseEnter={e => {
+                                const el = e.currentTarget as HTMLElement;
+                                el.style.background = `${activeAccent}14`;
+                                el.style.borderColor = activeAccent;
+                                el.style.color = activeAccent;
+                            }}
+                            onMouseLeave={e => {
+                                const el = e.currentTarget as HTMLElement;
+                                el.style.background = "transparent";
+                                el.style.borderColor = `${activeAccent}40`;
+                                el.style.color = "#6e5c53";
+                            }}
+                        >
+                            {/* TikTok icon */}
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.54V6.78a4.85 4.85 0 0 1-1.07-.09z"/>
+                            </svg>
+                            Lihat Preview di TikTok
+                        </a>
+                    )}
                 </div>
             </div>
         </AnimatedSection>
@@ -1239,6 +1271,7 @@ export default function MainHubPage() {
                         reverse={false}
                         initialSelectedIndex={0}
                         autoCycle={false}
+                        tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7647125933169675541?is_from_webapp=1&sender_device=pc"
                     />
                 </div>
             </section>
@@ -1329,6 +1362,7 @@ export default function MainHubPage() {
                             delay={100}
                             initialSelectedIndex={0}
                             autoCycle={true}
+                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7608960116141886740?is_from_webapp=1&sender_device=pc"
                         />
                         <LandscapeProductCard
                             label="Letter Edition"
@@ -1394,6 +1428,7 @@ export default function MainHubPage() {
                             reverse={true}
                             initialSelectedIndex={0}
                             autoCycle={true}
+                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7629604229094591764?is_from_webapp=1&sender_device=pc"
                         />
                         <LandscapeProductCard
                             label={
@@ -1434,6 +1469,7 @@ export default function MainHubPage() {
                             reverse={false}
                             initialSelectedIndex={0}
                             autoCycle={false}
+                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7641893530503351573?is_from_webapp=1&sender_device=pc"
                         />
                         <LandscapeProductCard
                             label="Arcade Edition"
@@ -1474,6 +1510,7 @@ export default function MainHubPage() {
                             delay={350}
                             reverse={true}
                             initialSelectedIndex={0}
+                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7617458730858319125?is_from_webapp=1&sender_device=pc"
                         />
                         <LandscapeProductCard
                             label="Wrapped Edition"
@@ -1491,6 +1528,7 @@ export default function MainHubPage() {
                                 </>
                             }
                             addonText="Tersedia opsi Terima Jadi: Rp 40.000"
+                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7627348817905470741?is_from_webapp=1&sender_device=pc"
                             mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
                             mediaType="image"
