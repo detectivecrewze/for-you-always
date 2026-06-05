@@ -51,13 +51,16 @@ function Navbar() {
                     WebkitBackdropFilter: "blur(24px) saturate(180%)",
                     border: "1px solid rgba(205,171,143,0.25)",
                     borderRadius: 999,
+                    overflow: "hidden",
+                    transform: "translateZ(0)",
+                    WebkitMaskImage: "-webkit-radial-gradient(white, black)",
                     boxShadow: scrolled
                         ? "0 8px 32px -8px rgba(29,24,22,0.14), 0 2px 8px -2px rgba(29,24,22,0.06)"
                         : "0 4px 16px -4px rgba(29,24,22,0.08)",
                     transition: "all 0.4s ease",
                 }}>
                     {/* Logo */}
-                    <a href="#" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0 }}>
+                    <a href="#" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0, position: "relative", zIndex: 10 }}>
                         <div style={{ width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
                             <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </div>
@@ -84,7 +87,7 @@ function Navbar() {
                     </div>
 
                     {/* Spacer — center area intentionally empty on mobile */}
-                    <div style={{ flex: 1 }} className="nav-mobile-quicklinks" />
+                    <div style={{ flex: 1 }} />
 
                     {/* CTA + Hamburger */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
