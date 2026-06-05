@@ -33,11 +33,12 @@ function Navbar() {
         <>
             {/* ── Wrapper: full width container, centers the pill ── */}
             <div style={{
-                position: "fixed", top: 0, left: 0, right: 0, zIndex: 999,
+                position: "fixed", top: 0, left: 0, right: 0, zIndex: 10000,
                 display: "flex", justifyContent: "center",
-                padding: scrolled ? "10px 20px" : "16px 20px",
+                padding: scrolled ? "10px 20px 0" : "16px 20px 0",
                 transition: "padding 0.4s ease",
                 pointerEvents: "none",
+                background: "transparent",
             }}>
                 <nav style={{
                     pointerEvents: "auto",
@@ -51,9 +52,6 @@ function Navbar() {
                     WebkitBackdropFilter: "blur(24px) saturate(180%)",
                     border: "1px solid rgba(205,171,143,0.25)",
                     borderRadius: 999,
-                    overflow: "hidden",
-                    transform: "translateZ(0)",
-                    WebkitMaskImage: "-webkit-radial-gradient(white, black)",
                     boxShadow: scrolled
                         ? "0 8px 32px -8px rgba(29,24,22,0.14), 0 2px 8px -2px rgba(29,24,22,0.06)"
                         : "0 4px 16px -4px rgba(29,24,22,0.08)",
