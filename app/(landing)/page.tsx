@@ -84,9 +84,6 @@ function Navbar() {
                         ))}
                     </div>
 
-                    {/* Spacer — center area intentionally empty on mobile */}
-                    <div style={{ flex: 1 }} />
-
                     {/* CTA + Hamburger */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                         <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
