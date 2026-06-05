@@ -127,13 +127,14 @@ function Navbar() {
             <div style={{
                 position: "fixed", top: scrolled ? 74 : 80, left: 20, right: 20, zIndex: 998,
                 background: "rgba(250,247,242,0.98)", backdropFilter: "blur(24px)",
-                border: "1px solid rgba(205,171,143,0.25)",
+                border: mobileOpen ? "1px solid rgba(205,171,143,0.25)" : "none",
+                opacity: mobileOpen ? 1 : 0,
                 borderRadius: 20,
                 padding: mobileOpen ? "20px 24px 24px" : "0 24px",
                 maxHeight: mobileOpen ? 400 : 0,
                 overflow: "hidden",
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: "0 12px 40px -8px rgba(29,24,22,0.16)",
+                boxShadow: mobileOpen ? "0 12px 40px -8px rgba(29,24,22,0.16)" : "none",
                 pointerEvents: mobileOpen ? "auto" : "none",
             }} className="nav-mobile-dropdown">
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
