@@ -16,7 +16,7 @@ export default function CatalogPage() {
             imageSrc: "/assets/opening_gate.png",
             title: "Memoria (Premium)",
             newPrice: "Rp 40.000",
-            href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20memesan%20*Premium%20Edition*%20(Done-For-You)%20seharga%20Rp%2040.000.%20Mohon%20info%20langkah%20selanjutnya.%20Terima%20kasih!"
+            href: "/catalog/memoria"
         },
         {
             badgeText: "#1 Terlaris",
