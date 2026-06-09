@@ -21,13 +21,42 @@ export default function ProductCatalogPage() {
                     Kembali ke Katalog
                 </Link>
             </div>
-            <section style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
+            <section id="loves-edition" style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
+                <style>{`
+                    #loves-edition .hub-showcase-media {
+                        background-color: #faf7f2 !important;
+                    }
+                    #loves-edition .hub-showcase-content {
+                        background-color: #2D141E !important;
+                        border-color: rgba(250, 247, 242, 0.25) !important;
+                    }
+                    #loves-edition .hub-showcase-content h3 { color: #faf7f2 !important; }
+                    #loves-edition .hub-showcase-content p { color: rgba(250, 247, 242, 0.85) !important; }
+                    #loves-edition .hub-showcase-content > div > div > span { color: #faf7f2 !important; opacity: 1 !important; }
+                    
+                    /* Themes Section */
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child {
+                        background: #2D141E !important;
+                        border-color: rgba(250, 247, 242, 0.25) !important;
+                    }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child button {
+                        background: rgba(255, 255, 255, 0.2) !important;
+                        border-color: rgba(255, 255, 255, 0.4) !important;
+                        color: #faf7f2 !important;
+                    }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child button:hover {
+                        background: rgba(255, 255, 255, 0.3) !important;
+                        border-color: rgba(255, 255, 255, 0.6) !important;
+                    }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child span { color: #faf7f2 !important; }
+                    #loves-edition .hub-showcase-media-wrapper > div:last-child span[style*="opacity: 0.8"] { color: rgba(250, 247, 242, 0.85) !important; opacity: 1 !important; }
+                `}</style>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
                         label={
                             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                Done For You <span style={{ opacity: 0.5 }}>ΓÇó</span> Premium
+                                Done For You <span style={{ opacity: 0.5 }}>•</span> Premium
                             </div>
                         }
                         title="Memoria"
