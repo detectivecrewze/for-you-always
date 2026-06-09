@@ -513,14 +513,15 @@ export default function MainHubPage() {
                                 fontWeight: 400, color: "#3B2F25", lineHeight: 1.1, letterSpacing: "-0.03em",
                                 marginBottom: 0
                             }}>
-                                Self-Edit <span style={{ 
+                                Yang Paling Banyak <br />
+                                <span style={{ 
                                     fontStyle: "italic", 
                                     background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
                                     WebkitBackgroundClip: "text",
                                     WebkitTextFillColor: "transparent",
                                     display: "inline-block",
                                     paddingRight: "0.1em"
-                                }}>Collection.</span>
+                                }}>Dipilih.</span>
                             </h2>
                             
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, margin: "28px 0" }}>
@@ -536,7 +537,7 @@ export default function MainHubPage() {
                                 maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
                                 letterSpacing: "0.01em"
                             }}>
-                                Rancang momen spesial Anda secara mandiri. Bebas pilih dari berbagai template premium kami dan sesuaikan setiap detailnya dengan sentuhan personal Anda.
+                                Pilihan favorit dari pelanggan kami. Temukan template yang paling diminati dan jadikan momen spesial Anda lebih berkesan.
                             </p>
                         </div>
                     </AnimatedSection>
