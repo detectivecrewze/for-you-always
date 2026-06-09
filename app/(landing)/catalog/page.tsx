@@ -60,7 +60,7 @@ export default function CatalogPage() {
             newPrice: "Rp 20.000",
             hashtag: "#10ROOMS",
             soldCount: "560+ terjual",
-            href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+            href: "/catalog/arcade"
         },
         {
             badgeText: "New Release",
@@ -71,7 +71,7 @@ export default function CatalogPage() {
             newPrice: "Rp 15.000",
             hashtag: "#NOSTALGIA",
             soldCount: "430+ terjual",
-            href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Retro%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+            href: "/catalog/retro"
         }
     ];
 
