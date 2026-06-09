@@ -731,44 +731,7 @@ export function LandscapeProductCard({
                             {addonText}
                         </div>
                     )}
-                    {tiktokHref && (() => {
-                        // Memoria uses cream accent (#faf7f2) but the panel background is DARK,
-                        // so we use light/cream colours for contrast — NOT dark brown.
-                        const isLight = activeAccent === "#faf7f2";
-                        const btnColor   = isLight ? "rgba(250,247,242,0.8)" : activeAccent;
-                        const btnBorder  = isLight ? "rgba(250,247,242,0.3)" : `${activeAccent}66`;
-                        const hoverBg    = isLight ? "rgba(250,247,242,0.1)" : `${activeAccent}1A`;
-                        const hoverBorder= isLight ? "rgba(250,247,242,0.6)" : activeAccent;
-                        return (
-                            <div style={{ marginTop: 12 }}>
-                                <a href={tiktokHref} target="_blank" rel="noopener noreferrer" style={{
-                                    display: "inline-flex", alignItems: "center", gap: 7,
-                                    padding: "7px 16px", borderRadius: 999,
-                                    background: "transparent",
-                                    border: `1px solid ${btnBorder}`,
-                                    fontSize: 11, fontWeight: 600, color: btnColor,
-                                    fontFamily: "var(--font-sans)", letterSpacing: "0.03em",
-                                    textDecoration: "none", transition: "all 0.25s ease",
-                                }}
-                                    onMouseEnter={e => {
-                                        const el = e.currentTarget as HTMLElement;
-                                        el.style.background = hoverBg;
-                                        el.style.borderColor = hoverBorder;
-                                    }}
-                                    onMouseLeave={e => {
-                                        const el = e.currentTarget as HTMLElement;
-                                        el.style.background = "transparent";
-                                        el.style.borderColor = btnBorder;
-                                    }}
-                                >
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
-                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.54V6.78a4.85 4.85 0 0 1-1.07-.09z"/>
-                                    </svg>
-                                    Lihat Preview di TikTok
-                                </a>
-                            </div>
-                        );
-                    })()}
+                    {}
                 </div>
             </div>
         </AnimatedSection>
