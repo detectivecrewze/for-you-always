@@ -425,7 +425,7 @@ export default function MainHubPage() {
                         <CompactProductCard
                             badgeText="Popular"
                             badgeColor="#9c27b0"
-                            imageSrc="https://cdn.for-you-always.my.id/1781032403868-q6zcbu.png"
+                            imageSrc="https://cdn.for-you-always.my.id/1781032481221-spwuqm.png"
                             title="Letter Edition"
                             oldPrice="Rp 25.000"
                             newPrice="Rp 15.000"
