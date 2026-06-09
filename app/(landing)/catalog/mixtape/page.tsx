@@ -42,7 +42,7 @@ export default function MixtapeCatalogPage() {
                             price="Rp 25.000"
                             addonText="Kode bundle akan dikirimkan via DM/WA setelah pesanan dikonfirmasi."
                             mediaSrc=""
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1781035285803-rn2es.png"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"

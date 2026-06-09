@@ -32,7 +32,7 @@ export default function CatalogPage() {
         {
             badgeText: "Premium Bundle",
             badgeColor: "#4a7c8e",
-            imageSrc: "https://cdn.for-you-always.my.id/1781035695791-dxhu3.png",
+            imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
             title: "Mixtape Edition",
             oldPrice: "Rp 50.000",
             newPrice: "Rp 25.000",
