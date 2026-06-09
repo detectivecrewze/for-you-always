@@ -20,10 +20,8 @@ function Navbar() {
     const links = [
         { label: "Home", href: "/" },
         { label: "Catalog", href: "/catalog" },
-        { label: "Premium Edition", href: "#loves-edition" },
         { label: "Cara Kerja", href: "#cara-kerja" },
         { label: "Testimoni", href: "#testimoni" },
-        { label: "FAQ", href: "#faq" },
     ];
 
         const mobileLinks = [
