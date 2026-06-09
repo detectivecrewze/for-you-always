@@ -30,20 +30,20 @@ export default function CatalogPage() {
             href: "/catalog/voices"
         },
         {
-            badgeText: "Recommended",
-            badgeColor: "#c9184a",
-            imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
-            title: "Wrapped Edition",
-            oldPrice: "Rp 25.000",
-            newPrice: "Rp 20.000",
-            hashtag: "#MEMORIES",
-            soldCount: "920+ terjual",
-            href: "/catalog/wrapped"
+            badgeText: "Premium Bundle",
+            badgeColor: "#4a7c8e",
+            imageSrc: "https://cdn.for-you-always.my.id/1781035695791-dxhu3.png",
+            title: "Mixtape Edition",
+            oldPrice: "Rp 50.000",
+            newPrice: "Rp 25.000",
+            hashtag: "#3QUOTAS",
+            soldCount: "New Release",
+            href: "/catalog/mixtape"
         },
         {
             badgeText: "Popular",
             badgeColor: "#9c27b0",
-            imageSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp",
+            imageSrc: "https://cdn.for-you-always.my.id/1781032720701-5lb1a.png",
             title: "Letter Edition",
             oldPrice: "Rp 25.000",
             newPrice: "Rp 15.000",
@@ -54,7 +54,7 @@ export default function CatalogPage() {
         {
             badgeText: "Interactive",
             badgeColor: "#5c8c5c",
-            imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+            imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
             title: "Arcade Edition",
             oldPrice: "Rp 25.000",
             newPrice: "Rp 20.000",
@@ -72,6 +72,17 @@ export default function CatalogPage() {
             hashtag: "#NOSTALGIA",
             soldCount: "430+ terjual",
             href: "/catalog/retro"
+        },
+        {
+            badgeText: "Recommended",
+            badgeColor: "#c9184a",
+            imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
+            title: "Wrapped Edition",
+            oldPrice: "Rp 25.000",
+            newPrice: "Rp 20.000",
+            hashtag: "#MEMORIES",
+            soldCount: "920+ terjual",
+            href: "/catalog/wrapped"
         }
     ];
 

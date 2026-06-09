@@ -425,20 +425,20 @@ export default function MainHubPage() {
                         <CompactProductCard
                             badgeText="Popular"
                             badgeColor="#9c27b0"
-                            imageSrc="https://cdn.for-you-always.my.id/1781032481221-spwuqm.png"
+                            imageSrc="https://cdn.for-you-always.my.id/1781032720701-5lb1a.png"
                             title="Letter Edition"
                             oldPrice="Rp 25.000"
                             newPrice="Rp 15.000"
                             href="/catalog/letter"
                         />
                         <CompactProductCard
-                            badgeText="New Release"
-                            badgeColor="#008689"
-                            imageSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
-                            title="Retro Edition"
-                            oldPrice="Rp 20.000"
-                            newPrice="Rp 15.000"
-                            href="/catalog/retro"
+                            badgeText="Premium Bundle"
+                            badgeColor="#4a7c8e"
+                            imageSrc="https://cdn.for-you-always.my.id/1781035695791-dxhu3.png"
+                            title="Mixtape Edition"
+                            oldPrice="Rp 50.000"
+                            newPrice="Rp 25.000"
+                            href="/catalog/mixtape"
                         />
                     </div>
 
