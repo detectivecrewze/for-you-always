@@ -8,8 +8,8 @@ interface CompactProductCardProps {
     title: string;
     oldPrice?: string;
     newPrice: string;
-    hashtag: string;
-    soldCount: string;
+    hashtag?: string;
+    soldCount?: string;
     href: string;
 }
 

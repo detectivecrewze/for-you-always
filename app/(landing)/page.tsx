@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import CompactProductCard from "../components/CompactProductCard";
+import { LandscapeProductCard, AnimatedSection } from "../components/LandscapeProductCard";
 
 /* ─────────────────────────────────────────────
    Navbar
