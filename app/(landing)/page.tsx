@@ -566,7 +566,7 @@ export default function MainHubPage() {
                             title="Retro Edition"
                             oldPrice="Rp 20.000"
                             newPrice="Rp 15.000"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Retro%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            href="/catalog/retro"
                         />
                     </div>
                 </div>
