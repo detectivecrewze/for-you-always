@@ -541,220 +541,32 @@ export default function MainHubPage() {
                         </div>
                     </AnimatedSection>
 
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <LandscapeProductCard
-                            label={
-                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Voices Gift <span style={{ opacity: 0.5 }}>•</span> Best Seller
-                                </div>
-                            }
-                            title="Kado Suara & Foto"
-                            description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik. Ungkapkan perasaanmu secara langsung."
-                            features={[
-                                "Rekam Suara & Custom Pesan",
-                                "Galeri Foto Sinematik",
-                                "Background Music Pilihan"
-                            ]}
-                            price="Promo Rp 15.000"
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
-                            mediaType="image"
-                            accentColor="#a67c52"
-                            accentGlow="rgba(166,124,82,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                            themes={[
-                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", videoSrc: "https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
-                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png" }
-                            ]}
-                            delay={100}
-                            initialSelectedIndex={0}
-                            autoCycle={true}
-                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7608960116141886740?is_from_webapp=1&sender_device=pc"
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, paddingBottom: 64 }}>
+                        <CompactProductCard
+                            badgeText="#1 Terlaris"
+                            imageSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
+                            title="Voices Gift"
+                            oldPrice="Rp 30.000"
+                            newPrice="Rp 15.000"
+                            href="/catalog/voices"
                         />
-                        <LandscapeProductCard
-                            label="Letter Edition"
-                            title="Surat Digital Aesthetic"
-                            description="Sampaikan pesan bermakna melalui surat digital bernuansa sinematik. Hadir dengan amplop interaktif, efek typewriter klasik, dan kustomisasi tema eksklusif."
-                            features={[
-                                "Amplop Digital Interaktif",
-                                "Efek Typewriter Sinematik",
-                                "Bisa Kirim Pesan Anonymous",
-                                "Foto / Video di Akhir Surat",
-                                "Background Music Pilihan"
-                            ]}
-                            price="Rp 15.000"
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
-                            mediaType="image"
-                            accentColor="#c4858a"
-                            accentGlow="rgba(196,133,138,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                            themesLabel="Koleksi Template"
-                            themes={[
-                                {
-                                    name: "Classic Envelope",
-                                    desc: "Desain amplop klasik dengan segel wax",
-                                    defaultSubThemeIndex: 2,
-                                    subThemes: [
-                                        { name: "Blush", color: "#d4a5a5", videoSrc: "https://cdn.for-you-always.my.id/1776428663275-7kfqle.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883949551-wyv56.webp" },
-                                        { name: "Sage", color: "#7a9e7e", videoSrc: "https://cdn.for-you-always.my.id/1776432216915-tak42d.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950618-0ej17p.webp" },
-                                        { name: "Rose", color: "#c4858a", videoSrc: "https://cdn.for-you-always.my.id/1776429848862-q9u8fm.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp" },
-                                        { name: "Midnight", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
-                                        { name: "Crimson", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
-                                        { name: "Obsidian", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
-                                    ]
-                                },
-                                {
-                                    name: "Vintage Airmail",
-                                    desc: "Desain surat pos udara klasik",
-                                    subThemes: [
-                                        { name: "Parchment", color: "#a68a64", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464837721-ukwgwd.webp" },
-                                        { name: "Lilac", color: "#d4cadd", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464836965-9zahl.webp" },
-                                        { name: "Sage", color: "#7a9e7e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464838382-funvvg.webp" },
-                                        { name: "Rose", color: "#c4858a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464838087-ztk2sl.webp" },
-                                        { name: "Midnight", color: "#2a3d5c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464837348-a40rot.webp" },
-                                        { name: "Bordeaux", color: "#581824", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464838763-2y25so.webp" }
-                                    ]
-                                },
-                                {
-                                    name: "Ribbon & Seal",
-                                    desc: "Desain elegan dengan pita dan segel wax",
-                                    defaultSubThemeIndex: 2,
-                                    subThemes: [
-                                        { name: "Parchment", color: "#e8dbce", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253357350-fp09fd.webp" },
-                                        { name: "Forest", color: "#4d6b53", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253356127-1es344.webp" },
-                                        { name: "Midnight", color: "#2a3d5c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp" },
-                                        { name: "Rose", color: "#c4858a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253355831-swb14.webp" },
-                                        { name: "Bordeaux", color: "#581824", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253356734-jbzz6.webp" },
-                                        { name: "Violet", color: "#8a6b96", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253356407-czstjw.webp" }
-                                    ]
-                                }
-                            ]}
-                            delay={200}
-                            reverse={true}
-                            initialSelectedIndex={0}
-                            autoCycle={true}
-                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7629604229094591764?is_from_webapp=1&sender_device=pc"
+                        <CompactProductCard
+                            badgeText="Popular"
+                            badgeColor="#9c27b0"
+                            imageSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
+                            title="Letter Edition"
+                            oldPrice="Rp 25.000"
+                            newPrice="Rp 15.000"
+                            href="/catalog/letter"
                         />
-                        <LandscapeProductCard
-                            label={
-                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Retro Edition <span style={{ opacity: 0.5 }}>•</span> NEW
-                                </div>
-                            }
-                            title="Retro Gift Card"
-                            description="Kado digital bergaya Windows 98/XP yang nostalgia. Cocok untuk birthday, apology, atau momen spesial apapun. Lengkap dengan GIF pilihan, surat digital, dan musik."
-                            features={[
-                                "Tampilan Retro Windows 98",
-                                "Custom GIF Pilihan",
-                                "5 Stages of Surprises",
-                                "Support Mobile Experiences",
-                                "Background Music Pilihan"
-                            ]}
-                            price={
-                                <>
-                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 20.000</span>
-                                    <span style={{ marginLeft: 8 }}>Promo Rp 15.000</span>
-                                </>
-                            }
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1778444022368-wu278.mp4"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
-                            mediaType="image"
-                            accentColor="#008689"
-                            accentGlow="rgba(0,134,137,0.2)"
+                        <CompactProductCard
+                            badgeText="New Release"
+                            badgeColor="#008689"
+                            imageSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
+                            title="Retro Edition"
+                            oldPrice="Rp 20.000"
+                            newPrice="Rp 15.000"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Retro%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                            themesLabel="Koleksi Halaman"
-                            themes={[
-                                { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444022368-wu278.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
-                                { name: "Music Player", desc: "Pemutar musik bergaya Winamp retro", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444904917-83vbnc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055394-kwtv5o.png" },
-                                { name: "Notepad.exe", desc: "Surat digital bergaya editor klasik", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444905827-1feuiq.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055893-z63rma.png" },
-                                { name: "Secret Gallery", desc: "Galeri rahasia yang muncul di akhir pesan", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444906361-ehz9q.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445056536-xvpcth.png" }
-                            ]}
-                            delay={250}
-                            reverse={false}
-                            initialSelectedIndex={0}
-                            autoCycle={false}
-                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7641893530503351573?is_from_webapp=1&sender_device=pc"
-                        />
-                        <LandscapeProductCard
-                            label="Arcade Edition"
-                            title="10 Rooms of Memories"
-                            description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."
-                            features={[
-                                "10 Ruangan Berbeda",
-                                "Bisa Turn On / Off Room",
-                                "Background Music Pilihan"
-                            ]}
-                            price={
-                                <>
-                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
-                                    <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
-                                </>
-                            }
-                            addonText="Tersedia opsi Terima Jadi: Rp 40.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
-                            mediaType="image"
-                            accentColor="#5c8c5c"
-                            accentGlow="rgba(92,140,92,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                            themesLabel="Koleksi Ruangan"
-                            themes={[
-                                { name: "Main Menu", desc: "Tampilan utama Arcade", videoSrc: "https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4" },
-                                { name: "Atlas", desc: "Peta lokasi kenangan", videoSrc: "https://cdn.for-you-always.my.id/1773525779608-nzn9pr.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764592-ca91hs.webp" },
-                                { name: "Music", desc: "Ruangan musik interaktif", videoSrc: "https://cdn.for-you-always.my.id/1773426110433-1feui.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015765012-bsu6r.webp" },
-                                { name: "Journey", desc: "Lini masa perjalanan", videoSrc: "https://cdn.for-you-always.my.id/1773426101549-nd559h.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764186-4os3t9.webp" },
-                                { name: "Moments", desc: "Galeri memori berharga", videoSrc: "https://cdn.for-you-always.my.id/1773426107508-yc067a.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763822-vcvc9c.webp" },
-                                { name: "Quiz", desc: "Kuis kenangan bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426113479-uu9xep.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762633-9y59gi.webp" },
-                                { name: "Catcher", desc: "Mini game penangkap", videoSrc: "https://cdn.for-you-always.my.id/1773426115531-1f4i3u.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762272-i7zhec.webp" },
-                                { name: "Fortune", desc: "Pesan keberuntungan", videoSrc: "https://cdn.for-you-always.my.id/1773426099696-jzm23i.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052907957-kkx9zv.webp" },
-                                { name: "Things", desc: "Hal-hal yang kamu sukain dari dia", videoSrc: "https://cdn.for-you-always.my.id/1773426093227-u7iyto.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015761318-x6271.webp" },
-                                { name: "Bucket", desc: "Daftar impian bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426095486-zsqvxo.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763359-9obyye.webp" },
-                                { name: "Message", desc: "Pesan rahasia spesial", videoSrc: "https://cdn.for-you-always.my.id/1773426105222-2tovrh.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763020-0nfkam.webp" }
-                            ]}
-                            delay={350}
-                            reverse={true}
-                            initialSelectedIndex={0}
-                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7617458730858319125?is_from_webapp=1&sender_device=pc"
-                        />
-                        <LandscapeProductCard
-                            label="Wrapped Edition"
-                            title="Memories Wrapped"
-                            description="Kado digital 6 halaman interaktif. Pilih lagu, galeri, rekap perjalanan, hingga surat yang bisa dibuka kapan saja."
-                            features={[
-                                "6 Halaman Berbeda",
-                                "Bisa Turn On / Off Halaman",
-                                "Background Music Pilihan"
-                            ]}
-                            price={
-                                <>
-                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
-                                    <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
-                                </>
-                            }
-                            addonText="Tersedia opsi Terima Jadi: Rp 40.000"
-                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7627348817905470741?is_from_webapp=1&sender_device=pc"
-                            mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
-                            mediaType="image"
-                            accentColor="#c9184a"
-                            accentGlow="rgba(201,24,74,0.15)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Wrapped%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
-                            themesLabel="Koleksi Halaman"
-                            themes={[
-                                { name: "Login", desc: "Halaman masuk", videoSrc: "https://cdn.for-you-always.my.id/1775677163497-m2sjw.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },
-                                { name: "Music", desc: "Pilihan lagu favorit", videoSrc: "https://cdn.for-you-always.my.id/1775677170491-x9o5bc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209591-bgprs5.webp" },
-                                { name: "Galleries", desc: "Kumpulan foto & video manis", videoSrc: "https://cdn.for-you-always.my.id/1775677161653-h3gapg.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015208474-m5rlwh.webp" },
-                                { name: "Wrapped", desc: "Ringkasan momen spesial", videoSrc: "https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015210238-kw2r9r.webp" },
-                                { name: "Letter", desc: "Surat cinta dari hati", videoSrc: "https://cdn.for-you-always.my.id/1775677168482-ksz90k.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052950263-rgp29.webp" },
-                                { name: "Invitation", desc: "Pertanyaan Lucu Dan Romantis", videoSrc: "https://cdn.for-you-always.my.id/1775677166373-4sk074.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209910-p31n5.webp" }
-                            ]}
-                            delay={450}
-                            reverse={false}
-                            initialSelectedIndex={3}
                         />
                     </div>
                 </div>
