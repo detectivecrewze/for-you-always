@@ -24,6 +24,11 @@ export default function Navbar() {
         { label: "FAQ", href: "/#faq" },
     ];
 
+    const mobileLinks = [
+        { label: "Home", href: "/" },
+        { label: "Catalog", href: "/catalog" },
+    ];
+
     return (
         <>
             {/* ── Wrapper: full width container, centers the pill ── */}
@@ -133,7 +138,7 @@ export default function Navbar() {
                 pointerEvents: mobileOpen ? "auto" : "none",
             }} className="nav-mobile-dropdown">
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                    {links.map(l => (
+                    {mobileLinks.map(l => (
                         <Link key={l.href} href={l.href}
                             onClick={() => setMobileOpen(false)}
                             style={{

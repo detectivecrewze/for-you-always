@@ -26,11 +26,9 @@ function Navbar() {
         { label: "FAQ", href: "#faq" },
     ];
 
-    const mobileLinks = [
+        const mobileLinks = [
         { label: "Home", href: "/" },
         { label: "Catalog", href: "/catalog" },
-        { label: "Premium", href: "#loves-edition" },
-        { label: "FAQ", href: "#faq" },
     ];
 
     return (
@@ -139,7 +137,7 @@ function Navbar() {
                 pointerEvents: mobileOpen ? "auto" : "none",
             }} className="nav-mobile-dropdown">
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                    {links.map(l => (
+                    {mobileLinks.map(l => (
                         <a key={l.href} href={l.href}
                             onClick={() => setMobileOpen(false)}
                             style={{
