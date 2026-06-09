@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import CompactProductCard from "../components/CompactProductCard";
 import { LandscapeProductCard, AnimatedSection } from "../components/LandscapeProductCard";
 
@@ -568,6 +569,43 @@ export default function MainHubPage() {
                             href="/catalog/retro"
                         />
                     </div>
+
+                    <AnimatedSection delay={200}>
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: 48, marginBottom: 24 }}>
+                            <Link href="/catalog" style={{
+                                padding: "16px 40px",
+                                borderRadius: 999,
+                                background: "#382a24",
+                                color: "#faf7f2",
+                                fontFamily: "var(--font-sans)",
+                                fontSize: 16,
+                                fontWeight: 700,
+                                textDecoration: "none",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 12,
+                                transition: "all 0.3s ease",
+                                boxShadow: "0 8px 24px rgba(56, 42, 36, 0.25)",
+                                letterSpacing: "0.02em"
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.transform = "translateY(-4px)";
+                                e.currentTarget.style.boxShadow = "0 12px 32px rgba(56, 42, 36, 0.35)";
+                                e.currentTarget.style.background = "#4a3830";
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 8px 24px rgba(56, 42, 36, 0.25)";
+                                e.currentTarget.style.background = "#382a24";
+                            }}>
+                                Lihat Semua Template
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </Link>
+                        </div>
+                    </AnimatedSection>
                 </div>
             </section>
 
