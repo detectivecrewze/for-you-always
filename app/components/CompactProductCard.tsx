@@ -100,7 +100,7 @@ export default function CompactProductCard({
                         <h3 style={{ 
                             fontFamily: "var(--font-display)", 
                             fontSize: 18, 
-                            fontWeight: 500, 
+                            fontWeight: 800, 
                             color: "#382a24",
                             margin: 0,
                             letterSpacing: "0.02em",
@@ -113,25 +113,13 @@ export default function CompactProductCard({
                     {/* Right Column */}
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.2 }}>
-                            {oldPrice && (
-                                <span style={{ 
-                                    fontFamily: "var(--font-sans)", 
-                                    fontSize: 10, 
-                                    color: "#a6968c", 
-                                    textDecoration: "line-through",
-                                    fontWeight: 500
-                                }}>
-                                    {oldPrice}
-                                </span>
-                            )}
                             <div style={{
                                 padding: "6px 12px", borderRadius: 999,
                                 background: "#faf7f2", color: "#382a24",
                                 fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
                                 letterSpacing: "0.05em", textTransform: "uppercase",
                                 display: "flex", alignItems: "center", gap: 6,
-                                border: "1px solid rgba(205,171,143,0.2)",
-                                marginTop: oldPrice ? 4 : 0
+                                border: "1px solid rgba(205,171,143,0.2)"
                             }}>
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />

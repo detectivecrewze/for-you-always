@@ -1824,7 +1824,7 @@ export default function VoicesLandingPage() {
                                         style={{
                                             fontSize: 10,
                                             color: "rgba(245,239,230,0.3)",
-                                            textDecoration: "line-through",
+                                            
                                         }}
                                     >
                                         satuan 5Ãƒâ€” = Rp 50.000

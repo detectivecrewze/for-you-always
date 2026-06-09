@@ -35,7 +35,6 @@ export default function ProductCatalogPage() {
                             ]}
                             price={
                                 <>
-                                    <span style={{ textDecoration: "line-through", opacity: 0.6, fontWeight: 500 }}>Rp 25.000</span>
                                     <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }

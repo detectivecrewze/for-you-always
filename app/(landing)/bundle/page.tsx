@@ -834,7 +834,7 @@ export default function BundleSalesPage() {
                                     }}
                                 >
                                     Pembelian berikutnya Rp 35.000 
-                                    <span style={{ textDecoration: "line-through", color: "rgba(245,239,230,0.3)", marginLeft: 6 }}>
+                                    <span style={{  color: "rgba(245,239,230,0.3)", marginLeft: 6 }}>
                                         (Harga asli Rp 50.000)
                                     </span>
                                 </div>
