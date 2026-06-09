@@ -15,7 +15,7 @@ interface CompactProductCardProps {
 
 export default function CompactProductCard({
     badgeText,
-    badgeColor = "#e91e63",
+    badgeColor = "#a88365",
     imageSrc,
     title,
     oldPrice,
@@ -74,9 +74,14 @@ export default function CompactProductCard({
                             display: "flex",
                             alignItems: "center",
                             gap: 4,
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                            letterSpacing: "0.05em",
+                            textTransform: "uppercase"
                         }}>
-                            <span>★</span> {badgeText}
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            {badgeText}
                         </div>
                     )}
                 </div>
@@ -86,11 +91,12 @@ export default function CompactProductCard({
                     {/* Left Column */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                         <h3 style={{ 
-                            fontFamily: "var(--font-sans)", 
-                            fontSize: 16, 
-                            fontWeight: 700, 
+                            fontFamily: "var(--font-display)", 
+                            fontSize: 18, 
+                            fontWeight: 500, 
                             color: "#382a24",
-                            margin: 0
+                            margin: 0,
+                            letterSpacing: "0.02em"
                         }}>
                             {title}
                         </h3>
@@ -104,21 +110,28 @@ export default function CompactProductCard({
                                 <span style={{ 
                                     fontFamily: "var(--font-sans)", 
                                     fontSize: 10, 
-                                    color: "#9da3a8", 
+                                    color: "#a6968c", 
                                     textDecoration: "line-through",
                                     fontWeight: 500
                                 }}>
                                     {oldPrice}
                                 </span>
                             )}
-                            <span style={{ 
-                                fontFamily: "var(--font-sans)", 
-                                fontSize: 16, 
-                                fontWeight: 800, 
-                                color: "#e91e63"
+                            <div style={{
+                                padding: "6px 12px", borderRadius: 999,
+                                background: "#faf7f2", color: "#382a24",
+                                fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
+                                letterSpacing: "0.05em", textTransform: "uppercase",
+                                display: "flex", alignItems: "center", gap: 6,
+                                border: "1px solid rgba(205,171,143,0.2)",
+                                marginTop: oldPrice ? 4 : 0
                             }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                                </svg>
                                 {newPrice}
-                            </span>
+                            </div>
                         </div>
 
                     </div>
