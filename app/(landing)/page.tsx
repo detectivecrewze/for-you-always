@@ -18,16 +18,18 @@ function Navbar() {
     }, []);
 
     const links = [
+        { label: "Home", href: "/" },
+        { label: "Catalog", href: "/catalog" },
         { label: "Premium Edition", href: "#loves-edition" },
-        { label: "Self-Edit", href: "#collection" },
         { label: "Cara Kerja", href: "#cara-kerja" },
         { label: "Testimoni", href: "#testimoni" },
         { label: "FAQ", href: "#faq" },
     ];
 
     const mobileLinks = [
+        { label: "Home", href: "/" },
+        { label: "Catalog", href: "/catalog" },
         { label: "Premium", href: "#loves-edition" },
-        { label: "Self-Edit", href: "#collection" },
         { label: "FAQ", href: "#faq" },
     ];
 
