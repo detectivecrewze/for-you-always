@@ -441,45 +441,21 @@ export default function MainHubPage() {
                         </div>
                     </AnimatedSection>
 
-                    <LandscapeProductCard
-                        label={
-                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                Done For You <span style={{ opacity: 0.5 }}>•</span> Premium
+                    
+                        <AnimatedSection delay={200}>
+                            <div style={{ maxWidth: 360, margin: "0 auto", paddingBottom: 24 }}>
+                                <CompactProductCard
+                                    badgeText="DONE FOR YOU • PREMIUM"
+                                    badgeColor="#382a24"
+                                    imageSrc="/assets/opening_gate.png"
+                                    title="Memoria"
+                                    oldPrice=""
+                                    newPrice="Rp 40.000"
+                                    href="/catalog/memoria"
+                                />
                             </div>
-                        }
-                        title="Memoria"
-                        description="Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda."
-                        features={[
-                            "Desain Premium & Eksklusif",
-                            "Bebas Kustomisasi Tema & Teks",
-                            "Animasi Visual Interaktif",
-                            "Kustomisasi Galeri & Musik Audio",
-                            "Dikerjakan Langsung oleh Kami"
-                        ]}
-                        price="Rp 40.000"
-                        mediaSrc=""
-                        fallbackImgSrc="/assets/opening_gate.png"
-                        mediaType="image"
-                        accentColor="#faf7f2"
-                        accentGlow="rgba(250,247,242,0.15)"
-                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20memesan%20*Premium%20Edition*%20(Done-For-You)%20seharga%20Rp%2040.000.%20Mohon%20info%20langkah%20selanjutnya.%20Terima%20kasih!"
-                        themesLabel="Koleksi Pages"
-                        themes={[
-                            { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
-                            { name: "Opening Section", desc: "Sapaan & musik latar", color: "#faf7f2", fallbackImgSrc: "/assets/opening_section.webp" },
-                            { name: "Time Section", desc: "Hitung mundur momen", color: "#faf7f2", fallbackImgSrc: "/assets/time_section.webp" },
-                            { name: "Letter Section", desc: "Pesan menyentuh hati", color: "#faf7f2", fallbackImgSrc: "/assets/letter_section.webp" },
-                            { name: "Reason Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/reason_section.webp" },
-                            { name: "Garden Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/metafora-gardeon_section.webp" },
-                            { name: "Gallery Section", desc: "Koleksi memori indah", color: "#faf7f2", fallbackImgSrc: "/assets/gallery_section.webp" },
-                            { name: "Closing Section", desc: "Penutup yang manis", color: "#faf7f2", fallbackImgSrc: "/assets/closing%20section.webp" }
-                        ]}
-                        delay={100}
-                        reverse={false}
-                        initialSelectedIndex={0}
-                        autoCycle={false}
-                        tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7647125933169675541?is_from_webapp=1&sender_device=pc"
-                    />
+                        </AnimatedSection>
+                        
                 </div>
             </section>
 
