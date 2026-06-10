@@ -451,6 +451,8 @@ export default function MainHubPage() {
                             oldPrice="Rp 30.000"
                             newPrice="Rp 15.000"
                             href="/catalog/voices"
+                            occasions={["Long Distance", "Apology", "Random Gift"]}
+                            features={["Pesan Suara (Voice Note)", "Desain Minimalis Elegan", "Surat Personal"]}
                         />
                         <CompactProductCard
                             badgeText="Popular"
@@ -461,6 +463,8 @@ export default function MainHubPage() {
                             oldPrice="Rp 25.000"
                             newPrice="Rp 15.000"
                             href="/catalog/letter"
+                            occasions={["Graduation", "Farewell", "Anniversary"]}
+                            features={["Animasi Segel Lilin", "Surat Panjang Terbaca Jelas", "Tema Menyesuaikan"]}
                         />
                         <CompactProductCard
                             badgeText="Premium Bundle"
@@ -471,6 +475,8 @@ export default function MainHubPage() {
                             oldPrice="Rp 50.000"
                             newPrice="Rp 25.000"
                             href="/catalog/mixtape"
+                            occasions={["Crush / PDKT", "Birthday"]}
+                            features={["Integrasi Lagu Spotify", "Animasi Kaset Retro", "Galeri Foto Estetik"]}
                         />
                     </div>
 

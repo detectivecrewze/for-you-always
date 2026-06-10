@@ -14,6 +14,8 @@ interface CompactProductCardProps {
     hashtag?: string;
     soldCount?: string;
     href: string;
+    features?: string[];
+    occasions?: string[];
 }
 
 export default function CompactProductCard({
@@ -26,7 +28,9 @@ export default function CompactProductCard({
     newPrice,
     hashtag,
     soldCount,
-    href
+    href,
+    features,
+    occasions
 }: CompactProductCardProps) {
     const waText = `Halo Digital Atelier! Saya tertarik untuk memesan *${title}* seharga ${newPrice}.\n\nMohon info langkah selanjutnya ya. Terima kasih!`;
     const waLink = `https://wa.me/6281936109076?text=${encodeURIComponent(waText)}`;
@@ -123,16 +127,32 @@ export default function CompactProductCard({
                     {/* Left Column */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingRight: 8 }}>
                         <h3 style={{ 
-                            fontFamily: "var(--font-display)", 
-                            fontSize: 18, 
+                            fontFamily: "var(--font-sans)", 
+                            fontSize: 22, 
                             fontWeight: 800, 
                             color: titleColor,
                             margin: 0,
-                            letterSpacing: "0.02em",
-                            lineHeight: 1.2
+                            letterSpacing: "-0.02em",
+                            lineHeight: 1.1,
+                            textShadow: "0 1px 2px rgba(0,0,0,0.05)"
                         }}>
                             {title}
                         </h3>
+                        {/* Occasions Tags */}
+                        {occasions && occasions.length > 0 && (
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+                                {occasions.map((occ, i) => (
+                                    <span key={i} style={{
+                                        fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                                        color: titleColor, background: `${titleColor}15`,
+                                        padding: "4px 10px", borderRadius: 999,
+                                        letterSpacing: "0.05em", textTransform: "uppercase"
+                                    }}>
+                                        {occ}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column */}
@@ -155,6 +175,25 @@ export default function CompactProductCard({
                         </div>
                     </div>
                 </div>
+
+                {/* Features List */}
+                {features && features.length > 0 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: -4, marginBottom: 4 }}>
+                        {features.map((feature, i) => (
+                            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={titleColor} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2, opacity: 0.7 }}>
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span style={{
+                                    fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 500,
+                                    color: "#6e5c53", lineHeight: 1.4
+                                }}>
+                                    {feature}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Buttons Container */}
                 <div style={{ display: "flex", gap: 8 }}>

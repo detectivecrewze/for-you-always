@@ -13,83 +13,97 @@ export default function CatalogPage() {
         {
             badgeText: "#1 Exclusive",
             badgeColor: "#d4af37",
-            titleColor: "#581824", // Burgundy / Bordeaux
+            titleColor: "#581824",
             imageSrc: "/assets/opening_gate.png",
             title: "Memoria (Premium)",
             newPrice: "Rp 40.000",
-            href: "/catalog/memoria"
+            href: "/catalog/memoria",
+            occasions: ["Anniversary", "Birthday"],
+            features: ["Done For You", "Premium & Eksklusif"]
         },
         {
             badgeText: "#1 Terlaris",
             badgeColor: "#e91e63",
-            titleColor: "#a67c52", // From Voices page
+            titleColor: "#a67c52",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
             title: "Voices Gift",
             oldPrice: "Rp 30.000",
             newPrice: "Rp 15.000",
             hashtag: "#BESTSELLER",
             soldCount: "1.2k+ terjual",
-            href: "/catalog/voices"
+            href: "/catalog/voices",
+            occasions: ["Long Distance", "Random Gift"],
+            features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
         {
             badgeText: "Premium Bundle",
             badgeColor: "#4a7c8e",
-            titleColor: "#5a8d9e", // From Mixtape page
+            titleColor: "#5a8d9e",
             imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
             title: "Mixtape Edition",
             oldPrice: "Rp 50.000",
             newPrice: "Rp 25.000",
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
-            href: "/catalog/mixtape"
+            href: "/catalog/mixtape",
+            occasions: ["Crush / PDKT", "Birthday"],
+            features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
         {
             badgeText: "Popular",
             badgeColor: "#9c27b0",
-            titleColor: "#2a3d5c", // From Letter Midnight theme
+            titleColor: "#2a3d5c",
             imageSrc: "https://cdn.for-you-always.my.id/1781032720701-5lb1a.png",
             title: "Letter Edition",
             oldPrice: "Rp 25.000",
             newPrice: "Rp 15.000",
             hashtag: "#AESTHETIC",
             soldCount: "850+ terjual",
-            href: "/catalog/letter"
+            href: "/catalog/letter",
+            occasions: ["Graduation", "Farewell", "Anniversary"],
+            features: ["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
         {
-            badgeText: "Interactive",
+            badgeText: "10 Rooms",
             badgeColor: "#5c8c5c",
-            titleColor: "#5c8c5c", // From Arcade page
-            imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
+            titleColor: "#5c8c5c",
+            imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
             title: "Arcade Edition",
-            oldPrice: "Rp 25.000",
+            oldPrice: "Rp 40.000",
             newPrice: "Rp 20.000",
             hashtag: "#10ROOMS",
             soldCount: "560+ terjual",
-            href: "/catalog/arcade"
+            href: "/catalog/arcade",
+            occasions: ["Anniversary", "Birthday"],
+            features: ["10 Ruangan Interaktif", "Bisa On / Off Room", "Background Music Pilihan"]
         },
         {
-            badgeText: "New Release",
+            badgeText: "Nostalgic",
             badgeColor: "#008689",
-            titleColor: "#008689", // From Retro page
+            titleColor: "#008689",
             imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
             title: "Retro Edition",
-            oldPrice: "Rp 20.000",
+            oldPrice: "Rp 30.000",
             newPrice: "Rp 15.000",
             hashtag: "#NOSTALGIA",
             soldCount: "430+ terjual",
-            href: "/catalog/retro"
+            href: "/catalog/retro",
+            occasions: ["Bestie", "Birthday", "Apology"],
+            features: ["Tampilan Retro Windows 98", "Custom GIF Pilihan", "5 Stages of Surprises"]
         },
         {
-            badgeText: "Recommended",
+            badgeText: "Storytelling",
             badgeColor: "#c9184a",
-            titleColor: "#c9184a", // From Wrapped page
+            titleColor: "#c9184a",
             imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
             title: "Wrapped Edition",
-            oldPrice: "Rp 25.000",
+            oldPrice: "Rp 40.000",
             newPrice: "Rp 20.000",
             hashtag: "#MEMORIES",
             soldCount: "920+ terjual",
-            href: "/catalog/wrapped"
+            href: "/catalog/wrapped",
+            occasions: ["Year End", "Anniversary"],
+            features: ["6 Halaman Interaktif", "Bisa On / Off Halaman", "Background Music Pilihan"]
         }
     ];
 
