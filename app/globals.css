@@ -45,3 +45,25 @@ video::-webkit-media-controls {
 @keyframes typewriter-blink { 0%, 100% { border-color: transparent; } 50% { border-color: inherit; } }
 @keyframes typewriter-text { 0%, 15% { width: 0; } 40%, 65% { width: 17ch; } 85%, 100% { width: 0; } }
 @keyframes envelope-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+/* Gradient Border Card */
+.gradient-border-card {
+  border: 2px solid transparent !important;
+  background-clip: padding-box !important;
+  position: relative;
+}
+
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #E8A0B0, #8B6A9A, #C4849A);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 0;
+  pointer-events: none;
+}

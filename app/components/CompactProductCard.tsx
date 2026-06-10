@@ -31,16 +31,38 @@ export default function CompactProductCard({
     const waText = `Halo Digital Atelier! Saya tertarik untuk memesan *${title}* seharga ${newPrice}.\n\nMohon info langkah selanjutnya ya. Terima kasih!`;
     const waLink = `https://wa.me/6281936109076?text=${encodeURIComponent(waText)}`;
 
+    const cardBorderGradient = `linear-gradient(135deg, ${titleColor}80, ${titleColor})`;
+
     return (
-        <div style={{
+        <>
+        <style>{`
+            .gradient-border-card {
+                border: 2px solid transparent !important;
+                background-clip: padding-box !important;
+                position: relative;
+            }
+            .gradient-border-card::before {
+                content: '';
+                position: absolute;
+                inset: -2px;
+                padding: 2px;
+                border-radius: inherit;
+                background: var(--card-border-gradient, linear-gradient(135deg, #E8A0B0, #8B6A9A, #C4849A));
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                z-index: 0;
+                pointer-events: none;
+            }
+        `}</style>
+        <div className="gradient-border-card" style={{
+            "--card-border-gradient": cardBorderGradient,
             background: "#ffffff",
             borderRadius: 24,
-            overflow: "hidden",
-            border: "1px solid rgba(205,171,143,0.15)",
             boxShadow: "0 8px 24px -8px rgba(0,0,0,0.06)",
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
             padding: 12
-        }}
+        } as React.CSSProperties}
         onMouseEnter={e => {
             (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
             (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 32px -8px rgba(0,0,0,0.12)";
@@ -52,6 +74,7 @@ export default function CompactProductCard({
             {/* Image Container */}
             <div style={{
                 position: "relative",
+                zIndex: 1,
                 width: "100%",
                 aspectRatio: "9/16",
                 borderRadius: 16,
@@ -94,7 +117,7 @@ export default function CompactProductCard({
             </div>
 
             {/* Content Container */}
-            <div style={{ padding: "16px 4px 4px 4px", display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ padding: "16px 4px 4px 4px", display: "flex", flexDirection: "column", gap: 20, position: "relative", zIndex: 1 }}>
                 {/* Title and Prices */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     {/* Left Column */}
@@ -175,5 +198,6 @@ export default function CompactProductCard({
                 </div>
             </div>
         </div>
+        </>
     );
 }
