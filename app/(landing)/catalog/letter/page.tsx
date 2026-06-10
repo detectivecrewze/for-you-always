@@ -51,7 +51,7 @@ export default function LetterCatalogPage() {
                                 "Background Music Pilihan"
                             ]}
                             price="Rp 15.000"
-                            demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
+                            demoLink="https://letter.for-you-always.my.id/letter-test"
                             addonText="Tersedia opsi Terima Jadi: Rp 30.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"

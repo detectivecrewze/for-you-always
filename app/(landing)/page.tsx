@@ -464,7 +464,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 25.000"
                             newPrice="Rp 15.000"
                             href="/catalog/letter"
-                            demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
+                            demoLink="https://letter.for-you-always.my.id/letter-test"
                             occasions={["Graduation", "Apology", "Anniversary"]}
                             features={["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
                         />

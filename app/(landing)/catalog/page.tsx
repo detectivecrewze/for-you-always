@@ -63,7 +63,7 @@ export default function CatalogPage() {
             hashtag: "#AESTHETIC",
             soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
-            demoLink: "https://letter.for-you-always.my.id/ribbon/letter-test",
+            demoLink: "https://letter.for-you-always.my.id/letter-test",
             occasions: ["Graduation", "Apology", "Anniversary"],
             features: ["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
