@@ -473,7 +473,7 @@ export default function MainHubPage() {
                             imageSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             title="Mixtape Edition"
                             oldPrice="Rp 50.000"
-                            newPrice="Rp 25.000"
+                            newPrice="Rp 20.000"
                             href="/catalog/mixtape"
                             occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
                             features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}

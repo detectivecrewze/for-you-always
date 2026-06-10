@@ -39,14 +39,14 @@ export default function MixtapeCatalogPage() {
                                 "Background Music Pilihan",
                                 "Rekam Suara & Custom Pesan"
                             ]}
-                            price="Rp 25.000"
+                            price="Rp 20.000"
                             addonText="Kode bundle akan dikirimkan via DM/WA setelah pesanan dikonfirmasi."
                             mediaSrc=""
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Mixtape%20Edition*%20(Premium%20Bundle%203%20Quota)%20seharga%20Rp%2025.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Mixtape%20Edition*%20(Premium%20Bundle%203%20Quota)%20seharga%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
                                 { name: "Bundle Dashboard", desc: "Sistem quota bundle otomatis", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781035640605-qnr98j.png" },

@@ -42,7 +42,7 @@ export default function CatalogPage() {
             imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
             title: "Mixtape Edition",
             oldPrice: "Rp 50.000",
-            newPrice: "Rp 25.000",
+            newPrice: "Rp 20.000",
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
