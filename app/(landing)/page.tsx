@@ -475,7 +475,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 50.000"
                             newPrice="Rp 25.000"
                             href="/catalog/mixtape"
-                            occasions={["Crush / PDKT", "Birthday"]}
+                            occasions={["Crush / PDKT", "Birthday", "Any Occasion"]}
                             features={["Integrasi Lagu Spotify", "Animasi Kaset Retro", "Galeri Foto Estetik"]}
                         />
                     </div>

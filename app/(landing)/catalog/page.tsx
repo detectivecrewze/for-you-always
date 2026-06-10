@@ -46,7 +46,7 @@ export default function CatalogPage() {
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
-            occasions: ["Crush / PDKT", "Birthday"],
+            occasions: ["Crush / PDKT", "Birthday", "Any Occasion"],
             features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
         {
