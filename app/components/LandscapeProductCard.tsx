@@ -74,7 +74,7 @@ export function LandscapeProductCard({
     accentGlow: string;
     href: string;
     themesLabel?: string;
-    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string }[] }[];
+    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string }[] }[];
     initialSelectedIndex?: number;
     autoCycle?: boolean;
     delay?: number;
@@ -88,6 +88,7 @@ export function LandscapeProductCard({
     const [activeGlow, setActiveGlow] = useState(accentGlow);
     const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
     const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
+    const [activeDemoLink, setActiveDemoLink] = useState(demoLink);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
         const initIdx = initialSelectedIndex ?? 0;
@@ -136,13 +137,19 @@ export function LandscapeProductCard({
             if (activeTheme.fallbackImgSrc) setActiveFallbackImgSrc(activeTheme.fallbackImgSrc);
             else if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
             else setActiveFallbackImgSrc(fallbackImgSrc);
+
+            // Logic to determine demoLink
+            if (activeTheme.demoLink) setActiveDemoLink(activeTheme.demoLink);
+            else if (theme.demoLink) setActiveDemoLink(theme.demoLink);
+            else setActiveDemoLink(demoLink);
         } else {
             setActiveAccent(accentColor);
             setActiveGlow(accentGlow);
             setActiveVideoSrc(mediaSrc);
             setActiveFallbackImgSrc(fallbackImgSrc);
+            setActiveDemoLink(demoLink);
         }
-    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc]);
+    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink]);
 
     // Handle Auto Cycling
     useEffect(() => {
@@ -242,8 +249,8 @@ export function LandscapeProductCard({
                         )}
 
                         {/* Floating Demo Button Overlay */}
-                        {demoLink && (
-                            <a href={demoLink} target="_blank" rel="noopener noreferrer" style={{
+                        {activeDemoLink && (
+                            <a href={activeDemoLink} target="_blank" rel="noopener noreferrer" style={{
                                 position: "absolute",
                                 bottom: 16,
                                 left: 16,
