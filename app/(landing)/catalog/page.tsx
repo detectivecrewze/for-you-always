@@ -13,7 +13,7 @@ export default function CatalogPage() {
         {
             badgeText: "#1 Exclusive",
             badgeColor: "#d4af37",
-            titleColor: "#2D141E", // Dark theme background color from Memoria page
+            titleColor: "#581824", // Burgundy / Bordeaux
             imageSrc: "/assets/opening_gate.png",
             title: "Memoria (Premium)",
             newPrice: "Rp 40.000",
