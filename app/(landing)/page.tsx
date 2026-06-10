@@ -455,7 +455,7 @@ export default function MainHubPage() {
                         <CompactProductCard
                             badgeText="Popular"
                             badgeColor="#9c27b0"
-                            titleColor="#c4858a" // From Letter page
+                            titleColor="#2a3d5c" // From Letter Midnight theme
                             imageSrc="https://cdn.for-you-always.my.id/1781032720701-5lb1a.png"
                             title="Letter Edition"
                             oldPrice="Rp 25.000"
