@@ -51,6 +51,9 @@ export const metadata: Metadata = {
     apple: "/assets/favicon/apple-touch-icon.png",
   },
   manifest: "/assets/favicon/site.webmanifest",
+  verification: {
+    google: "xioDWch2qaMHQ9tLJDUxKtV1oddFipFpL2IVhOp0PLU",
+  },
 };
 
 export const viewport = {
