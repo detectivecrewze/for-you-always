@@ -444,6 +444,8 @@ export default function MainHubPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, paddingBottom: 64 }}>
                         <CompactProductCard
                             badgeText="#1 Terlaris"
+                            badgeColor="#e91e63"
+                            titleColor="#a67c52" // From Voices page
                             imageSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
                             title="Voices Gift"
                             oldPrice="Rp 30.000"
@@ -453,6 +455,7 @@ export default function MainHubPage() {
                         <CompactProductCard
                             badgeText="Popular"
                             badgeColor="#9c27b0"
+                            titleColor="#c4858a" // From Letter page
                             imageSrc="https://cdn.for-you-always.my.id/1781032720701-5lb1a.png"
                             title="Letter Edition"
                             oldPrice="Rp 25.000"
@@ -462,6 +465,7 @@ export default function MainHubPage() {
                         <CompactProductCard
                             badgeText="Premium Bundle"
                             badgeColor="#4a7c8e"
+                            titleColor="#5a8d9e" // From Mixtape page
                             imageSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             title="Mixtape Edition"
                             oldPrice="Rp 50.000"

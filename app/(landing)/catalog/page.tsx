@@ -13,6 +13,7 @@ export default function CatalogPage() {
         {
             badgeText: "#1 Exclusive",
             badgeColor: "#d4af37",
+            titleColor: "#2D141E", // Dark theme background color from Memoria page
             imageSrc: "/assets/opening_gate.png",
             title: "Memoria (Premium)",
             newPrice: "Rp 40.000",
@@ -21,6 +22,7 @@ export default function CatalogPage() {
         {
             badgeText: "#1 Terlaris",
             badgeColor: "#e91e63",
+            titleColor: "#a67c52", // From Voices page
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
             title: "Voices Gift",
             oldPrice: "Rp 30.000",
@@ -32,6 +34,7 @@ export default function CatalogPage() {
         {
             badgeText: "Premium Bundle",
             badgeColor: "#4a7c8e",
+            titleColor: "#5a8d9e", // From Mixtape page
             imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
             title: "Mixtape Edition",
             oldPrice: "Rp 50.000",
@@ -43,6 +46,7 @@ export default function CatalogPage() {
         {
             badgeText: "Popular",
             badgeColor: "#9c27b0",
+            titleColor: "#c4858a", // From Letter page
             imageSrc: "https://cdn.for-you-always.my.id/1781032720701-5lb1a.png",
             title: "Letter Edition",
             oldPrice: "Rp 25.000",
@@ -54,6 +58,7 @@ export default function CatalogPage() {
         {
             badgeText: "Interactive",
             badgeColor: "#5c8c5c",
+            titleColor: "#5c8c5c", // From Arcade page
             imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
             title: "Arcade Edition",
             oldPrice: "Rp 25.000",
@@ -65,6 +70,7 @@ export default function CatalogPage() {
         {
             badgeText: "New Release",
             badgeColor: "#008689",
+            titleColor: "#008689", // From Retro page
             imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
             title: "Retro Edition",
             oldPrice: "Rp 20.000",
@@ -76,6 +82,7 @@ export default function CatalogPage() {
         {
             badgeText: "Recommended",
             badgeColor: "#c9184a",
+            titleColor: "#c9184a", // From Wrapped page
             imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
             title: "Wrapped Edition",
             oldPrice: "Rp 25.000",

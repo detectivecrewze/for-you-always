@@ -8,6 +8,7 @@ interface CompactProductCardProps {
     badgeColor?: string; // e.g. "#a88365"
     imageSrc: string;
     title: string;
+    titleColor?: string;
     oldPrice?: string;
     newPrice: string;
     hashtag?: string;
@@ -20,6 +21,7 @@ export default function CompactProductCard({
     badgeColor = "#a88365",
     imageSrc,
     title,
+    titleColor = "#382a24",
     oldPrice,
     newPrice,
     hashtag,
@@ -101,7 +103,7 @@ export default function CompactProductCard({
                             fontFamily: "var(--font-display)", 
                             fontSize: 18, 
                             fontWeight: 800, 
-                            color: "#382a24",
+                            color: titleColor,
                             margin: 0,
                             letterSpacing: "0.02em",
                             lineHeight: 1.2
