@@ -18,10 +18,11 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://for-you-always.my.id"),
-  title: "For you, Always. — Digital Atelier",
+  alternates: { canonical: '/' },
+  title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
   description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
   openGraph: {
-    title: "For you, Always. — Digital Atelier",
+    title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
     description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
     url: "https://for-you-always.my.id",
     siteName: "For you, Always.",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "For you, Always. — Digital Atelier",
+    title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
     description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
     images: ["https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"],
   },
@@ -74,6 +75,22 @@ export default function RootLayout({
         <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
         <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "For you, Always.",
+              "url": "https://for-you-always.my.id",
+              "logo": "https://for-you-always.my.id/logo.png",
+              "description": "Digital Atelier khusus kado digital premium dan surat interaktif.",
+              "sameAs": [
+                "https://instagram.com/foryoualways.id"
+              ]
+            })
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
         {children}

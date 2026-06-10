@@ -838,6 +838,12 @@ export default function MainHubPage() {
                         </a>
                     </div>
 
+                    <div style={{ maxWidth: 600, margin: "0 auto 32px", textAlign: "center" }}>
+                        <p style={{ fontSize: 10, color: "#8b7e75", lineHeight: 1.6, fontWeight: 400, fontFamily: "var(--font-sans)" }}>
+                            For you, Always. adalah Digital Atelier yang menghadirkan pengalaman <strong>kado digital premium</strong> dan <strong>surat interaktif aesthetic</strong>. Cocok untuk hadiah anniversary, kado ulang tahun, merayakan momen spesial, atau kejutan LDR (Long Distance Relationship). Dari <em>Voices Gift</em>, <em>Arcade</em>, <em>Mixtape</em>, hingga <em>Retro Edition</em>, setiap karya didesain dengan animasi eksklusif untuk menciptakan memori yang tak terlupakan.
+                        </p>
+                    </div>
+
                     <p style={{ fontSize: 9, color: "#a6968c", fontWeight: 500, letterSpacing: "0.05em" }}>© 2026 FOR YOU, ALWAYS. — ALL RIGHTS RESERVED.</p>
                 </AnimatedSection>
             </section>
