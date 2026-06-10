@@ -32,7 +32,7 @@ export default function CatalogPage() {
             hashtag: "#BESTSELLER",
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
-            occasions: ["Long Distance", "Any Occasion", "Birthday"],
+            occasions: ["Long Dist", "Any Occasion", "Birthday"],
             features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
         {
@@ -46,7 +46,7 @@ export default function CatalogPage() {
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
-            occasions: ["Crush / PDKT", "Birthday", "Any Occasion"],
+            occasions: ["Crush", "Birthday", "Any Occasion"],
             features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
         {

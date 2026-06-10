@@ -152,10 +152,10 @@ export default function CompactProductCard({
                                 }}>For</span>
                                 {occasions.map((occ, i) => (
                                     <span key={i} style={{
-                                        fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
+                                        fontFamily: "var(--font-sans)", fontSize: 8, fontWeight: 700,
                                         color: titleColor, background: `${titleColor}15`,
                                         padding: "2px 6px", borderRadius: 999,
-                                        letterSpacing: "0.05em", textTransform: "uppercase",
+                                        letterSpacing: "0.03em", textTransform: "uppercase",
                                         whiteSpace: "nowrap", display: "inline-block"
                                     }}>
                                         {occ}
