@@ -17,6 +17,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://for-you-always.my.id"),
   title: "For you, Always. — Digital Atelier",
   description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
   openGraph: {
