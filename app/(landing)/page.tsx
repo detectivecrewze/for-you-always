@@ -451,7 +451,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 30.000"
                             newPrice="Rp 15.000"
                             href="/catalog/voices"
-                            occasions={["Long Dist", "Any Occasion", "Birthday"]}
+                            occasions={["Long Dist", "Any Occasion", "Birthday", "Apology"]}
                             features={["Pesan Suara (Voice Note)", "Desain Minimalis Elegan", "Surat Personal"]}
                         />
                         <CompactProductCard
@@ -475,7 +475,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 50.000"
                             newPrice="Rp 25.000"
                             href="/catalog/mixtape"
-                            occasions={["Crush", "Birthday", "Any Occasion"]}
+                            occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
                             features={["Integrasi Lagu Spotify", "Animasi Kaset Retro", "Galeri Foto Estetik"]}
                         />
                     </div>

@@ -32,7 +32,7 @@ export default function CatalogPage() {
             hashtag: "#BESTSELLER",
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
-            occasions: ["Long Dist", "Any Occasion", "Birthday"],
+            occasions: ["Long Dist", "Any Occasion", "Birthday", "Apology"],
             features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
         {
@@ -46,7 +46,7 @@ export default function CatalogPage() {
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
-            occasions: ["Crush", "Birthday", "Any Occasion"],
+            occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
             features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
         {
@@ -74,7 +74,7 @@ export default function CatalogPage() {
             hashtag: "#10ROOMS",
             soldCount: "560+ terjual",
             href: "/catalog/arcade",
-            occasions: ["Anniversary", "Birthday"],
+            occasions: ["Anniversary", "Birthday", "Bestie"],
             features: ["10 Ruangan Interaktif", "Bisa On / Off Room", "Background Music Pilihan"]
         },
         {
