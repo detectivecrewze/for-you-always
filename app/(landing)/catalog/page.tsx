@@ -32,7 +32,7 @@ export default function CatalogPage() {
             hashtag: "#BESTSELLER",
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
-            occasions: ["Long Distance", "Random Gift"],
+            occasions: ["Long Distance", "Any Occasion", "Birthday"],
             features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
         {
@@ -60,7 +60,7 @@ export default function CatalogPage() {
             hashtag: "#AESTHETIC",
             soldCount: "850+ terjual",
             href: "/catalog/letter",
-            occasions: ["Graduation", "Farewell", "Anniversary"],
+            occasions: ["Graduation", "Apology", "Anniversary"],
             features: ["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
         {
@@ -102,7 +102,7 @@ export default function CatalogPage() {
             hashtag: "#MEMORIES",
             soldCount: "920+ terjual",
             href: "/catalog/wrapped",
-            occasions: ["Year End", "Anniversary"],
+            occasions: ["Year End", "Anniversary", "Birthday"],
             features: ["6 Halaman Interaktif", "Bisa On / Off Halaman", "Background Music Pilihan"]
         }
     ];
