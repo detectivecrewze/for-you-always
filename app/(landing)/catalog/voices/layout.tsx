@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Voices Gift - Kado Suara & Foto",
     description: "Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik.",
-    images: ["https://cdn.for-you-always.my.id/1777881039502-bav595.webp"],
+    images: ["https://cdn.for-you-always.my.id/1781123503121-y6uhb.png"],
   }
 };
 
