@@ -400,15 +400,27 @@ export default function MainHubPage() {
                                 fontWeight: 400, color: "#3B2F25", lineHeight: 1.1, letterSpacing: "-0.03em",
                                 marginBottom: 0
                             }}>
-                                Yang Paling Banyak <br />
-                                <span style={{ 
-                                    fontStyle: "italic", 
-                                    background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                    display: "inline-block",
-                                    paddingRight: "0.1em"
-                                }}>Dipilih.</span>
+                                Most Popular <br />
+                                <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
+                                    <span style={{ 
+                                        fontStyle: "italic", 
+                                        background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent",
+                                        display: "inline-block",
+                                        paddingRight: "0.1em"
+                                    }}>Choice</span>
+                                    <svg viewBox="0 0 24 24" fill="url(#starGradient)" style={{ width: "clamp(32px, 5vw, 48px)", height: "clamp(32px, 5vw, 48px)", flexShrink: 0 }}>
+                                        <defs>
+                                            <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stopColor="#a88365" />
+                                                <stop offset="40%" stopColor="#d8b89c" />
+                                                <stop offset="100%" stopColor="#8c6a4f" />
+                                            </linearGradient>
+                                        </defs>
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </span>
                             </h2>
                             
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, margin: "28px 0" }}>
@@ -821,19 +833,7 @@ export default function MainHubPage() {
             <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
                 style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
             >
-                <div style={{
-                    padding: "8px 16px", borderRadius: 999,
-                    background: "#1d1816", color: "#cdab8f",
-                    fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                    boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)",
-                    transition: "all 0.3s ease",
-                    whiteSpace: "nowrap" as const,
-                }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#1d1816"; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; (e.currentTarget as HTMLElement).style.color = "#cdab8f"; }}
-                >
-                    Order
-                </div>
+
                 <div
                     style={{ width: 44, height: 44, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s ease", flexShrink: 0 }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
