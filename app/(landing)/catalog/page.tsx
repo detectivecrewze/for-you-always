@@ -18,7 +18,7 @@ export default function CatalogPage() {
             title: "Memoria (Premium)",
             newPrice: "Rp 40.000",
             href: "/catalog/memoria",
-            occasions: ["Anniversary", "Birthday"],
+            occasions: ["Anniversary", "Birthday", "Crush"],
             features: ["Done For You", "Premium & Eksklusif"]
         },
         {
