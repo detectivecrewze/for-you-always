@@ -140,13 +140,14 @@ export default function CompactProductCard({
                         </h3>
                         {/* Occasions Tags */}
                         {occasions && occasions.length > 0 && (
-                            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+                            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
                                 {occasions.map((occ, i) => (
                                     <span key={i} style={{
-                                        fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                                        fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
                                         color: titleColor, background: `${titleColor}15`,
-                                        padding: "4px 10px", borderRadius: 999,
-                                        letterSpacing: "0.05em", textTransform: "uppercase"
+                                        padding: "3px 8px", borderRadius: 999,
+                                        letterSpacing: "0.05em", textTransform: "uppercase",
+                                        whiteSpace: "nowrap", display: "inline-block"
                                     }}>
                                         {occ}
                                     </span>

@@ -67,7 +67,7 @@ export default function CatalogPage() {
             badgeText: "10 Rooms",
             badgeColor: "#5c8c5c",
             titleColor: "#5c8c5c",
-            imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+            imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
             title: "Arcade Edition",
             oldPrice: "Rp 40.000",
             newPrice: "Rp 20.000",
