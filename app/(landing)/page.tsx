@@ -452,7 +452,7 @@ export default function MainHubPage() {
                             newPrice="Rp 15.000"
                             href="/catalog/voices"
                             occasions={["Long Dist", "Any Occasion", "Birthday", "Apology"]}
-                            features={["Pesan Suara (Voice Note)", "Desain Minimalis Elegan", "Surat Personal"]}
+                            features={["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
                         />
                         <CompactProductCard
                             badgeText="Popular"
@@ -464,7 +464,7 @@ export default function MainHubPage() {
                             newPrice="Rp 15.000"
                             href="/catalog/letter"
                             occasions={["Graduation", "Apology", "Anniversary"]}
-                            features={["Animasi Segel Lilin", "Surat Panjang Terbaca Jelas", "Tema Menyesuaikan"]}
+                            features={["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
                         />
                         <CompactProductCard
                             badgeText="Premium Bundle"
@@ -476,7 +476,7 @@ export default function MainHubPage() {
                             newPrice="Rp 25.000"
                             href="/catalog/mixtape"
                             occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
-                            features={["Integrasi Lagu Spotify", "Animasi Kaset Retro", "Galeri Foto Estetik"]}
+                            features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}
                         />
                     </div>
 
