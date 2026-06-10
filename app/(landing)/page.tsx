@@ -452,7 +452,7 @@ export default function MainHubPage() {
                             newPrice="Rp 15.000"
                             href="/catalog/voices"
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
-                            occasions={["Long Dist", "Any Occasion", "Birthday", "Apology"]}
+                            occasions={["LDR", "Any Occasion", "Birthday", "Apology"]}
                             features={["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
                         />
                         <CompactProductCard
@@ -465,7 +465,7 @@ export default function MainHubPage() {
                             newPrice="Rp 15.000"
                             href="/catalog/letter"
                             demoLink="https://letter.for-you-always.my.id/letter-test"
-                            occasions={["Graduation", "Apology", "Anniversary"]}
+                            occasions={["Graduation", "Apology", "Anniversary", "LDR"]}
                             features={["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
                         />
                         <CompactProductCard

@@ -19,7 +19,7 @@ export default function CatalogPage() {
             newPrice: "Rp 40.000",
             href: "/catalog/memoria",
             demoLink: "https://anniv.for-you-always.my.id/",
-            occasions: ["Anniversary", "Birthday", "Crush"],
+            occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
             features: ["Done For You", "Premium & Eksklusif"]
         },
         {
@@ -34,7 +34,7 @@ export default function CatalogPage() {
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
             demoLink: "https://voice.for-you-always.my.id/gift/for-nadin",
-            occasions: ["Long Dist", "Any Occasion", "Birthday", "Apology"],
+            occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
             features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
         {
@@ -64,7 +64,7 @@ export default function CatalogPage() {
             soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
             demoLink: "https://letter.for-you-always.my.id/letter-test",
-            occasions: ["Graduation", "Apology", "Anniversary"],
+            occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
             features: ["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
         {
