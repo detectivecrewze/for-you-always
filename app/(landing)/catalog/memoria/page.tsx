@@ -69,6 +69,7 @@ export default function ProductCatalogPage() {
                             "Dikerjakan Langsung oleh Kami"
                         ]}
                         price="Rp 40.000"
+                        demoLink="https://anniv.for-you-always.my.id/"
                         mediaSrc=""
                         fallbackImgSrc="/assets/opening_gate.png"
                         mediaType="image"

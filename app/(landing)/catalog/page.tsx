@@ -18,6 +18,7 @@ export default function CatalogPage() {
             title: "Memoria (Premium)",
             newPrice: "Rp 40.000",
             href: "/catalog/memoria",
+            demoLink: "https://anniv.for-you-always.my.id/",
             occasions: ["Anniversary", "Birthday", "Crush"],
             features: ["Done For You", "Premium & Eksklusif"]
         },
@@ -32,6 +33,7 @@ export default function CatalogPage() {
             hashtag: "#BESTSELLER",
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
+            demoLink: "https://voice.for-you-always.my.id/gift/for-nadin",
             occasions: ["Long Dist", "Any Occasion", "Birthday", "Apology"],
             features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
@@ -46,6 +48,7 @@ export default function CatalogPage() {
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
+            demoLink: "https://mixtape.for-you-always.my.id/auto-w2ykcoi",
             occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
             features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
@@ -58,8 +61,9 @@ export default function CatalogPage() {
             oldPrice: "Rp 25.000",
             newPrice: "Rp 15.000",
             hashtag: "#AESTHETIC",
-            soldCount: "850+ terjual",
+            soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
+            demoLink: "https://letter.for-you-always.my.id/ribbon/letter-test",
             occasions: ["Graduation", "Apology", "Anniversary"],
             features: ["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
@@ -86,8 +90,9 @@ export default function CatalogPage() {
             oldPrice: "Rp 30.000",
             newPrice: "Rp 15.000",
             hashtag: "#NOSTALGIA",
-            soldCount: "430+ terjual",
+            soldCount: "340+ terjual",
             href: "/catalog/retro",
+            demoLink: "https://retro.for-you-always.my.id/?to=retro-test",
             occasions: ["Bestie", "Birthday", "Apology"],
             features: ["Tampilan Retro Windows 98", "Custom GIF Pilihan", "5 Stages of Surprises"]
         },
@@ -100,8 +105,9 @@ export default function CatalogPage() {
             oldPrice: "Rp 40.000",
             newPrice: "Rp 20.000",
             hashtag: "#MEMORIES",
-            soldCount: "920+ terjual",
+            soldCount: "420+ terjual",
             href: "/catalog/wrapped",
+            demoLink: "https://love.for-you-always.my.id/love-test",
             occasions: ["Year End", "Anniversary", "Birthday"],
             features: ["6 Halaman Interaktif", "Bisa On / Off Halaman", "Background Music Pilihan"]
         }

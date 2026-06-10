@@ -451,6 +451,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 30.000"
                             newPrice="Rp 15.000"
                             href="/catalog/voices"
+                            demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
                             occasions={["Long Dist", "Any Occasion", "Birthday", "Apology"]}
                             features={["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
                         />
@@ -463,6 +464,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 25.000"
                             newPrice="Rp 15.000"
                             href="/catalog/letter"
+                            demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
                             occasions={["Graduation", "Apology", "Anniversary"]}
                             features={["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
                         />
@@ -475,6 +477,7 @@ export default function MainHubPage() {
                             oldPrice="Rp 50.000"
                             newPrice="Rp 20.000"
                             href="/catalog/mixtape"
+                            demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
                             features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}
                         />

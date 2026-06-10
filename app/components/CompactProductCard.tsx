@@ -16,6 +16,7 @@ interface CompactProductCardProps {
     href: string;
     features?: string[];
     occasions?: string[];
+    demoLink?: string;
 }
 
 export default function CompactProductCard({
@@ -30,7 +31,8 @@ export default function CompactProductCard({
     soldCount,
     href,
     features,
-    occasions
+    occasions,
+    demoLink
 }: CompactProductCardProps) {
     const waText = `Halo Digital Atelier! Saya tertarik untuk memesan *${title}* seharga ${newPrice}.\n\nMohon info langkah selanjutnya ya. Terima kasih!`;
     const waLink = `https://wa.me/6281936109076?text=${encodeURIComponent(waText)}`;
@@ -117,6 +119,45 @@ export default function CompactProductCard({
                         </svg>
                         {badgeText}
                     </div>
+                )}
+
+                {/* Bottom Left Demo Button */}
+                {demoLink && (
+                    <a href={demoLink} target="_blank" rel="noopener noreferrer" style={{
+                        position: "absolute",
+                        bottom: 12,
+                        left: 12,
+                        background: "rgba(250, 247, 242, 0.85)",
+                        backdropFilter: "blur(8px)",
+                        WebkitBackdropFilter: "blur(8px)",
+                        border: "1px solid rgba(56, 42, 36, 0.15)",
+                        color: "#382a24",
+                        fontSize: 11,
+                        fontWeight: 800,
+                        padding: "6px 12px",
+                        borderRadius: 999,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                        letterSpacing: "0.02em",
+                        textDecoration: "none",
+                        transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={e => {
+                        e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={e => {
+                        e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
+                        e.currentTarget.style.transform = "translateY(0)";
+                    }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Lihat Demo
+                    </a>
                 )}
             </div>
 

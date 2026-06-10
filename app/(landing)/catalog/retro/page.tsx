@@ -44,6 +44,7 @@ export default function ProductCatalogPage() {
                                     <span style={{ marginLeft: 8 }}>Promo Rp 15.000</span>
                                 </>
                             }
+                            demoLink="https://retro.for-you-always.my.id/?to=retro-test"
                             addonText="Tersedia opsi Terima Jadi: Rp 30.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1778444022368-wu278.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"

@@ -38,6 +38,7 @@ export default function ProductCatalogPage() {
                                 "Background Music Pilihan"
                             ]}
                             price="Promo Rp 15.000"
+                            demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
                             addonText="Tersedia opsi Terima Jadi: Rp 30.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
