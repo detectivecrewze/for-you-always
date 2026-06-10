@@ -142,7 +142,7 @@ export default function CompactProductCard({
                         {occasions && occasions.length > 0 && (
                             <div style={{ 
                                 display: "flex", flexDirection: "row", flexWrap: "wrap", 
-                                alignItems: "center", gap: 6, marginTop: 4, 
+                                alignItems: "center", gap: 4, marginTop: 4, 
                                 paddingLeft: 6, borderLeft: `2px solid ${titleColor}40` 
                             }}>
                                 <span style={{
@@ -154,7 +154,7 @@ export default function CompactProductCard({
                                     <span key={i} style={{
                                         fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
                                         color: titleColor, background: `${titleColor}15`,
-                                        padding: "3px 8px", borderRadius: 999,
+                                        padding: "2px 6px", borderRadius: 999,
                                         letterSpacing: "0.05em", textTransform: "uppercase",
                                         whiteSpace: "nowrap", display: "inline-block"
                                     }}>
