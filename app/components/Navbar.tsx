@@ -23,8 +23,10 @@ export default function Navbar() {
     ];
 
     const mobileLinks = [
-        { label: "Home", href: "/" },
         { label: "Catalog", href: "/catalog" },
+        { label: "Cara Kerja", href: "/#cara-kerja" },
+        { label: "Testimoni", href: "/#testimoni" },
+        { label: "FAQ", href: "/#faq" },
     ];
 
     return (
@@ -83,6 +85,20 @@ export default function Navbar() {
                                 </Link>
                             )
                         })}
+                    </div>
+
+                    {/* Mobile quick links — center */}
+                    <div style={{ alignItems: "center", gap: 16 }} className="nav-mobile-quicklinks">
+                        <Link href="/" style={{
+                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                            color: pathname === "/" ? "#a67c52" : "#6e5c53", textDecoration: "none",
+                        }}>HOME</Link>
+                        <Link href="/catalog" style={{
+                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                            color: pathname === "/catalog" || pathname.startsWith("/catalog/") ? "#a67c52" : "#6e5c53", textDecoration: "none",
+                        }}>CATALOG</Link>
                     </div>
 
                     {/* CTA + Hamburger */}

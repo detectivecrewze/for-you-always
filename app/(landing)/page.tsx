@@ -25,9 +25,11 @@ function Navbar() {
         { label: "Testimoni", href: "#testimoni" },
     ];
 
-        const mobileLinks = [
-        { label: "Home", href: "/" },
+    const mobileLinks = [
         { label: "Catalog", href: "/catalog" },
+        { label: "Cara Kerja", href: "#cara-kerja" },
+        { label: "Testimoni", href: "#testimoni" },
+        { label: "FAQ", href: "#faq" },
     ];
 
     return (
@@ -83,6 +85,20 @@ function Navbar() {
                                 {l.label}
                             </a>
                         ))}
+                    </div>
+
+                    {/* Mobile quick links — center */}
+                    <div style={{ alignItems: "center", gap: 16 }} className="nav-mobile-quicklinks">
+                        <Link href="/" style={{
+                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                            color: "#a67c52", textDecoration: "none",
+                        }}>HOME</Link>
+                        <Link href="/catalog" style={{
+                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                            color: "#6e5c53", textDecoration: "none",
+                        }}>CATALOG</Link>
                     </div>
 
                     {/* CTA + Hamburger */}
@@ -307,8 +323,8 @@ export default function MainHubPage() {
                     {/* Hero CTA Buttons */}
                     <AnimatedSection delay={350}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 60 }}>
-                            <a
-                                href="#loves-edition"
+                            <Link
+                                href="/catalog"
                                 style={{
                                     display: "inline-flex", alignItems: "center", gap: 8,
                                     padding: "14px 32px", borderRadius: 999,
@@ -320,9 +336,9 @@ export default function MainHubPage() {
                                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
                                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
                             >
-                                Lihat Koleksi
+                                Lihat Catalog
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                            </a>
+                            </Link>
                             <a
                                 href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20tahu%20lebih%20lanjut%20tentang%20produk%20kalian."
                                 target="_blank" rel="noopener noreferrer"
