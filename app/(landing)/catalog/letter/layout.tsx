@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Letter Edition - Surat Digital Aesthetic",
     description: "Sampaikan pesan bermakna melalui surat digital bernuansa sinematik.",
-    images: ["https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"],
+    images: ["https://cdn.for-you-always.my.id/1781032720701-5lb1a.png"],
   }
 };
 

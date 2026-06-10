@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mixtape Edition - Cassette Playlist",
     description: "Kembalikan memori lagu-lagu favorit kalian dalam kaset digital interaktif yang bisa diputar kapan saja.",
-    images: ["https://cdn.for-you-always.my.id/1776517947113-e4y3s.webp"],
+    images: ["https://cdn.for-you-always.my.id/1781034685666-udzbps.png"],
   }
 };
 

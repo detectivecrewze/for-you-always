@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Arcade Edition - Petualangan Interaktif",
     description: "Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian.",
-    images: ["https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"],
+    images: ["https://cdn.for-you-always.my.id/1781032826300-poixyb.png"],
   }
 };
 
