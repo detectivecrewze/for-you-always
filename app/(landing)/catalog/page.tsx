@@ -53,6 +53,21 @@ export default function CatalogPage() {
             features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
         {
+            badgeText: "New ✨",
+            badgeColor: "#e8789a",
+            titleColor: "#8a3050",
+            imageSrc: "/assets/opening_gate.png",
+            title: "Invitation Edition",
+            oldPrice: "Rp 30.000",
+            newPrice: "Rp 15.000",
+            hashtag: "#DATEINVITATION",
+            soldCount: "New Release",
+            href: "/catalog/invitation",
+            demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
+            occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
+            features: ["Undangan Kencan Interaktif", "6 Pilihan Tema Warna", "Tiket Kencan Digital"]
+        },
+        {
             badgeText: "Popular",
             badgeColor: "#9c27b0",
             titleColor: "#2a3d5c",
