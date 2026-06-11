@@ -59,6 +59,16 @@ export default function InvitationCatalogPage() {
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Invitation%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                            themesLabel="Alur Undangan"
+                            themes={[
+                                { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
+                                { name: "Invitation", desc: "Kartu undangan utama", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp" },
+                                { name: "Date Picker", desc: "Pemilihan tanggal & waktu", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838838-b3w88t.webp" },
+                                { name: "Date Activity", desc: "Pilihan aktivitas kencan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838139-qf8gc.webp" },
+                                { name: "Dress Code", desc: "Tentukan dress code", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210839542-jybloo.webp" },
+                                { name: "Notes", desc: "Pesan khusus & catatan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840694-hzo19n.webp" },
+                                { name: "Ending", desc: "Card invitation download", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210842087-xguq5o.webp" }
+                            ]}
                             delay={0}
                             reverse={false}
                             initialSelectedIndex={0}
