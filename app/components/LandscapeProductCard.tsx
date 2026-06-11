@@ -367,19 +367,20 @@ export function LandscapeProductCard({
                                 {/* Main Dots Indicator */}
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
                                     {themes.map((theme, i) => {
-                                        const themeColor = theme.color || accentColor;
+                                        const hasExplicitColor = !!theme.color;
+                                        const themeColor = hasExplicitColor ? theme.color! : "#d1d5db";
                                         const isSelected = (selectedIndex === null && i === 0) || selectedIndex === i;
-                                        const isSubThemed = theme.subThemes && theme.subThemes.length > 0;
+                                        const dotColor = isSelected ? (hasExplicitColor ? themeColor : activeAccent) : (hasExplicitColor ? themeColor : "#d1d5db");
                                         return (
                                             <div
                                                 key={i}
                                                 onClick={() => setSelectedIndex(i)}
                                                 style={{
                                                     width: 10, height: 10, borderRadius: "50%",
-                                                    background: isSubThemed ? (isSelected ? activeAccent : "#d1d5db") : themeColor,
+                                                    background: dotColor,
                                                     cursor: "pointer",
                                                     border: isSelected ? `2px solid #fff` : `none`,
-                                                    boxShadow: isSelected ? `0 0 0 1.5px ${isSubThemed ? activeAccent : themeColor}` : `none`,
+                                                    boxShadow: isSelected ? `0 0 0 1.5px ${isSelected ? (hasExplicitColor ? themeColor : activeAccent) : "#d1d5db"}` : `none`,
                                                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                                                     transform: isSelected ? "scale(1.4)" : "scale(1)",
                                                     opacity: isSelected ? 1 : 0.4
@@ -390,10 +391,11 @@ export function LandscapeProductCard({
                                     })}
                                 </div>
 
-                                {/* SubThemes Color Dots Indicator */}
+                                {/* SubThemes Color Dots Indicator — only shown when subThemes have explicit color values */}
                                 {(() => {
                                     const currentTheme = themes[selectedIndex !== null ? selectedIndex : 0];
-                                    if (currentTheme?.subThemes && currentTheme.subThemes.length > 0) {
+                                    const hasColoredSubThemes = currentTheme?.subThemes && currentTheme.subThemes.length > 0 && currentTheme.subThemes.some(s => !!s.color);
+                                    if (hasColoredSubThemes) {
                                         return (
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 16, gap: 8 }}>
                                                 <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: activeAccent, opacity: 0.7, textTransform: "uppercase" }}>
