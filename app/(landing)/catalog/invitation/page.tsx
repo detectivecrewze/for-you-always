@@ -47,7 +47,6 @@ export default function InvitationCatalogPage() {
                                 "Amplop Digital Interaktif",
                                 "Pilih Tanggal Kencan Berdua",
                                 "Pilih Aktivitas & Dress Code",
-                                "6 Pilihan Tema Warna",
                                 "Tiket Kencan Digital",
                                 "Background Music Pilihan"
                             ]}
@@ -60,23 +59,6 @@ export default function InvitationCatalogPage() {
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
                             href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Invitation%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
-                            themesLabel="Preview Experience"
-                            themes={[
-                                {
-                                    name: "Alur Undangan Kencan",
-                                    desc: "Pengalaman interaktif dari awal hingga mendapat tiket",
-                                    defaultSubThemeIndex: 1,
-                                    subThemes: [
-                                        { name: "1. Amplop", color: "#e8789a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
-                                        { name: "2. Undangan", color: "#6b8ddb", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp" },
-                                        { name: "3. Tanggal", color: "#9b72d0", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838838-b3w88t.webp" },
-                                        { name: "4. Aktivitas", color: "#5dab78", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838139-qf8gc.webp" },
-                                        { name: "5. Dresscode", color: "#e07b4a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210839542-jybloo.webp" },
-                                        { name: "6. Pesan", color: "#3bbda0", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840694-hzo19n.webp" },
-                                        { name: "7. Tiket Akhir", color: "#5c2d3f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210842087-xguq5o.webp" }
-                                    ]
-                                }
-                            ]}
                             delay={0}
                             reverse={false}
                             initialSelectedIndex={0}

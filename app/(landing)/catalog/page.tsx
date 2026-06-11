@@ -65,7 +65,7 @@ export default function CatalogPage() {
             href: "/catalog/invitation",
             demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
             occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
-            features: ["Undangan Kencan Interaktif", "6 Pilihan Tema Warna", "Tiket Kencan Digital"]
+            features: ["Undangan Kencan Interaktif", "Pilih Tanggal & Aktivitas", "Tiket Kencan Digital"]
         },
         {
             badgeText: "Popular",
