@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Invitation Edition - Undangan Kencan Interaktif",
     description: "Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu.",
-    images: ["/assets/opening_gate.png"],
+    images: ["https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp"],
   }
 };
 

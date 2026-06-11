@@ -51,57 +51,29 @@ export default function InvitationCatalogPage() {
                                 "Tiket Kencan Digital",
                                 "Background Music Pilihan"
                             ]}
-                            price="Rp 15.000"
+                            price="Rp 10.000"
                             demoLink="https://invitation.for-you-always.my.id/WRcVb-mY0f"
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="/assets/opening_gate.png"
-                            fallbackImgSrc="/assets/opening_gate.png"
+                            addonText="Tersedia opsi Terima Jadi: Rp 20.000"
+                            mediaSrc="https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp"
                             mediaType="image"
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Invitation%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
-                            themesLabel="Pilihan Tema"
+                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Invitation%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                            themesLabel="Preview Experience"
                             themes={[
                                 {
-                                    name: "Peach Blossom",
-                                    desc: "Tema merah muda lembut yang romantis",
+                                    name: "Alur Undangan Kencan",
+                                    desc: "Pengalaman interaktif dari awal hingga mendapat tiket",
+                                    defaultSubThemeIndex: 1,
                                     subThemes: [
-                                        { name: "Pink", color: "#e8789a", fallbackImgSrc: "/assets/opening_gate.png" }
-                                    ]
-                                },
-                                {
-                                    name: "Baby Blue",
-                                    desc: "Tema biru muda yang tenang dan elegan",
-                                    subThemes: [
-                                        { name: "Blue", color: "#6b8ddb", fallbackImgSrc: "/assets/opening_gate.png" }
-                                    ]
-                                },
-                                {
-                                    name: "Lavender Dream",
-                                    desc: "Tema ungu lavender yang dreamy",
-                                    subThemes: [
-                                        { name: "Lavender", color: "#9b72d0", fallbackImgSrc: "/assets/opening_gate.png" }
-                                    ]
-                                },
-                                {
-                                    name: "Sage Garden",
-                                    desc: "Tema hijau sage yang natural dan segar",
-                                    subThemes: [
-                                        { name: "Sage", color: "#5dab78", fallbackImgSrc: "/assets/opening_gate.png" }
-                                    ]
-                                },
-                                {
-                                    name: "Sunset Peach",
-                                    desc: "Tema peach hangat seperti senja",
-                                    subThemes: [
-                                        { name: "Peach", color: "#e07b4a", fallbackImgSrc: "/assets/opening_gate.png" }
-                                    ]
-                                },
-                                {
-                                    name: "Mint Breeze",
-                                    desc: "Tema mint segar dan menyejukkan",
-                                    subThemes: [
-                                        { name: "Mint", color: "#3bbda0", fallbackImgSrc: "/assets/opening_gate.png" }
+                                        { name: "1. Amplop", color: "#e8789a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
+                                        { name: "2. Undangan", color: "#6b8ddb", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp" },
+                                        { name: "3. Tanggal", color: "#9b72d0", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838838-b3w88t.webp" },
+                                        { name: "4. Aktivitas", color: "#5dab78", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838139-qf8gc.webp" },
+                                        { name: "5. Dresscode", color: "#e07b4a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210839542-jybloo.webp" },
+                                        { name: "6. Pesan", color: "#3bbda0", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840694-hzo19n.webp" },
+                                        { name: "7. Tiket Akhir", color: "#5c2d3f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210842087-xguq5o.webp" }
                                     ]
                                 }
                             ]}
