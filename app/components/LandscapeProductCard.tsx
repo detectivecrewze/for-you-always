@@ -422,7 +422,7 @@ export function LandscapeProductCard({
                                                     </button>
 
                                                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                                                        {currentTheme.subThemes.map((subTheme, i) => {
+                                                        {currentTheme.subThemes?.map((subTheme, i) => {
                                                             const themeColor = subTheme.color || activeAccent;
                                                             const isSelected = selectedSubThemeIndex === i;
                                                             return (
