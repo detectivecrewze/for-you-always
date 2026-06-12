@@ -68,14 +68,14 @@ export default function ProductCatalogPage() {
                             "Kustomisasi Galeri & Musik Audio",
                             "Dikerjakan Langsung oleh Kami"
                         ]}
-                        price="Rp 40.000"
+                        price="Rp 30.000"
                         demoLink="https://anniv.for-you-always.my.id/"
                         mediaSrc=""
                         fallbackImgSrc="/assets/opening_gate.png"
                         mediaType="image"
                         accentColor="#faf7f2"
                         accentGlow="rgba(250,247,242,0.15)"
-                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20memesan%20*Premium%20Edition*%20(Done-For-You)%20seharga%20Rp%2040.000.%20Mohon%20info%20langkah%20selanjutnya.%20Terima%20kasih!"
+                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20memesan%20*Premium%20Edition*%20(Done-For-You)%20seharga%20Rp%2030.000.%20Mohon%20info%20langkah%20selanjutnya.%20Terima%20kasih!"
                         themesLabel="Koleksi Pages"
                         themes={[
                             { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },

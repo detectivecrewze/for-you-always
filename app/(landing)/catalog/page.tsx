@@ -16,7 +16,7 @@ export default function CatalogPage() {
             titleColor: "#581824",
             imageSrc: "/assets/opening_gate.png",
             title: "Memoria (Premium)",
-            newPrice: "Rp 40.000",
+            newPrice: "Rp 30.000",
             href: "/catalog/memoria",
             demoLink: "https://anniv.for-you-always.my.id/",
             occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
