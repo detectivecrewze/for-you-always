@@ -61,6 +61,7 @@ export function LandscapeProductCard({
     addonText,
     tiktokHref,
     demoLink,
+    onOrderClick,
 }: {
     label: React.ReactNode;
     title: string;
@@ -72,7 +73,7 @@ export function LandscapeProductCard({
     mediaType: "video" | "gif" | "image" | "placeholder";
     accentColor: string;
     accentGlow: string;
-    href: string;
+    href?: string;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string }[] }[];
     initialSelectedIndex?: number;
@@ -82,6 +83,7 @@ export function LandscapeProductCard({
     addonText?: React.ReactNode;
     tiktokHref?: string;
     demoLink?: string;
+    onOrderClick?: () => void;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [activeAccent, setActiveAccent] = useState(accentColor);
@@ -735,18 +737,33 @@ export function LandscapeProductCard({
 
                     <div className="price-action-container" style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
                         {/* Order — always dark bg for Memoria (light accent), otherwise use accent */}
-                        <a href={href} target="_blank" rel="noopener noreferrer" style={{
-                            padding: "12px 28px", borderRadius: 999,
-                            background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
-                            color: "#fff",
-                            fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
-                            textDecoration: "none", transition: "all 0.5s ease",
-                            boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`
-                        }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                            Order
-                        </a>
+                        {onOrderClick ? (
+                            <button onClick={onOrderClick} style={{
+                                padding: "12px 28px", borderRadius: 999,
+                                background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
+                                color: "#fff", border: "none", cursor: "pointer",
+                                fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                                textDecoration: "none", transition: "all 0.5s ease",
+                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`
+                            }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
+                                Order
+                            </button>
+                        ) : (
+                            <a href={href} target="_blank" rel="noopener noreferrer" style={{
+                                padding: "12px 28px", borderRadius: 999,
+                                background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
+                                color: "#fff",
+                                fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                                textDecoration: "none", transition: "all 0.5s ease",
+                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`
+                            }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
+                                Order
+                            </a>
+                        )}
 
                         {/* Price badge — always readable */}
                         <div style={{
