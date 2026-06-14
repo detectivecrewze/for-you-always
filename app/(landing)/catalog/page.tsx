@@ -102,7 +102,7 @@ export default function CatalogPage() {
             href: "/catalog/voices",
             demoLink: "https://voice.for-you-always.my.id/gift/for-nadin",
             occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
-            features: ["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
+            features: ["3 Slot Voices Gift Sekaligus", "Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
         {
             badgeText: "Premium Bundle",
@@ -136,7 +136,7 @@ export default function CatalogPage() {
             href: "/catalog/invitation",
             demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
             occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
-            features: ["Undangan Kencan Interaktif", "Pilih Tanggal & Aktivitas", "Tiket Kencan Digital"]
+            features: ["3 Slot Invitation Sekaligus", "Undangan Kencan Interaktif", "Pilih Tanggal & Aktivitas", "Tiket Kencan Digital"]
         },
         {
             badgeText: "Popular",
@@ -153,7 +153,7 @@ export default function CatalogPage() {
             href: "/catalog/letter",
             demoLink: "https://letter.for-you-always.my.id/letter-test",
             occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
-            features: ["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
+            features: ["3 Slot Letter Edition Sekaligus", "Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
         {
             badgeText: "10 Rooms",
@@ -186,7 +186,7 @@ export default function CatalogPage() {
             href: "/catalog/retro",
             demoLink: "https://retro.for-you-always.my.id/?to=retro-test",
             occasions: ["Bestie", "Birthday", "Apology"],
-            features: ["Tampilan Retro Windows 98", "Custom GIF Pilihan", "5 Stages of Surprises"]
+            features: ["3 Slot Retro Edition Sekaligus", "Tampilan Retro Windows 98", "Custom GIF Pilihan", "5 Stages of Surprises"]
         },
         {
             badgeText: "Storytelling",

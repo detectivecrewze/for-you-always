@@ -103,7 +103,7 @@ function Navbar() {
 
                     {/* CTA + Hamburger */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                        <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
+                        <Link href="/catalog"
                             style={{
                                 padding: "7px 18px", borderRadius: 999,
                                 background: "#1d1816", color: "#faf7f2",
@@ -115,7 +115,7 @@ function Navbar() {
                             className="nav-cta"
                         >
                             Order
-                        </a>
+                        </Link>
                         {/* Hamburger */}
                         <button
                             onClick={() => setMobileOpen(v => !v)}
@@ -167,7 +167,7 @@ function Navbar() {
                             {l.label}
                         </a>
                     ))}
-                    <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
+                    <Link href="/catalog"
                         onClick={() => setMobileOpen(false)}
                         style={{
                             marginTop: 16, display: "inline-flex", alignItems: "center", justifyContent: "center",
@@ -177,8 +177,8 @@ function Navbar() {
                             textDecoration: "none",
                         }}
                     >
-                        Order via WhatsApp
-                    </a>
+                        Order Now
+                    </Link>
                 </div>
             </div>
 
@@ -201,6 +201,68 @@ function Navbar() {
 
 
 export default function MainHubPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
+    const [pendingProduct, setPendingProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
+    const [paymentToken, setPaymentToken] = useState<string | null>(null);
+    const [showPendingWidget, setShowPendingWidget] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
+
+    useEffect(() => {
+    }, []);
+
+    const handleCheckout = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!checkoutProduct) return;
+        
+        setIsLoading(true);
+        try {
+            const res = await fetch("https://payment-gateway.aldoramadhan16.workers.dev/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    order_id: `ORDER-${checkoutProduct.id.toUpperCase()}-${Date.now()}`,
+                    gross_amount: checkoutProduct.numericPrice,
+                    product_type: checkoutProduct.id,
+                    customer_details: {
+                        first_name: customerDetails.firstName,
+                        email: customerDetails.email,
+                        phone: customerDetails.phone
+                    },
+                    item_details: [{ id: checkoutProduct.id, price: checkoutProduct.numericPrice, quantity: 1, name: checkoutProduct.title }]
+                })
+            });
+
+            const data = await res.json();
+            if (data.token) {
+                const savedToken = data.token;
+                setPaymentToken(savedToken);
+                setPendingProduct(checkoutProduct);
+                // Close the form modal first, THEN open Midtrans
+                setCheckoutProduct(null);
+                setIsLoading(false);
+
+                (window as any).snap.pay(savedToken, {
+                    onSuccess: () => { 
+                        window.location.href = '/success'; 
+                    },
+                    onPending: () => { },
+                    onError: () => { },
+                    onClose: () => { 
+                        // User closed Midtrans popup — now show the widget
+                        setShowPendingWidget(true);
+                    }
+                });
+            } else {
+                alert("Gagal memproses pembayaran");
+                setIsLoading(false);
+            }
+        } catch (error) {
+            alert("Terjadi kesalahan sistem");
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
 
@@ -453,12 +515,18 @@ export default function MainHubPage() {
                             href="/catalog/voices"
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
                             occasions={["LDR", "Any Occasion", "Birthday", "Apology"]}
-                            features={["Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
+                            features={["3 Slot Voices Gift Sekaligus", "Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
+                            onOrderClick={() => {
+                                setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a37a6b" });
+                                setPaymentToken(null);
+                                setShowPendingWidget(false);
+                            }}
+                            addonText="Token kuota (3 voices) akan otomatis dikirimkan via email."
                         />
                         <CompactProductCard
                             badgeText="Popular"
                             badgeColor="#9c27b0"
-                            titleColor="#2a3d5c" // From Letter Midnight theme
+                            titleColor="#2a3d5c"
                             imageSrc="https://cdn.for-you-always.my.id/1781032720701-5lb1a.png"
                             title="Letter Edition"
                             oldPrice="Rp 25.000"
@@ -466,12 +534,17 @@ export default function MainHubPage() {
                             href="/catalog/letter"
                             demoLink="https://letter.for-you-always.my.id/letter-test"
                             occasions={["Graduation", "Apology", "Anniversary", "LDR"]}
-                            features={["Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
+                            features={["3 Slot Letter Edition Sekaligus", "Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
+                            onOrderClick={() => {
+                                setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" });
+                                setPaymentToken(null);
+                                setShowPendingWidget(false);
+                            }}
                         />
                         <CompactProductCard
                             badgeText="Premium Bundle"
                             badgeColor="#4a7c8e"
-                            titleColor="#5a8d9e" // From Mixtape page
+                            titleColor="#5a8d9e"
                             imageSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             title="Mixtape Edition"
                             oldPrice="Rp 50.000"
@@ -480,6 +553,12 @@ export default function MainHubPage() {
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
                             features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}
+                            onOrderClick={() => {
+                                setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5b879c" });
+                                setPaymentToken(null);
+                                setShowPendingWidget(false);
+                            }}
+                            addonText="Token kuota (3 mixtape) akan otomatis dikirimkan via email setelah pembayaran."
                         />
                     </div>
 
@@ -522,6 +601,107 @@ export default function MainHubPage() {
                 </div>
             </section>
 
+            {showPendingWidget && paymentToken && pendingProduct ? (
+                <div style={{ 
+                    position: "fixed", bottom: 24, left: 24, zIndex: 999999, 
+                    background: "#fff", width: 320, borderRadius: 20, 
+                    padding: 20, boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+                    border: "1px solid #e0d4cc",
+                    display: "flex", flexDirection: "column", gap: 12,
+                    animation: "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
+                }}>
+                    <style>{`
+                        @keyframes slideUp {
+                            from { transform: translateY(20px); opacity: 0; }
+                            to { transform: translateY(0); opacity: 1; }
+                        }
+                    `}</style>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div>
+                            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: pendingProduct.themeColor || "#e8789a" }}>⏳ Menunggu Pembayaran</p>
+                            <p style={{ margin: "4px 0 0", fontSize: 14, fontWeight: 600, color: "#1d1816" }}>{pendingProduct.title}</p>
+                            <p style={{ margin: "2px 0 0", fontSize: 13, color: "#6e5c53" }}>Rp {pendingProduct.numericPrice.toLocaleString('id-ID')}</p>
+                        </div>
+                        <button 
+                            onClick={() => {
+                                setPendingProduct(null);
+                                setPaymentToken(null);
+                                setShowPendingWidget(false);
+                            }}
+                            style={{ background: "none", border: "none", cursor: "pointer", color: "#a6968c", padding: 4 }}
+                            title="Batalkan Pesanan"
+                        >
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                    
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#faf7f2", padding: "10px 12px", borderRadius: 10, marginTop: 12 }}>
+                        <span style={{ fontSize: 12, color: "#6e5c53" }}>Total</span>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: pendingProduct.themeColor || "#e8789a" }}>Rp {pendingProduct.numericPrice.toLocaleString('id-ID')}</span>
+                    </div>
+
+                    <button 
+                        onClick={() => {
+                            (window as any).snap.pay(paymentToken, {
+                                onSuccess: () => { 
+                                    window.location.href = '/success'; 
+                                },
+                                onPending: () => { },
+                                onError: () => { },
+                                onClose: () => { 
+                                    setShowPendingWidget(true);
+                                }
+                            });
+                        }}
+                        style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: pendingProduct.themeColor || "#e8789a", color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "background 0.3s ease", marginTop: 12 }}
+                    >
+                        Lanjut Bayar
+                    </button>
+                </div>
+            ) : checkoutProduct ? (
+                <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.4)", zIndex: 999999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                    <div style={{ background: "#fff", width: "100%", maxWidth: 400, borderRadius: 24, padding: "32px 24px", position: "relative", boxShadow: "0 24px 48px rgba(0,0,0,0.1)" }}>
+                                <button onClick={() => {
+                                    setCheckoutProduct(null);
+                                    setPaymentToken(null);
+                                    setShowPendingWidget(false);
+                                    localStorage.removeItem('valentine_pending_payment');
+                                }} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", color: "#666", padding: 8 }}>
+                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                
+                                <h3 style={{ fontFamily: "var(--font-cormorant)", fontSize: 28, color: "#1d1816", marginBottom: 8, marginTop: 0 }}>{checkoutProduct.title}</h3>
+                                <p style={{ color: "#6e5c53", fontSize: 14, marginBottom: 24 }}>Lengkapi data di bawah ini untuk menerima Akses Kado Anda.</p>
+                                
+                                <form onSubmit={handleCheckout} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                                    <div>
+                                        <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#382a24", marginBottom: 6 }}>Nama Panggilan</label>
+                                        <input type="text" required value={customerDetails.firstName} onChange={e => setCustomerDetails({...customerDetails, firstName: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #e0d4cc", outline: "none", fontSize: 14 }} placeholder="Contoh: Budi" />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#382a24", marginBottom: 6 }}>Email Anda</label>
+                                        <input type="email" required value={customerDetails.email} onChange={e => setCustomerDetails({...customerDetails, email: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #e0d4cc", outline: "none", fontSize: 14 }} placeholder="Akses akan dikirim ke sini" />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#382a24", marginBottom: 6 }}>Nomor WhatsApp</label>
+                                        <input type="tel" required value={customerDetails.phone} onChange={e => setCustomerDetails({...customerDetails, phone: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #e0d4cc", outline: "none", fontSize: 14 }} placeholder="Contoh: 08123456789" />
+                                    </div>
+                                    
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8, paddingTop: 16, borderTop: "1px dashed #e0d4cc" }}>
+                                        <span style={{ color: "#6e5c53", fontSize: 14 }}>Total Pembayaran</span>
+                                        <span style={{ color: "#1d1816", fontSize: 18, fontWeight: 700 }}>Rp {checkoutProduct.numericPrice.toLocaleString('id-ID')}</span>
+                                    </div>
+
+                                    <button type="submit" disabled={isLoading} style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", background: checkoutProduct.themeColor || "#e8789a", color: "#fff", fontSize: 15, fontWeight: 600, cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, marginTop: 8, transition: "background 0.3s ease" }}>
+                                        {isLoading ? "Memproses..." : "Lanjut Pembayaran"}
+                                    </button>
+                                </form>
+                    </div>
+                </div>
+            ) : null}
+
             {/* ── CARA KERJA ── */}
             <section id="cara-kerja" style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#f2ebe1", overflow: "hidden" }}>
                 <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.035 }} />
@@ -549,7 +729,7 @@ export default function MainHubPage() {
                         {[
                             {
                                 num: "01", title: "Pilih Produk",
-                                desc: "Pilih dari lima format kado digital kami — sesuai cerita yang ingin kamu sampaikan.",
+                                desc: "Pilih dari enam format kado digital kami — sesuai cerita yang ingin kamu sampaikan.",
                                 icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
                             },
                             {
@@ -704,7 +884,7 @@ export default function MainHubPage() {
 
                             {
                                 q: "Bagaimana cara pembayaran?",
-                                a: "Pembayaran dapat dilakukan via scan QR, transfer bank, atau dompet digital (GoPay, OVO, Dana). Setelah order via WhatsApp, admin akan mengirimkan detail dan QR pembayaran langsung ke chat."
+                                a: "Pembayaran dapat dilakukan secara otomatis melalui website kami menggunakan QRIS, transfer bank (Virtual Account), atau dompet digital (GoPay, OVO, Dana). Setelah memilih produk, Anda bisa langsung membayar dan mendapatkan akses kado digital tanpa harus menunggu admin."
                             },
                             {
                                 q: "Apakah bisa request custom desain atau tema?",
