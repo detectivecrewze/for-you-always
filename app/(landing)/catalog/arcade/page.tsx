@@ -21,7 +21,7 @@ export default function ArcadeCatalogPage() {
         setIsLoading(true);
         try {
             // Note: Update to production URL when deploying
-            const res = await fetch("https://payment-gateway.aldoramadhan16.workers.dev/api/checkout", {
+            const res = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -42,18 +42,10 @@ export default function ArcadeCatalogPage() {
                 })
             });
             const data = await res.json();
-            if (data.token) {
-                const savedToken = data.token;
-                setPaymentToken(savedToken);
+            if (data.redirectUrl) {
                 setIsCheckoutOpen(false);
                 setIsLoading(false);
-
-                (window as any).snap.pay(savedToken, {
-                    onSuccess: () => { window.location.href = '/success'; },
-                    onPending: () => { },
-                    onError: () => { },
-                    onClose: () => { setShowPendingWidget(true); }
-                });
+                window.location.href = data.redirectUrl;
             } else {
                 console.error(data);
             }

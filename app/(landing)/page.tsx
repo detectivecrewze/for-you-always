@@ -217,7 +217,7 @@ export default function MainHubPage() {
         
         setIsLoading(true);
         try {
-            const res = await fetch("https://payment-gateway.aldoramadhan16.workers.dev/api/checkout", {
+            const res = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -234,25 +234,10 @@ export default function MainHubPage() {
             });
 
             const data = await res.json();
-            if (data.token) {
-                const savedToken = data.token;
-                setPaymentToken(savedToken);
-                setPendingProduct(checkoutProduct);
-                // Close the form modal first, THEN open Midtrans
+            if (data.redirectUrl) {
                 setCheckoutProduct(null);
                 setIsLoading(false);
-
-                (window as any).snap.pay(savedToken, {
-                    onSuccess: () => { 
-                        window.location.href = '/success'; 
-                    },
-                    onPending: () => { },
-                    onError: () => { },
-                    onClose: () => { 
-                        // User closed Midtrans popup — now show the widget
-                        setShowPendingWidget(true);
-                    }
-                });
+                window.location.href = data.redirectUrl;
             } else {
                 alert("Gagal memproses pembayaran");
                 setIsLoading(false);
