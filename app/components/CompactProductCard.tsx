@@ -17,6 +17,7 @@ interface CompactProductCardProps {
     features?: string[];
     occasions?: string[];
     demoLink?: string;
+    addonText?: string;
 }
 
 export default function CompactProductCard({
