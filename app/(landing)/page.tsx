@@ -637,11 +637,7 @@ export default function MainHubPage() {
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
                             occasions={["LDR", "Any Occasion", "Birthday", "Apology"]}
                             features={["3 Slot Voices Gift Sekaligus", "Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
-                            onOrderClick={() => {
-                                setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a37a6b" });
-                                setPaymentToken(null);
-                                setShowPendingWidget(false);
-                            }}
+
                             addonText="Token kuota (3 voices) akan otomatis dikirimkan via email."
                         />
                         <CompactProductCard
@@ -656,11 +652,7 @@ export default function MainHubPage() {
                             demoLink="https://letter.for-you-always.my.id/letter-test"
                             occasions={["Graduation", "Apology", "Anniversary", "LDR"]}
                             features={["3 Slot Letter Edition Sekaligus", "Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
-                            onOrderClick={() => {
-                                setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" });
-                                setPaymentToken(null);
-                                setShowPendingWidget(false);
-                            }}
+
                         />
                         <CompactProductCard
                             badgeText="Premium Bundle"
@@ -674,11 +666,7 @@ export default function MainHubPage() {
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
                             features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}
-                            onOrderClick={() => {
-                                setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5b879c" });
-                                setPaymentToken(null);
-                                setShowPendingWidget(false);
-                            }}
+
                             addonText="Token kuota (3 mixtape) akan otomatis dikirimkan via email setelah pembayaran."
                         />
                     </div>
