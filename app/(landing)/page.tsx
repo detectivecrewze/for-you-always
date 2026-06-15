@@ -331,110 +331,231 @@ export default function MainHubPage() {
             <Navbar />
 
             {/* ── HERO ── */}
-            <section id="hero" style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(80px, 12vh, 130px)", textAlign: "center" }}>
-                <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 24px" }}>
+            <section id="hero" style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(80px, 12vh, 130px)" }}>
+                <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "60px" }}>
+                    
+                    {/* LEFT COLUMN: HERO MOCKUP */}
+                    <div style={{ flex: "1 1 400px", position: "relative", display: "flex", justifyContent: "center" }}>
+                        <AnimatedSection delay={100}>
+                            <div style={{ position: "relative", display: "inline-block" }}>
+                                {/* Image Utama */}
+                                <img 
+                                    src="/assets/hand-phone.png?v=2" 
+                                    alt="Preview" 
+                                    className="hero-mockup-img"
+                                    style={{
+                                        width: "100%", maxWidth: 360, height: "auto",
+                                        filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
+                                        maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
+                                        WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)"
+                                    }}
+                                />
 
-                    <AnimatedSection>
+                                {/* Floating Badge 1: Link langsung jadi */}
+                                <div className="hero-badge-1" style={{
+                                    position: 'absolute',
+                                    top: '40%',
+                                    background: '#fff',
+                                    padding: '10px 16px',
+                                    borderRadius: '16px',
+                                    boxShadow: '0 12px 32px rgba(29,24,22,0.12)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    zIndex: 10,
+                                    animation: 'bounce-soft 4s ease-in-out infinite'
+                                }}>
+                                    <span style={{ fontSize: 14 }}>⚡</span>
+                                    <p style={{ margin: 0, fontSize: '11px', fontWeight: 600, color: '#382a24', textAlign: 'left', lineHeight: 1.3 }}>Link langsung jadi<br/>setelah bayar</p>
+                                </div>
+
+                                {/* Floating Badge 2: Hubungi Kami */}
+                                <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ada%20pertanyaan." target="_blank" rel="noopener noreferrer" className="hero-badge-2" style={{
+                                    position: 'absolute',
+                                    bottom: '20%',
+                                    background: '#fff',
+                                    padding: '12px 16px',
+                                    borderRadius: '16px',
+                                    boxShadow: '0 12px 32px rgba(29,24,22,0.12)',
+                                    zIndex: 10,
+                                    textAlign: 'left',
+                                    textDecoration: 'none',
+                                    animation: 'bounce-soft 4.5s ease-in-out infinite 0.7s',
+                                    cursor: 'pointer'
+                                }}>
+                                    <p style={{ margin: 0, fontSize: '10px', color: '#888', marginBottom: 2 }}>Ada pertanyaan?</p>
+                                    <p style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: '#1d1816' }}>Hubungi kami</p>
+                                </a>
+                            </div>
+                        </AnimatedSection>
+                    </div>
+
+                    {/* RIGHT COLUMN: TEXT & CTA */}
+                    <div style={{ flex: "1 1 500px", textAlign: "left" }} className="hero-text-container">
+
+                        <AnimatedSection delay={100}>
+                            <h1 style={{
+                                fontFamily: "var(--font-display)",
+                                fontSize: "clamp(4.2rem, 12vw, 6.5rem)",
+                                fontWeight: 500, lineHeight: 0.95,
+                                letterSpacing: "-0.02em", color: "#382a24", marginBottom: 24,
+                            }}>
+                                The Art of<br />
+                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gifting<br/>Memories.</span>
+                            </h1>
+                        </AnimatedSection>
+
+                        <AnimatedSection delay={200}>
+                            <p style={{
+                                fontFamily: "var(--font-sans)",
+                                fontSize: "clamp(1.1rem, 2vw, 1.25rem)",
+                                color: "#6e5c53", lineHeight: 1.6,
+                                maxWidth: 480, margin: "0 0 48px",
+                                letterSpacing: "-0.01em"
+                            }}>
+                                Kado kejutan website romantis untuk si dia, siap dalam 1 menit.<br />
+                                Mulai dari <strong style={{ color: '#1d1816', fontWeight: 800 }}>Rp 15.000.</strong>
+                            </p>
+                        </AnimatedSection>
+
+                        {/* Hero CTA Buttons */}
+                        <AnimatedSection delay={350}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "nowrap", width: "100%", maxWidth: "400px", marginBottom: 20 }}>
+                                <a
+                                    href="#collection"
+                                    style={{
+                                        flex: 1, display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
+                                        padding: "14px 0", borderRadius: 999,
+                                        background: "#1d1816", color: "#faf7f2",
+                                        fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                        textDecoration: "none", transition: "all 0.3s ease",
+                                        boxShadow: "0 8px 32px -8px rgba(29,24,22,0.25)"
+                                    }}
+                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
+                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
+                                >
+                                    Pilih Template &rarr;
+                                </a>
+                                <a
+                                    href="#collection"
+                                    style={{
+                                        flex: 1, display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
+                                        padding: "14px 0", borderRadius: 999,
+                                        background: "transparent", color: "#6e5c53",
+                                        fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                        textDecoration: "none", transition: "all 0.3s ease",
+                                        border: "1.5px solid rgba(205,171,143,0.35)",
+                                    }}
+                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#a88365"; }}
+                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(205,171,143,0.35)"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
+                                >
+                                    Lihat Catalog
+                                </a>
+                            </div>
+                        </AnimatedSection>
+
+                        {/* Social Proof */}
+                        <AnimatedSection delay={450}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 12 }}>
+                                <div style={{ display: "flex" }}>
+                                    {[...Array(3)].map((_, i) => (
+                                        <div key={i} style={{
+                                            width: 32, height: 32, borderRadius: "50%", background: i === 0 ? "#cdab8f" : i === 1 ? "#a6968c" : "#d8b89c",
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                            marginLeft: i > 0 ? -12 : 0, border: "2.5px solid #faf7f2",
+                                            position: "relative", zIndex: 3 - i
+                                        }}>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,0.85)" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                            </svg>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "14px", fontWeight: 800, color: "#1d1816" }}>
+                                            800+ Happy Customers
+                                        </span>
+                                        <div style={{ display: "flex", gap: 2 }}>
+                                            {[...Array(5)].map((_, i) => (
+                                                <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#ffc107" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                                </svg>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </AnimatedSection>
+                        
+                        {/* ── MARQUEE SCROLLING TEXT ── */}
                         <div style={{
-                            display: "inline-flex", alignItems: "center", gap: 8,
-                            padding: "6px 16px",
-                            background: "rgba(205,171,143,0.08)",
-                            border: "1.2px solid rgba(205,171,143,0.2)",
-                            borderRadius: 999, marginBottom: 36,
+                            position: "absolute",
+                            left: 0,
+                            width: "100vw",
+                            marginTop: 40
                         }}>
-                            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#cdab8f", animation: "pulse-dot 2s infinite", display: "inline-block" }} />
-                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#a88365" }}>
-                                Digital Atelier · For you, Always.
-                            </span>
-                        </div>
-                    </AnimatedSection>
-
-                    <AnimatedSection delay={100}>
-                        <h1 style={{
-                            fontFamily: "var(--font-display)",
-                            fontSize: "clamp(3.2rem, 10vw, 7rem)",
-                            fontWeight: 400, lineHeight: 0.95,
-                            letterSpacing: "-0.04em", color: "#382a24", marginBottom: 32,
-                        }}>
-                            The Art of<br />
-                            <span style={{ fontStyle: "italic", marginLeft: "0.2em", color: "#cdab8f" }}>Gifting Memories.</span>
-                        </h1>
-                    </AnimatedSection>
-
-                    <AnimatedSection delay={200}>
-                        <p style={{
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "clamp(1rem, 2.2vw, 1.1rem)",
-                            color: "#6e5c53", lineHeight: 1.8,
-                            maxWidth: 500, margin: "0 auto 56px",
-                            letterSpacing: "-0.01em"
-                        }}>
-                            Enam cara berbeda untuk mengabadikan satu cerita.
-                            Pilih produk yang paling mencerminkan perasaanmu.
-                        </p>
-                    </AnimatedSection>
-
-                    <AnimatedSection delay={300}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 40 }}>
-                            <div style={{ height: 1, width: 40, background: "rgba(205,171,143,0.3)" }} />
-                            <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#cdab8f" }} />
-                            <div style={{ height: 1, width: 40, background: "rgba(205,171,143,0.3)" }} />
-                        </div>
-                    </AnimatedSection>
-
-                    {/* Hero CTA Buttons */}
-                    <AnimatedSection delay={350}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 60 }}>
-                            <Link
-                                href="/catalog"
-                                style={{
-                                    display: "inline-flex", alignItems: "center", gap: 8,
-                                    padding: "14px 32px", borderRadius: 999,
-                                    background: "#1d1816", color: "#faf7f2",
-                                    fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                                    textDecoration: "none", transition: "all 0.3s ease",
-                                    boxShadow: "0 8px 32px -8px rgba(29,24,22,0.25)"
-                                }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
-                            >
-                                Lihat Catalog
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                            </Link>
-                            <a
-                                href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20tahu%20lebih%20lanjut%20tentang%20produk%20kalian."
-                                target="_blank" rel="noopener noreferrer"
-                                style={{
-                                    display: "inline-flex", alignItems: "center", gap: 8,
-                                    padding: "14px 32px", borderRadius: 999,
-                                    background: "transparent", color: "#6e5c53",
-                                    fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                                    textDecoration: "none", transition: "all 0.3s ease",
-                                    border: "1.5px solid rgba(205,171,143,0.35)",
-                                }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#cdab8f"; (e.currentTarget as HTMLElement).style.color = "#a88365"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(205,171,143,0.35)"; (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
-                            >
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" /></svg>
-                                Tanya via WhatsApp
-                            </a>
-                        </div>
-                    </AnimatedSection>
-
-
-                    <AnimatedSection delay={500}>
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: 0.5, animation: "bounce-soft 2s ease-in-out infinite" }}>
-                            <span style={{ fontFamily: "var(--font-sans)", fontSize: 8.5, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#a6968c" }}>Explore</span>
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#a6968c" strokeWidth={1.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </AnimatedSection>
+                            <style dangerouslySetInnerHTML={{__html: `
+                                    @keyframes marquee-scroll {
+                                        0% { transform: translateX(0); }
+                                        100% { transform: translateX(-50%); }
+                                    }
+                                    .marquee-animate {
+                                        animation: marquee-scroll 25s linear infinite;
+                                    }
+                                    @media (max-width: 768px) {
+                                        .marquee-animate {
+                                            animation: marquee-scroll 12s linear infinite;
+                                        }
+                                    }
+                                    .marquee-hover:hover {
+                                        animation-play-state: paused !important;
+                                    }
+                                `}} />
+                                <div style={{ 
+                                    overflow: "hidden", 
+                                    whiteSpace: "nowrap", 
+                                    display: "flex", 
+                                    width: "100%", 
+                                    background: "#efebe6", 
+                                    borderTop: "1px solid #e5dbcf", 
+                                    borderBottom: "1px solid #e5dbcf", 
+                                    padding: "16px 0" 
+                                }}>
+                                    <div className="marquee-hover marquee-animate" style={{ 
+                                        display: "flex", 
+                                        flexDirection: "row", 
+                                        width: "max-content"
+                                    }}>
+                                        {[...Array(6)].map((_, arrayIndex) => (
+                                            <div key={arrayIndex} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+                                                {["DESAIN PREMIUM", "AKTIF SELAMANYA", "PROSES 1 MENIT", "800+ HAPPY CUSTOMERS", "LINK LANGSUNG JADI", "HARGA TERJANGKAU", "FULL CUSTOM"].map((text, i) => (
+                                                    <div key={i} style={{ 
+                                                        flexShrink: 0, 
+                                                        display: "flex", 
+                                                        alignItems: "center",
+                                                        fontFamily: "var(--font-sans)",
+                                                        fontSize: "12px",
+                                                        fontWeight: 800,
+                                                        letterSpacing: "0.15em",
+                                                        textTransform: "uppercase",
+                                                        color: "#a88365"
+                                                    }}>
+                                                        <span>{text}</span>
+                                                        <span style={{ margin: "0 32px", opacity: 0.4, fontSize: "16px" }}>•</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
             </section>
 
             {/* ── THE COLLECTION (SELF-EDIT) ── */}
-            <section id="collection" style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
+            <section id="collection" style={{ position: "relative", zIndex: 1, padding: "120px 0 120px" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
 
                     <AnimatedSection>
@@ -841,7 +962,7 @@ export default function MainHubPage() {
                     <AnimatedSection delay={400}>
                         <div style={{ marginTop: 80, display: "flex", justifyContent: "center", gap: "clamp(32px, 8vw, 100px)", flexWrap: "wrap" }}>
                             {[
-                                { num: "1000+", label: "Happy Customers" },
+                                { num: "800+", label: "Happy Customers" },
                                 { num: "5.0", label: "Average Rating" },
                                 { num: "6", label: "Formats" },
                             ].map((stat, i) => (
@@ -1030,15 +1151,14 @@ export default function MainHubPage() {
 
             {/* Floating WhatsApp with label */}
             <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
+                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
             >
-
                 <div
-                    style={{ width: 44, height: 44, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s ease", flexShrink: 0 }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
+                    style={{ width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s ease", flexShrink: 0 }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#cdab8f"; (e.currentTarget as HTMLElement).style.transform = "scale(1.05)"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
                 >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#faf7f2">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf7f2">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                         <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
                     </svg>
