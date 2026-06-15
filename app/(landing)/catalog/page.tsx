@@ -250,11 +250,7 @@ export default function CatalogPage() {
                         <AnimatedSection key={idx} delay={idx * 100}>
                             <CompactProductCard 
                                 {...item} 
-                                onOrderClick={item.id ? () => {
-                                    setCheckoutProduct({ id: item.id as string, title: item.title, numericPrice: item.numericPrice as number, themeColor: item.titleColor as string });
-                                    setPaymentToken(null);
-                                    setShowPendingWidget(false);
-                                } : undefined}
+
                             />
                         </AnimatedSection>
                     ))}
