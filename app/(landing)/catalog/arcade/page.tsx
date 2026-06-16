@@ -3,9 +3,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function ProductCatalogPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -44,7 +48,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#5c8c5c"
                             accentGlow="rgba(92,140,92,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*%20seharga%20Promo%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            onOrder={() => setCheckoutProduct({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })}
                             themesLabel="Koleksi Ruangan"
                             themes={[
                                 { name: "Main Menu", desc: "Tampilan utama Arcade", videoSrc: "https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4" },
@@ -67,6 +71,7 @@ export default function ProductCatalogPage() {
                     </div>
                 </div>
             </section>
-        </div>
+            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
+</div>
     );
 }

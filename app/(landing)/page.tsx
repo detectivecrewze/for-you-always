@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import CompactProductCard from "../components/CompactProductCard";
 import { LandscapeProductCard, AnimatedSection } from "../components/LandscapeProductCard";
+import AutoScrollCarousel from "../components/ProductCarousel";
 
 /* ─────────────────────────────────────────────
    Navbar
@@ -257,6 +258,18 @@ export default function MainHubPage() {
                     0%, 100% { transform: translateY(0); }
                     50% { transform: translateY(8px); }
                 }
+                @keyframes wiggle-bubble {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    25% { transform: translateY(-2px) rotate(-4deg); }
+                    75% { transform: translateY(2px) rotate(4deg); }
+                }
+                @media (max-width: 500px) {
+                    .social-proof-row {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 8px !important;
+                    }
+                }
                 @keyframes pulse-dot {
                     0%, 100% { opacity: 0.4; transform: scale(1); }
                     50% { opacity: 1; transform: scale(1.15); }
@@ -441,33 +454,51 @@ export default function MainHubPage() {
 
                         {/* Social Proof */}
                         <AnimatedSection delay={450}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 12 }}>
-                                <div style={{ display: "flex" }}>
-                                    {[...Array(3)].map((_, i) => (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                    <span style={{ fontFamily: "var(--font-sans)", fontSize: "17px", fontWeight: 800, color: "#1d1816" }}>
+                                        800+ Happy Customers
+                                    </span>
+                                    <div style={{ display: "flex", gap: 2 }}>
+                                        {[...Array(5)].map((_, i) => (
+                                            <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#ffc107" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                            </svg>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginLeft: 4 }}>
+                                    {[
+                                        { initial: 'A', bg: '#b36b79' },
+                                        { initial: 'M', bg: '#6b8bb3' },
+                                        { initial: 'J', bg: '#6bb381' },
+                                        { initial: 'K', bg: '#b38d6b' },
+                                        { initial: 'S', bg: '#766bb3' },
+                                    ].map((user, i) => (
                                         <div key={i} style={{
-                                            width: 32, height: 32, borderRadius: "50%", background: i === 0 ? "#cdab8f" : i === 1 ? "#a6968c" : "#d8b89c",
+                                            width: 34, height: 34, borderRadius: "50%", background: user.bg,
                                             display: "flex", alignItems: "center", justifyContent: "center",
                                             marginLeft: i > 0 ? -12 : 0, border: "2.5px solid #faf7f2",
-                                            position: "relative", zIndex: 3 - i
+                                            position: "relative", zIndex: 5 - i,
+                                            color: "#fff", fontSize: 13, fontWeight: 800, fontFamily: "var(--font-sans)",
+                                            boxShadow: "0 4px 12px rgba(29,24,22,0.08)",
+                                            animation: `wiggle-bubble 3s ease-in-out infinite`,
+                                            animationDelay: `${i * 0.15}s`
                                         }}>
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,0.85)" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                            </svg>
+                                            {user.initial}
                                         </div>
                                     ))}
-                                </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "14px", fontWeight: 800, color: "#1d1816" }}>
-                                            800+ Happy Customers
-                                        </span>
-                                        <div style={{ display: "flex", gap: 2 }}>
-                                            {[...Array(5)].map((_, i) => (
-                                                <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#ffc107" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                                                </svg>
-                                            ))}
-                                        </div>
+                                    <div style={{
+                                        height: 34, borderRadius: 999, background: "#fff",
+                                        display: "flex", alignItems: "center", justifyContent: "center",
+                                        marginLeft: -12, padding: "0 14px 0 16px", border: "2.5px solid #faf7f2",
+                                        position: "relative", zIndex: 0,
+                                        color: "#6e5c53", fontSize: 11, fontWeight: 800, fontFamily: "var(--font-sans)",
+                                        boxShadow: "0 4px 12px rgba(29,24,22,0.08)",
+                                        animation: `wiggle-bubble 3s ease-in-out infinite`,
+                                        animationDelay: `0.75s`
+                                    }}>
+                                        +MORE
                                     </div>
                                 </div>
                             </div>
@@ -540,158 +571,154 @@ export default function MainHubPage() {
             </section>
 
             {/* ── THE COLLECTION (SELF-EDIT) ── */}
-            <section id="collection" style={{ position: "relative", zIndex: 1, padding: "120px 0 120px" }}>
+            <section id="collection" style={{ position: "relative", zIndex: 1, padding: "120px 0 40px" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
 
-                    <AnimatedSection>
-                        <div style={{ textAlign: "center", marginBottom: 70 }}>
-                            <div style={{
-                                display: "inline-flex", alignItems: "center", gap: 10,
-                                padding: "6px 20px", border: "1.2px solid rgba(205,171,143,0.3)",
-                                borderRadius: 999, marginBottom: 24,
-                                background: "linear-gradient(135deg, rgba(205,171,143,0.08), rgba(205,171,143,0.02))",
-                                boxShadow: "0 8px 24px -8px rgba(205,171,143,0.25)"
-                            }}>
-                                <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#a88365", animation: "pulse-dot 2s infinite" }} />
-                                <span style={{
-                                    fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700,
-                                    letterSpacing: "0.24em", textTransform: "uppercase" as const,
-                                    color: "#a88365"
-                                }}>
-                                    Instant Access
-                                </span>
-                                <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#a88365", animation: "pulse-dot 2s infinite", animationDelay: "1s" }} />
-                            </div>
-
-                            <h2 style={{
-                                fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem, 7vw, 4.8rem)",
-                                fontWeight: 400, color: "#3B2F25", lineHeight: 1.1, letterSpacing: "-0.03em",
-                                marginBottom: 0
-                            }}>
-                                Most Popular <br />
-                                <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
-                                    <span style={{ 
-                                        fontStyle: "italic", 
-                                        background: "linear-gradient(135deg, #a88365 0%, #d8b89c 40%, #8c6a4f 100%)",
-                                        WebkitBackgroundClip: "text",
-                                        WebkitTextFillColor: "transparent",
-                                        display: "inline-block",
-                                        paddingRight: "0.1em"
-                                    }}>Choice</span>
-                                    <svg viewBox="0 0 24 24" fill="url(#starGradient)" style={{ width: "clamp(32px, 5vw, 48px)", height: "clamp(32px, 5vw, 48px)", flexShrink: 0 }}>
-                                        <defs>
-                                            <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stopColor="#a88365" />
-                                                <stop offset="40%" stopColor="#d8b89c" />
-                                                <stop offset="100%" stopColor="#8c6a4f" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                    </svg>
-                                </span>
-                            </h2>
-                            
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, margin: "28px 0" }}>
-                                <div style={{ height: 1, width: 40, background: "linear-gradient(90deg, transparent, rgba(205,171,143,0.6))" }} />
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a88365" strokeWidth="1.5">
-                                    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="rgba(168, 131, 101, 0.15)" />
-                                </svg>
-                                <div style={{ height: 1, width: 40, background: "linear-gradient(270deg, transparent, rgba(205,171,143,0.6))" }} />
-                            </div>
-
+                    {/* Minimal header — like letter4u: kicker kiri + link kanan */}
+                    <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, marginBottom: 28 }}>
+                        <div>
                             <p style={{
-                                fontFamily: "var(--font-sans)", fontSize: "clamp(1rem, 2vw, 1.15rem)", color: "#6e5c53",
-                                maxWidth: 540, margin: "0 auto", lineHeight: 1.7,
-                                letterSpacing: "0.01em"
-                            }}>
-                                Pilihan favorit dari pelanggan kami. Temukan template yang paling diminati dan jadikan momen spesial Anda lebih berkesan.
-                            </p>
+                                fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700,
+                                letterSpacing: "0.2em", textTransform: "uppercase",
+                                color: "#a88365", margin: "0 0 8px 0"
+                            }}>Pilih Kado</p>
+                            <h2 style={{
+                                fontFamily: "var(--font-display)",
+                                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                                fontWeight: 700,
+                                fontStyle: "italic",
+                                color: "#1d1816", margin: 0,
+                                letterSpacing: "-0.025em", lineHeight: 1.05
+                            }}>Temukan <span style={{ color: "#cdab8f" }}>Gift-mu</span></h2>
                         </div>
-                    </AnimatedSection>
+                        <Link href="/catalog" style={{
+                            fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 800,
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                            color: "#a67c52", textDecoration: "none", whiteSpace: "nowrap",
+                            transition: "opacity 0.2s ease",
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.opacity = "0.65"; }}
+                        onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}
+                        >
+                            Lihat Semua →
+                        </Link>
+                    </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, paddingBottom: 64 }}>
-                        <CompactProductCard
-                            badgeText="#1 Terlaris"
-                            badgeColor="#e91e63"
-                            titleColor="#a67c52" // From Voices page
-                            imageSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
-                            title="Voices Gift"
-                            oldPrice="Rp 30.000"
-                            newPrice="Rp 15.000"
-                            href="/catalog/voices"
-                            demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
-                            occasions={["LDR", "Any Occasion", "Birthday", "Apology"]}
-                            features={["3 Slot Voices Gift Sekaligus", "Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
-                            addonText="Token kuota (3 voices) akan otomatis dikirimkan via email."
-                            onOrder={() => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
-                        />
-                        <CompactProductCard
-                            badgeText="Popular"
-                            badgeColor="#9c27b0"
-                            titleColor="#2a3d5c"
-                            imageSrc="https://cdn.for-you-always.my.id/1781032720701-5lb1a.png"
-                            title="Letter Edition"
-                            oldPrice="Rp 25.000"
-                            newPrice="Rp 15.000"
-                            href="/catalog/letter"
-                            demoLink="https://letter.for-you-always.my.id/letter-test"
-                            occasions={["Graduation", "Apology", "Anniversary", "LDR"]}
-                            features={["3 Slot Letter Edition Sekaligus", "Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
-                            onOrder={() => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })}
-                        />
-                        <CompactProductCard
-                            badgeText="Premium Bundle"
-                            badgeColor="#4a7c8e"
-                            titleColor="#5a8d9e"
-                            imageSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
-                            title="Mixtape Edition"
-                            oldPrice="Rp 50.000"
-                            newPrice="Rp 20.000"
-                            href="/catalog/mixtape"
-                            demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
-                            occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
-                            features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}
-                            addonText="Token kuota (3 mixtape) akan otomatis dikirimkan via email setelah pembayaran."
-                            onOrder={() => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#4a7c8e" })}
+
+                    {/* ─── Auto-Scrolling Carousel (Landing Page only) ─── */}
+                    <div style={{ margin: "0 -24px", paddingBottom: 48 }}>
+                        <AutoScrollCarousel
+                            speed={55}
+                            cards={[
+                                {
+                                    badgeText: "#1 Exclusive",
+                                    badgeColor: "#d4af37",
+                                    badgeVariant: "solid",
+                                    imageSrc: "/assets/opening_gate.png",
+                                    price: "Rp 30.000",
+                                    title: "Memoria (Premium)",
+                                    titleColor: "#581824",
+                                    description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
+                                    href: "/catalog/memoria",
+                                    demoLink: "https://anniv.for-you-always.my.id/",
+                                    onOrder: () => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 30000, themeColor: "#581824" })
+                                },
+                                {
+                                    badgeText: "#1 Terlaris",
+                                    badgeColor: "#e91e63",
+                                    badgeVariant: "solid",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
+                                    price: "Rp 15.000",
+                                    title: "Voices Gift",
+                                    titleColor: "#a67c52",
+                                    description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
+                                    href: "/catalog/voices",
+                                    demoLink: "https://voice.for-you-always.my.id/gift/for-nadin",
+                                    onOrder: () => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })
+                                },
+                                {
+                                    badgeText: "Popular",
+                                    badgeColor: "#2a3d5c",
+                                    badgeVariant: "solid",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp",
+                                    price: "Rp 15.000",
+                                    title: "Letter Edition",
+                                    titleColor: "#2a3d5c",
+                                    description: "Amplop digital interaktif dengan efek typewriter sinematik dan foto/video di akhir surat.",
+                                    href: "/catalog/letter",
+                                    demoLink: "https://letter.for-you-always.my.id/letter-test",
+                                    onOrder: () => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })
+                                },
+                                {
+                                    badgeText: "Premium Bundle",
+                                    badgeColor: "#4a7c8e",
+                                    badgeVariant: "soft",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
+                                    price: "Rp 20.000",
+                                    title: "Mixtape Edition",
+                                    titleColor: "#5a8d9e",
+                                    description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
+                                    href: "/catalog/mixtape",
+                                    demoLink: "https://mixtape.for-you-always.my.id/auto-w2ykcoi",
+                                    onOrder: () => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5a8d9e" })
+                                },
+                                {
+                                    badgeText: "New ✨",
+                                    badgeColor: "#e8789a",
+                                    badgeVariant: "solid",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp",
+                                    price: "Rp 15.000",
+                                    title: "Invitation Edition",
+                                    titleColor: "#8a3050",
+                                    description: "Undangan kencan interaktif — pilih tanggal, aktivitas, dan kirim tiket kencan digital.",
+                                    href: "/catalog/invitation",
+                                    demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
+                                    onOrder: () => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })
+                                },
+                                {
+                                    badgeText: "10 Rooms",
+                                    badgeColor: "#5c8c5c",
+                                    badgeVariant: "solid",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
+                                    price: "Rp 20.000",
+                                    title: "Arcade Edition",
+                                    titleColor: "#5c8c5c",
+                                    description: "10 ruangan interaktif penuh kejutan dengan background music pilihan.",
+                                    href: "/catalog/arcade",
+                                    onOrder: () => setCheckoutProduct({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })
+                                },
+                                {
+                                    badgeText: "Nostalgic",
+                                    badgeColor: "#008689",
+                                    badgeVariant: "soft",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
+                                    price: "Rp 15.000",
+                                    title: "Retro Edition",
+                                    titleColor: "#008689",
+                                    description: "Tampilan retro Windows 98 dengan 5 stages of surprises dan custom GIF pilihan.",
+                                    href: "/catalog/retro",
+                                    demoLink: "https://retro.for-you-always.my.id/?to=retro-test",
+                                    onOrder: () => setCheckoutProduct({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })
+                                },
+                                {
+                                    badgeText: "Storytelling",
+                                    badgeColor: "#c9184a",
+                                    badgeVariant: "soft",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
+                                    price: "Rp 20.000",
+                                    title: "Wrapped Edition",
+                                    titleColor: "#c9184a",
+                                    description: "6 halaman interaktif bercerita — perfect untuk anniversary dan year-end recap.",
+                                    href: "/catalog/wrapped",
+                                    demoLink: "https://love.for-you-always.my.id/love-test",
+                                    onOrder: () => setCheckoutProduct({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })
+                                },
+                            ]}
                         />
                     </div>
 
-                    <AnimatedSection delay={200}>
-                        <div style={{ display: "flex", justifyContent: "center", marginTop: 48, marginBottom: 24 }}>
-                            <Link href="/catalog" style={{
-                                padding: "16px 40px",
-                                borderRadius: 999,
-                                background: "#382a24",
-                                color: "#faf7f2",
-                                fontFamily: "var(--font-sans)",
-                                fontSize: 16,
-                                fontWeight: 700,
-                                textDecoration: "none",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 12,
-                                transition: "all 0.3s ease",
-                                boxShadow: "0 8px 24px rgba(56, 42, 36, 0.25)",
-                                letterSpacing: "0.02em"
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.transform = "translateY(-4px)";
-                                e.currentTarget.style.boxShadow = "0 12px 32px rgba(56, 42, 36, 0.35)";
-                                e.currentTarget.style.background = "#4a3830";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.transform = "translateY(0)";
-                                e.currentTarget.style.boxShadow = "0 8px 24px rgba(56, 42, 36, 0.25)";
-                                e.currentTarget.style.background = "#382a24";
-                            }}>
-                                Lihat Semua Template
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </Link>
-                        </div>
-                    </AnimatedSection>
+
+
                 </div>
             </section>
 
@@ -797,7 +824,7 @@ export default function MainHubPage() {
             ) : null}
 
             {/* ── CARA KERJA ── */}
-            <section id="cara-kerja" style={{ position: "relative", zIndex: 1, padding: "120px 0", background: "#f2ebe1", overflow: "hidden" }}>
+            <section id="cara-kerja" style={{ position: "relative", zIndex: 1, padding: "40px 0 120px", background: "#f2ebe1", overflow: "hidden" }}>
                 <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.035 }} />
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
 
@@ -822,18 +849,18 @@ export default function MainHubPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: 2 }}>
                         {[
                             {
-                                num: "01", title: "Pilih Produk",
-                                desc: "Pilih dari enam format kado digital kami — sesuai cerita yang ingin kamu sampaikan.",
+                                num: "01", title: "Pilih & Selesaikan Pesanan",
+                                desc: "Pilih dari delapan format kado digital kami, isi data diri, dan selesaikan pembayaran dengan aman.",
                                 icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
                             },
                             {
-                                num: "02", title: "Isi di Studio",
-                                desc: "Upload foto, rekam suara, pilih musik — semua dari browser-mu. Tidak perlu skill apapun.",
+                                num: "02", title: "Cek Email & Masuk Studio",
+                                desc: "Link akses eksklusif akan langsung dikirim ke emailmu. Buka linknya, lalu upload foto, lagu, atau rekam suara.",
                                 icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" /></svg>
                             },
                             {
-                                num: "03", title: "Kirim & Surprise",
-                                desc: "Dapat link unik dengan passcode. Kirim ke orang tersayang, dan lihat reaksinya.",
+                                num: "03", title: "Kirim & Surprise!",
+                                desc: "Kado digitalmu siap dalam hitungan menit! Dapatkan link unik dengan passcode untuk dikirimkan ke orang tersayang.",
                                 icon: <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0-10.628a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5zm0 10.628a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5z" /></svg>
                             },
                         ].map((step, i) => (
@@ -889,8 +916,8 @@ export default function MainHubPage() {
                         {[
                             { name: "Rara A.", product: "Voices Gift", text: "Pacarku nangis pas buka ini. Beneran ga nyangka bisa segitu indahnya. Foto-fotonya berasa kayak film pendek.", rating: 5, delay: 80 },
                             { name: "Kevin M.", product: "Arcade Edition", text: "Buat ulang tahun pacar, dia main sampe lupa waktu. 10 ruangan semua seru banget, apalagi bagian kejutan di akhir.", rating: 5, delay: 160 },
-                            { name: "Sella D.", product: "Voices Gift", text: "Murah banget tapi hasilnya premium. Temen-temenku pada tanya beli dimana, kirain bikin sendiri.", rating: 5, delay: 240 },
-                            { name: "Bagas P.", product: "Voices Gift", text: "Awalnya skeptis, tapi begitu kirim ke dia... dia langsung video call sambil nangis. Worth every penny.", rating: 5, delay: 320 },
+                            { name: "Sella D.", product: "Wrapped Edition", text: "Murah banget tapi hasilnya premium. Temen-temenku pada nanya bikin dimana, kirain jago coding.", rating: 5, delay: 240 },
+                            { name: "Bagas P.", product: "Letter Edition", text: "Awalnya skeptis, tapi begitu kirim ke dia... dia langsung video call sambil senyum-senyum salah tingkah. Bener-bener worth every penny.", rating: 5, delay: 320 },
                         ].map((r, i) => (
                             <AnimatedSection key={i} delay={r.delay}>
                                 <div style={{
@@ -937,7 +964,7 @@ export default function MainHubPage() {
                             {[
                                 { num: "800+", label: "Happy Customers" },
                                 { num: "5.0", label: "Average Rating" },
-                                { num: "6", label: "Formats" },
+                                { num: "8", label: "Formats" },
                             ].map((stat, i) => (
                                 <div key={i} style={{ textAlign: "center" }}>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 400, color: "#faf7f2", lineHeight: 1, marginBottom: 8 }}>{stat.num}</div>
@@ -973,12 +1000,12 @@ export default function MainHubPage() {
                         {[
                             {
                                 q: "Berapa lama proses pengerjaan?",
-                                a: "Untuk produk Self-Edit, Anda akan langsung mendapatkan akses instan seketika setelah pembayaran. Untuk layanan Terima Jadi (Memoria), proses pengerjaan adalah maksimal 1x24 jam setelah semua materi dan data kami terima."
+                                a: "Akses instan (langsung) setelah pembayaran untuk produk Self-Edit. Khusus layanan Terima Jadi (Memoria), pengerjaan maksimal 1x24 jam."
                             },
 
                             {
                                 q: "Bagaimana cara pembayaran?",
-                                a: "Pembayaran dapat dilakukan secara otomatis melalui website kami menggunakan QRIS, transfer bank (Virtual Account), atau dompet digital (GoPay, OVO, Dana). Setelah memilih produk, Anda bisa langsung membayar dan mendapatkan akses kado digital tanpa harus menunggu admin."
+                                a: "Sistem otomatis 24 jam via QRIS, Virtual Account, atau E-Wallet (GoPay/OVO/DANA). Akses langsung didapat tanpa perlu konfirmasi admin."
                             },
                             {
                                 q: "Apakah bisa request custom desain atau tema?",
@@ -1074,9 +1101,13 @@ export default function MainHubPage() {
 
                     <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
                         {[
+                            { label: "Memoria", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Memoria%20Premium*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
                             { label: "Voices", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
                             { label: "Letter", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                            { label: "Mixtape", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Mixtape%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                            { label: "Invitation", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Invitation%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
                             { label: "Arcade", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Arcade%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
+                            { label: "Retro", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Retro%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
                             { label: "Wrapped", href: "https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Wrapped%20Edition*.%20Mohon%20info%20selanjutnya%20ya.%20Terima%20kasih!" },
                         ].map(link => (
                             <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "#6e5c53", textDecoration: "none", borderBottom: "1.5px solid transparent", transition: "all 0.3s ease" }}

@@ -3,9 +3,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function InvitationCatalogPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -50,7 +54,7 @@ export default function InvitationCatalogPage() {
                                 "Tiket Kencan Digital",
                                 "Background Music Pilihan"
                             ]}
-                            price="Rp 10.000"
+                            price="Rp 15.000"
                             demoLink="https://invitation.for-you-always.my.id/WRcVb-mY0f"
                             addonText="Tersedia opsi Terima Jadi: Rp 20.000"
                             mediaSrc="https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp"
@@ -58,7 +62,7 @@ export default function InvitationCatalogPage() {
                             mediaType="image"
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Invitation%20Edition*%20seharga%20Rp%2010.000.%0A%0AMohon%20info%20langkah%20selanjutnya%20ya.%20Terima%20kasih!"
+                            onOrder={() => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
                             themesLabel="Alur Undangan"
                             themes={[
                                 { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
@@ -77,6 +81,7 @@ export default function InvitationCatalogPage() {
                     </div>
                 </div>
             </section>
-        </div>
+            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
+</div>
     );
 }

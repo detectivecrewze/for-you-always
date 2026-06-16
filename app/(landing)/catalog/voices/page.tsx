@@ -3,9 +3,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function ProductCatalogPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -45,7 +49,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            onOrder={() => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
                             themes={[
                                 { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", videoSrc: "https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
                                 { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin" }
@@ -58,6 +62,7 @@ export default function ProductCatalogPage() {
                     </div>
                 </div>
             </section>
-        </div>
+            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
+</div>
     );
 }

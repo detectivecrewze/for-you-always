@@ -3,9 +3,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function ProductCatalogPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -51,7 +55,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#008689"
                             accentGlow="rgba(0,134,137,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Retro%20Edition*%20seharga%20Promo%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            onOrder={() => setCheckoutProduct({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })}
                             themesLabel="Koleksi Halaman"
                             themes={[
                                 { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444022368-wu278.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
@@ -68,6 +72,7 @@ export default function ProductCatalogPage() {
                     </div>
                 </div>
             </section>
-        </div>
+            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
+</div>
     );
 }

@@ -3,9 +3,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function ProductCatalogPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -75,7 +79,7 @@ export default function ProductCatalogPage() {
                         mediaType="image"
                         accentColor="#faf7f2"
                         accentGlow="rgba(250,247,242,0.15)"
-                        href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20memesan%20*Premium%20Edition*%20(Done-For-You)%20seharga%20Rp%2030.000.%20Mohon%20info%20langkah%20selanjutnya.%20Terima%20kasih!"
+                        onOrder={() => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 30000, themeColor: "#581824" })}
                         themesLabel="Koleksi Pages"
                         themes={[
                             { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
@@ -96,6 +100,7 @@ export default function ProductCatalogPage() {
                     </div>
                 </div>
             </section>
-        </div>
+            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
+</div>
     );
 }

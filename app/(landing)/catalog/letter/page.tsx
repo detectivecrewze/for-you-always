@@ -3,9 +3,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function LetterCatalogPage() {
+    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -58,7 +62,7 @@ export default function LetterCatalogPage() {
                             mediaType="image"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
-                            href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Letter%20Edition*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                            onOrder={() => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })}
                             themesLabel="Koleksi Template"
                             themes={[
                                 {
@@ -108,6 +112,7 @@ export default function LetterCatalogPage() {
                     </div>
                 </div>
             </section>
-        </div>
+            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
+</div>
     );
 }
