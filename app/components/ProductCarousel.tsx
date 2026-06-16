@@ -152,7 +152,6 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         display: "block",
                         transition: "transform 0.5s ease",
                         pointerEvents: "none",
-                        willChange: "transform",
                     }}
                     onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}

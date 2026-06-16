@@ -206,10 +206,14 @@ import CheckoutModal from "../components/CheckoutModal";
 export default function MainHubPage() {
     const [checkoutProduct, setCheckoutProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
 
+    const memoizedContent = React.useMemo(() => {
+        return <LandingContent setCheckoutProduct={setCheckoutProduct} />;
+    }, []);
+
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
             <Navbar />
-            <LandingContent setCheckoutProduct={setCheckoutProduct} />
+            {memoizedContent}
             <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
         </div>
     );
