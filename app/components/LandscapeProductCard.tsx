@@ -213,17 +213,29 @@ export function LandscapeProductCard({
                             el.style.borderColor = "rgba(255,255,255,0.15)";
                         }}
                     >
-                        {activeFallbackImgSrc ? (
+                        {activeFallbackImgSrc && isTikTok ? (
                             <img
                                 key={activeFallbackImgSrc}
                                 src={activeFallbackImgSrc}
                                 alt={title}
                                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
-                        ) : mediaSrc ? (
+                        ) : mediaType === "video" && activeVideoSrc ? (
+                            <video
+                                ref={videoRef}
+                                key={activeVideoSrc}
+                                src={activeVideoSrc}
+                                poster={activeFallbackImgSrc || undefined}
+                                loop
+                                muted
+                                playsInline
+                                preload="none"
+                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                            />
+                        ) : (activeFallbackImgSrc || mediaSrc) ? (
                             <img
-                                key={mediaSrc}
-                                src={mediaSrc}
+                                key={activeFallbackImgSrc || mediaSrc}
+                                src={activeFallbackImgSrc || mediaSrc}
                                 alt={title}
                                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
