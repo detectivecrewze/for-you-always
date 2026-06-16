@@ -39,26 +39,12 @@ export default function CatalogPage() {
             });
 
             const data = await res.json();
-            if (data.token) {
-                const savedToken = data.token;
-                setPaymentToken(savedToken);
-                setPendingProduct(checkoutProduct);
-                // Close the form modal first, THEN open Midtrans
+            if (data.redirectUrl) {
                 setCheckoutProduct(null);
                 setIsLoading(false);
-
-                (window as any).snap.pay(savedToken, {
-                    onSuccess: () => { 
-                        window.location.href = '/success'; 
-                    },
-                    onPending: () => { },
-                    onError: () => { },
-                    onClose: () => { 
-                        // User closed Midtrans popup — now show the widget
-                        setShowPendingWidget(true);
-                    }
-                });
+                window.location.href = data.redirectUrl;
             } else {
+                console.error("Checkout error:", data);
                 alert("Gagal memproses pembayaran");
                 setIsLoading(false);
             }
