@@ -287,16 +287,21 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
             </div>
 
             {/* Fade edges */}
-            <div style={{
+            <div className="carousel-fade" style={{
                 position: "absolute", left: 0, top: 0, bottom: 16,
                 width: 80, background: "linear-gradient(90deg, rgba(250,247,242,1) 0%, transparent 100%)",
                 pointerEvents: "none",
             }} />
-            <div style={{
+            <div className="carousel-fade" style={{
                 position: "absolute", right: 0, top: 0, bottom: 16,
                 width: 80, background: "linear-gradient(270deg, rgba(250,247,242,1) 0%, transparent 100%)",
                 pointerEvents: "none",
             }} />
+            <style>{`
+                @media (max-width: 768px) {
+                    .carousel-fade { display: none !important; }
+                }
+            `}</style>
         </div>
     );
 }
