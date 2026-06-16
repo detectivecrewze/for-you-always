@@ -298,7 +298,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                 pointerEvents: "none",
             }} />
             <style>{`
-                @media (max-width: 768px) {
+                @media (max-width: 1024px) {
                     .carousel-fade { display: none !important; }
                 }
             `}</style>
