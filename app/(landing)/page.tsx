@@ -217,7 +217,7 @@ export default function MainHubPage() {
         
         setIsLoading(true);
         try {
-            const res = await fetch("https://payment-gateway.aldoramadhan16.workers.dev/api/checkout", {
+            const res = await fetch("https://doku-gateway.aldoramadhan16.workers.dev/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
