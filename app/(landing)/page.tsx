@@ -637,8 +637,8 @@ export default function MainHubPage() {
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
                             occasions={["LDR", "Any Occasion", "Birthday", "Apology"]}
                             features={["3 Slot Voices Gift Sekaligus", "Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]}
-
                             addonText="Token kuota (3 voices) akan otomatis dikirimkan via email."
+                            onOrder={() => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
                         />
                         <CompactProductCard
                             badgeText="Popular"
@@ -652,7 +652,7 @@ export default function MainHubPage() {
                             demoLink="https://letter.for-you-always.my.id/letter-test"
                             occasions={["Graduation", "Apology", "Anniversary", "LDR"]}
                             features={["3 Slot Letter Edition Sekaligus", "Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]}
-
+                            onOrder={() => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })}
                         />
                         <CompactProductCard
                             badgeText="Premium Bundle"
@@ -666,8 +666,8 @@ export default function MainHubPage() {
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             occasions={["Crush", "Birthday", "Any Occasion", "Apology"]}
                             features={["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]}
-
                             addonText="Token kuota (3 mixtape) akan otomatis dikirimkan via email setelah pembayaran."
+                            onOrder={() => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#4a7c8e" })}
                         />
                     </div>
 

@@ -18,6 +18,7 @@ interface CompactProductCardProps {
     occasions?: string[];
     demoLink?: string;
     addonText?: string;
+    onOrder?: () => void;
 }
 
 export default function CompactProductCard({
@@ -33,10 +34,9 @@ export default function CompactProductCard({
     href,
     features,
     occasions,
-    demoLink
+    demoLink,
+    onOrder
 }: CompactProductCardProps) {
-    const waText = `Halo Digital Atelier! Saya tertarik untuk memesan *${title}* seharga ${newPrice}.\n\nMohon info langkah selanjutnya ya. Terima kasih!`;
-    const waLink = `https://wa.me/6281936109076?text=${encodeURIComponent(waText)}`;
 
     const cardBorderGradient = `linear-gradient(135deg, ${titleColor}80, ${titleColor})`;
 
@@ -267,25 +267,25 @@ export default function CompactProductCard({
                         Lihat
                     </Link>
                     
-                    <a href={waLink} target="_blank" rel="noopener noreferrer" style={{
+                    <button onClick={onOrder} style={{
                         flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
                         background: "#382a24", color: "#faf7f2",
                         fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
-                        textDecoration: "none", transition: "all 0.2s ease",
+                        border: "none", cursor: "pointer", transition: "all 0.2s ease",
                         boxShadow: "0 4px 12px rgba(56, 42, 36, 0.2)",
                         letterSpacing: "0.05em", textTransform: "uppercase",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                     }}
                     onMouseEnter={e => {
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = "0 6px 16px rgba(56, 42, 36, 0.3)";
+                        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                        (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 16px rgba(56, 42, 36, 0.3)";
                     }}
                     onMouseLeave={e => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "0 4px 12px rgba(56, 42, 36, 0.2)";
+                        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 12px rgba(56, 42, 36, 0.2)";
                     }}>
                         Order Gift
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
