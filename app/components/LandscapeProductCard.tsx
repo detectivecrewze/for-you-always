@@ -68,7 +68,7 @@ export function LandscapeProductCard({
     description: string;
     price: React.ReactNode;
     features: string[];
-    mediaSrc: string;
+    mediaSrc?: string;
     fallbackImgSrc?: string;
     mediaType: "video" | "gif" | "image" | "placeholder";
     accentColor: string;
