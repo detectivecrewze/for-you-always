@@ -196,6 +196,8 @@ export function LandscapeProductCard({
                                 key={activeFallbackImgSrc || mediaSrc}
                                 src={activeFallbackImgSrc || mediaSrc}
                                 alt={title}
+                                loading="lazy"
+                                decoding="async"
                                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
                         ) : (

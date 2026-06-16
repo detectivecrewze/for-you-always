@@ -518,6 +518,7 @@ export default function MainHubPage() {
                                     }
                                     .marquee-animate {
                                         animation: marquee-scroll 25s linear infinite;
+                                        will-change: transform;
                                     }
                                     @media (max-width: 768px) {
                                         .marquee-animate {

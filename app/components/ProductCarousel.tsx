@@ -42,26 +42,37 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
         const singleWidth = track.scrollWidth / 2;
 
         let lastTime: number | null = null;
+        let isVisible = false;
 
         const animate = (now: number) => {
             if (lastTime === null) lastTime = now;
             const delta = now - lastTime;
             lastTime = now;
 
-            if (!pausedRef.current && !isDragging.current) {
+            if (isVisible && !pausedRef.current && !isDragging.current) {
                 posRef.current += (speed * delta) / 1000;
                 if (posRef.current >= singleWidth) {
                     posRef.current -= singleWidth;
                 }
-                track.style.transform = `translateX(-${posRef.current}px)`;
+                track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
             }
 
             animRef.current = requestAnimationFrame(animate);
         };
 
+        const observer = new IntersectionObserver(([entry]) => {
+            isVisible = entry.isIntersecting;
+            if (isVisible && lastTime === null) {
+                lastTime = performance.now();
+            }
+        }, { threshold: 0 });
+        
+        observer.observe(track);
         animRef.current = requestAnimationFrame(animate);
+
         return () => {
             if (animRef.current) cancelAnimationFrame(animRef.current);
+            observer.disconnect();
         };
     }, [cards.length, speed]);
 
@@ -132,6 +143,8 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     src={card.imageSrc}
                     alt={card.title}
                     draggable={false}
+                    loading="lazy"
+                    decoding="async"
                     style={{
                         width: "100%",
                         height: 260,
@@ -139,6 +152,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         display: "block",
                         transition: "transform 0.5s ease",
                         pointerEvents: "none",
+                        willChange: "transform",
                     }}
                     onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
