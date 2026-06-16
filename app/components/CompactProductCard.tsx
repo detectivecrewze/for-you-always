@@ -269,20 +269,20 @@ export default function CompactProductCard({
                     
                     <button onClick={onOrder} style={{
                         flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
-                        background: "#382a24", color: "#faf7f2",
+                        background: titleColor, color: "#faf7f2",
                         fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
                         border: "none", cursor: "pointer", transition: "all 0.2s ease",
-                        boxShadow: "0 4px 12px rgba(56, 42, 36, 0.2)",
+                        boxShadow: `0 4px 12px ${titleColor}33`,
                         letterSpacing: "0.05em", textTransform: "uppercase",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                     }}
                     onMouseEnter={e => {
                         (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                        (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 16px rgba(56, 42, 36, 0.3)";
+                        (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 16px ${titleColor}4D`;
                     }}
                     onMouseLeave={e => {
                         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 12px rgba(56, 42, 36, 0.2)";
+                        (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${titleColor}33`;
                     }}>
                         Order Gift
                     </button>
