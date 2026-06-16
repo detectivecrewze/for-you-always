@@ -399,8 +399,7 @@ export default function MainHubPage() {
                                 maxWidth: 480, margin: "0 0 48px",
                                 letterSpacing: "-0.01em"
                             }}>
-                                Kado kejutan website romantis untuk si dia, siap dalam 1 menit.<br />
-                                Mulai dari <strong style={{ color: '#1d1816', fontWeight: 800 }}>Rp 15.000.</strong>
+                                Kado kejutan website romantis untuk si dia, siap dalam 1 menit. Mulai dari <strong style={{ color: '#1d1816', fontWeight: 800 }}>Rp 15.000.</strong>
                             </p>
                         </AnimatedSection>
 

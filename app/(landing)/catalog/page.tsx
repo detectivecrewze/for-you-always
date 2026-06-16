@@ -182,7 +182,7 @@ export default function CatalogPage() {
             title: "Wrapped Edition",
             oldPrice: "Rp 40.000",
             newPrice: "Rp 20.000",
-            id: "loves",
+            id: "wrapped",
             numericPrice: 20000,
             hashtag: "#MEMORIES",
             soldCount: "420+ terjual",
@@ -236,7 +236,7 @@ export default function CatalogPage() {
                         <AnimatedSection key={idx} delay={idx * 100}>
                             <CompactProductCard 
                                 {...item} 
-
+                                onOrder={() => setCheckoutProduct({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor })}
                             />
                         </AnimatedSection>
                     ))}
