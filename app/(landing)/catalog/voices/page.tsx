@@ -44,15 +44,14 @@ export default function ProductCatalogPage() {
                             price="Promo Rp 15.000"
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
                             addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
                             mediaType="image"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
                             onOrder={() => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
                             themes={[
-                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", videoSrc: "https://cdn.for-you-always.my.id/1775620755494-cig1w.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
-                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", videoSrc: "https://cdn.for-you-always.my.id/1777794147584-6sq29.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin" }
+                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
+                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin" }
                             ]}
                             delay={100}
                             initialSelectedIndex={0}

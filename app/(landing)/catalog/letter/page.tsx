@@ -57,7 +57,6 @@ export default function LetterCatalogPage() {
                             price="Rp 15.000"
                             demoLink="https://letter.for-you-always.my.id/letter-test"
                             addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1776679814124-0f7fq5.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
                             mediaType="image"
                             accentColor="#c4858a"
@@ -70,9 +69,9 @@ export default function LetterCatalogPage() {
                                     desc: "Desain amplop minimalis dengan segel lilin",
                                     defaultSubThemeIndex: 3,
                                     subThemes: [
-                                        { name: "Parchment", color: "#a68a64", videoSrc: "https://cdn.for-you-always.my.id/1776679812683-gngv0r.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951336-1eoxe7.webp" },
-                                        { name: "Forest", color: "#4d6b53", videoSrc: "https://cdn.for-you-always.my.id/1776432454559-0o85rd.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950505-o8x5o7.webp" },
-                                        { name: "Midnight", color: "#2a3d5c", videoSrc: "https://cdn.for-you-always.my.id/1776432449348-uxmvjp.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
+                                        { name: "Parchment", color: "#a68a64", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951336-1eoxe7.webp" },
+                                        { name: "Forest", color: "#4d6b53", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950505-o8x5o7.webp" },
+                                        { name: "Midnight", color: "#2a3d5c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
                                         { name: "Crimson", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
                                         { name: "Obsidian", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
                                     ]

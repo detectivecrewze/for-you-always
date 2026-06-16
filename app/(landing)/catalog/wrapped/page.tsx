@@ -45,7 +45,6 @@ export default function ProductCatalogPage() {
                             addonText="Tersedia opsi Terima Jadi: Rp 40.000"
                             demoLink="https://love.for-you-always.my.id/love-test"
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7627348817905470741?is_from_webapp=1&sender_device=pc"
-                            mediaSrc="https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
                             mediaType="image"
                             accentColor="#c9184a"
@@ -53,12 +52,12 @@ export default function ProductCatalogPage() {
                             onOrder={() => setCheckoutProduct({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })}
                             themesLabel="Koleksi Halaman"
                             themes={[
-                                { name: "Login", desc: "Halaman masuk", videoSrc: "https://cdn.for-you-always.my.id/1775677163497-m2sjw.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },
-                                { name: "Music", desc: "Pilihan lagu favorit", videoSrc: "https://cdn.for-you-always.my.id/1775677170491-x9o5bc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209591-bgprs5.webp" },
-                                { name: "Galleries", desc: "Kumpulan foto & video manis", videoSrc: "https://cdn.for-you-always.my.id/1775677161653-h3gapg.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015208474-m5rlwh.webp" },
-                                { name: "Wrapped", desc: "Ringkasan momen spesial", videoSrc: "https://cdn.for-you-always.my.id/1775677721850-q0w3xt.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015210238-kw2r9r.webp" },
-                                { name: "Letter", desc: "Surat cinta dari hati", videoSrc: "https://cdn.for-you-always.my.id/1775677168482-ksz90k.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052950263-rgp29.webp" },
-                                { name: "Invitation", desc: "Pertanyaan Lucu Dan Romantis", videoSrc: "https://cdn.for-you-always.my.id/1775677166373-4sk074.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209910-p31n5.webp" }
+                                { name: "Login", desc: "Halaman masuk", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },
+                                { name: "Music", desc: "Pilihan lagu favorit", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209591-bgprs5.webp" },
+                                { name: "Galleries", desc: "Kumpulan foto & video manis", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015208474-m5rlwh.webp" },
+                                { name: "Wrapped", desc: "Ringkasan momen spesial", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015210238-kw2r9r.webp" },
+                                { name: "Letter", desc: "Surat cinta dari hati", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052950263-rgp29.webp" },
+                                { name: "Invitation", desc: "Pertanyaan Lucu Dan Romantis", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209910-p31n5.webp" }
                             ]}
                             delay={450}
                             reverse={false}

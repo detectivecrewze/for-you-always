@@ -168,29 +168,7 @@ export function LandscapeProductCard({
     }, [autoCycle, themes, isInView]);
 
 
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video || mediaType !== "video") return;
-
-        // Force strict iOS autoplay requirements
-        video.defaultMuted = true;
-        video.muted = true;
-        video.playsInline = true;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsInView(true);
-                    video.play().catch(() => { });
-                } else {
-                    video.pause();
-                }
-            },
-            { threshold: 0.1 }
-        );
-        observer.observe(video);
-        return () => observer.disconnect();
-    }, [mediaType, activeVideoSrc]);
+    // (Video logic removed as per request to use static images only)
 
     return (
         <AnimatedSection delay={delay}>
@@ -213,26 +191,7 @@ export function LandscapeProductCard({
                             el.style.borderColor = "rgba(255,255,255,0.15)";
                         }}
                     >
-                        {activeFallbackImgSrc && isTikTok ? (
-                            <img
-                                key={activeFallbackImgSrc}
-                                src={activeFallbackImgSrc}
-                                alt={title}
-                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
-                            />
-                        ) : mediaType === "video" && activeVideoSrc ? (
-                            <video
-                                ref={videoRef}
-                                key={activeVideoSrc}
-                                src={activeVideoSrc}
-                                poster={activeFallbackImgSrc || undefined}
-                                loop
-                                muted
-                                playsInline
-                                preload="none"
-                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
-                            />
-                        ) : (activeFallbackImgSrc || mediaSrc) ? (
+                        {activeFallbackImgSrc || mediaSrc ? (
                             <img
                                 key={activeFallbackImgSrc || mediaSrc}
                                 src={activeFallbackImgSrc || mediaSrc}

@@ -50,7 +50,6 @@ export default function ProductCatalogPage() {
                             }
                             demoLink="https://retro.for-you-always.my.id/?to=retro-test"
                             addonText="Tersedia opsi Terima Jadi: Rp 30.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1778444022368-wu278.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
                             mediaType="image"
                             accentColor="#008689"
@@ -58,10 +57,10 @@ export default function ProductCatalogPage() {
                             onOrder={() => setCheckoutProduct({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })}
                             themesLabel="Koleksi Halaman"
                             themes={[
-                                { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444022368-wu278.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
-                                { name: "Music Player", desc: "Pemutar musik bergaya Winamp retro", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444904917-83vbnc.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055394-kwtv5o.png" },
-                                { name: "Notepad.exe", desc: "Surat digital bergaya editor klasik", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444905827-1feuiq.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055893-z63rma.png" },
-                                { name: "Secret Gallery", desc: "Galeri rahasia yang muncul di akhir pesan", color: "#008689", videoSrc: "https://cdn.for-you-always.my.id/1778444906361-ehz9q.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445056536-xvpcth.png" }
+                                { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },
+                                { name: "Music Player", desc: "Pemutar musik bergaya Winamp retro", color: "#008689", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055394-kwtv5o.png" },
+                                { name: "Notepad.exe", desc: "Surat digital bergaya editor klasik", color: "#008689", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445055893-z63rma.png" },
+                                { name: "Secret Gallery", desc: "Galeri rahasia yang muncul di akhir pesan", color: "#008689", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778445056536-xvpcth.png" }
                             ]}
                             delay={250}
                             reverse={false}

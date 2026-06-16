@@ -43,7 +43,6 @@ export default function ProductCatalogPage() {
                                 </>
                             }
                             addonText="Tersedia opsi Terima Jadi: Rp 40.000"
-                            mediaSrc="https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
                             mediaType="image"
                             accentColor="#5c8c5c"
@@ -51,17 +50,17 @@ export default function ProductCatalogPage() {
                             onOrder={() => setCheckoutProduct({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })}
                             themesLabel="Koleksi Ruangan"
                             themes={[
-                                { name: "Main Menu", desc: "Tampilan utama Arcade", videoSrc: "https://cdn.for-you-always.my.id/1773433190382-k7de49.mp4" },
-                                { name: "Atlas", desc: "Peta lokasi kenangan", videoSrc: "https://cdn.for-you-always.my.id/1773525779608-nzn9pr.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764592-ca91hs.webp" },
-                                { name: "Music", desc: "Ruangan musik interaktif", videoSrc: "https://cdn.for-you-always.my.id/1773426110433-1feui.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015765012-bsu6r.webp" },
-                                { name: "Journey", desc: "Lini masa perjalanan", videoSrc: "https://cdn.for-you-always.my.id/1773426101549-nd559h.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764186-4os3t9.webp" },
-                                { name: "Moments", desc: "Galeri memori berharga", videoSrc: "https://cdn.for-you-always.my.id/1773426107508-yc067a.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763822-vcvc9c.webp" },
-                                { name: "Quiz", desc: "Kuis kenangan bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426113479-uu9xep.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762633-9y59gi.webp" },
-                                { name: "Catcher", desc: "Mini game penangkap", videoSrc: "https://cdn.for-you-always.my.id/1773426115531-1f4i3u.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762272-i7zhec.webp" },
-                                { name: "Fortune", desc: "Pesan keberuntungan", videoSrc: "https://cdn.for-you-always.my.id/1773426099696-jzm23i.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052907957-kkx9zv.webp" },
-                                { name: "Things", desc: "Hal-hal yang kamu sukain dari dia", videoSrc: "https://cdn.for-you-always.my.id/1773426093227-u7iyto.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015761318-x6271.webp" },
-                                { name: "Bucket", desc: "Daftar impian bersama", videoSrc: "https://cdn.for-you-always.my.id/1773426095486-zsqvxo.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763359-9obyye.webp" },
-                                { name: "Message", desc: "Pesan rahasia spesial", videoSrc: "https://cdn.for-you-always.my.id/1773426105222-2tovrh.mp4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763020-0nfkam.webp" }
+                                { name: "Main Menu", desc: "Tampilan utama Arcade", },
+                                { name: "Atlas", desc: "Peta lokasi kenangan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764592-ca91hs.webp" },
+                                { name: "Music", desc: "Ruangan musik interaktif", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015765012-bsu6r.webp" },
+                                { name: "Journey", desc: "Lini masa perjalanan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015764186-4os3t9.webp" },
+                                { name: "Moments", desc: "Galeri memori berharga", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763822-vcvc9c.webp" },
+                                { name: "Quiz", desc: "Kuis kenangan bersama", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762633-9y59gi.webp" },
+                                { name: "Catcher", desc: "Mini game penangkap", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015762272-i7zhec.webp" },
+                                { name: "Fortune", desc: "Pesan keberuntungan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778052907957-kkx9zv.webp" },
+                                { name: "Things", desc: "Hal-hal yang kamu sukain dari dia", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015761318-x6271.webp" },
+                                { name: "Bucket", desc: "Daftar impian bersama", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763359-9obyye.webp" },
+                                { name: "Message", desc: "Pesan rahasia spesial", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015763020-0nfkam.webp" }
                             ]}
                             delay={350}
                             reverse={true}
