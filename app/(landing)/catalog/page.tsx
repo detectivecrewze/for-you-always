@@ -4,55 +4,16 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/LandscapeProductCard";
+import CheckoutModal from "../../components/CheckoutModal";
 
 export default function CatalogPage() {
     const [checkoutProduct, setCheckoutProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
     const [pendingProduct, setPendingProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
     const [paymentToken, setPaymentToken] = useState<string | null>(null);
     const [showPendingWidget, setShowPendingWidget] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
 
     useEffect(() => {
     }, []);
-
-    const handleCheckout = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!checkoutProduct) return;
-        
-        setIsLoading(true);
-        try {
-            const res = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    order_id: `ORDER-${checkoutProduct.id.toUpperCase()}-${Date.now()}`,
-                    gross_amount: checkoutProduct.numericPrice,
-                    product_type: checkoutProduct.id,
-                    customer_details: {
-                        first_name: customerDetails.firstName,
-                        email: customerDetails.email,
-                        phone: customerDetails.phone
-                    },
-                    item_details: [{ id: checkoutProduct.id, price: checkoutProduct.numericPrice, quantity: 1, name: checkoutProduct.title }]
-                })
-            });
-
-            const data = await res.json();
-            if (data.redirectUrl) {
-                setCheckoutProduct(null);
-                setIsLoading(false);
-                window.location.href = data.redirectUrl;
-            } else {
-                console.error("Checkout error:", data);
-                alert("Gagal memproses pembayaran");
-                setIsLoading(false);
-            }
-        } catch (error) {
-            alert("Terjadi kesalahan sistem");
-            setIsLoading(false);
-        }
-    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -295,48 +256,16 @@ export default function CatalogPage() {
                         Lanjut Bayar
                     </button>
                 </div>
-            ) : checkoutProduct ? (
-                <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.4)", zIndex: 999999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-                    <div style={{ background: "#fff", width: "100%", maxWidth: 400, borderRadius: 24, padding: "32px 24px", position: "relative", boxShadow: "0 24px 48px rgba(0,0,0,0.1)" }}>
-                                <button onClick={() => {
-                                    setCheckoutProduct(null);
-                                    setPaymentToken(null);
-                                    setShowPendingWidget(false);
-                                }} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", color: "#666", padding: 8 }}>
-                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                                
-                                <h3 style={{ fontFamily: "var(--font-cormorant)", fontSize: 28, color: "#1d1816", marginBottom: 8, marginTop: 0 }}>{checkoutProduct.title}</h3>
-                                <p style={{ color: "#6e5c53", fontSize: 14, marginBottom: 24 }}>Lengkapi data di bawah ini untuk menerima Akses Kado Anda.</p>
-                                
-                                <form onSubmit={handleCheckout} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                                    <div>
-                                        <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#382a24", marginBottom: 6 }}>Nama Panggilan</label>
-                                        <input type="text" required value={customerDetails.firstName} onChange={e => setCustomerDetails({...customerDetails, firstName: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #e0d4cc", outline: "none", fontSize: 14 }} placeholder="Contoh: Budi" />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#382a24", marginBottom: 6 }}>Email Anda</label>
-                                        <input type="email" required value={customerDetails.email} onChange={e => setCustomerDetails({...customerDetails, email: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #e0d4cc", outline: "none", fontSize: 14 }} placeholder="Akses akan dikirim ke sini" />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#382a24", marginBottom: 6 }}>Nomor WhatsApp</label>
-                                        <input type="tel" required value={customerDetails.phone} onChange={e => setCustomerDetails({...customerDetails, phone: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #e0d4cc", outline: "none", fontSize: 14 }} placeholder="Contoh: 08123456789" />
-                                    </div>
-                                    
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8, paddingTop: 16, borderTop: "1px dashed #e0d4cc" }}>
-                                        <span style={{ color: "#6e5c53", fontSize: 14 }}>Total Pembayaran</span>
-                                        <span style={{ color: "#1d1816", fontSize: 18, fontWeight: 700 }}>Rp {checkoutProduct.numericPrice.toLocaleString('id-ID')}</span>
-                                    </div>
-
-                                    <button type="submit" disabled={isLoading} style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", background: checkoutProduct.themeColor || "#e8789a", color: "#fff", fontSize: 15, fontWeight: 600, cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, marginTop: 8, transition: "background 0.3s ease" }}>
-                                        {isLoading ? "Memproses..." : "Lanjut Pembayaran"}
-                                    </button>
-                                </form>
-                    </div>
-                </div>
-            ) : null}
+            ) : (
+                <CheckoutModal 
+                    product={checkoutProduct} 
+                    onClose={() => {
+                        setCheckoutProduct(null);
+                        setPaymentToken(null);
+                        setShowPendingWidget(false);
+                    }} 
+                />
+            )}
 
             <style>{`
                 @keyframes fade-in-up {
