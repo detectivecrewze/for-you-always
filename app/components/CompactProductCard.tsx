@@ -41,85 +41,53 @@ export default function CompactProductCard({
     const cardBorderGradient = `linear-gradient(135deg, ${titleColor}80, ${titleColor})`;
 
     return (
-        <>
-        <style>{`
-            .gradient-border-card {
-                border: 2px solid transparent !important;
-                background-clip: padding-box !important;
-                position: relative;
-            }
-            .gradient-border-card::before {
-                content: '';
-                position: absolute;
-                inset: -2px;
-                padding: 2px;
-                border-radius: inherit;
-                background: var(--card-border-gradient, linear-gradient(135deg, #E8A0B0, #8B6A9A, #C4849A));
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                z-index: 0;
-                pointer-events: none;
-            }
-        `}</style>
-        <div className="gradient-border-card" style={{
-            "--card-border-gradient": cardBorderGradient,
+        <div style={{
             background: "#ffffff",
-            borderRadius: 24,
-            boxShadow: "0 8px 24px -8px rgba(0,0,0,0.06)",
+            borderRadius: "1.6rem",
+            boxShadow: "0 4px 24px -4px rgba(0,0,0,0.07), 0 0 0 1px rgba(205,171,143,0.1)",
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
-            padding: 12
+            padding: 12,
+            display: "flex",
+            flexDirection: "column",
         } as React.CSSProperties}
         onMouseEnter={e => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 32px -8px rgba(0,0,0,0.12)";
+            (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)";
+            (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px -8px rgba(0,0,0,0.14), 0 0 0 1px rgba(205,171,143,0.18)";
         }}
         onMouseLeave={e => {
             (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px -8px rgba(0,0,0,0.06)";
+            (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px -4px rgba(0,0,0,0.07), 0 0 0 1px rgba(205,171,143,0.1)";
         }}>
             {/* Image Container */}
-            <div style={{
-                position: "relative",
-                zIndex: 1,
-                width: "100%",
-                aspectRatio: "9/16",
-                borderRadius: 16,
-                overflow: "hidden",
-                background: "#f4f4f4"
-            }}>
+            <div style={{ position: "relative", overflow: "hidden", borderRadius: "1.2rem", zIndex: 1 }}>
                 <img 
                     src={imageSrc} 
                     alt={title} 
-                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")}
+                    style={{ width: "100%", height: 260, objectFit: "cover", transition: "transform 0.5s ease" }}
+                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                 />
                 
                 {/* Top Left Badge */}
                 {badgeText && (
-                    <div style={{
+                    <span style={{
                         position: "absolute",
                         top: 12,
                         left: 12,
-                        background: badgeColor,
-                        color: "#fff",
-                        fontSize: 10,
-                        fontWeight: 700,
-                        padding: "4px 10px",
                         borderRadius: 999,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 4,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                        letterSpacing: "0.05em",
-                        textTransform: "uppercase"
+                        background: "rgba(255,255,255,0.88)",
+                        backdropFilter: "blur(6px)",
+                        WebkitBackdropFilter: "blur(6px)",
+                        color: badgeColor,
+                        fontSize: 9,
+                        fontWeight: 800,
+                        padding: "4px 12px",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        zIndex: 2
                     }}>
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
                         {badgeText}
-                    </div>
+                    </span>
                 )}
 
                 {/* Bottom Left Demo Button */}
@@ -289,6 +257,5 @@ export default function CompactProductCard({
                 </div>
             </div>
         </div>
-        </>
     );
 }
