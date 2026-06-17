@@ -69,7 +69,6 @@ export default function CatalogPage() {
             id: "loves",
             numericPrice: 30000,
             href: "/catalog/memoria",
-            demoLink: "https://anniv.for-you-always.my.id/",
             occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
             features: ["Done For You", "Premium & Eksklusif"]
         },
@@ -86,7 +85,6 @@ export default function CatalogPage() {
             hashtag: "#BESTSELLER",
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
-            demoLink: "https://voice.for-you-always.my.id/gift/for-nadin",
             occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
             features: ["3 Slot Voices Gift Sekaligus", "Rekam Suara & Custom Pesan", "Galeri Foto Sinematik", "Background Music Pilihan"]
         },
@@ -103,7 +101,6 @@ export default function CatalogPage() {
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
-            demoLink: "https://mixtape.for-you-always.my.id/auto-w2ykcoi",
             occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
             features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Klasik", "Galeri Foto / Video"]
         },
@@ -120,7 +117,6 @@ export default function CatalogPage() {
             hashtag: "#DATEINVITATION",
             soldCount: "New Release",
             href: "/catalog/invitation",
-            demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
             occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
             features: ["3 Slot Invitation Sekaligus", "Undangan Kencan Interaktif", "Pilih Tanggal & Aktivitas", "Tiket Kencan Digital"]
         },
@@ -137,7 +133,6 @@ export default function CatalogPage() {
             hashtag: "#AESTHETIC",
             soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
-            demoLink: "https://letter.for-you-always.my.id/letter-test",
             occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
             features: ["3 Slot Letter Edition Sekaligus", "Amplop Digital Interaktif", "Efek Typewriter Sinematik", "Foto / Video di Akhir Surat"]
         },
@@ -170,7 +165,6 @@ export default function CatalogPage() {
             hashtag: "#NOSTALGIA",
             soldCount: "340+ terjual",
             href: "/catalog/retro",
-            demoLink: "https://retro.for-you-always.my.id/?to=retro-test",
             occasions: ["Bestie", "Birthday", "Apology"],
             features: ["3 Slot Retro Edition Sekaligus", "Tampilan Retro Windows 98", "Custom GIF Pilihan", "5 Stages of Surprises"]
         },
@@ -187,7 +181,6 @@ export default function CatalogPage() {
             hashtag: "#MEMORIES",
             soldCount: "420+ terjual",
             href: "/catalog/wrapped",
-            demoLink: "https://love.for-you-always.my.id/love-test",
             occasions: ["Year End", "Anniversary", "Birthday"],
             features: ["6 Halaman Interaktif", "Bisa On / Off Halaman", "Background Music Pilihan"]
         }

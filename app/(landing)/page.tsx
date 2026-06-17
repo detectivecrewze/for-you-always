@@ -599,7 +599,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#581824",
                                     description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
                                     href: "/catalog/memoria",
-                                    demoLink: "https://anniv.for-you-always.my.id/",
                                     onOrder: () => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 30000, themeColor: "#581824" })
                                 },
                                 {
@@ -612,7 +611,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#a67c52",
                                     description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
                                     href: "/catalog/voices",
-                                    demoLink: "https://voice.for-you-always.my.id/gift/for-nadin",
                                     onOrder: () => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })
                                 },
                                 {
@@ -625,7 +623,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#2a3d5c",
                                     description: "Amplop digital interaktif dengan efek typewriter sinematik dan foto/video di akhir surat.",
                                     href: "/catalog/letter",
-                                    demoLink: "https://letter.for-you-always.my.id/letter-test",
                                     onOrder: () => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })
                                 },
                                 {
@@ -638,7 +635,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#5a8d9e",
                                     description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
                                     href: "/catalog/mixtape",
-                                    demoLink: "https://mixtape.for-you-always.my.id/auto-w2ykcoi",
                                     onOrder: () => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5a8d9e" })
                                 },
                                 {
@@ -651,7 +647,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#8a3050",
                                     description: "Undangan kencan interaktif — pilih tanggal, aktivitas, dan kirim tiket kencan digital.",
                                     href: "/catalog/invitation",
-                                    demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
                                     onOrder: () => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })
                                 },
                                 {
@@ -676,7 +671,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#008689",
                                     description: "Tampilan retro Windows 98 dengan 5 stages of surprises dan custom GIF pilihan.",
                                     href: "/catalog/retro",
-                                    demoLink: "https://retro.for-you-always.my.id/?to=retro-test",
                                     onOrder: () => setCheckoutProduct({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })
                                 },
                                 {
@@ -689,7 +683,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#c9184a",
                                     description: "6 halaman interaktif bercerita — perfect untuk anniversary dan year-end recap.",
                                     href: "/catalog/wrapped",
-                                    demoLink: "https://love.for-you-always.my.id/love-test",
                                     onOrder: () => setCheckoutProduct({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })
                                 },
                             ]}
