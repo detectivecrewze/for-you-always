@@ -721,11 +721,15 @@ export function LandscapeProductCard({
                                 color: "#fff",
                                 fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
                                 textDecoration: "none", transition: "all 0.5s ease",
-                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`
+                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`,
+                                display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                             }}
                                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                                Order
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Order Gift
                             </button>
                         ) : (
                             <a href={href} target="_blank" rel="noopener noreferrer" style={{
@@ -734,11 +738,15 @@ export function LandscapeProductCard({
                                 color: "#fff",
                                 fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
                                 textDecoration: "none", transition: "all 0.5s ease",
-                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`
+                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`,
+                                display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                             }}
                                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                                Order
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Order Gift
                             </a>
                         )}
 
