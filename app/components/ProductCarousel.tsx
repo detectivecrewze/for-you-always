@@ -84,7 +84,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     }, [cards.length, speed]);
 
     // Drag-to-scroll
-    const handleMouseDown = (e: React.MouseEvent) => {
+    const handlePointerDown = (e: React.PointerEvent) => {
         isDragging.current = true;
         pausedRef.current = true;
         dragStartX.current = e.clientX;
@@ -92,7 +92,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
         if (trackRef.current) trackRef.current.style.cursor = "grabbing";
     };
 
-    const handleMouseMove = (e: React.MouseEvent) => {
+    const handlePointerMove = (e: React.PointerEvent) => {
         if (!isDragging.current) return;
         const track = trackRef.current;
         if (!track) return;
@@ -103,10 +103,10 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
         if (newPos < 0) newPos += singleWidth;
         if (newPos >= singleWidth) newPos -= singleWidth;
         posRef.current = newPos;
-        track.style.transform = `translateX(-${posRef.current}px)`;
+        track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
         isDragging.current = false;
         pausedRef.current = false;
         if (trackRef.current) trackRef.current.style.cursor = "grab";
@@ -275,11 +275,12 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
 
     return (
         <div
-            style={{ position: "relative", width: "100%", overflow: "hidden" }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp} // Ensure drag state is cancelled if mouse leaves while dragging
+            style={{ position: "relative", width: "100%", overflow: "hidden", touchAction: "pan-y" }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+            onPointerCancel={handlePointerUp}
         >
             {/* The moving track — duplicated for seamless loop */}
             <div
