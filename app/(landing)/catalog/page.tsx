@@ -31,7 +31,7 @@ export default function CatalogPage() {
             numericPrice: 30000,
             href: "/catalog/memoria",
             occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
-            features: ["Desain Eksklusif Kustom", "Galeri Foto Sinematik", "Layanan Terima Beres"]
+            features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
         },
         {
             badgeText: "#1 Terlaris",
@@ -47,7 +47,7 @@ export default function CatalogPage() {
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
             occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
-            features: ["3 Pesan Suara Pribadi", "Galeri Foto & Musik", "Desain Player Estetik"]
+            features: ["3 Slot Voices Sekaligus", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
         },
         {
             badgeText: "Premium Bundle",
@@ -63,7 +63,7 @@ export default function CatalogPage() {
             soldCount: "New Release",
             href: "/catalog/mixtape",
             occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
-            features: ["3 Playlist Kustom", "Kaset Retro Interaktif", "Galeri Multimedia Lengkap"]
+            features: ["3 Slot Mixtape Sekaligus", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
         },
         {
             badgeText: "New ✨",
@@ -79,7 +79,7 @@ export default function CatalogPage() {
             soldCount: "New Release",
             href: "/catalog/invitation",
             occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
-            features: ["3 Undangan Kencan", "Pilih Aktivitas Bebas", "Tiket Digital Animasi"]
+            features: ["3 Slot Invitation Sekaligus", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
         },
         {
             badgeText: "Popular",
@@ -95,7 +95,7 @@ export default function CatalogPage() {
             soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
             occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
-            features: ["3 Surat Estetik", "Efek Typewriter Klasik", "Kejutan Amplop Foto"]
+            features: ["3 Slot Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
         },
         {
             badgeText: "10 Rooms",
@@ -111,7 +111,7 @@ export default function CatalogPage() {
             soldCount: "560+ terjual",
             href: "/catalog/arcade",
             occasions: ["Anniversary", "Birthday", "Bestie"],
-            features: ["10 Ruangan Game", "Kustomisasi Bebas", "Background Music Pilihan"]
+            features: ["10 Ruangan Game Interaktif", "Kustomisasi On/Off Ruangan", "Dilengkapi Background Music"]
         },
         {
             badgeText: "Nostalgic",
@@ -127,7 +127,7 @@ export default function CatalogPage() {
             soldCount: "340+ terjual",
             href: "/catalog/retro",
             occasions: ["Bestie", "Birthday", "Apology"],
-            features: ["3 Tema Klasik OS", "Nostalgia Windows 98", "5 Tahapan Kejutan"]
+            features: ["3 Slot Retro Sekaligus", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
         },
         {
             badgeText: "Storytelling",
@@ -143,7 +143,7 @@ export default function CatalogPage() {
             soldCount: "420+ terjual",
             href: "/catalog/wrapped",
             occasions: ["Year End", "Anniversary", "Birthday"],
-            features: ["6 Halaman Recap", "Kustomisasi Fleksibel", "Storytelling Sinematik"]
+            features: ["6 Halaman Recap Interaktif", "Kustomisasi On/Off Halaman", "Dilengkapi Background Music"]
         }
     ];
 
