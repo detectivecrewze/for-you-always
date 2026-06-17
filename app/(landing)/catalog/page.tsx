@@ -47,7 +47,7 @@ export default function CatalogPage() {
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
             occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
-            features: ["3 Quota Voices Sekaligus", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
+            features: ["3 Kuota", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
         },
         {
             badgeText: "Premium Bundle",
@@ -63,7 +63,7 @@ export default function CatalogPage() {
             soldCount: "New Release",
             href: "/catalog/mixtape",
             occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
-            features: ["3 Quota Mixtape Sekaligus", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
+            features: ["3 Kuota", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
         },
         {
             badgeText: "New ✨",
@@ -79,7 +79,7 @@ export default function CatalogPage() {
             soldCount: "New Release",
             href: "/catalog/invitation",
             occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
-            features: ["3 Quota Invitation Sekaligus", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
+            features: ["3 Kuota", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
         },
         {
             badgeText: "Popular",
@@ -95,7 +95,7 @@ export default function CatalogPage() {
             soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
             occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
-            features: ["3 Quota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
+            features: ["3 Kuota", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
         },
         {
             badgeText: "10 Rooms",
@@ -127,7 +127,7 @@ export default function CatalogPage() {
             soldCount: "340+ terjual",
             href: "/catalog/retro",
             occasions: ["Bestie", "Birthday", "Apology"],
-            features: ["3 Quota Retro Sekaligus", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
+            features: ["3 Kuota", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
         },
         {
             badgeText: "Storytelling",

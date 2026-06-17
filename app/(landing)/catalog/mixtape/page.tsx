@@ -37,7 +37,7 @@ export default function MixtapeCatalogPage() {
                             title="Mixtape Edition"
                             description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik ala kaset retro. Setiap pembelian otomatis mendapatkan 3 kuota pembuatan mixtape untuk momen yang berbeda."
                             features={[
-                                "Mendapatkan 3 Kuota / Playlist Mixtape",
+                                "Mendapatkan 3 Kuota",
                                 "Desain kaset retro yang bisa di-play",
                                 "Bebas custom foto/video & lagu",
                                 "Bebas custom pesan personal",
