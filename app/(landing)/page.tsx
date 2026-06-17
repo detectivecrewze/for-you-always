@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import CompactProductCard from "../components/CompactProductCard";
 import { LandscapeProductCard, AnimatedSection } from "../components/LandscapeProductCard";
 import AutoScrollCarousel from "../components/ProductCarousel";
@@ -312,9 +313,12 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                         <AnimatedSection delay={100}>
                             <div style={{ position: "relative", display: "inline-block" }}>
                                 {/* Image Utama */}
-                                <img 
+                                <Image 
                                     src="/assets/hand-phone.png?v=2" 
                                     alt="Preview" 
+                                    width={360}
+                                    height={720}
+                                    priority={true}
                                     className="hero-mockup-img"
                                     style={{
                                         width: "100%", maxWidth: 360, height: "auto",

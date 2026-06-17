@@ -63,6 +63,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     draggable={false}
                     loading="lazy"
                     decoding="async"
+                    fetchPriority="low"
                     style={{
                         width: "100%",
                         height: 260,

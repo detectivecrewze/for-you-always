@@ -15,7 +15,10 @@ export function AnimatedSection({
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) setTimeout(() => setIsVisible(true), delay);
+                if (entry.isIntersecting) {
+                    setTimeout(() => setIsVisible(true), delay);
+                    observer.disconnect(); // Only animate once, stop observing to save CPU
+                }
             },
             { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
         );
@@ -198,6 +201,7 @@ export function LandscapeProductCard({
                                 alt={title}
                                 loading="lazy"
                                 decoding="async"
+                                fetchPriority="low"
                                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
                         ) : (
