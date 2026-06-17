@@ -135,10 +135,10 @@ export default function CompactProductCard({
                 {/* Title and Prices */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     {/* Left Column */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingRight: 8 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingRight: 8, flex: 1 }}>
                         <h3 style={{ 
                             fontFamily: "var(--font-sans)", 
-                            fontSize: 22, 
+                            fontSize: title.length > 15 ? 20 : 22, 
                             fontWeight: 800, 
                             color: titleColor,
                             margin: 0,
@@ -146,26 +146,30 @@ export default function CompactProductCard({
                             lineHeight: 1.1,
                             textShadow: "0 1px 2px rgba(0,0,0,0.05)"
                         }}>
-                            {title}
+                            {title.includes(' (') ? (
+                                <>
+                                    {title.split(' (')[0]} <span style={{ fontSize: 14, fontWeight: 600, opacity: 0.8 }}>({title.split(' (')[1]}</span>
+                                </>
+                            ) : title}
                         </h3>
+                        
                         {/* Occasions Tags */}
                         {occasions && occasions.length > 0 && (
                             <div style={{ 
                                 display: "flex", flexDirection: "row", flexWrap: "wrap", 
-                                alignItems: "center", gap: 4, marginTop: 4, 
-                                paddingLeft: 6, borderLeft: `2px solid ${titleColor}40` 
+                                alignItems: "center", gap: "4px 6px", marginTop: 4
                             }}>
                                 <span style={{
-                                    fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 600,
-                                    color: `${titleColor}99`, letterSpacing: "0.05em",
+                                    fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 500,
+                                    color: "#a6968c", letterSpacing: "0.02em",
                                     fontStyle: "italic", marginRight: 2
                                 }}>For</span>
                                 {occasions.map((occ, i) => (
                                     <span key={i} style={{
-                                        fontFamily: "var(--font-sans)", fontSize: 8, fontWeight: 700,
-                                        color: titleColor, background: `${titleColor}15`,
-                                        padding: "2px 6px", borderRadius: 999,
-                                        letterSpacing: "0.03em", textTransform: "uppercase",
+                                        fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700,
+                                        color: titleColor, background: `${titleColor}10`,
+                                        padding: "3px 8px", borderRadius: 6,
+                                        letterSpacing: "0.05em", textTransform: "uppercase",
                                         whiteSpace: "nowrap", display: "inline-block"
                                     }}>
                                         {occ}
@@ -175,23 +179,25 @@ export default function CompactProductCard({
                         )}
                     </div>
 
-                    {/* Right Column */}
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.2 }}>
-                            <div style={{
-                                padding: "6px 12px", borderRadius: 999,
-                                background: "#faf7f2", color: "#382a24",
-                                fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
-                                letterSpacing: "0.05em", textTransform: "uppercase",
-                                display: "flex", alignItems: "center", gap: 6,
-                                border: "1px solid rgba(205,171,143,0.2)"
-                            }}>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                    <line x1="7" y1="7" x2="7.01" y2="7" />
-                                </svg>
-                                {newPrice}
-                            </div>
+                    {/* Right Column (Price) */}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", flexShrink: 0 }}>
+                        <div style={{
+                            padding: "6px 10px", borderRadius: 8,
+                            background: "#faf7f2", color: "#1d1816",
+                            fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 800,
+                            letterSpacing: "0.02em",
+                            display: "flex", alignItems: "center", gap: 6,
+                            border: "1px solid rgba(205,171,143,0.3)",
+                            boxShadow: "0 2px 8px -2px rgba(0,0,0,0.05)"
+                        }}>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                <line x1="7" y1="7" x2="7.01" y2="7" />
+                            </svg>
+                            <span>
+                                <span style={{ fontSize: 10, fontWeight: 600, color: "#8b7e75", marginRight: 2 }}>Rp</span>
+                                {newPrice.replace('Rp ', '')}
+                            </span>
                         </div>
                     </div>
                 </div>
