@@ -630,12 +630,12 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     badgeColor: "#4a7c8e",
                                     badgeVariant: "soft",
                                     imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
-                                    price: "Rp 20.000",
+                                    price: "Rp 15.000",
                                     title: "Mixtape Edition",
                                     titleColor: "#5a8d9e",
                                     description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
                                     href: "/catalog/mixtape",
-                                    onOrder: () => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5a8d9e" })
+                                    onOrder: () => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })
                                 },
                                 {
                                     badgeText: "New ✨",
