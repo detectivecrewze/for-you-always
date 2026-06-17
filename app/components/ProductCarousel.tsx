@@ -46,15 +46,22 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
 
         const animate = (now: number) => {
             if (lastTime === null) lastTime = now;
-            const delta = now - lastTime;
+            let delta = now - lastTime;
             lastTime = now;
 
+            // clamp delta to prevent massive jumps when switching tabs
+            if (delta > 50) delta = 50;
+
             if (isVisible && !pausedRef.current && !isDragging.current) {
-                posRef.current += (speed * delta) / 1000;
-                if (posRef.current >= singleWidth) {
-                    posRef.current -= singleWidth;
+                // Always get latest scrollWidth in case of resize or lazy load
+                const currentSingleWidth = track.scrollWidth / 2;
+                
+                if (currentSingleWidth > 0) {
+                    posRef.current += (speed * delta) / 1000;
+                    // Use modulo to safely wrap around even if it somehow jumped
+                    posRef.current = posRef.current % currentSingleWidth;
+                    track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
                 }
-                track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
             }
 
             animRef.current = requestAnimationFrame(animate);
