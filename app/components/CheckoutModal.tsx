@@ -17,8 +17,17 @@ interface CheckoutModalProps {
 export default function CheckoutModal({ product, onClose }: CheckoutModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
+    const [closing, setClosing] = useState(false);
 
     if (!product) return null;
+
+    const handleClose = () => {
+        setClosing(true);
+        setTimeout(() => {
+            setClosing(false);
+            onClose();
+        }, 180);
+    };
 
     const handleCheckout = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,7 +52,7 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
 
             const data = await res.json();
             if (data.redirectUrl) {
-                onClose();
+                handleClose();
                 setIsLoading(false);
                 window.location.href = data.redirectUrl;
             } else {
@@ -59,9 +68,20 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
     };
 
     return (
-        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.4)", zIndex: 999999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-            <div style={{ background: "#fff", width: "100%", maxWidth: 400, borderRadius: 24, padding: "32px 24px", position: "relative", boxShadow: "0 24px 48px rgba(0,0,0,0.1)" }}>
-                <button onClick={onClose} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", color: "#666", padding: 8 }}>
+        <div style={{ 
+            position: "fixed", top: 0, left: 0, right: 0, bottom: 0, 
+            background: "rgba(0,0,0,0.4)", zIndex: 999999, 
+            display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+            opacity: closing ? 0 : 1,
+            transition: "opacity 0.18s ease"
+        }}>
+            <div style={{ 
+                background: "#fff", width: "100%", maxWidth: 400, borderRadius: 24, padding: "32px 24px", 
+                position: "relative", boxShadow: "0 24px 48px rgba(0,0,0,0.1)",
+                transform: closing ? "scale(0.97) translateY(10px)" : "scale(1) translateY(0)",
+                transition: "transform 0.18s cubic-bezier(0.4, 0, 0.2, 1)"
+            }}>
+                <button onClick={handleClose} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", color: "#666", padding: 8 }}>
                     <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
