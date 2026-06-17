@@ -160,32 +160,32 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
                         
                         <div style={{ display: "flex", flexDirection: "column", gap: "14px", background: "rgba(250,247,242,0.8)", padding: "20px", borderRadius: "16px", border: "1px solid rgba(205,171,143,0.3)", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.02)" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span style={{ fontSize: "13px", color: "#8b7e75", fontWeight: 500, display: "flex", alignItems: "center", gap: "8px" }}>
+                                <span style={{ fontSize: "13px", color: "#8b7e75", fontWeight: 500, display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4M20 12l-6-6M20 12l-6 6" /></svg>
                                     Produk
                                 </span>
-                                <span style={{ fontSize: "14px", color: "#382a24", fontWeight: 700 }}>{product.title}</span>
+                                <span style={{ fontSize: "14px", color: "#382a24", fontWeight: 700, textAlign: "right", maxWidth: "60%", wordBreak: "break-word" }}>{product.title}</span>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span style={{ fontSize: "13px", color: "#8b7e75", fontWeight: 500, display: "flex", alignItems: "center", gap: "8px" }}>
+                                <span style={{ fontSize: "13px", color: "#8b7e75", fontWeight: 500, display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     Nama
                                 </span>
-                                <span style={{ fontSize: "14px", color: "#382a24", fontWeight: 700 }}>{customerDetails.firstName}</span>
+                                <span style={{ fontSize: "14px", color: "#382a24", fontWeight: 700, textAlign: "right", maxWidth: "60%", wordBreak: "break-word" }}>{customerDetails.firstName}</span>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#fef1f2", padding: "12px", borderRadius: "12px", margin: "4px -12px", border: "1px solid #fbd5da" }}>
-                                <span style={{ fontSize: "13px", color: "#c9184a", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
+                                <span style={{ fontSize: "13px", color: "#c9184a", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                     Email
                                 </span>
-                                <span style={{ fontSize: "14px", color: "#c9184a", fontWeight: 900 }}>{customerDetails.email}</span>
+                                <span style={{ fontSize: "14px", color: "#c9184a", fontWeight: 900, textAlign: "right", maxWidth: "60%", wordBreak: "break-all" }}>{customerDetails.email}</span>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span style={{ fontSize: "13px", color: "#8b7e75", fontWeight: 500, display: "flex", alignItems: "center", gap: "8px" }}>
+                                <span style={{ fontSize: "13px", color: "#8b7e75", fontWeight: 500, display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                                     WhatsApp
                                 </span>
-                                <span style={{ fontSize: "14px", color: "#382a24", fontWeight: 700 }}>{customerDetails.phone}</span>
+                                <span style={{ fontSize: "14px", color: "#382a24", fontWeight: 700, textAlign: "right", maxWidth: "60%", wordBreak: "break-word" }}>{customerDetails.phone}</span>
                             </div>
                             
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "12px", paddingTop: "16px", borderTop: "1px dashed rgba(205,171,143,0.4)" }}>
