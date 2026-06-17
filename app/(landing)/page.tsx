@@ -568,30 +568,49 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                     {/* Minimal header — like letter4u: kicker kiri + link kanan */}
                     <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, marginBottom: 28 }}>
                         <div>
-                            <p style={{
-                                fontFamily: "var(--font-sans)", fontSize: 9.5, fontWeight: 700,
-                                letterSpacing: "0.2em", textTransform: "uppercase",
-                                color: "#a88365", margin: "0 0 8px 0"
-                            }}>Pilih Kado</p>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                                <div style={{ width: 24, height: 1, background: "rgba(168,131,101,0.5)" }} />
+                                <p style={{
+                                    fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                                    letterSpacing: "0.2em", textTransform: "uppercase",
+                                    color: "#a88365", margin: 0
+                                }}>Pilih Kado</p>
+                            </div>
                             <h2 style={{
                                 fontFamily: "var(--font-display)",
-                                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                                fontWeight: 700,
-                                fontStyle: "italic",
+                                fontSize: "clamp(2.8rem, 6vw, 4.5rem)",
+                                fontWeight: 400,
                                 color: "#1d1816", margin: 0,
-                                letterSpacing: "-0.025em", lineHeight: 1.05
-                            }}>Temukan <span style={{ color: "#cdab8f" }}>Gift-mu</span></h2>
+                                letterSpacing: "-0.02em", lineHeight: 1.05
+                            }}>
+                                Temukan <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gift-mu</span>
+                            </h2>
                         </div>
                         <Link href="/catalog" style={{
-                            fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 800,
-                            letterSpacing: "0.1em", textTransform: "uppercase",
-                            color: "#a67c52", textDecoration: "none", whiteSpace: "nowrap",
-                            transition: "opacity 0.2s ease",
+                            display: "flex", alignItems: "center", gap: 8,
+                            padding: "12px 24px", borderRadius: 999,
+                            border: "1px solid rgba(205,171,143,0.3)",
+                            fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
+                            letterSpacing: "0.05em", textTransform: "uppercase",
+                            color: "#8a7060", textDecoration: "none", whiteSpace: "nowrap",
+                            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                         }}
-                        onMouseEnter={e => { e.currentTarget.style.opacity = "0.65"; }}
-                        onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}
+                        onMouseEnter={e => { 
+                            e.currentTarget.style.background = "rgba(205,171,143,0.08)";
+                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.6)";
+                            e.currentTarget.style.transform = "translateY(-2px)";
+                        }}
+                        onMouseLeave={e => { 
+                            e.currentTarget.style.background = "transparent";
+                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.3)";
+                            e.currentTarget.style.transform = "translateY(0)";
+                        }}
                         >
-                            Lihat Semua →
+                            Lihat Semua
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </Link>
                     </div>
 
