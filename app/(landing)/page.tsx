@@ -625,12 +625,12 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     badgeColor: "#d4af37",
                                     badgeVariant: "solid",
                                     imageSrc: "/assets/opening_gate.png",
-                                    price: "Rp 30.000",
+                                    price: "Rp 40.000",
                                     title: "Memoria (Premium)",
                                     titleColor: "#581824",
                                     description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
                                     href: "/catalog/memoria",
-                                    onOrder: () => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 30000, themeColor: "#581824" })
+                                    onOrder: () => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
                                 },
                                 {
                                     badgeText: "#1 Terlaris",

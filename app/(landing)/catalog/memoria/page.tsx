@@ -72,14 +72,14 @@ export default function ProductCatalogPage() {
                             "Kustomisasi Galeri & Musik Audio",
                             "Dikerjakan Langsung oleh Kami"
                         ]}
-                        price="Rp 30.000"
+                        price="Rp 40.000"
                         demoLink="https://anniv.for-you-always.my.id/"
                         mediaSrc=""
                         fallbackImgSrc="/assets/opening_gate.png"
                         mediaType="image"
                         accentColor="#faf7f2"
                         accentGlow="rgba(250,247,242,0.15)"
-                        onOrder={() => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 30000, themeColor: "#581824" })}
+                        onOrder={() => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })}
                         themesLabel="Koleksi Pages"
                         themes={[
                             { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },

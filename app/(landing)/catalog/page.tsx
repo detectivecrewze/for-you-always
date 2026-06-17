@@ -26,9 +26,9 @@ export default function CatalogPage() {
             titleColor: "#581824",
             imageSrc: "/assets/opening_gate.png",
             title: "Memoria (Premium)",
-            newPrice: "Rp 30.000",
+            newPrice: "Rp 40.000",
             id: "loves",
-            numericPrice: 30000,
+            numericPrice: 40000,
             href: "/catalog/memoria",
             occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
             features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
