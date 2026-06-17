@@ -372,14 +372,26 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
 
                         <AnimatedSection delay={100}>
                             <h1 style={{
+                                fontFamily: "var(--font-sans)",
+                                fontSize: 11,
+                                fontWeight: 700,
+                                letterSpacing: "0.15em",
+                                textTransform: "uppercase",
+                                color: "#a67c52",
+                                marginBottom: 16,
+                                marginTop: 0
+                            }}>
+                                Kado Digital Premium & Surat Interaktif
+                            </h1>
+                            <h2 style={{
                                 fontFamily: "var(--font-display)",
                                 fontSize: "clamp(4.2rem, 12vw, 6.5rem)",
                                 fontWeight: 500, lineHeight: 0.95,
-                                letterSpacing: "-0.02em", color: "#382a24", marginBottom: 24,
+                                letterSpacing: "-0.02em", color: "#382a24", marginTop: 0, marginBottom: 24,
                             }}>
                                 The Art of<br />
                                 <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gifting<br/>Memories.</span>
-                            </h1>
+                            </h2>
                         </AnimatedSection>
 
                         <AnimatedSection delay={200}>
