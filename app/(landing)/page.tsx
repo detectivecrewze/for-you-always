@@ -1077,7 +1077,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                 }}
             >
                 {/* Text Bubble */}
-                <div style={{
+                <div className="hidden md:flex items-center gap-[6px]" style={{
                     background: "rgba(255, 255, 255, 0.95)",
                     backdropFilter: "blur(10px)",
                     padding: "10px 20px",
@@ -1085,7 +1085,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                     boxShadow: "0 8px 24px -4px rgba(29, 24, 22, 0.12)",
                     border: "1px solid rgba(205, 171, 143, 0.2)",
                     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    display: "flex", alignItems: "center", gap: 6
                 }}>
                     <span style={{ fontSize: 12.5, fontWeight: 500, color: "#6e5c53", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
                         Butuh bantuan? <strong style={{ color: "#382a24", fontWeight: 700 }}>Chat Admin</strong>
