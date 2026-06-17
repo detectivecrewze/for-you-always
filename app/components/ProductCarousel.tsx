@@ -23,94 +23,11 @@ interface AutoScrollCarouselProps {
 }
 
 export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCarouselProps) {
-    const trackRef = useRef<HTMLDivElement>(null);
-    const animRef = useRef<number | null>(null);
-    const pausedRef = useRef(false);
-    const posRef = useRef(0);
+    const singleSetWidth = cards.length * 380; // 360px card + 20px gap
+    const duration = singleSetWidth / speed;
 
-    // Drag-to-scroll state
-    const isDragging = useRef(false);
-    const dragStartX = useRef(0);
-    const dragStartPos = useRef(0);
-
-    useEffect(() => {
-        const track = trackRef.current;
-        if (!track) return;
-
-        const totalItems = cards.length;
-        // track has 2x items for seamless loop
-        const singleWidth = track.scrollWidth / 2;
-
-        let lastTime: number | null = null;
-        let isVisible = false;
-
-        const animate = (now: number) => {
-            if (lastTime === null) lastTime = now;
-            let delta = now - lastTime;
-            lastTime = now;
-
-            // clamp delta to prevent massive jumps when switching tabs
-            if (delta > 50) delta = 50;
-
-            if (isVisible && !pausedRef.current && !isDragging.current) {
-                // Always get latest scrollWidth in case of resize or lazy load
-                const currentSingleWidth = track.scrollWidth / 2;
-                
-                if (currentSingleWidth > 0) {
-                    posRef.current += (speed * delta) / 1000;
-                    // Use modulo to safely wrap around even if it somehow jumped
-                    posRef.current = posRef.current % currentSingleWidth;
-                    track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
-                }
-            }
-
-            animRef.current = requestAnimationFrame(animate);
-        };
-
-        const observer = new IntersectionObserver(([entry]) => {
-            isVisible = entry.isIntersecting;
-            if (isVisible && lastTime === null) {
-                lastTime = performance.now();
-            }
-        }, { threshold: 0 });
-        
-        observer.observe(track);
-        animRef.current = requestAnimationFrame(animate);
-
-        return () => {
-            if (animRef.current) cancelAnimationFrame(animRef.current);
-            observer.disconnect();
-        };
-    }, [cards.length, speed]);
-
-    // Drag-to-scroll
-    const handlePointerDown = (e: React.PointerEvent) => {
-        isDragging.current = true;
-        pausedRef.current = true;
-        dragStartX.current = e.clientX;
-        dragStartPos.current = posRef.current;
-        if (trackRef.current) trackRef.current.style.cursor = "grabbing";
-    };
-
-    const handlePointerMove = (e: React.PointerEvent) => {
-        if (!isDragging.current) return;
-        const track = trackRef.current;
-        if (!track) return;
-        const delta = dragStartX.current - e.clientX;
-        const singleWidth = track.scrollWidth / 2;
-        let newPos = dragStartPos.current + delta;
-        // clamp within loop range
-        if (newPos < 0) newPos += singleWidth;
-        if (newPos >= singleWidth) newPos -= singleWidth;
-        posRef.current = newPos;
-        track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
-    };
-
-    const handlePointerUp = () => {
-        isDragging.current = false;
-        pausedRef.current = false;
-        if (trackRef.current) trackRef.current.style.cursor = "grab";
-    };
+    // We no longer need JS requestAnimationFrame, PointerEvents, or IntersectionObserver!
+    // Pure CSS animation is 100x more reliable and uses zero CPU.
 
     // Render a single card
     const renderCard = (card: LoopCard, key: string) => (
@@ -274,22 +191,24 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     );
 
     return (
-        <div
-            style={{ position: "relative", width: "100%", overflow: "hidden", touchAction: "pan-y" }}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerLeave={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-        >
+        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+            <style>{`
+                @keyframes slide-infinite-css {
+                    from { transform: translateX(0); }
+                    to { transform: translateX(-50%); }
+                }
+                @media (max-width: 1024px) {
+                    .carousel-fade { display: none !important; }
+                }
+            `}</style>
+            
             {/* The moving track — duplicated for seamless loop */}
             <div
-                ref={trackRef}
                 style={{
                     display: "flex",
                     gap: 20,
-                    willChange: "transform",
-                    cursor: "grab",
+                    width: "max-content",
+                    animation: `slide-infinite-css ${duration}s linear infinite`,
                     paddingBottom: 16,
                     paddingTop: 8,
                 }}
