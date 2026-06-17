@@ -124,7 +124,7 @@ export default function CatalogPage() {
             badgeText: "Popular",
             badgeColor: "#9c27b0",
             titleColor: "#2a3d5c",
-            imageSrc: "https://cdn.for-you-always.my.id/1781032720701-5lb1a.png",
+            imageSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp",
             title: "Letter Edition",
             oldPrice: "Rp 25.000",
             newPrice: "Rp 15.000",
