@@ -47,7 +47,7 @@ export default function CatalogPage() {
             soldCount: "1.2k+ terjual",
             href: "/catalog/voices",
             occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
-            features: ["3 Kuota", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
+            features: ["3 Kuota Voices Sekaligus", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
         },
         {
             badgeText: "Premium Bundle",
@@ -63,7 +63,7 @@ export default function CatalogPage() {
             soldCount: "New Release",
             href: "/catalog/mixtape",
             occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
-            features: ["3 Kuota", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
+            features: ["3 Kuota Mixtape Sekaligus", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
         },
         {
             badgeText: "New ✨",
@@ -79,7 +79,7 @@ export default function CatalogPage() {
             soldCount: "New Release",
             href: "/catalog/invitation",
             occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
-            features: ["3 Kuota", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
+            features: ["3 Kuota Invitation Sekaligus", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
         },
         {
             badgeText: "Popular",
@@ -95,7 +95,7 @@ export default function CatalogPage() {
             soldCount: "2.1k+ terjual",
             href: "/catalog/letter",
             occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
-            features: ["3 Kuota", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
+            features: ["3 Kuota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
         },
         {
             badgeText: "10 Rooms",
@@ -127,7 +127,7 @@ export default function CatalogPage() {
             soldCount: "340+ terjual",
             href: "/catalog/retro",
             occasions: ["Bestie", "Birthday", "Apology"],
-            features: ["3 Kuota", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
+            features: ["3 Kuota Retro Sekaligus", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
         },
         {
             badgeText: "Storytelling",
@@ -266,6 +266,47 @@ export default function CatalogPage() {
                     }} 
                 />
             )}
+            {/* Floating WhatsApp with label */}
+            <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
+                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
+                onMouseEnter={e => { 
+                    const btn = e.currentTarget.children[1] as HTMLElement;
+                    if (btn) { btn.style.background = "#cdab8f"; btn.style.transform = "scale(1.05)"; }
+                    const bubble = e.currentTarget.children[0] as HTMLElement;
+                    if (bubble) { bubble.style.transform = "translateY(-2px)"; bubble.style.boxShadow = "0 12px 28px -4px rgba(29, 24, 22, 0.15)"; }
+                }}
+                onMouseLeave={e => { 
+                    const btn = e.currentTarget.children[1] as HTMLElement;
+                    if (btn) { btn.style.background = "#1d1816"; btn.style.transform = "scale(1)"; }
+                    const bubble = e.currentTarget.children[0] as HTMLElement;
+                    if (bubble) { bubble.style.transform = "translateY(0)"; bubble.style.boxShadow = "0 8px 24px -4px rgba(29, 24, 22, 0.12)"; }
+                }}
+            >
+                {/* Text Bubble */}
+                <div className="hidden md:flex items-center gap-[6px]" style={{
+                    background: "rgba(255, 255, 255, 0.95)",
+                    backdropFilter: "blur(10px)",
+                    padding: "10px 20px",
+                    borderRadius: "999px",
+                    boxShadow: "0 8px 24px -4px rgba(29, 24, 22, 0.12)",
+                    border: "1px solid rgba(205, 171, 143, 0.2)",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}>
+                    <span style={{ fontSize: 12.5, fontWeight: 500, color: "#6e5c53", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
+                        Butuh bantuan? <strong style={{ color: "#382a24", fontWeight: 700 }}>Chat Admin</strong>
+                    </span>
+                </div>
+
+                {/* WA Icon */}
+                <div
+                    style={{ width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", flexShrink: 0 }}
+                >
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf7f2">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
+                    </svg>
+                </div>
+            </a>
 
             <style>{`
                 @keyframes fade-in-up {
