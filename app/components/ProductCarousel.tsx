@@ -76,12 +76,6 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
         };
     }, [cards.length, speed]);
 
-    // Pause on hover
-    const handleMouseEnter = () => { pausedRef.current = true; };
-    const handleMouseLeave = () => {
-        if (!isDragging.current) pausedRef.current = false;
-    };
-
     // Drag-to-scroll
     const handleMouseDown = (e: React.MouseEvent) => {
         isDragging.current = true;
@@ -275,11 +269,10 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     return (
         <div
             style={{ position: "relative", width: "100%", overflow: "hidden" }}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp} // Ensure drag state is cancelled if mouse leaves while dragging
         >
             {/* The moving track — duplicated for seamless loop */}
             <div
