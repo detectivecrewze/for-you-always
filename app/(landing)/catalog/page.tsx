@@ -168,7 +168,7 @@ export default function CatalogPage() {
                         letterSpacing: "-0.03em",
                         marginBottom: 16
                     }}>
-                        Semua <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Koleksi.</span>
+                        Semua <span style={{ fontStyle: "italic", color: "#b58c6d" }}>Koleksi.</span>
                     </h1>
                     <p style={{
                         fontFamily: "var(--font-sans)",
@@ -177,7 +177,7 @@ export default function CatalogPage() {
                         maxWidth: 540,
                         margin: "0 auto"
                     }}>
-                        Temukan seluruh katalog kado digital spesial kami. Pilih template yang paling menggambarkan ceritamu.
+                        Jelajahi koleksi kado digital eksklusif kami. Temukan kanvas terbaik untuk merangkai kenanganmu.
                     </p>
                 </div>
 
