@@ -24,7 +24,7 @@ export default function OrderStatusPage() {
 
         const checkStatus = async () => {
             try {
-                const res = await fetch(`https://doku-gateway.aldoramadhan16.workers.dev/api/check-status?order_id=${id}`);
+                const res = await fetch(`https://pakasir-gateway.aldoramadhan16.workers.dev/api/status?order_id=${id}`);
                 const data = await res.json();
                 
                 if (!res.ok) {
