@@ -318,13 +318,12 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     <img> dirender sebagai gambar biasa, workaround yang valid. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src="/assets/favicon/hand-phone-z.webp" 
+                                    src="/assets/favicon/hand-phone-z.gif" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     style={{
                                         width: "100%", maxWidth: 360, height: "auto",
                                         display: "block",
-                                        mixBlendMode: "multiply",
                                         filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
                                         maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
                                         WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)"
