@@ -71,6 +71,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${dmSans.variable} ${cormorant.variable}`}>
       <head>
+        <link rel="preload" href="/assets/favicon/happy-birthday.gif" as="image" />
         <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
         <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />

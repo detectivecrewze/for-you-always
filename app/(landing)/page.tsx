@@ -318,7 +318,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     <img> dirender sebagai gambar biasa, workaround yang valid. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src="/assets/favicon/hand-phone-z.gif" 
+                                    src="/assets/favicon/happy-birthday.gif" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     style={{
