@@ -312,16 +312,18 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                     <div style={{ flex: "1 1 400px", position: "relative", display: "flex", justifyContent: "center" }}>
                         <AnimatedSection delay={100}>
                             <div style={{ position: "relative", display: "inline-block" }}>
-                                {/* Image Utama */}
-                                <Image 
-                                    src="/assets/favicon/hand-phone.webp" 
-                                    alt="Preview" 
-                                    width={360}
-                                    height={720}
-                                    priority={true}
+                                {/* Image Utama - Menggunakan <img> biasa (bukan Next/Image) agar
+                                    animated WebP dapat bergerak di iOS TikTok in-app browser.
+                                    TikTok's WKWebView memaksa <video> ke fullscreen, sedangkan
+                                    <img> dirender sebagai gambar biasa, workaround yang valid. */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img 
+                                    src="/assets/favicon/hand-phone-z.webp" 
+                                    alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     style={{
                                         width: "100%", maxWidth: 360, height: "auto",
+                                        display: "block",
                                         filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
                                         maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
                                         WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)"
