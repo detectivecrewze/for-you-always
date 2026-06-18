@@ -314,7 +314,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                             <div style={{ position: "relative", display: "inline-block" }}>
                                 {/* Image Utama */}
                                 <Image 
-                                    src="/assets/hand-phone.webp" 
+                                    src="/assets/favicon/hand-phone.webp" 
                                     alt="Preview" 
                                     width={360}
                                     height={720}
