@@ -324,7 +324,6 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     style={{
                                         width: "100%", maxWidth: 360, height: "auto",
                                         display: "block",
-                                        mixBlendMode: "multiply",
                                         filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
                                         maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
                                         WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)"
