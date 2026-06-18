@@ -318,7 +318,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     Efek fade digantikan oleh overlay <div> di bawah. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src="/assets/favicon/hand-phone-z.gif" 
+                                    src="https://cdn.for-you-always.my.id/1781807802981-yohlpk.gif" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     style={{
