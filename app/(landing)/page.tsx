@@ -313,9 +313,9 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                         <AnimatedSection delay={100}>
                             <div style={{ position: "relative", display: "inline-block" }}>
                                 {/* Image Utama - Menggunakan <img> biasa (bukan Next/Image) agar
-                                    animated WebP dapat bergerak di iOS TikTok in-app browser.
-                                    TikTok's WKWebView memaksa <video> ke fullscreen, sedangkan
-                                    <img> dirender sebagai gambar biasa, workaround yang valid. */}
+                                    animated GIF dapat bergerak di iOS TikTok in-app browser.
+                                    mask-image dihapus dari <img> untuk mencegah flicker setiap GIF loop.
+                                    Efek fade digantikan oleh overlay <div> di bawah. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
                                     src="/assets/favicon/happy-birthday.gif" 
@@ -325,12 +325,20 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                         width: "100%", maxWidth: 360, height: "auto",
                                         display: "block",
                                         filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
-                                        maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
-                                        WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
                                         transform: "translateZ(0)",
                                         backfaceVisibility: "hidden"
                                     }}
                                 />
+                                {/* Overlay fade — elemen terpisah dari GIF sehingga tidak berkedip saat loop */}
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: "25%",
+                                    background: "linear-gradient(to bottom, transparent 0%, #f5efe6 100%)",
+                                    pointerEvents: "none"
+                                }} />
 
                                 {/* Floating Badge 1: Link langsung jadi */}
                                 <div className="hero-badge-1" style={{
