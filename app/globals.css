@@ -87,7 +87,7 @@ video::-webkit-media-controls {
 
 @media (max-width: 768px) {
   .hero-badge-1 {
-    right: 0px !important;
+    right: -15px !important;
     transform: scale(0.75);
     transform-origin: right center;
   }
