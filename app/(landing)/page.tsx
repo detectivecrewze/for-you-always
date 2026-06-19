@@ -397,12 +397,12 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                             </h1>
                             <h2 style={{
                                 fontFamily: "var(--font-display)",
-                                fontSize: "clamp(4.2rem, 12vw, 6.5rem)",
+                                fontSize: "clamp(3.2rem, 9vw, 5.5rem)",
                                 fontWeight: 500, lineHeight: 0.95,
                                 letterSpacing: "-0.02em", color: "#382a24", marginTop: 0, marginBottom: 24,
                             }}>
-                                The Art of<br />
-                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gifting<br/>Memories.</span>
+                                Bikin Dia Baper,<br />
+                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Tanpa Pusing<br/>Mikir Kado.</span>
                             </h2>
                         </AnimatedSection>
 
@@ -414,7 +414,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                 maxWidth: 480, margin: "0 0 48px",
                                 letterSpacing: "-0.01em"
                             }}>
-                                Kado kejutan website romantis untuk si dia, siap dalam 1 menit. Mulai dari <strong style={{ color: '#1d1816', fontWeight: 800 }}>Rp 15.000.</strong>
+                                Kirim kejutan website romantis rahasia yang langsung jadi dalam 1 menit. Kado <span style={{ fontStyle: 'italic' }}>effort</span> yang tidak menguras dompet mulai dari <strong style={{ color: '#1d1816', fontWeight: 800 }}>Rp 15.000.</strong>
                             </p>
                         </AnimatedSection>
 
