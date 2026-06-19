@@ -355,7 +355,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     animation: 'bounce-soft 4s ease-in-out infinite'
                                 }}>
                                     <span style={{ fontSize: 14 }}>⚡</span>
-                                    <p style={{ margin: 0, fontSize: '11px', fontWeight: 600, color: '#382a24', textAlign: 'left', lineHeight: 1.3 }}>Link langsung jadi<br/>setelah bayar</p>
+                                    <p style={{ margin: 0, fontSize: '11px', fontWeight: 600, color: '#382a24', textAlign: 'left', lineHeight: 1.3 }}>Akses Instan<br/>tanpa menunggu</p>
                                 </div>
 
                                 {/* Floating Badge 2: Hubungi Kami */}
