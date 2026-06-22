@@ -402,7 +402,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                 letterSpacing: "-0.02em", color: "#382a24", marginTop: 0, marginBottom: 24,
                             }}>
                                 The Art of<br />
-                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gifting<br/>Memories.</span>
+                                <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gifting.</span>
                             </h2>
                         </AnimatedSection>
 
