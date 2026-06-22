@@ -1,4 +1,4 @@
-﻿# 🤖 PANDUAN ONBOARDING — AI AGENT
+# 🤖 PANDUAN ONBOARDING — AI AGENT
 ### Platform: **For you, Always.** — Digital Atelier
 ### Dokumen ini wajib dibaca tuntas sebelum menyentuh kode apapun.
 
@@ -163,6 +163,14 @@ Stack  : Vanilla JS, Cloudflare D1 (SQLite serverless)
 | RETRO_WORKER | birthday-retro | Retro Edition |
 | WRAPPED_WORKER | loves-edition | Wrapped Edition |
 
+> **⚠️ Catatan Penting — Dua Pola Integrasi:**
+> Mixtape, Invitation, dan Loves/Memoria **TIDAK menggunakan Worker binding** karena mereka di-host di Vercel (bukan Cloudflare Worker). Sebagai gantinya, gateway memanggil API route Next.js mereka via HTTP biasa:
+> - Mixtape → `https://mixtape.for-you-always.my.id/api/generate-link`
+> - Invitation → `https://invitation.for-you-always.my.id/api/generate-link`
+> - Loves → `https://anniv.for-you-always.my.id/api/generate-link`
+>
+> Pembelian semua produk **tetap works** — tapi produk berbasis Vercel sedikit lebih rentan jika Vercel app down saat webhook dipicu.
+
 ---
 
 ### [letter-project/] — PRODUK: Letter Edition (Vanilla JS)
@@ -290,8 +298,8 @@ birthday-retro/
 
 ---
 
-### [wrapped-project/] — Versi Lama / Arsip
-> Kemungkinan adalah versi lama dari Wrapped Edition. Cek `git log` dulu sebelum memodifikasi apapun di sini.
+### [wrapped-project/] — Versi Lama / Arsip (Vanilla JS)
+> Ini adalah versi lama dari Wrapped Edition — berbasis **Vanilla JS / static site** (ada `index.html`, `pages/`, `shared.css`), BUKAN Next.js. Berbeda dengan `loves-edition` yang aktif dan berbasis Next.js. Cek `git log` dulu sebelum memodifikasi apapun di sini.
 
 ---
 
