@@ -67,13 +67,14 @@ export default function LetterCatalogPage() {
                                 {
                                     name: "Classic Wax Seal",
                                     desc: "Desain amplop minimalis dengan segel lilin",
-                                    defaultSubThemeIndex: 3,
+                                    defaultSubThemeIndex: 0,
                                     subThemes: [
-                                        { name: "Parchment", color: "#a68a64", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951336-1eoxe7.webp" },
-                                        { name: "Forest", color: "#4d6b53", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883950505-o8x5o7.webp" },
-                                        { name: "Midnight", color: "#2a3d5c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777883951055-ml1py.webp" },
-                                        { name: "Crimson", color: "#c03050", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945610-6kxb7.webp" },
-                                        { name: "Obsidian", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777913945923-vqo0rr.webp" }
+                                        { name: "Blush", color: "#e3b5b4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781975354379-zs8pmj.webp" },
+                                        { name: "Sage", color: "#7a9e7e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781975355062-7dvbi2.webp" },
+                                        { name: "Obsidian Green", color: "#2d6a4f", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782119885711-hczmpi.webp" },
+                                        { name: "Rose Pink", color: "#c4858a", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782119887163-8kand7.webp" },
+                                        { name: "Red Burgundy", color: "#7b2434", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782119887798-toxu2f.webp" },
+                                        { name: "Midnight", color: "#2a3d5c", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782119888422-pdxnom.webp" }
                                     ]
                                 },
                                 {
@@ -104,7 +105,7 @@ export default function LetterCatalogPage() {
                             ]}
                             delay={0}
                             reverse={false}
-                            initialSelectedIndex={0}
+                            initialSelectedIndex={2}
                             autoCycle={false}
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7629604229094591764?is_from_webapp=1&sender_device=pc"
                         />
