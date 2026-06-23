@@ -38,7 +38,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
                 const parsed = JSON.parse(stored);
-                if (Array.isArray(parsed)) setItems(parsed);
+                if (Array.isArray(parsed)) {
+                    // eslint-disable-next-line
+                    setItems(parsed);
+                }
             }
         } catch {
             // ignore

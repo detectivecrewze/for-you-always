@@ -76,7 +76,7 @@ export default function CartToast() {
                         {lastAdded?.title}
                     </div>
                     <div style={{ fontSize: 11, color: "rgba(250,247,242,0.55)", fontFamily: "var(--font-sans)", fontWeight: 500 }}>
-                        Masuk keranjang · Tap untuk lihat
+                        Berhasil dipesan · Tap untuk lihat
                     </div>
                 </div>
 

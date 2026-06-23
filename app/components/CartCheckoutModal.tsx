@@ -27,7 +27,9 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
     const handleCheckout = async () => {
         setIsLoading(true);
         try {
-            const orderId = `ORDER-BUNDLE-${Date.now()}`;
+            const orderId = items.length === 1
+                ? `ORDER-${items[0].id.toUpperCase()}-${Date.now()}`
+                : `ORDER-BUNDLE-${Date.now()}`;
             const res = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -129,10 +131,14 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                             fontSize: 30, color: "#1d1816",
                             margin: "0 0 6px", letterSpacing: "-0.02em", lineHeight: 1,
                         }}>
-                            Checkout <span style={{ fontStyle: "italic", color: "#a67c52" }}>Bundel</span>
+                            Checkout <span style={{ fontStyle: "italic", color: items.length > 1 ? "#a67c52" : items[0]?.themeColor || "#a67c52" }}>
+                                {items.length > 1 ? "Bundle" : items[0]?.title || "Kado"}
+                            </span>
                         </h3>
                         <p style={{ fontSize: 13, color: "#8b7e75", margin: "0 0 28px", lineHeight: 1.6, fontFamily: "var(--font-sans)" }}>
-                            Akses semua kado digital akan dikirim otomatis ke email kamu.
+                            {items.length > 1
+                                ? "Akses semua kado digital akan dikirim otomatis ke email kamu."
+                                : "Akses kado digital akan dikirim otomatis ke email kamu."}
                         </p>
 
                         <form onSubmit={handleNext} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
