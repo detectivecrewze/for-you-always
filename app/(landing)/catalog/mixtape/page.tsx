@@ -43,7 +43,7 @@ export default function MixtapeCatalogPage() {
                                 "Bebas custom pesan personal",
                                 "Rekam Suara & Custom Pesan"
                             ]}
-                            price="Rp 20.000"
+                            price="Rp 15.000"
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             addonText="Kode bundle akan dikirimkan via DM/WA setelah pesanan dikonfirmasi."
                             mediaSrc=""
