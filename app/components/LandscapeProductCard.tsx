@@ -65,7 +65,6 @@ export function LandscapeProductCard({
     addonText,
     tiktokHref,
     demoLink,
-    demoHint,
 }: {
     label: React.ReactNode;
     title: string;
@@ -88,7 +87,6 @@ export function LandscapeProductCard({
     addonText?: React.ReactNode;
     tiktokHref?: string;
     demoLink?: string;
-    demoHint?: string;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [activeAccent, setActiveAccent] = useState(accentColor);
@@ -231,68 +229,41 @@ export function LandscapeProductCard({
 
                         {/* Floating Demo Button Overlay */}
                         {activeDemoLink && (
-                            <div style={{
+                            <a href={activeDemoLink} target="_blank" rel="noopener noreferrer" style={{
                                 position: "absolute",
                                 bottom: 16,
                                 left: 16,
+                                background: "rgba(250, 247, 242, 0.85)",
+                                backdropFilter: "blur(8px)",
+                                WebkitBackdropFilter: "blur(8px)",
+                                border: "1px solid rgba(56, 42, 36, 0.15)",
+                                color: "#382a24",
+                                fontSize: 12,
+                                fontWeight: 800,
+                                padding: "8px 16px",
+                                borderRadius: 999,
                                 display: "flex",
                                 alignItems: "center",
-                                gap: 10,
-                                zIndex: 10
+                                gap: 6,
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                                letterSpacing: "0.02em",
+                                textDecoration: "none",
+                                transition: "all 0.2s ease"
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
+                                e.currentTarget.style.transform = "translateY(-2px)";
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
+                                e.currentTarget.style.transform = "translateY(0)";
                             }}>
-                                <a href={activeDemoLink} target="_blank" rel="noopener noreferrer" style={{
-                                    background: "rgba(250, 247, 242, 0.85)",
-                                    backdropFilter: "blur(8px)",
-                                    WebkitBackdropFilter: "blur(8px)",
-                                    border: "1px solid rgba(56, 42, 36, 0.15)",
-                                    color: "#382a24",
-                                    fontSize: 12,
-                                    fontWeight: 800,
-                                    padding: "8px 16px",
-                                    borderRadius: 999,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 6,
-                                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                                    letterSpacing: "0.02em",
-                                    textDecoration: "none",
-                                    transition: "all 0.2s ease"
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
-                                    e.currentTarget.style.transform = "translateY(-2px)";
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
-                                    e.currentTarget.style.transform = "translateY(0)";
-                                }}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Lihat Demo
-                                </a>
-                                {demoHint && (
-                                    <div style={{
-                                        fontSize: 10,
-                                        fontWeight: 700,
-                                        color: "rgba(255,255,255,0.9)",
-                                        background: "rgba(0,0,0,0.45)",
-                                        padding: "6px 10px",
-                                        borderRadius: 8,
-                                        backdropFilter: "blur(4px)",
-                                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 4
-                                    }}>
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                                        </svg>
-                                        {demoHint}
-                                    </div>
-                                )}
-                            </div>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                Lihat Demo
+                            </a>
                         )}
                     </div>
 
