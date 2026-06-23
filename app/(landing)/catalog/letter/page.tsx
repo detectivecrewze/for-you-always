@@ -68,6 +68,7 @@ export default function LetterCatalogPage() {
                                     name: "Classic Wax Seal",
                                     desc: "Desain amplop minimalis dengan segel lilin",
                                     demoLink: "https://letter.for-you-always.my.id/letter-test",
+                                    demoLabel: "Lihat Demo Wax",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
                                         { name: "Blush", color: "#e3b5b4", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781975354379-zs8pmj.webp" },
@@ -82,6 +83,7 @@ export default function LetterCatalogPage() {
                                     name: "Vintage Airmail",
                                     desc: "Desain surat pos udara klasik",
                                     demoLink: "https://letter.for-you-always.my.id/airmail/letter-test",
+                                    demoLabel: "Lihat Demo Airmail",
                                     subThemes: [
                                         { name: "Parchment", color: "#a68a64", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464837721-ukwgwd.webp" },
                                         { name: "Lilac", color: "#d4cadd", fallbackImgSrc: "https://cdn.for-you-always.my.id/1779464836965-9zahl.webp" },
@@ -95,6 +97,7 @@ export default function LetterCatalogPage() {
                                     name: "Ribbon & Seal",
                                     desc: "Desain elegan dengan pita dan segel wax",
                                     demoLink: "https://letter.for-you-always.my.id/ribbon/letter-test",
+                                    demoLabel: "Lihat Demo Ribbon",
                                     defaultSubThemeIndex: 2,
                                     subThemes: [
                                         { name: "Parchment", color: "#e8dbce", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253357350-fp09fd.webp" },

@@ -65,6 +65,7 @@ export function LandscapeProductCard({
     addonText,
     tiktokHref,
     demoLink,
+    demoLabel,
 }: {
     label: React.ReactNode;
     title: string;
@@ -79,7 +80,7 @@ export function LandscapeProductCard({
     href?: string;
     onOrder?: () => void;
     themesLabel?: string;
-    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string }[] }[];
+    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
     autoCycle?: boolean;
     delay?: number;
@@ -87,6 +88,7 @@ export function LandscapeProductCard({
     addonText?: React.ReactNode;
     tiktokHref?: string;
     demoLink?: string;
+    demoLabel?: string;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [activeAccent, setActiveAccent] = useState(accentColor);
@@ -94,6 +96,7 @@ export function LandscapeProductCard({
     const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
     const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
     const [activeDemoLink, setActiveDemoLink] = useState(demoLink);
+    const [activeDemoLabel, setActiveDemoLabel] = useState(demoLabel || "Lihat Demo");
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
         const initIdx = initialSelectedIndex ?? 0;
@@ -147,14 +150,20 @@ export function LandscapeProductCard({
             if (activeTheme.demoLink) setActiveDemoLink(activeTheme.demoLink);
             else if (theme.demoLink) setActiveDemoLink(theme.demoLink);
             else setActiveDemoLink(demoLink);
+
+            // Logic to determine demoLabel
+            if (activeTheme.demoLabel) setActiveDemoLabel(activeTheme.demoLabel);
+            else if (theme.demoLabel) setActiveDemoLabel(theme.demoLabel);
+            else setActiveDemoLabel(demoLabel || "Lihat Demo");
         } else {
             setActiveAccent(accentColor);
             setActiveGlow(accentGlow);
             setActiveVideoSrc(mediaSrc);
             setActiveFallbackImgSrc(fallbackImgSrc);
             setActiveDemoLink(demoLink);
+            setActiveDemoLabel(demoLabel || "Lihat Demo");
         }
-    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink]);
+    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel]);
 
     // Handle Auto Cycling
     useEffect(() => {
@@ -262,7 +271,7 @@ export function LandscapeProductCard({
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
-                                Lihat Demo
+                                {activeDemoLabel}
                             </a>
                         )}
                     </div>
