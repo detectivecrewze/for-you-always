@@ -56,7 +56,7 @@ export default function LetterCatalogPage() {
                             ]}
                             price="Rp 15.000"
                             demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
-                            addonText="*Setiap tombol Lihat Demo mengarah ke preview tema yang dipilih."
+                            demoHint="Demo berubah sesuai tema"
 
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
                             mediaType="image"
