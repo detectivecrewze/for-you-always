@@ -45,7 +45,6 @@ export default function MixtapeCatalogPage() {
                             ]}
                             price="Rp 15.000"
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
-                            addonText="Kode bundle akan dikirimkan via DM/WA setelah pesanan dikonfirmasi."
                             mediaSrc=""
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             mediaType="image"
