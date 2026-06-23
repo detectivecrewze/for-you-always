@@ -684,7 +684,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     badgeText: "New ✨",
                                     badgeColor: "#e8789a",
                                     badgeVariant: "solid",
-                                    imageSrc: "https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp",
+                                    imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
                                     price: "Rp 15.000",
                                     title: "Invitation Edition",
                                     titleColor: "#8a3050",

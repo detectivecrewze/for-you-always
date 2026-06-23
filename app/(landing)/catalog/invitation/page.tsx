@@ -57,16 +57,16 @@ export default function InvitationCatalogPage() {
                             price="Rp 15.000"
                             demoLink="https://invitation.for-you-always.my.id/WRcVb-mY0f"
 
-                            mediaSrc="https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp"
+                            mediaSrc="https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
                             mediaType="image"
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
                             onOrder={() => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
                             themesLabel="Alur Undangan"
                             themes={[
-                                { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
-                                { name: "Invitation", desc: "Kartu undangan utama", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210840115-m9v0xv.webp" },
+                                { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp" },
+                                { name: "Invitation", desc: "Kartu undangan utama", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp" },
                                 { name: "Date Picker", desc: "Pemilihan tanggal & waktu", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838838-b3w88t.webp" },
                                 { name: "Date Activity", desc: "Pilihan aktivitas kencan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838139-qf8gc.webp" },
                                 { name: "Dress Code", desc: "Tentukan dress code", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210839542-jybloo.webp" },
