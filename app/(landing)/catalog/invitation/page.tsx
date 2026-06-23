@@ -65,7 +65,7 @@ export default function InvitationCatalogPage() {
                             onOrder={() => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
                             themesLabel="Alur Undangan"
                             themes={[
-                                { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp" },
+                                { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
                                 { name: "Invitation", desc: "Kartu undangan utama", fallbackImgSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp" },
                                 { name: "Date Picker", desc: "Pemilihan tanggal & waktu", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838838-b3w88t.webp" },
                                 { name: "Date Activity", desc: "Pilihan aktivitas kencan", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210838139-qf8gc.webp" },
