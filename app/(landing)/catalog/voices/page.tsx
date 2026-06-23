@@ -43,7 +43,7 @@ export default function ProductCatalogPage() {
                             ]}
                             price="Promo Rp 15.000"
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
+
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
                             mediaType="image"
                             accentColor="#a67c52"

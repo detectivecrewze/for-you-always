@@ -42,7 +42,7 @@ export default function ProductCatalogPage() {
                                     <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }
-                            addonText="Tersedia opsi Terima Jadi: Rp 40.000"
+
                             demoLink="https://love.for-you-always.my.id/love-test"
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7627348817905470741?is_from_webapp=1&sender_device=pc"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"

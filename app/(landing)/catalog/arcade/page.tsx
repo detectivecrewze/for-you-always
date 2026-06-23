@@ -42,7 +42,7 @@ export default function ProductCatalogPage() {
                                     <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
                                 </>
                             }
-                            addonText="Tersedia opsi Terima Jadi: Rp 40.000"
+
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
                             mediaType="image"
                             accentColor="#5c8c5c"

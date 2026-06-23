@@ -49,7 +49,7 @@ export default function ProductCatalogPage() {
                                 </>
                             }
                             demoLink="https://retro.for-you-always.my.id/?to=retro-test"
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
+
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
                             mediaType="image"
                             accentColor="#008689"

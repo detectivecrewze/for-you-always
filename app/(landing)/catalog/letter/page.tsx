@@ -56,7 +56,7 @@ export default function LetterCatalogPage() {
                             ]}
                             price="Rp 15.000"
                             demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
-                            addonText="Tersedia opsi Terima Jadi: Rp 30.000"
+
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
                             mediaType="image"
                             accentColor="#c4858a"
