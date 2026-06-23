@@ -3,12 +3,11 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
-import { useState } from "react";
+import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 
 export default function MixtapeCatalogPage() {
-    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -50,7 +49,7 @@ export default function MixtapeCatalogPage() {
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
-                            onOrder={() => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })}
+                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })}
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
                                 { name: "Bundle Dashboard", desc: "Sistem quota bundle otomatis", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781035640605-qnr98j.png" },
@@ -65,7 +64,6 @@ export default function MixtapeCatalogPage() {
                     </div>
                 </div>
             </section>
-            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
-</div>
+        </div>
     );
 }

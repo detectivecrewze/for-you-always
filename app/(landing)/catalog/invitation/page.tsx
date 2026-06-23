@@ -3,12 +3,11 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
-import { useState } from "react";
+import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 
 export default function InvitationCatalogPage() {
-    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -62,7 +61,7 @@ export default function InvitationCatalogPage() {
                             mediaType="image"
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
-                            onOrder={() => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
+                            onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
                             themesLabel="Alur Undangan"
                             themes={[
                                 { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
@@ -81,7 +80,6 @@ export default function InvitationCatalogPage() {
                     </div>
                 </div>
             </section>
-            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
-</div>
+        </div>
     );
 }

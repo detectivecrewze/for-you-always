@@ -3,12 +3,11 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
-import { useState } from "react";
+import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 
 export default function ProductCatalogPage() {
-    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -49,7 +48,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
-                            onOrder={() => setCheckoutProduct({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })}
+                            onAddToCart={() => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })}
                             themesLabel="Koleksi Halaman"
                             themes={[
                                 { name: "Login", desc: "Halaman masuk", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },
@@ -66,7 +65,6 @@ export default function ProductCatalogPage() {
                     </div>
                 </div>
             </section>
-            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
-</div>
+        </div>
     );
 }

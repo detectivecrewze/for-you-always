@@ -1,16 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/LandscapeProductCard";
-import CheckoutModal from "../../components/CheckoutModal";
+import { useCart } from "../../context/CartContext";
 
 export default function CatalogPage() {
-    const [checkoutProduct, setCheckoutProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
-    const [pendingProduct, setPendingProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
-    const [paymentToken, setPaymentToken] = useState<string | null>(null);
-    const [showPendingWidget, setShowPendingWidget] = useState(false);
+    const { addToCart } = useCart();
 
     useEffect(() => {
     }, []);
@@ -190,82 +187,14 @@ export default function CatalogPage() {
                         <AnimatedSection key={idx} delay={idx * 100}>
                             <CompactProductCard 
                                 {...item} 
-                                onOrder={() => setCheckoutProduct({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor })}
+                                onAddToCart={() => addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor })}
                             />
                         </AnimatedSection>
                     ))}
                 </div>
             </div>
 
-            {showPendingWidget && paymentToken && pendingProduct ? (
-                <div style={{ 
-                    position: "fixed", bottom: 24, left: 24, zIndex: 999999, 
-                    background: "#fff", width: 320, borderRadius: 20, 
-                    padding: 20, boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
-                    border: "1px solid #e0d4cc",
-                    display: "flex", flexDirection: "column", gap: 12,
-                    animation: "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
-                }}>
-                    <style>{`
-                        @keyframes slideUp {
-                            from { transform: translateY(20px); opacity: 0; }
-                            to { transform: translateY(0); opacity: 1; }
-                        }
-                    `}</style>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <div>
-                            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: pendingProduct.themeColor || "#e8789a" }}>⏳ Menunggu Pembayaran</p>
-                            <p style={{ margin: "4px 0 0", fontSize: 14, fontWeight: 600, color: "#1d1816" }}>{pendingProduct.title}</p>
-                            <p style={{ margin: "2px 0 0", fontSize: 13, color: "#6e5c53" }}>Rp {pendingProduct.numericPrice.toLocaleString('id-ID')}</p>
-                        </div>
-                        <button 
-                            onClick={() => {
-                                setPendingProduct(null);
-                                setPaymentToken(null);
-                                setShowPendingWidget(false);
-                            }}
-                            style={{ background: "none", border: "none", cursor: "pointer", color: "#a6968c", padding: 4 }}
-                            title="Batalkan Pesanan"
-                        >
-                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#faf7f2", padding: "10px 12px", borderRadius: 10, marginTop: 12 }}>
-                        <span style={{ fontSize: 12, color: "#6e5c53" }}>Total</span>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: pendingProduct.themeColor || "#e8789a" }}>Rp {pendingProduct.numericPrice.toLocaleString('id-ID')}</span>
-                    </div>
 
-                    <button 
-                        onClick={() => {
-                            (window as any).snap.pay(paymentToken, {
-                                onSuccess: () => { 
-                                    window.location.href = '/success'; 
-                                },
-                                onPending: () => { },
-                                onError: () => { },
-                                onClose: () => { 
-                                    setShowPendingWidget(true);
-                                }
-                            });
-                        }}
-                        style={{ width: "100%", padding: "12px", borderRadius: 10, border: "none", background: pendingProduct.themeColor || "#e8789a", color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "background 0.3s ease", marginTop: 12 }}
-                    >
-                        Lanjut Bayar
-                    </button>
-                </div>
-            ) : (
-                <CheckoutModal 
-                    product={checkoutProduct} 
-                    onClose={() => {
-                        setCheckoutProduct(null);
-                        setPaymentToken(null);
-                        setShowPendingWidget(false);
-                    }} 
-                />
-            )}
             {/* Floating WhatsApp with label */}
             <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
                 style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}

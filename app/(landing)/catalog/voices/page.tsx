@@ -3,12 +3,11 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
-import { useState } from "react";
+import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 
 export default function ProductCatalogPage() {
-    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -48,7 +47,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
-                            onOrder={() => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
+                            onAddToCart={() => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
                             themes={[
                                 { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
                                 { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin" }
@@ -61,7 +60,6 @@ export default function ProductCatalogPage() {
                     </div>
                 </div>
             </section>
-            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
-</div>
+        </div>
     );
 }

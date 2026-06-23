@@ -55,7 +55,7 @@ export function LandscapeProductCard({
     accentColor,
     accentGlow,
     href,
-    onOrder,
+    onAddToCart,
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
@@ -78,7 +78,7 @@ export function LandscapeProductCard({
     accentColor: string;
     accentGlow: string;
     href?: string;
-    onOrder?: () => void;
+    onAddToCart?: () => void;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
@@ -721,45 +721,8 @@ export function LandscapeProductCard({
                         })}
                     </div>
 
-                    <div className="price-action-container" style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginTop: "auto" }}>
-                        {/* Order — always dark bg for Memoria (light accent), otherwise use accent */}
-                        {onOrder ? (
-                            <button onClick={onOrder} style={{
-                                padding: "12px 28px", borderRadius: 999, border: "none", cursor: "pointer",
-                                background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
-                                color: "#fff",
-                                fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
-                                textDecoration: "none", transition: "all 0.5s ease",
-                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`,
-                                display: "flex", alignItems: "center", justifyContent: "center", gap: 6
-                            }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
-                                Order Gift
-                            </button>
-                        ) : (
-                            <a href={href} target="_blank" rel="noopener noreferrer" style={{
-                                padding: "12px 28px", borderRadius: 999,
-                                background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
-                                color: "#fff",
-                                fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const,
-                                textDecoration: "none", transition: "all 0.5s ease",
-                                boxShadow: `0 8px 24px -4px rgba(29,24,22,0.2)`,
-                                display: "flex", alignItems: "center", justifyContent: "center", gap: 6
-                            }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
-                                Order Gift
-                            </a>
-                        )}
-
-                        {/* Price badge — always readable */}
+                    <div className="price-action-container" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: "auto" }}>
+                        {/* Price badge */}
                         <div style={{
                             padding: "10px 20px", borderRadius: 999,
                             background: "rgba(255,255,255,0.9)",
@@ -776,6 +739,56 @@ export function LandscapeProductCard({
                             </svg>
                             {price}
                         </div>
+
+                        {/* Add to Cart Button */}
+                        {onAddToCart && (
+                            <button
+                                onClick={onAddToCart}
+                                style={{
+                                    padding: "12px 24px", borderRadius: 999, border: "none", cursor: "pointer",
+                                    background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
+                                    color: "#fff",
+                                    fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const,
+                                    textDecoration: "none", transition: "all 0.4s ease",
+                                    boxShadow: `0 8px 24px -4px ${activeAccent}55`,
+                                    display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
+                                    fontFamily: "var(--font-sans)",
+                                }}
+                                onMouseEnter={e => {
+                                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                                    (e.currentTarget as HTMLElement).style.boxShadow = `0 14px 32px -4px ${activeAccent}77`;
+                                }}
+                                onMouseLeave={e => {
+                                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                                    (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px -4px ${activeAccent}55`;
+                                }}
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Masuk Keranjang
+                            </button>
+                        )}
+
+                        {/* Fallback href order */}
+                        {!onAddToCart && href && (
+                            <a href={href} target="_blank" rel="noopener noreferrer" style={{
+                                padding: "12px 24px", borderRadius: 999,
+                                background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
+                                color: "#fff",
+                                fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const,
+                                textDecoration: "none", transition: "all 0.5s ease",
+                                boxShadow: `0 8px 24px -4px ${activeAccent}55`,
+                                display: "flex", alignItems: "center", justifyContent: "center", gap: 7
+                            }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Masuk Keranjang
+                            </a>
+                        )}
                     </div>
                     {addonText && (
                         <div style={{

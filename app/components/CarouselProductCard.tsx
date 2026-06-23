@@ -15,7 +15,7 @@ interface CarouselProductCardProps {
     occasions?: string[];
     demoLink?: string;
     href: string;
-    onOrder?: () => void;
+    onAddToCart?: () => void;
     bgAccent?: string; // background color for mockup stage padding
 }
 
@@ -31,7 +31,7 @@ export default function CarouselProductCard({
     occasions,
     demoLink,
     href,
-    onOrder,
+    onAddToCart,
     bgAccent = "#f4ede4",
 }: CarouselProductCardProps) {
     return (
@@ -239,7 +239,7 @@ export default function CarouselProductCard({
                     >
                         Lihat
                     </Link>
-                    <button onClick={onOrder} style={{
+                    <button onClick={onAddToCart} style={{
                         flex: 2, padding: "11px 8px", borderRadius: 14,
                         background: titleColor, color: "#faf7f2",
                         fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700,
@@ -258,10 +258,9 @@ export default function CarouselProductCard({
                     }}
                     >
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                            <line x1="7" y1="7" x2="7.01" y2="7"/>
+                            <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        Order Gift
+                        Masuk Keranjang
                     </button>
                 </div>
             </div>

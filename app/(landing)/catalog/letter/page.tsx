@@ -3,12 +3,11 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import CheckoutModal, { CheckoutProduct } from "../../../components/CheckoutModal";
-import { useState } from "react";
+import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 
 export default function LetterCatalogPage() {
-    const [checkoutProduct, setCheckoutProduct] = useState<CheckoutProduct | null>(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -61,7 +60,7 @@ export default function LetterCatalogPage() {
                             mediaType="image"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
-                            onOrder={() => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })}
+                            onAddToCart={() => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })}
                             themesLabel="Koleksi Template"
                             themes={[
                                 {
@@ -118,7 +117,6 @@ export default function LetterCatalogPage() {
                     </div>
                 </div>
             </section>
-            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
-</div>
+        </div>
     );
 }

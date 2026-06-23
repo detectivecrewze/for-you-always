@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const pathname = usePathname();
+    const { cartCount, openDrawer } = useCart();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40);
@@ -103,6 +105,46 @@ export default function Navbar() {
 
                     {/* CTA + Hamburger */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                        {/* Cart Icon Button */}
+                        <button
+                            onClick={openDrawer}
+                            aria-label="Keranjang"
+                            style={{
+                                position: "relative",
+                                background: cartCount > 0 ? "rgba(205,171,143,0.15)" : "transparent",
+                                border: "1px solid rgba(205,171,143,0.25)",
+                                borderRadius: 999,
+                                width: 36, height: 36,
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                cursor: "pointer",
+                                color: cartCount > 0 ? "#a67c52" : "#6e5c53",
+                                transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.2)"; (e.currentTarget as HTMLElement).style.color = "#a67c52"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = cartCount > 0 ? "rgba(205,171,143,0.15)" : "transparent"; (e.currentTarget as HTMLElement).style.color = cartCount > 0 ? "#a67c52" : "#6e5c53"; }}
+                        >
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            {cartCount > 0 && (
+                                <span style={{
+                                    position: "absolute", top: -4, right: -4,
+                                    background: "#c9184a",
+                                    color: "#fff",
+                                    fontSize: 9, fontWeight: 800,
+                                    width: 16, height: 16,
+                                    borderRadius: "50%",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    border: "2px solid #faf7f2",
+                                    fontFamily: "var(--font-sans)",
+                                    lineHeight: 1,
+                                    letterSpacing: 0,
+                                }}>
+                                    {cartCount > 9 ? "9+" : cartCount}
+                                </span>
+                            )}
+                        </button>
+
                         <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
                             style={{
                                 padding: "7px 18px", borderRadius: 999,

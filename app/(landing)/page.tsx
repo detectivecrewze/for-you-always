@@ -6,225 +6,20 @@ import Image from "next/image";
 import CompactProductCard from "../components/CompactProductCard";
 import { LandscapeProductCard, AnimatedSection } from "../components/LandscapeProductCard";
 import AutoScrollCarousel from "../components/ProductCarousel";
-
-/* ─────────────────────────────────────────────
-   Navbar
-   ───────────────────────────────────────────── */
-function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
-    const [mobileOpen, setMobileOpen] = useState(false);
-
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
-    const links = [
-        { label: "Home", href: "/" },
-        { label: "Catalog", href: "/catalog" },
-        { label: "Cara Kerja", href: "#cara-kerja" },
-        { label: "Testimoni", href: "#testimoni" },
-    ];
-
-    const mobileLinks = [
-        { label: "Catalog", href: "/catalog" },
-        { label: "Cara Kerja", href: "#cara-kerja" },
-        { label: "Testimoni", href: "#testimoni" },
-        { label: "FAQ", href: "#faq" },
-    ];
-
-    return (
-        <>
-            {/* ── Wrapper: full width container, centers the pill ── */}
-            <div style={{
-                position: "fixed", top: 0, left: 0, right: 0, zIndex: 10000,
-                display: "flex", justifyContent: "center",
-                padding: scrolled ? "10px 20px 0" : "16px 20px 0",
-                transition: "padding 0.4s ease",
-                pointerEvents: "none",
-                background: "transparent",
-            }}>
-                <nav style={{
-                    pointerEvents: "auto",
-                    display: "flex", alignItems: "center", justifyContent: "space-between",
-                    width: "100%",
-                    maxWidth: 1100,
-                    height: 52,
-                    padding: "0 16px 0 16px",
-                    background: "rgba(250,247,242,0.96)",
-                    backdropFilter: "blur(24px) saturate(180%)",
-                    WebkitBackdropFilter: "blur(24px) saturate(180%)",
-                    border: "1px solid rgba(205,171,143,0.25)",
-                    borderRadius: 999,
-                    boxShadow: scrolled
-                        ? "0 8px 32px -8px rgba(29,24,22,0.14), 0 2px 8px -2px rgba(29,24,22,0.06)"
-                        : "0 4px 16px -4px rgba(29,24,22,0.08)",
-                    transition: "all 0.4s ease",
-                }}>
-                    {/* Logo */}
-                    <a href="#" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0, position: "relative", zIndex: 10 }}>
-                        <div style={{ width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
-                            <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                        </div>
-                        <span style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "#382a24", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
-                            For you, Always.
-                        </span>
-                    </a>
-
-                    {/* Desktop links — center */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 28 }} className="nav-desktop-links">
-                        {links.map(l => (
-                            <a key={l.href} href={l.href} style={{
-                                fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
-                                letterSpacing: "0.1em", textTransform: "uppercase",
-                                color: "#6e5c53", textDecoration: "none",
-                                transition: "color 0.2s ease",
-                            }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#a67c52"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6e5c53"; }}
-                            >
-                                {l.label}
-                            </a>
-                        ))}
-                    </div>
-
-                    {/* Mobile quick links — center */}
-                    <div style={{ alignItems: "center", gap: 16 }} className="nav-mobile-quicklinks">
-                        <Link href="/" style={{
-                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
-                            letterSpacing: "0.1em", textTransform: "uppercase",
-                            color: "#a67c52", textDecoration: "none",
-                        }}>HOME</Link>
-                        <Link href="/catalog" style={{
-                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
-                            letterSpacing: "0.1em", textTransform: "uppercase",
-                            color: "#6e5c53", textDecoration: "none",
-                        }}>CATALOG</Link>
-                    </div>
-
-                    {/* CTA + Hamburger */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                        <Link href="/catalog"
-                            style={{
-                                padding: "7px 18px", borderRadius: 999,
-                                background: "#1d1816", color: "#faf7f2",
-                                fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                                textDecoration: "none", transition: "all 0.3s ease", whiteSpace: "nowrap",
-                            }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#a67c52"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1d1816"; }}
-                            className="nav-cta"
-                        >
-                            Order
-                        </Link>
-                        {/* Hamburger */}
-                        <button
-                            onClick={() => setMobileOpen(v => !v)}
-                            className="nav-hamburger"
-                            style={{
-                                background: "rgba(205,171,143,0.12)", border: "1px solid rgba(205,171,143,0.25)",
-                                borderRadius: 999, cursor: "pointer",
-                                width: 34, height: 34,
-                                display: "flex", flexDirection: "column", gap: 4, alignItems: "center", justifyContent: "center",
-                                transition: "background 0.2s ease",
-                            }}
-                            aria-label="Toggle menu"
-                        >
-                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(5.5px) rotate(45deg)" : "none" }} />
-                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
-                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(-5.5px) rotate(-45deg)" : "none" }} />
-                        </button>
-                    </div>
-                </nav>
-            </div>
-
-            {/* Mobile dropdown menu */}
-            <div style={{
-                position: "fixed", top: scrolled ? 74 : 80, left: 20, right: 20, zIndex: 998,
-                background: "rgba(250,247,242,0.98)", backdropFilter: "blur(24px)",
-                border: mobileOpen ? "1px solid rgba(205,171,143,0.25)" : "none",
-                opacity: mobileOpen ? 1 : 0,
-                borderRadius: 20,
-                padding: mobileOpen ? "20px 24px 24px" : "0 24px",
-                maxHeight: mobileOpen ? 400 : 0,
-                overflow: "hidden",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: mobileOpen ? "0 12px 40px -8px rgba(29,24,22,0.16)" : "none",
-                pointerEvents: mobileOpen ? "auto" : "none",
-            }} className="nav-mobile-dropdown">
-                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                    {mobileLinks.map(l => (
-                        <a key={l.href} href={l.href}
-                            onClick={() => setMobileOpen(false)}
-                            style={{
-                                fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
-                                letterSpacing: "0.08em", textTransform: "uppercase",
-                                color: "#382a24", textDecoration: "none",
-                                padding: "13px 0",
-                                borderBottom: "1px solid rgba(205,171,143,0.12)",
-                                transition: "color 0.2s ease",
-                            }}
-                        >
-                            {l.label}
-                        </a>
-                    ))}
-                    <Link href="/catalog"
-                        onClick={() => setMobileOpen(false)}
-                        style={{
-                            marginTop: 16, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                            padding: "12px 28px", borderRadius: 999,
-                            background: "#1d1816", color: "#faf7f2",
-                            fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                            textDecoration: "none",
-                        }}
-                    >
-                        Order Now
-                    </Link>
-                </div>
-            </div>
-
-            <style>{`
-                @media (max-width: 768px) {
-                    .nav-desktop-links { display: none !important; }
-                    .nav-cta { display: none !important; }
-                    .nav-hamburger { display: flex !important; }
-                    .nav-mobile-quicklinks { display: flex !important; }
-                }
-                @media (min-width: 769px) {
-                    .nav-hamburger { display: none !important; }
-                    .nav-mobile-dropdown { display: none !important; }
-                    .nav-mobile-quicklinks { display: none !important; }
-                }
-            `}</style>
-        </>
-    );
-}
-
-
-import CheckoutModal from "../components/CheckoutModal";
-
-function LandingContentWithCheckout() {
-    const [checkoutProduct, setCheckoutProduct] = useState<{ id: string, title: string, numericPrice: number, themeColor: string } | null>(null);
-    
-    return (
-        <>
-            <LandingContent setCheckoutProduct={setCheckoutProduct} />
-            <CheckoutModal product={checkoutProduct} onClose={() => setCheckoutProduct(null)} />
-        </>
-    );
-}
+import Navbar from "../components/Navbar";
+import { useCart } from "../context/CartContext";
 
 export default function MainHubPage() {
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
             <Navbar />
-            <LandingContentWithCheckout />
+            <LandingContent />
         </div>
     );
 }
 
-const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct: any }) => {
+const LandingContent = React.memo(() => {
+    const { addToCart } = useCart();
     return (
         <>
 
@@ -642,7 +437,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#581824",
                                     description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
                                     href: "/catalog/memoria",
-                                    onOrder: () => setCheckoutProduct({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
+                                    onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
                                 },
                                 {
                                     badgeText: "#1 Terlaris",
@@ -654,7 +449,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#a67c52",
                                     description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
                                     href: "/catalog/voices",
-                                    onOrder: () => setCheckoutProduct({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })
+                                    onAddToCart: () => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })
                                 },
                                 {
                                     badgeText: "Popular",
@@ -666,7 +461,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#2a3d5c",
                                     description: "Amplop digital interaktif dengan efek typewriter sinematik dan foto/video di akhir surat.",
                                     href: "/catalog/letter",
-                                    onOrder: () => setCheckoutProduct({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })
+                                    onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })
                                 },
                                 {
                                     badgeText: "Premium Bundle",
@@ -678,7 +473,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#5a8d9e",
                                     description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
                                     href: "/catalog/mixtape",
-                                    onOrder: () => setCheckoutProduct({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })
+                                    onAddToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })
                                 },
                                 {
                                     badgeText: "New ✨",
@@ -690,7 +485,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#8a3050",
                                     description: "Undangan kencan interaktif — pilih tanggal, aktivitas, dan kirim tiket kencan digital.",
                                     href: "/catalog/invitation",
-                                    onOrder: () => setCheckoutProduct({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })
+                                    onAddToCart: () => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })
                                 },
                                 {
                                     badgeText: "10 Rooms",
@@ -702,7 +497,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#5c8c5c",
                                     description: "10 ruangan interaktif penuh kejutan dengan background music pilihan.",
                                     href: "/catalog/arcade",
-                                    onOrder: () => setCheckoutProduct({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })
+                                    onAddToCart: () => addToCart({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })
                                 },
                                 {
                                     badgeText: "Nostalgic",
@@ -714,7 +509,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#008689",
                                     description: "Tampilan retro Windows 98 dengan 5 stages of surprises dan custom GIF pilihan.",
                                     href: "/catalog/retro",
-                                    onOrder: () => setCheckoutProduct({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })
+                                    onAddToCart: () => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })
                                 },
                                 {
                                     badgeText: "Storytelling",
@@ -726,7 +521,7 @@ const LandingContent = React.memo(({ setCheckoutProduct }: { setCheckoutProduct:
                                     titleColor: "#c9184a",
                                     description: "6 halaman interaktif bercerita — perfect untuk anniversary dan year-end recap.",
                                     href: "/catalog/wrapped",
-                                    onOrder: () => setCheckoutProduct({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })
+                                    onAddToCart: () => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })
                                 },
                             ]}
                         />
