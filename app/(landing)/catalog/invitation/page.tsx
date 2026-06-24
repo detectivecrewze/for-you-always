@@ -62,6 +62,7 @@ export default function InvitationCatalogPage() {
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
                             onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "invitation", title: "Invitation Edition (3 Slot)", numericPrice: 20000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Alur Undangan"
                             themes={[
                                 { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },

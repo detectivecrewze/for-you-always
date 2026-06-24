@@ -9,6 +9,8 @@ export interface CartItem {
     numericPrice: number;
     themeColor: string;
     themeImgSrc?: string;
+    isThreeSlot?: boolean;   // true = user membeli 3 slot (bundle code)
+    slotCount?: number;       // jumlah slot, default 1
 }
 
 interface CartContextValue {

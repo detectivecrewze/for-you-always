@@ -54,6 +54,7 @@ export default function ProductCatalogPage() {
                             accentColor="#008689"
                             accentGlow="rgba(0,134,137,0.2)"
                             onAddToCart={() => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "retro", title: "Retro Edition (3 Slot)", numericPrice: 20000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Koleksi Halaman"
                             themes={[
                                 { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },

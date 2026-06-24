@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 export function AnimatedSection({
     children,
@@ -57,6 +58,7 @@ export function LandscapeProductCard({
     accentGlow,
     href,
     onAddToCart,
+    onAddThreeSlotToCart,
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
@@ -80,6 +82,7 @@ export function LandscapeProductCard({
     accentGlow: string;
     href?: string;
     onAddToCart?: () => void;
+    onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
@@ -98,6 +101,7 @@ export function LandscapeProductCard({
     const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
     const [activeDemoLink, setActiveDemoLink] = useState(demoLink);
     const [activeDemoLabel, setActiveDemoLabel] = useState(demoLabel || "Lihat Demo");
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
         const initIdx = initialSelectedIndex ?? 0;
@@ -861,7 +865,19 @@ export function LandscapeProductCard({
                         {/* Add to Cart Button */}
                         {onAddToCart && (
                             <button
-                                onClick={onAddToCart}
+                                onClick={() => {
+                                    if (onAddThreeSlotToCart) {
+                                        setSlotPickerConfig({
+                                            productId: "product", // not strictly used inside the modal except for identity
+                                            productTitle: title,
+                                            themeColor: activeAccent,
+                                            onSelectSingle: onAddToCart,
+                                            onSelectThreeSlot: onAddThreeSlotToCart,
+                                        });
+                                    } else {
+                                        onAddToCart();
+                                    }
+                                }}
                                 style={{
                                     padding: "12px 24px", borderRadius: 999, border: "none", cursor: "pointer",
                                     background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
@@ -923,9 +939,16 @@ export function LandscapeProductCard({
                             {addonText}
                         </div>
                     )}
-                    {}
                 </div>
             </div>
+
+            {/* Slot Picker Modal */}
+            {slotPickerConfig && (
+                <SlotPickerModal
+                    config={slotPickerConfig}
+                    onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
         </AnimatedSection>
     );
 }
