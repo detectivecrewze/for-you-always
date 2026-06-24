@@ -30,7 +30,7 @@ export default function ProductCatalogPage() {
                         <LandscapeProductCard
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Voices Gift <span style={{ opacity: 0.5 }}>ΓÇó</span> Best Seller
+                                    Voices Gift <span style={{ opacity: 0.5 }}>•</span> Best Seller
                                 </div>
                             }
                             title="Kado Suara & Foto"
