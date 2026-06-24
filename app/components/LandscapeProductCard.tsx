@@ -530,6 +530,10 @@ export function LandscapeProductCard({
                             const isDateFeature = feat.toLowerCase().includes("tanggal") || feat.toLowerCase().includes("waktu");
                             const isActivityFeature = feat.toLowerCase().includes("aktivitas") || feat.toLowerCase().includes("dress code");
                             const isTicketFeature = feat.toLowerCase().includes("tiket");
+                            const isNicknameFeature = feat.toLowerCase().includes("nama") || feat.toLowerCase().includes("nickname");
+                            const isRoomsFeature = feat.toLowerCase().includes("10 ruang") || feat.toLowerCase().includes("ruangan");
+                            const isGameFeature = feat.toLowerCase().includes("game") || feat.toLowerCase().includes("permainan");
+                            const isPixelFeature = feat.toLowerCase().includes("12 karakter") || feat.toLowerCase().includes("pixel");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
