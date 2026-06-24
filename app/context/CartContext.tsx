@@ -67,7 +67,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             mixtape: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
             retro: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
             arcade: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
-            wrapped: "https://cdn.for-you-always.my.id/1778524793846-bxav21.png",
+            wrapped: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
             letter: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp",
             invitation: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
             loves: "/assets/opening_gate.png",
