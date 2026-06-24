@@ -36,7 +36,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                 body: JSON.stringify({
                     order_id: orderId,
                     gross_amount: cartTotal,
-                    product_type: items.map(i => i.id).join(","),
+                    product_type: items.map(i => i.isThreeSlot ? `${i.id}_3slot` : i.id).join(","),
                     customer_details: {
                         first_name: customerDetails.firstName,
                         email: customerDetails.email,
