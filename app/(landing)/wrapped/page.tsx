@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 /* ─────────────────────────────────────────────
    Animated Section (Intersection Observer)
@@ -832,8 +833,8 @@ export default function WrappedLandingPage() {
             {/* ── Footer ── */}
             <footer style={{ padding: "60px 24px", textAlign: "center", borderTop: "1px solid var(--wrap-border)" }}>
                 <Link href="/" style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 8, textDecoration: "none", marginBottom: 20 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 12, overflow: "hidden", border: "1px solid var(--wrap-border)" }}>
-                        <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "relative", width: 36, height: 36, borderRadius: 12, overflow: "hidden", border: "1px solid var(--wrap-border)" }}>
+                        <Image src="/logo.png" alt="Logo" fill style={{ objectFit: "cover" }} />
                     </div>
                     <span style={{ fontFamily: "var(--wrap-font-display)", fontStyle: "italic", fontWeight: 600, fontSize: 15, color: "var(--wrap-text-primary)" }}>
                         For you, Always.

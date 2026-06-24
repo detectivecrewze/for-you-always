@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CarouselProductCardProps {
     badgeText?: string;
@@ -84,13 +85,12 @@ export default function CarouselProductCard({
                     boxShadow: `0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10)`,
                     border: "2px solid rgba(255,255,255,0.6)",
                 }}>
-                    <img
+                    <Image
                         src={imageSrc}
                         alt={title}
+                        fill
                         draggable={false}
                         style={{
-                            width: "100%",
-                            height: "100%",
                             objectFit: "cover",
                             transition: "transform 0.5s ease",
                             pointerEvents: "none",

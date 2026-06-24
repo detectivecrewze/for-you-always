@@ -806,8 +806,8 @@ const LandingContent = React.memo(() => {
 
                 <AnimatedSection delay={100}>
                     <div style={{ marginBottom: 40 }}>
-                        <div style={{ width: 44, height: 44, borderRadius: 14, overflow: "hidden", border: "1.2px solid rgba(205,171,143,0.3)", margin: "0 auto 20px" }}>
-                            <img src="/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover", filter: "sepia(0.15) opacity(0.85)" }} />
+                        <div style={{ position: "relative", width: 44, height: 44, borderRadius: 14, overflow: "hidden", border: "1.2px solid rgba(205,171,143,0.3)", margin: "0 auto 20px" }}>
+                            <Image src="/logo.png" alt="Logo" fill style={{ objectFit: "cover", filter: "sepia(0.15) opacity(0.85)" }} />
                         </div>
                         <div style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: 24, color: "#382a24", marginBottom: 8, letterSpacing: "-0.02em" }}>For you, Always.</div>
                         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase" as const, color: "#a6968c" }}>Preserving Memories Digitally</div>

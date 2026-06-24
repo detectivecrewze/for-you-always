@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import "./voices.css";
 
 /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
@@ -282,11 +283,12 @@ function FeatureShowcase() {
                             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                         />
                     ) : hasImage ? (
-                        <img
+                        <Image
                             key={slide.imageSrc}
                             src={slide.imageSrc}
                             alt={slide.title}
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            fill
+                            style={{ objectFit: "cover", display: "block" }}
                         />
                     ) : (
                         /* Placeholder */
@@ -637,12 +639,11 @@ function FeatureCard({
                             }}
                         />
                     ) : imageSrc ? (
-                        <img
+                        <Image
                             src={imageSrc}
                             alt={title}
+                            fill
                             style={{
-                                width: "100%",
-                                height: "100%",
                                 objectFit: "cover",
                                 display: "block",
                             }}
@@ -1827,7 +1828,7 @@ export default function VoicesLandingPage() {
                                             
                                         }}
                                     >
-                                        satuan 5Ãƒâ€” = Rp 50.000
+                                        satuan 5× = Rp 50.000
                                     </div>
                                 </div>
                                 <div
@@ -1927,6 +1928,7 @@ export default function VoicesLandingPage() {
                 >
                     <div
                         style={{
+                            position: "relative",
                             width: 36,
                             height: 36,
                             borderRadius: 12,
@@ -1934,10 +1936,11 @@ export default function VoicesLandingPage() {
                             border: "1px solid var(--border)",
                         }}
                     >
-                        <img
+                        <Image
                             src="/logo.png"
                             alt="Logo"
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            fill
+                            style={{ objectFit: "cover" }}
                         />
                     </div>
                     <span

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CompactProductCardProps {
     badgeText?: string;
@@ -59,11 +60,12 @@ export default function CompactProductCard({
             (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px -4px rgba(0,0,0,0.07), 0 0 0 1px rgba(205,171,143,0.1)";
         }}>
             {/* Image Container */}
-            <div style={{ position: "relative", overflow: "hidden", borderRadius: "1.2rem", zIndex: 1 }}>
-                <img 
+            <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", zIndex: 1 }}>
+                <Image 
                     src={imageSrc} 
                     alt={title} 
-                    style={{ width: "100%", height: 260, objectFit: "cover", transition: "transform 0.5s ease" }}
+                    fill
+                    style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
                     onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                 />

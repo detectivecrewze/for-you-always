@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -133,7 +134,7 @@ export default function WizardEditor() {
             <header className="h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-4">
                     <Link href="/dashboard" className="w-10 h-10 relative overflow-hidden rounded-lg">
-                        <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                        <Image src="/logo.png" alt="Logo" fill className="object-cover" />
                     </Link>
                     <div className="h-4 w-px bg-gray-200"></div>
                     <h1 className="font-bold text-gray-900 truncate max-w-[200px]">

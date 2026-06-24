@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface LoopCard {
     badgeText?: string;
@@ -56,19 +57,15 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
             }}
         >
             {/* Image Container with rounded corners all around */}
-            <div style={{ position: "relative", overflow: "hidden", borderRadius: "1.2rem" }}>
-                <img
+            <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem" }}>
+                <Image
                     src={card.imageSrc}
                     alt={card.title}
+                    fill
                     draggable={false}
                     loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
                     style={{
-                        width: "100%",
-                        height: 260,
                         objectFit: "cover",
-                        display: "block",
                         transition: "transform 0.5s ease",
                         pointerEvents: "none",
                     }}

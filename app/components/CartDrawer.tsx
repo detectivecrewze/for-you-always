@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useCart, CartItem } from "../context/CartContext";
 import CartCheckoutModal from "./CartCheckoutModal";
 
@@ -200,10 +201,11 @@ export default function CartDrawer() {
                                         boxShadow: `0 4px 12px ${group.themeColor || "#cdab8f"}44`,
                                     }}>
                                         {group.themeImgSrc && (
-                                            <img 
+                                            <Image 
                                                 src={group.themeImgSrc} 
                                                 alt={group.title}
-                                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                             />
                                         )}
                                     </div>

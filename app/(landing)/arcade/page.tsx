@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Animated Section (Intersection Observer)
@@ -1323,6 +1324,7 @@ export default function ArcadeLandingPage() {
                 >
                     <div
                         style={{
+                            position: "relative",
                             width: 36,
                             height: 36,
                             borderRadius: 10,
@@ -1330,10 +1332,11 @@ export default function ArcadeLandingPage() {
                             border: "2px solid var(--arc-border-gold)",
                         }}
                     >
-                        <img
+                        <Image
                             src="/logo.png"
                             alt="Logo"
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            fill
+                            style={{ objectFit: "cover" }}
                         />
                     </div>
                     <span

@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 
 export default function Dashboard() {
@@ -36,7 +37,7 @@ export default function Dashboard() {
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col p-6">
                 <div className="flex items-center gap-2 mb-10">
                     <div className="w-10 h-10 relative overflow-hidden rounded-lg">
-                        <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                        <Image src="/logo.png" alt="Logo" fill className="object-cover" />
                     </div>
                     <span className="font-display font-bold text-gray-900 italic lowercase tracking-tight">for you, always.</span>
                 </div>

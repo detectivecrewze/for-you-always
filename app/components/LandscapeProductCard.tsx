@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 
 export function AnimatedSection({
     children,
@@ -204,14 +205,13 @@ export function LandscapeProductCard({
                         }}
                     >
                         {activeFallbackImgSrc || mediaSrc ? (
-                            <img
+                            <Image
                                 key={activeFallbackImgSrc || mediaSrc}
-                                src={activeFallbackImgSrc || mediaSrc}
+                                src={(activeFallbackImgSrc || mediaSrc) as string}
                                 alt={title}
+                                fill
                                 loading="lazy"
-                                decoding="async"
-                                fetchPriority="low"
-                                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                                style={{ objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
                         ) : (
                             <div style={{
@@ -512,7 +512,7 @@ export function LandscapeProductCard({
                     <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
                         {features.map((feat) => {
                             const isToggleFeature = feat.toLowerCase().includes("turn on / off") || feat.toLowerCase().includes("animasi interaktif") || feat.toLowerCase().includes("animasi visual");
-                            const isMusicFeature = feat.toLowerCase().includes("music pilihan");
+                            const isMusicFeature = feat.toLowerCase().includes("music pilihan") || feat.toLowerCase().includes("lagu") || feat.toLowerCase().includes("playlist");
                             const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema") || feat.toLowerCase().includes("kustomisasi tema");
                             const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
                             const isGalleryFeature = feat.toLowerCase().includes("galeri foto") || feat.toLowerCase().includes("kustomisasi galeri");
@@ -521,7 +521,8 @@ export function LandscapeProductCard({
                             const isPremiumFeature = feat.toLowerCase().includes("premium & eksklusif") || feat.toLowerCase().includes("kuota");
                             const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video") || feat.toLowerCase().includes("foto/video");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
-                            const isRetroFeature = feat.toLowerCase().includes("retro windows") || feat.toLowerCase().includes("kaset");
+                            const isCassetteFeature = feat.toLowerCase().includes("kaset") || feat.toLowerCase().includes("mixtape");
+                            const isRetroFeature = feat.toLowerCase().includes("retro windows") || (feat.toLowerCase().includes("retro") && !feat.toLowerCase().includes("kaset"));
                             const isNostalgiaGallery = feat.toLowerCase().includes("nostalgia");
                             const isMobileFeature = feat.toLowerCase().includes("mobile");
                             const isQuotesFeature = feat.toLowerCase().includes("quotes") || feat.toLowerCase().includes("pesan personal");
@@ -697,6 +698,17 @@ export function LandscapeProductCard({
                                             }}>
                                                 Dearest Lyxelle,
                                             </div>
+                                        </div>
+                                    )}
+                                    {/* Animation: Cassette */}
+                                    {isCassetteFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 3s infinite ease-in-out" }}>
+                                            <svg width="16" height="12" viewBox="0 0 24 16" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <rect x="2" y="2" width="20" height="12" rx="2" />
+                                                <circle cx="8" cy="8" r="2" />
+                                                <circle cx="16" cy="8" r="2" />
+                                                <line x1="10" y1="8" x2="14" y2="8" />
+                                            </svg>
                                         </div>
                                     )}
 
