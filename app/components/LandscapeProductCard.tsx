@@ -764,6 +764,58 @@ export function LandscapeProductCard({
                                             </svg>
                                         </div>
                                     )}
+
+                                    {/* Animation: Nickname */}
+                                    {isNicknameFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 3s infinite ease-in-out", opacity: 0.9 }}>
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                                <circle cx="12" cy="7" r="4" />
+                                                <rect x="2" y="3" width="20" height="18" rx="2" strokeDasharray="4 4" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Rooms */}
+                                    {isRoomsFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "photo-shuffle 4s infinite ease-in-out" }}>
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <rect x="3" y="3" width="7" height="7" />
+                                                <rect x="14" y="3" width="7" height="7" />
+                                                <rect x="14" y="14" width="7" height="7" />
+                                                <rect x="3" y="14" width="7" height="7" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Game */}
+                                    {isGameFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 2.5s infinite ease-in-out" }}>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <line x1="6" y1="12" x2="10" y2="12" />
+                                                <line x1="8" y1="10" x2="8" y2="14" />
+                                                <line x1="15" y1="13" x2="15.01" y2="13" strokeWidth="3" />
+                                                <line x1="18" y1="11" x2="18.01" y2="11" strokeWidth="3" />
+                                                <rect x="2" y="6" width="20" height="12" rx="2" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Pixel */}
+                                    {isPixelFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease", animation: "typewriter-blink 0.5s steps(2, start) infinite" }}>
+                                                <rect x="2" y="10" width="4" height="4" />
+                                                <rect x="6" y="6" width="4" height="4" />
+                                                <rect x="10" y="2" width="4" height="4" />
+                                                <rect x="14" y="6" width="4" height="4" />
+                                                <rect x="18" y="10" width="4" height="4" />
+                                                <rect x="14" y="14" width="4" height="4" />
+                                                <rect x="10" y="18" width="4" height="4" />
+                                                <rect x="6" y="14" width="4" height="4" />
+                                            </svg>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

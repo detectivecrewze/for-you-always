@@ -30,7 +30,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
             const orderId = items.length === 1
                 ? `ORDER-${items[0].id.toUpperCase()}-${Date.now()}`
                 : `ORDER-BUNDLE-${Date.now()}`;
-            const res = await fetch("https://pakasir-gateway-sandbox.aldoramadhan16.workers.dev/api/checkout", {
+            const res = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
