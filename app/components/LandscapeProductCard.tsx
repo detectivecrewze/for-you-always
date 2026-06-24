@@ -110,6 +110,7 @@ export function LandscapeProductCard({
         if (typeof navigator !== 'undefined') {
             const ua = navigator.userAgent || navigator.vendor;
             if (/Bytedance|musical_ly|TikTok/i.test(ua)) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setIsTikTok(true);
             }
         }
@@ -118,10 +119,8 @@ export function LandscapeProductCard({
     // Reset subTheme index when main theme changes
     useEffect(() => {
         if (selectedIndex !== null && themes && themes[selectedIndex]) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedSubThemeIndex(themes[selectedIndex].defaultSubThemeIndex || 0);
         } else {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedSubThemeIndex(0);
         }
     }, [selectedIndex, themes]);
@@ -135,9 +134,7 @@ export function LandscapeProductCard({
                 : theme;
 
             const resolvedColor = activeTheme.color || theme.color || accentColor;
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setActiveAccent(resolvedColor);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setActiveGlow(resolvedColor ? `${resolvedColor}33` : accentGlow);
 
             // Logic to determine video source
