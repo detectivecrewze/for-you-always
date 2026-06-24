@@ -520,7 +520,7 @@ export function LandscapeProductCard({
                             const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim") || feat.toLowerCase().includes("dikerjakan langsung");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
                             const isPremiumFeature = feat.toLowerCase().includes("premium & eksklusif") || feat.toLowerCase().includes("kuota");
-                            const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video") || feat.toLowerCase().includes("foto/video");
+                            const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video") || feat.toLowerCase().includes("foto/video") || feat.toLowerCase().includes("gif");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
                             const isCassetteFeature = feat.toLowerCase().includes("kaset") || feat.toLowerCase().includes("mixtape");
                             const isRetroFeature = feat.toLowerCase().includes("retro windows") || (feat.toLowerCase().includes("retro") && !feat.toLowerCase().includes("kaset"));
@@ -534,6 +534,7 @@ export function LandscapeProductCard({
                             const isRoomsFeature = feat.toLowerCase().includes("10 ruang") || feat.toLowerCase().includes("ruangan");
                             const isGameFeature = feat.toLowerCase().includes("game") || feat.toLowerCase().includes("permainan");
                             const isPixelFeature = feat.toLowerCase().includes("12 karakter") || feat.toLowerCase().includes("pixel");
+                            const isSurpriseFeature = feat.toLowerCase().includes("surprise") || feat.toLowerCase().includes("kejutan");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -748,6 +749,19 @@ export function LandscapeProductCard({
                                                 <circle cx="8" cy="8" r="2" />
                                                 <circle cx="16" cy="8" r="2" />
                                                 <line x1="10" y1="8" x2="14" y2="8" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Surprise */}
+                                    {isSurpriseFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", animation: "envelope-bob 3s infinite ease-in-out" }}>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }}>
+                                                <polyline points="20 12 20 22 4 22 4 12" />
+                                                <rect x="2" y="7" width="20" height="5" />
+                                                <line x1="12" y1="22" x2="12" y2="7" />
+                                                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                                                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
                                             </svg>
                                         </div>
                                     )}

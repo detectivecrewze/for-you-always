@@ -30,7 +30,7 @@ export default function ProductCatalogPage() {
                         <LandscapeProductCard
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Retro Edition <span style={{ opacity: 0.5 }}>ΓÇó</span> NEW
+                                    Retro Edition
                                 </div>
                             }
                             title="Retro Gift Card"
