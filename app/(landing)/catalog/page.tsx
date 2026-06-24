@@ -186,7 +186,7 @@ export default function CatalogPage() {
                     gap: 32 
                 }}>
                     {catalogItems.map((item, idx) => {
-                        const isEligible = ["letter", "voices", "mixtape", "invitation", "retro"].includes(item.id);
+                        const isEligible = ["letter", "voices", "retro"].includes(item.id);
                         
                         const handleAddToCart = () => {
                             addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor });
@@ -201,6 +201,9 @@ export default function CatalogPage() {
                                     onSelectSingle: handleAddToCart,
                                     onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Slot)`, numericPrice: 20000, themeColor: item.titleColor, isThreeSlot: true, slotCount: 3 }),
                                 });
+                            } else if (item.id === "mixtape" || item.id === "invitation") {
+                                // Add as 3-slot bundle directly
+                                addToCart({ id: item.id, title: `${item.title} (3 Slot)`, numericPrice: item.numericPrice, themeColor: item.titleColor, isThreeSlot: true, slotCount: 3 });
                             } else {
                                 handleAddToCart();
                             }
