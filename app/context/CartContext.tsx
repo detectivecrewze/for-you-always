@@ -4,15 +4,17 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 export interface CartItem {
     id: string;
+    cartItemId?: string;
     title: string;
     numericPrice: number;
     themeColor: string;
+    themeImgSrc?: string;
 }
 
 interface CartContextValue {
     items: CartItem[];
     addToCart: (item: CartItem) => void;
-    removeFromCart: (id: string) => void;
+    removeFromCart: (cartItemIdOrId: string) => void;
     clearCart: () => void;
     cartCount: number;
     cartTotal: number;
@@ -60,18 +62,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }, [items, hydrated]);
 
     const addToCart = useCallback((item: CartItem) => {
-        setItems(prev => {
-            // Prevent duplicate — same product id
-            if (prev.find(i => i.id === item.id)) return prev;
-            return [...prev, item];
-        });
-        setLastAdded(item);
+        const DEFAULT_IMAGES: Record<string, string> = {
+            voices: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
+            mixtape: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
+            retro: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
+            arcade: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+            wrapped: "https://cdn.for-you-always.my.id/1778524793846-bxav21.png",
+            letter: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp",
+            invitation: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
+            loves: "/assets/opening_gate.png",
+        };
+
+        const itemWithUniqueId = { 
+            ...item, 
+            cartItemId: item.cartItemId || Math.random().toString(36).substring(2, 9),
+            themeImgSrc: item.themeImgSrc || DEFAULT_IMAGES[item.id]
+        };
+        setItems(prev => [...prev, itemWithUniqueId]);
+        setLastAdded(itemWithUniqueId);
         // Clear lastAdded after toast duration
         setTimeout(() => setLastAdded(null), 3500);
     }, []);
 
-    const removeFromCart = useCallback((id: string) => {
-        setItems(prev => prev.filter(i => i.id !== id));
+    const removeFromCart = useCallback((identifier: string) => {
+        setItems(prev => prev.filter(i => i.cartItemId !== identifier && i.id !== identifier));
     }, []);
 
     const clearCart = useCallback(() => {

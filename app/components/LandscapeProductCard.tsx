@@ -519,12 +519,12 @@ export function LandscapeProductCard({
                             const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim") || feat.toLowerCase().includes("dikerjakan langsung");
                             const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
                             const isPremiumFeature = feat.toLowerCase().includes("premium & eksklusif") || feat.toLowerCase().includes("kuota");
-                            const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video");
+                            const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video") || feat.toLowerCase().includes("foto/video");
                             const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
                             const isRetroFeature = feat.toLowerCase().includes("retro windows") || feat.toLowerCase().includes("kaset");
                             const isNostalgiaGallery = feat.toLowerCase().includes("nostalgia");
                             const isMobileFeature = feat.toLowerCase().includes("mobile");
-                            const isQuotesFeature = feat.toLowerCase().includes("quotes");
+                            const isQuotesFeature = feat.toLowerCase().includes("quotes") || feat.toLowerCase().includes("pesan personal");
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>

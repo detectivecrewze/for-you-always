@@ -5,15 +5,15 @@ import Navbar from "../../components/Navbar";
 import Link from "next/link";
 
 // ── Product metadata (mirrors gateway) ───────────────────────────────────
-const PRODUCT_META: Record<string, { name: string; emoji: string; color: string; desc: string }> = {
-    letter:     { name: "Letter Edition",      emoji: "💌", color: "#b5806a", desc: "Surat digital interaktif dengan amplop" },
-    voices:     { name: "Voices Gift",         emoji: "🎙️", color: "#7a6a9a", desc: "Rekaman suara & galeri foto" },
-    arcade:     { name: "Arcade Edition",      emoji: "🎮", color: "#4a7a6a", desc: "Game interaktif berbasis kenangan" },
-    retro:      { name: "Retro Edition",       emoji: "🕹️", color: "#6a5a9a", desc: "Kado nostalgia bertema Windows 98" },
-    wrapped:    { name: "Wrapped Edition",     emoji: "🎁", color: "#9a6a7a", desc: "Recap interaktif ala Spotify Wrapped" },
-    mixtape:    { name: "Mixtape Edition",     emoji: "🎵", color: "#6a8a9a", desc: "Kaset retro dengan playlist personal" },
-    invitation: { name: "Invitation Edition",  emoji: "✉️", color: "#9a8a6a", desc: "Tiket undangan kencan digital" },
-    loves:      { name: "Memoria Edition",    emoji: "🌸", color: "#8b2252", desc: "Kado premium penuh kenangan" },
+const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color: string; desc: string }> = {
+    letter:     { name: "Letter Edition",      icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>, color: "#b5806a", desc: "Surat digital interaktif dengan amplop" },
+    voices:     { name: "Voices Gift",         icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="8" x2="16" y1="22" y2="22"/></svg>, color: "#7a6a9a", desc: "Rekaman suara & galeri foto" },
+    arcade:     { name: "Arcade Edition",      icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>, color: "#4a7a6a", desc: "Game interaktif berbasis kenangan" },
+    retro:      { name: "Retro Edition",       icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M10 8v4l3-2-3-2Z"/><line x1="12" x2="12" y1="17" y2="21"/><line x1="8" x2="16" y1="21" y2="21"/></svg>, color: "#6a5a9a", desc: "Kado nostalgia bertema Windows 98" },
+    wrapped:    { name: "Wrapped Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>, color: "#9a6a7a", desc: "Recap interaktif ala Spotify Wrapped" },
+    mixtape:    { name: "Mixtape Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>, color: "#6a8a9a", desc: "Kaset retro dengan playlist personal" },
+    invitation: { name: "Invitation Edition",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>, color: "#9a8a6a", desc: "Tiket undangan kencan digital" },
+    loves:      { name: "Memoria Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>, color: "#8b2252", desc: "Kado premium penuh kenangan" },
 };
 
 type MagicLinks = string | Record<string, string>;
@@ -28,7 +28,7 @@ function parseMagicLinks(raw: string): MagicLinks {
 
 // Single product card shown in the paid state
 function ProductCard({ productKey, link }: { productKey: string; link: string }) {
-    const meta = PRODUCT_META[productKey] || { name: productKey, emoji: "🎁", color: "#a88365", desc: "Kado digital" };
+    const meta = PRODUCT_META[productKey] || { name: productKey, icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>, color: "#a88365", desc: "Kado digital" };
     const isLoves = productKey === "loves";
     const label = isLoves ? "Isi Form Kreasi" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
@@ -56,7 +56,7 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 24, flexShrink: 0,
             }}>
-                {meta.emoji}
+                {meta.icon}
             </div>
 
             {/* Text */}
@@ -74,6 +74,8 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
+                role="button"
+                aria-label={`Buka ${meta.name}`}
                 style={{
                     display: "inline-flex", alignItems: "center", gap: 6,
                     padding: "10px 18px", borderRadius: 999,
@@ -117,7 +119,7 @@ export default function OrderStatusPage() {
 
         const checkStatus = async () => {
             try {
-                const res = await fetch(`https://pakasir-gateway.aldoramadhan16.workers.dev/api/status?order_id=${id}`);
+                const res = await fetch(`https://pakasir-gateway-sandbox.aldoramadhan16.workers.dev/api/status?order_id=${id}`);
                 const data = await res.json();
 
                 if (!res.ok) {
@@ -128,13 +130,23 @@ export default function OrderStatusPage() {
                 if (data.status === "paid" || data.status === "success") {
                     setStatus("paid");
                     if (data.magic_link) {
-                        if (typeof data.magic_link === "object") {
-                            setMagicLinks(data.magic_link);
+                        let linksData = data.magic_link;
+                        if (typeof linksData === "string") {
+                            try {
+                                const parsed = JSON.parse(linksData);
+                                if (parsed && typeof parsed === "object") {
+                                    linksData = parsed;
+                                }
+                            } catch (_) {}
+                        }
+
+                        if (typeof linksData === "object" && linksData !== null) {
+                            setMagicLinks(linksData);
                         } else {
                             // Plain string — wrap with product_id key for uniform rendering
                             setMagicLinks(data.product_id
-                                ? { [data.product_id]: data.magic_link as string }
-                                : data.magic_link as string
+                                ? { [data.product_id]: linksData as string }
+                                : linksData as string
                             );
                         }
                     }
@@ -188,7 +200,7 @@ export default function OrderStatusPage() {
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
             <Navbar />
 
-            <section style={{
+            <main style={{
                 position: "relative", zIndex: 1,
                 paddingTop: "clamp(120px, 15vh, 160px)",
                 paddingBottom: "clamp(80px, 12vh, 130px)",
@@ -441,7 +453,7 @@ export default function OrderStatusPage() {
                         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
                     `}</style>
                 </div>
-            </section>
+            </main>
         </div>
     );
 }

@@ -164,9 +164,17 @@ export default function CartDrawer() {
                         </div>
                     ) : (
                         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                            {items.map((item: CartItem) => (
+                            {Object.values(items.reduce((acc, item) => {
+                                if (!acc[item.id]) {
+                                    acc[item.id] = { ...item, quantity: 1, cartItemIds: [item.cartItemId || item.id] };
+                                } else {
+                                    acc[item.id].quantity += 1;
+                                    acc[item.id].cartItemIds.push(item.cartItemId || item.id);
+                                }
+                                return acc;
+                            }, {} as Record<string, any>)).map((group: any) => (
                                 <div
-                                    key={item.id}
+                                    key={group.id}
                                     className="cart-item-row"
                                     style={{
                                         display: "flex",
@@ -181,15 +189,24 @@ export default function CartDrawer() {
                                         position: "relative",
                                     }}
                                 >
-                                    {/* Color swatch */}
+                                    {/* Image or Color swatch */}
                                     <div style={{
                                         width: 40, height: 40,
                                         borderRadius: 12,
-                                        background: item.themeColor || "#cdab8f",
+                                        background: group.themeColor || "#cdab8f",
                                         flexShrink: 0,
-                                        opacity: 0.85,
-                                        boxShadow: `0 4px 12px ${item.themeColor || "#cdab8f"}44`,
-                                    }} />
+                                        position: "relative",
+                                        overflow: "hidden",
+                                        boxShadow: `0 4px 12px ${group.themeColor || "#cdab8f"}44`,
+                                    }}>
+                                        {group.themeImgSrc && (
+                                            <img 
+                                                src={group.themeImgSrc} 
+                                                alt={group.title}
+                                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                            />
+                                        )}
+                                    </div>
 
                                     <div style={{ flex: 1, minWidth: 0 }}>
                                         <div style={{
@@ -199,20 +216,20 @@ export default function CartDrawer() {
                                             marginBottom: 3,
                                             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                                         }}>
-                                            {item.title}
+                                            {group.title} {group.quantity > 1 && <span style={{ color: "#a67c52", fontSize: 12, marginLeft: 4 }}>(x{group.quantity})</span>}
                                         </div>
                                         <div style={{
                                             fontFamily: "var(--font-sans)",
                                             fontSize: 12, fontWeight: 600,
                                             color: "#a67c52",
                                         }}>
-                                            Rp {item.numericPrice.toLocaleString("id-ID")}
+                                            Rp {(group.numericPrice * group.quantity).toLocaleString("id-ID")}
                                         </div>
                                     </div>
 
                                     <button
                                         className="cart-item-remove"
-                                        onClick={() => removeFromCart(item.id)}
+                                        onClick={() => removeFromCart(group.cartItemIds[group.cartItemIds.length - 1])}
                                         style={{
                                             background: "rgba(220,50,50,0.07)",
                                             border: "none",
@@ -227,7 +244,7 @@ export default function CartDrawer() {
                                         }}
                                         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.background = "rgba(220,50,50,0.12)"; }}
                                         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; (e.currentTarget as HTMLElement).style.background = "rgba(220,50,50,0.07)"; }}
-                                        aria-label={`Hapus ${item.title}`}
+                                        aria-label={`Hapus satu ${group.title}`}
                                     >
                                         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
