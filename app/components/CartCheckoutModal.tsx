@@ -36,7 +36,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                 body: JSON.stringify({
                     order_id: orderId,
                     gross_amount: cartTotal,
-                    product_type: items.map(i => i.id).join(","),
+                    product_type: items.map(i => i.isThreeSlot ? `${i.id}_3slot` : i.id).join(","),
                     customer_details: {
                         first_name: customerDetails.firstName,
                         email: customerDetails.email,
@@ -226,8 +226,8 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                                     Kado yang dibeli
                                 </p>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                                    {items.map(item => (
-                                        <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    {items.map((item, index) => (
+                                        <div key={item.cartItemId || `${item.id}-${index}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.themeColor || "#cdab8f", flexShrink: 0 }} />
                                                 <span style={{ fontSize: 13, color: "#382a24", fontFamily: "var(--font-sans)", fontWeight: 500 }}>{item.title}</span>

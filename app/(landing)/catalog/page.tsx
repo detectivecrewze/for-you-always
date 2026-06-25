@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/LandscapeProductCard";
+import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
 import { useCart } from "../../context/CartContext";
 
 export default function CatalogPage() {
     const { addToCart } = useCart();
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
 
     useEffect(() => {
     }, []);
@@ -53,9 +55,9 @@ export default function CatalogPage() {
             imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
             title: "Mixtape Edition",
             oldPrice: "Rp 50.000",
-            newPrice: "Rp 15.000",
+            newPrice: "Rp 20.000",
             id: "mixtape",
-            numericPrice: 15000,
+            numericPrice: 20000,
             hashtag: "#3QUOTAS",
             soldCount: "New Release",
             href: "/catalog/mixtape",
@@ -183,16 +185,46 @@ export default function CatalogPage() {
                     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", 
                     gap: 32 
                 }}>
-                    {catalogItems.map((item, idx) => (
-                        <AnimatedSection key={idx} delay={idx * 100}>
-                            <CompactProductCard 
-                                {...item} 
-                                onAddToCart={() => addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor })}
-                            />
-                        </AnimatedSection>
-                    ))}
+                    {catalogItems.map((item, idx) => {
+                        const isEligible = ["letter", "voices", "retro", "mixtape", "invitation"].includes(item.id);
+                        
+                        const handleAddToCart = () => {
+                            addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor });
+                        };
+
+                        const handlePesanClick = () => {
+                            if (isEligible) {
+                                setSlotPickerConfig({
+                                    productId: item.id,
+                                    productTitle: item.title,
+                                    themeColor: item.titleColor,
+                                    onSelectSingle: handleAddToCart,
+                                    onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Slot)`, numericPrice: 20000, themeColor: item.titleColor, isThreeSlot: true, slotCount: 3 }),
+                                });
+                            } else {
+                                handleAddToCart();
+                            }
+                        };
+
+                        return (
+                            <AnimatedSection key={idx} delay={idx * 100}>
+                                <CompactProductCard 
+                                    {...item} 
+                                    onAddToCart={handlePesanClick}
+                                />
+                            </AnimatedSection>
+                        );
+                    })}
                 </div>
             </div>
+
+            {/* Slot Picker Modal */}
+            {slotPickerConfig && (
+                <SlotPickerModal
+                    config={slotPickerConfig}
+                    onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
 
 
             {/* Floating WhatsApp with label */}

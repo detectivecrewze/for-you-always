@@ -173,16 +173,17 @@ export default function CartDrawer() {
                     ) : (
                         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                             {Object.values(items.reduce((acc, item) => {
-                                if (!acc[item.id]) {
-                                    acc[item.id] = { ...item, quantity: 1, cartItemIds: [item.cartItemId || item.id] };
+                                const groupKey = `${item.id}-${item.title}`;
+                                if (!acc[groupKey]) {
+                                    acc[groupKey] = { ...item, quantity: 1, cartItemIds: [item.cartItemId || item.id] };
                                 } else {
-                                    acc[item.id].quantity += 1;
-                                    acc[item.id].cartItemIds.push(item.cartItemId || item.id);
+                                    acc[groupKey].quantity += 1;
+                                    acc[groupKey].cartItemIds.push(item.cartItemId || item.id);
                                 }
                                 return acc;
-                            }, {} as Record<string, any>)).map((group: any) => (
+                            }, {} as Record<string, CartItem & { quantity: number; cartItemIds: string[] }>)).map((group) => (
                                 <div
-                                    key={group.id}
+                                    key={`${group.id}-${group.title}`}
                                     className="cart-item-row"
                                     style={{
                                         display: "flex",

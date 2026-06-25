@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 export function AnimatedSection({
     children,
@@ -57,6 +58,7 @@ export function LandscapeProductCard({
     accentGlow,
     href,
     onAddToCart,
+    onAddThreeSlotToCart,
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
@@ -80,6 +82,7 @@ export function LandscapeProductCard({
     accentGlow: string;
     href?: string;
     onAddToCart?: () => void;
+    onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
@@ -92,17 +95,24 @@ export function LandscapeProductCard({
     demoLabel?: string;
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [activeAccent, setActiveAccent] = useState(accentColor);
-    const [activeGlow, setActiveGlow] = useState(accentGlow);
-    const [activeVideoSrc, setActiveVideoSrc] = useState(mediaSrc);
-    const [activeFallbackImgSrc, setActiveFallbackImgSrc] = useState(fallbackImgSrc);
-    const [activeDemoLink, setActiveDemoLink] = useState(demoLink);
-    const [activeDemoLabel, setActiveDemoLabel] = useState(demoLabel || "Lihat Demo");
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
+    
+    // Instead of using useEffect to reset sub-theme, we track previous selectedIndex
+    const [prevSelectedIndex, setPrevSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
         const initIdx = initialSelectedIndex ?? 0;
         return themes?.[initIdx]?.defaultSubThemeIndex || 0;
     });
+
+    if (selectedIndex !== prevSelectedIndex) {
+        setPrevSelectedIndex(selectedIndex);
+        const newSubTheme = (selectedIndex !== null && themes && themes[selectedIndex]) 
+            ? (themes[selectedIndex].defaultSubThemeIndex || 0) 
+            : 0;
+        setSelectedSubThemeIndex(newSubTheme);
+    }
+
     const [isTikTok, setIsTikTok] = useState(false);
     const [isInView, setIsInView] = useState(false);
 
@@ -116,56 +126,41 @@ export function LandscapeProductCard({
         }
     }, []);
 
-    // Reset subTheme index when main theme changes
-    useEffect(() => {
-        if (selectedIndex !== null && themes && themes[selectedIndex]) {
-            setSelectedSubThemeIndex(themes[selectedIndex].defaultSubThemeIndex || 0);
-        } else {
-            setSelectedSubThemeIndex(0);
-        }
-    }, [selectedIndex, themes]);
+    // Derived state for media and colors based on selectedIndex
+    let activeAccent = accentColor;
+    let activeGlow = accentGlow;
+    let activeVideoSrc = mediaSrc;
+    let activeFallbackImgSrc = fallbackImgSrc;
+    let activeDemoLink = demoLink;
+    let activeDemoLabel = demoLabel || "Lihat Demo";
 
-    // Sync media and accents whenever selectedIndex changes
-    useEffect(() => {
-        if (selectedIndex !== null && themes && themes[selectedIndex]) {
-            const theme = themes[selectedIndex];
-            const activeTheme = (theme.subThemes && theme.subThemes.length > 0) 
-                ? theme.subThemes[selectedSubThemeIndex] || theme 
-                : theme;
+    if (selectedIndex !== null && themes && themes[selectedIndex]) {
+        const theme = themes[selectedIndex];
+        const activeTheme = (theme.subThemes && theme.subThemes.length > 0) 
+            ? theme.subThemes[selectedSubThemeIndex] || theme 
+            : theme;
 
-            const resolvedColor = activeTheme.color || theme.color || accentColor;
-            setActiveAccent(resolvedColor);
-            setActiveGlow(resolvedColor ? `${resolvedColor}33` : accentGlow);
+        const resolvedColor = activeTheme.color || theme.color || accentColor;
+        activeAccent = resolvedColor;
+        activeGlow = resolvedColor ? `${resolvedColor}33` : accentGlow;
 
-            // Logic to determine video source
-            if (activeTheme.videoSrc) setActiveVideoSrc(activeTheme.videoSrc);
-            else if (theme.videoSrc) setActiveVideoSrc(theme.videoSrc);
-            else if (activeTheme.fallbackImgSrc || theme.fallbackImgSrc) setActiveVideoSrc("");
-            else setActiveVideoSrc(mediaSrc);
+        if (activeTheme.videoSrc) activeVideoSrc = activeTheme.videoSrc;
+        else if (theme.videoSrc) activeVideoSrc = theme.videoSrc;
+        else if (activeTheme.fallbackImgSrc || theme.fallbackImgSrc) activeVideoSrc = "";
+        else activeVideoSrc = mediaSrc;
 
-            // Logic to determine fallback image
-            if (activeTheme.fallbackImgSrc) setActiveFallbackImgSrc(activeTheme.fallbackImgSrc);
-            else if (theme.fallbackImgSrc) setActiveFallbackImgSrc(theme.fallbackImgSrc);
-            else setActiveFallbackImgSrc(fallbackImgSrc);
+        if (activeTheme.fallbackImgSrc) activeFallbackImgSrc = activeTheme.fallbackImgSrc;
+        else if (theme.fallbackImgSrc) activeFallbackImgSrc = theme.fallbackImgSrc;
+        else activeFallbackImgSrc = fallbackImgSrc;
 
-            // Logic to determine demoLink
-            if (activeTheme.demoLink) setActiveDemoLink(activeTheme.demoLink);
-            else if (theme.demoLink) setActiveDemoLink(theme.demoLink);
-            else setActiveDemoLink(demoLink);
+        if (activeTheme.demoLink) activeDemoLink = activeTheme.demoLink;
+        else if (theme.demoLink) activeDemoLink = theme.demoLink;
+        else activeDemoLink = demoLink;
 
-            // Logic to determine demoLabel
-            if (activeTheme.demoLabel) setActiveDemoLabel(activeTheme.demoLabel);
-            else if (theme.demoLabel) setActiveDemoLabel(theme.demoLabel);
-            else setActiveDemoLabel(demoLabel || "Lihat Demo");
-        } else {
-            setActiveAccent(accentColor);
-            setActiveGlow(accentGlow);
-            setActiveVideoSrc(mediaSrc);
-            setActiveFallbackImgSrc(fallbackImgSrc);
-            setActiveDemoLink(demoLink);
-            setActiveDemoLabel(demoLabel || "Lihat Demo");
-        }
-    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel]);
+        if (activeTheme.demoLabel) activeDemoLabel = activeTheme.demoLabel;
+        else if (theme.demoLabel) activeDemoLabel = theme.demoLabel;
+        else activeDemoLabel = demoLabel || "Lihat Demo";
+    }
 
     // Handle Auto Cycling
     useEffect(() => {
@@ -861,7 +856,19 @@ export function LandscapeProductCard({
                         {/* Add to Cart Button */}
                         {onAddToCart && (
                             <button
-                                onClick={onAddToCart}
+                                onClick={() => {
+                                    if (onAddThreeSlotToCart) {
+                                        setSlotPickerConfig({
+                                            productId: "product", // not strictly used inside the modal except for identity
+                                            productTitle: title,
+                                            themeColor: activeAccent,
+                                            onSelectSingle: onAddToCart,
+                                            onSelectThreeSlot: onAddThreeSlotToCart,
+                                        });
+                                    } else {
+                                        onAddToCart();
+                                    }
+                                }}
                                 style={{
                                     padding: "12px 24px", borderRadius: 999, border: "none", cursor: "pointer",
                                     background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
@@ -923,9 +930,16 @@ export function LandscapeProductCard({
                             {addonText}
                         </div>
                     )}
-                    {}
                 </div>
             </div>
+
+            {/* Slot Picker Modal */}
+            {slotPickerConfig && (
+                <SlotPickerModal
+                    config={slotPickerConfig}
+                    onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
         </AnimatedSection>
     );
 }

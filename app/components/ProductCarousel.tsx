@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 interface LoopCard {
     badgeText?: string;
@@ -16,6 +17,9 @@ interface LoopCard {
     href: string;
     price?: string;
     onAddToCart?: () => void;
+    // 3-Slot fields
+    isThreeSlotEligible?: boolean;    // show SlotPickerModal on "Pesan"
+    onAddThreeSlotToCart?: () => void; // callback untuk 3 slot
 }
 
 interface AutoScrollCarouselProps {
@@ -27,8 +31,24 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     const singleSetWidth = cards.length * 380; // 360px card + 20px gap
     const duration = singleSetWidth / speed;
 
-    // We no longer need JS requestAnimationFrame, PointerEvents, or IntersectionObserver!
-    // Pure CSS animation is 100x more reliable and uses zero CPU.
+    // State for slot picker modal
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+
+    const handlePesanClick = (card: LoopCard) => {
+        if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
+            // Show picker modal
+            setSlotPickerConfig({
+                productId: card.href.split("/").pop() || "",
+                productTitle: card.title,
+                themeColor: card.titleColor || "#a67c52",
+                onSelectSingle: card.onAddToCart,
+                onSelectThreeSlot: card.onAddThreeSlotToCart,
+            });
+        } else {
+            // No 3-slot option, add directly
+            card.onAddToCart?.();
+        }
+    };
 
     // Render a single card
     const renderCard = (card: LoopCard, key: string) => (
@@ -141,9 +161,9 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     {card.description}
                 </p>
 
-                {/* Buttons — stacked like letter4u */}
+                {/* Buttons — stacked */}
                 <button
-                    onClick={() => card.onAddToCart?.()}
+                    onClick={() => handlePesanClick(card)}
                     style={{
                         display: "flex", justifyContent: "center", alignItems: "center", gap: 6,
                         width: "100%", padding: "12px 0", borderRadius: 12,
@@ -193,50 +213,60 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     );
 
     return (
-        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
-            <style>{`
-                @keyframes slide-infinite-css {
-                    from { transform: translateX(0); }
-                    to { transform: translateX(-50%); }
-                }
-                @media (max-width: 1024px) {
-                    .carousel-fade { display: none !important; }
-                }
-            `}</style>
-            
-            {/* The moving track — duplicated for seamless loop */}
-            <div
-                style={{
-                    display: "flex",
-                    gap: 20,
-                    width: "max-content",
-                    animation: `slide-infinite-css ${duration}s linear infinite`,
-                    paddingBottom: 16,
-                    paddingTop: 8,
-                }}
-            >
-                {/* Original set */}
-                {cards.map((c, i) => renderCard(c, `card-a-${i}`))}
-                {/* Duplicate set for seamless loop */}
-                {cards.map((c, i) => renderCard(c, `card-b-${i}`))}
+        <>
+            <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+                <style>{`
+                    @keyframes slide-infinite-css {
+                        from { transform: translateX(0); }
+                        to { transform: translateX(-50%); }
+                    }
+                    @media (max-width: 1024px) {
+                        .carousel-fade { display: none !important; }
+                    }
+                `}</style>
+                
+                {/* The moving track — duplicated for seamless loop */}
+                <div
+                    style={{
+                        display: "flex",
+                        gap: 20,
+                        width: "max-content",
+                        animation: `slide-infinite-css ${duration}s linear infinite`,
+                        paddingBottom: 16,
+                        paddingTop: 8,
+                    }}
+                >
+                    {/* Original set */}
+                    {cards.map((c, i) => renderCard(c, `card-a-${i}`))}
+                    {/* Duplicate set for seamless loop */}
+                    {cards.map((c, i) => renderCard(c, `card-b-${i}`))}
+                </div>
+
+                {/* Fade edges */}
+                <div className="carousel-fade" style={{
+                    position: "absolute", left: 0, top: 0, bottom: 16,
+                    width: 80, background: "linear-gradient(90deg, rgba(250,247,242,1) 0%, transparent 100%)",
+                    pointerEvents: "none",
+                }} />
+                <div className="carousel-fade" style={{
+                    position: "absolute", right: 0, top: 0, bottom: 16,
+                    width: 80, background: "linear-gradient(270deg, rgba(250,247,242,1) 0%, transparent 100%)",
+                    pointerEvents: "none",
+                }} />
+                <style>{`
+                    @media (max-width: 1024px) {
+                        .carousel-fade { display: none !important; }
+                    }
+                `}</style>
             </div>
 
-            {/* Fade edges */}
-            <div className="carousel-fade" style={{
-                position: "absolute", left: 0, top: 0, bottom: 16,
-                width: 80, background: "linear-gradient(90deg, rgba(250,247,242,1) 0%, transparent 100%)",
-                pointerEvents: "none",
-            }} />
-            <div className="carousel-fade" style={{
-                position: "absolute", right: 0, top: 0, bottom: 16,
-                width: 80, background: "linear-gradient(270deg, rgba(250,247,242,1) 0%, transparent 100%)",
-                pointerEvents: "none",
-            }} />
-            <style>{`
-                @media (max-width: 1024px) {
-                    .carousel-fade { display: none !important; }
-                }
-            `}</style>
-        </div>
+            {/* Slot Picker Modal */}
+            {slotPickerConfig && (
+                <SlotPickerModal
+                    config={slotPickerConfig}
+                    onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
+        </>
     );
 }

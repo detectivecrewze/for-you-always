@@ -10,12 +10,14 @@ export default function CartToast() {
 
     useEffect(() => {
         if (!lastAdded) {
-            setAnimOut(true);
+            requestAnimationFrame(() => setAnimOut(true));
             const t = setTimeout(() => { setVisible(false); setAnimOut(false); }, 350);
             return () => clearTimeout(t);
         }
-        setVisible(true);
-        setAnimOut(false);
+        requestAnimationFrame(() => {
+            setVisible(true);
+            setAnimOut(false);
+        });
     }, [lastAdded]);
 
     if (!visible) return null;
