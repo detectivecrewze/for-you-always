@@ -111,24 +111,28 @@ export default function CollectionSection() {
                                 badgeColor: "#4a7c8e",
                                 badgeVariant: "soft",
                                 imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
-                                price: "Rp 20.000",
+                                price: "Mulai Rp 15.000",
                                 title: "Mixtape Edition",
                                 titleColor: "#5a8d9e",
                                 description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
                                 href: "/catalog/mixtape",
-                                onAddToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Slot)", numericPrice: 20000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })
+                                onAddToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" }),
+                                isThreeSlotEligible: true,
+                                onAddThreeSlotToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Slot)", numericPrice: 20000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "New ✨",
                                 badgeColor: "#e8789a",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
-                                price: "Rp 15.000",
+                                price: "Mulai Rp 15.000",
                                 title: "Invitation Edition",
                                 titleColor: "#8a3050",
                                 description: "Undangan kencan interaktif — pilih tanggal, aktivitas, dan kirim tiket kencan digital.",
                                 href: "/catalog/invitation",
-                                onAddToCart: () => addToCart({ id: "invitation", title: "Invitation Edition (3 Slot)", numericPrice: 15000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })
+                                onAddToCart: () => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" }),
+                                isThreeSlotEligible: true,
+                                onAddThreeSlotToCart: () => addToCart({ id: "invitation", title: "Invitation Edition (3 Slot)", numericPrice: 20000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "10 Rooms",
