@@ -158,7 +158,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
                                 fontSize: 11, color: "#8b7e75",
                                 margin: 0, fontWeight: 400,
                             }}>
-                                1 link produk untuk 1 penerima
+                                Buat 1 kado untuk 1 penerima
                             </p>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
@@ -236,7 +236,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
                                 fontSize: 11, color: "#6e5c53",
                                 margin: 0, fontWeight: 400,
                             }}>
-                                1 bundle code · bisa dipakai 3x
+                                1 kode bundle · bisa buat 3 kado
                             </p>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
