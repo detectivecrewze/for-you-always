@@ -181,7 +181,7 @@ export default function CartDrawer() {
                                     acc[groupKey].cartItemIds.push(item.cartItemId || item.id);
                                 }
                                 return acc;
-                            }, {} as Record<string, any>)).map((group: any) => (
+                            }, {} as Record<string, CartItem & { quantity: number; cartItemIds: string[] }>)).map((group) => (
                                 <div
                                     key={`${group.id}-${group.title}`}
                                     className="cart-item-row"

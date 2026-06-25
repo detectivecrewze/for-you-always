@@ -226,8 +226,8 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                                     Kado yang dibeli
                                 </p>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                                    {items.map(item => (
-                                        <div key={item.cartItemId || `${item.id}-${Math.random()}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    {items.map((item, index) => (
+                                        <div key={item.cartItemId || `${item.id}-${index}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.themeColor || "#cdab8f", flexShrink: 0 }} />
                                                 <span style={{ fontSize: 13, color: "#382a24", fontFamily: "var(--font-sans)", fontWeight: 500 }}>{item.title}</span>
