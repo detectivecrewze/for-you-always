@@ -86,7 +86,7 @@ export default function HeroSection() {
                                     Efek fade digantikan oleh overlay <div> di bawah. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src="/hero-gift-animation.webp" 
+                                    src="/assets/favicon/hand-gift.webp" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     fetchPriority="high"
