@@ -86,7 +86,7 @@ export default function HeroSection() {
                                     Efek fade digantikan oleh overlay <div> di bawah. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src="https://cdn.for-you-always.my.id/1781807802981-yohlpk.gif" 
+                                    src="/assets/favicon/happy-birthday-ezgif.com.webp" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     fetchPriority="high"
