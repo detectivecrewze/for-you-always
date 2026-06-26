@@ -89,6 +89,7 @@ export default function HeroSection() {
                                     src="https://cdn.for-you-always.my.id/1781807802981-yohlpk.gif" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
+                                    fetchPriority="high"
                                     style={{
                                         width: "100%", maxWidth: 360, height: "auto",
                                         display: "block",

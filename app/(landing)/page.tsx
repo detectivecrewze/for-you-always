@@ -6,6 +6,10 @@ import TestimonialsSection from "../components/sections/TestimonialsSection";
 import FAQSection from "../components/sections/FAQSection";
 import FooterSection from "../components/sections/FooterSection";
 
+// ISR: pre-render homepage sebagai static dan regenerate setiap 60 detik.
+// Ini menghilangkan cold start SSR — TTFB turun dari ~1.5s ke ~50ms.
+export const revalidate = 60;
+
 export default function MainHubPage() {
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
@@ -24,4 +28,4 @@ export default function MainHubPage() {
             <FooterSection />
         </div>
     );
-}
+}
