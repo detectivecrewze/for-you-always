@@ -90,6 +90,8 @@ export default function HeroSection() {
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     fetchPriority="high"
+                                    width="360"
+                                    height="450"
                                     style={{
                                         width: "100%", maxWidth: 360, height: "auto",
                                         display: "block",
