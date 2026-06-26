@@ -63,7 +63,7 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0, position: "relative", zIndex: 10 }}>
                         <div style={{ position: "relative", width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
-                            <Image src="/logo.png" alt="Logo" fill style={{ objectFit: "cover" }} />
+                            <Image src="/logo.png" alt="Logo" fill style={{ objectFit: "cover" }} sizes="26px" />
                         </div>
                         <span style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "#382a24", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
                             For you, Always.
