@@ -51,8 +51,8 @@ export default function Navbar() {
                     height: 52,
                     padding: "0 16px 0 16px",
                     background: "rgba(250,247,242,0.96)",
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
+                    backdropFilter: "blur(24px) saturate(180%)",
+                    WebkitBackdropFilter: "blur(24px) saturate(180%)",
                     border: "1px solid rgba(205,171,143,0.25)",
                     borderRadius: 999,
                     boxShadow: scrolled
@@ -183,7 +183,7 @@ export default function Navbar() {
             {/* Mobile dropdown menu */}
             <div style={{
                 position: "fixed", top: scrolled ? 74 : 80, left: 20, right: 20, zIndex: 998,
-                background: "rgba(250,247,242,0.98)", backdropFilter: "blur(12px)",
+                background: "rgba(250,247,242,0.98)", backdropFilter: "blur(24px)",
                 border: mobileOpen ? "1px solid rgba(205,171,143,0.25)" : "none",
                 opacity: mobileOpen ? 1 : 0,
                 borderRadius: 20,
