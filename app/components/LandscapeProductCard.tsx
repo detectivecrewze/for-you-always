@@ -95,24 +95,21 @@ export function LandscapeProductCard({
     demoLink?: string;
     demoLabel?: string;
 }) {
-    const videoRef = useRef<HTMLVideoElement>(null);
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     
-    // Instead of using useEffect to reset sub-theme, we track previous selectedIndex
-    const [prevSelectedIndex, setPrevSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
+    // Track selected sub-theme per tema
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
         const initIdx = initialSelectedIndex ?? 0;
         return themes?.[initIdx]?.defaultSubThemeIndex || 0;
     });
 
-    if (selectedIndex !== prevSelectedIndex) {
-        setPrevSelectedIndex(selectedIndex);
-        const newSubTheme = (selectedIndex !== null && themes && themes[selectedIndex]) 
-            ? (themes[selectedIndex].defaultSubThemeIndex || 0) 
-            : 0;
-        setSelectedSubThemeIndex(newSubTheme);
-    }
+    // Reset sub-theme saat tema utama berubah — BENAR: pakai useEffect, bukan setState di body render
+    useEffect(() => {
+        if (selectedIndex !== null && themes && themes[selectedIndex]) {
+            setSelectedSubThemeIndex(themes[selectedIndex].defaultSubThemeIndex || 0);
+        }
+    }, [selectedIndex, themes]);
 
     const [isTikTok, setIsTikTok] = useState(false);
     const [isInView, setIsInView] = useState(false);

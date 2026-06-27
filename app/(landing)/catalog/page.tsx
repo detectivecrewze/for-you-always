@@ -1,150 +1,195 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/LandscapeProductCard";
 import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
 import { useCart } from "../../context/CartContext";
 
+// Konstanta statis di luar komponen — tidak dibuat ulang setiap render
+const CATALOG_ITEMS = [
+    {
+        badgeText: "#1 Exclusive",
+        badgeColor: "#d4af37",
+        titleColor: "#581824",
+        imageSrc: "/assets/opening_gate.png",
+        title: "Memoria (Premium)",
+        newPrice: "Rp 40.000",
+        id: "loves",
+        numericPrice: 40000,
+        href: "/catalog/memoria",
+        occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
+        features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
+    },
+    {
+        badgeText: "#1 Terlaris",
+        badgeColor: "#e91e63",
+        titleColor: "#a67c52",
+        imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
+        title: "Voices Gift",
+        newPrice: "Rp 15.000",
+        oldPrice: "Rp 30.000",
+        id: "voices",
+        numericPrice: 15000,
+        hashtag: "#BESTSELLER",
+        soldCount: "1.2k+ terjual",
+        href: "/catalog/voices",
+        occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
+        features: ["3 Kuota Voices Sekaligus", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
+    },
+    {
+        badgeText: "Premium Bundle",
+        badgeColor: "#4a7c8e",
+        titleColor: "#5a8d9e",
+        imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
+        title: "Mixtape Edition",
+        oldPrice: "Rp 50.000",
+        newPrice: "Rp 20.000",
+        id: "mixtape",
+        numericPrice: 20000,
+        hashtag: "#3QUOTAS",
+        soldCount: "New Release",
+        href: "/catalog/mixtape",
+        occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
+        features: ["3 Kuota Mixtape Sekaligus", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
+    },
+    {
+        badgeText: "New ✨",
+        badgeColor: "#e8789a",
+        titleColor: "#8a3050",
+        imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
+        title: "Invitation Edition",
+        oldPrice: "Rp 30.000",
+        newPrice: "Rp 15.000",
+        id: "invitation",
+        numericPrice: 15000,
+        hashtag: "#DATEINVITATION",
+        soldCount: "New Release",
+        href: "/catalog/invitation",
+        occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
+        features: ["3 Kuota Invitation Sekaligus", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
+    },
+    {
+        badgeText: "Popular",
+        badgeColor: "#9c27b0",
+        titleColor: "#2a3d5c",
+        imageSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp",
+        title: "Letter Edition",
+        oldPrice: "Rp 25.000",
+        newPrice: "Rp 15.000",
+        id: "letter",
+        numericPrice: 15000,
+        hashtag: "#AESTHETIC",
+        soldCount: "2.1k+ terjual",
+        href: "/catalog/letter",
+        occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
+        features: ["3 Kuota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
+    },
+    {
+        badgeText: "10 Rooms",
+        badgeColor: "#5c8c5c",
+        titleColor: "#5c8c5c",
+        imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
+        title: "Arcade Edition",
+        oldPrice: "Rp 40.000",
+        newPrice: "Rp 20.000",
+        id: "arcade",
+        numericPrice: 20000,
+        hashtag: "#10ROOMS",
+        soldCount: "560+ terjual",
+        href: "/catalog/arcade",
+        occasions: ["Anniversary", "Birthday", "Bestie"],
+        features: ["10 Ruangan Game Interaktif", "Kustomisasi On/Off Ruangan", "Dilengkapi Background Music"]
+    },
+    {
+        badgeText: "Nostalgic",
+        badgeColor: "#008689",
+        titleColor: "#008689",
+        imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
+        title: "Retro Edition",
+        oldPrice: "Rp 30.000",
+        newPrice: "Rp 15.000",
+        id: "retro",
+        numericPrice: 15000,
+        hashtag: "#NOSTALGIA",
+        soldCount: "340+ terjual",
+        href: "/catalog/retro",
+        occasions: ["Bestie", "Birthday", "Apology"],
+        features: ["3 Kuota Retro Sekaligus", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
+    },
+    {
+        badgeText: "Storytelling",
+        badgeColor: "#c9184a",
+        titleColor: "#c9184a",
+        imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
+        title: "Wrapped Edition",
+        oldPrice: "Rp 40.000",
+        newPrice: "Rp 20.000",
+        id: "wrapped",
+        numericPrice: 20000,
+        hashtag: "#MEMORIES",
+        soldCount: "420+ terjual",
+        href: "/catalog/wrapped",
+        occasions: ["Year End", "Anniversary", "Birthday"],
+        features: ["6 Halaman Recap Interaktif", "Kustomisasi On/Off Halaman", "Dilengkapi Background Music"]
+    }
+] as Array<{
+    badgeText: string;
+    badgeColor: string;
+    titleColor: string;
+    imageSrc: string;
+    title: string;
+    newPrice: string;
+    id: string;
+    numericPrice: number;
+    href: string;
+    occasions: string[];
+    features: string[];
+    oldPrice?: string;
+    hashtag?: string;
+    soldCount?: string;
+}>;
+
+const SLOT_ELIGIBLE_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
+
 export default function CatalogPage() {
     const { addToCart } = useCart();
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
 
     useEffect(() => {
-    }, []);
-
-    useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    const catalogItems = [
-        {
-            badgeText: "#1 Exclusive",
-            badgeColor: "#d4af37",
-            titleColor: "#581824",
-            imageSrc: "/assets/opening_gate.png",
-            title: "Memoria (Premium)",
-            newPrice: "Rp 40.000",
-            id: "loves",
-            numericPrice: 40000,
-            href: "/catalog/memoria",
-            occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
-            features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
-        },
-        {
-            badgeText: "#1 Terlaris",
-            badgeColor: "#e91e63",
-            titleColor: "#a67c52",
-            imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
-            title: "Voices Gift",
-            newPrice: "Rp 15.000",
-            oldPrice: "Rp 30.000",
-            id: "voices",
-            numericPrice: 15000,
-            hashtag: "#BESTSELLER",
-            soldCount: "1.2k+ terjual",
-            href: "/catalog/voices",
-            occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],
-            features: ["3 Kuota Voices Sekaligus", "Rekam Suara & Pesan Pribadi", "Galeri Foto & Music Pilihan"]
-        },
-        {
-            badgeText: "Premium Bundle",
-            badgeColor: "#4a7c8e",
-            titleColor: "#5a8d9e",
-            imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
-            title: "Mixtape Edition",
-            oldPrice: "Rp 50.000",
-            newPrice: "Rp 20.000",
-            id: "mixtape",
-            numericPrice: 20000,
-            hashtag: "#3QUOTAS",
-            soldCount: "New Release",
-            href: "/catalog/mixtape",
-            occasions: ["Crush", "Birthday", "Any Occasion", "Apology"],
-            features: ["3 Kuota Mixtape Sekaligus", "Desain Kaset Retro Interaktif", "Galeri Foto, Video & Musik"]
-        },
-        {
-            badgeText: "New ✨",
-            badgeColor: "#e8789a",
-            titleColor: "#8a3050",
-            imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
-            title: "Invitation Edition",
-            oldPrice: "Rp 30.000",
-            newPrice: "Rp 15.000",
-            id: "invitation",
-            numericPrice: 15000,
-            hashtag: "#DATEINVITATION",
-            soldCount: "New Release",
-            href: "/catalog/invitation",
-            occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
-            features: ["3 Kuota Invitation Sekaligus", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
-        },
-        {
-            badgeText: "Popular",
-            badgeColor: "#9c27b0",
-            titleColor: "#2a3d5c",
-            imageSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp",
-            title: "Letter Edition",
-            oldPrice: "Rp 25.000",
-            newPrice: "Rp 15.000",
-            id: "letter",
-            numericPrice: 15000,
-            hashtag: "#AESTHETIC",
-            soldCount: "2.1k+ terjual",
-            href: "/catalog/letter",
-            occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
-            features: ["3 Kuota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
-        },
-        {
-            badgeText: "10 Rooms",
-            badgeColor: "#5c8c5c",
-            titleColor: "#5c8c5c",
-            imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
-            title: "Arcade Edition",
-            oldPrice: "Rp 40.000",
-            newPrice: "Rp 20.000",
-            id: "arcade",
-            numericPrice: 20000,
-            hashtag: "#10ROOMS",
-            soldCount: "560+ terjual",
-            href: "/catalog/arcade",
-            occasions: ["Anniversary", "Birthday", "Bestie"],
-            features: ["10 Ruangan Game Interaktif", "Kustomisasi On/Off Ruangan", "Dilengkapi Background Music"]
-        },
-        {
-            badgeText: "Nostalgic",
-            badgeColor: "#008689",
-            titleColor: "#008689",
-            imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
-            title: "Retro Edition",
-            oldPrice: "Rp 30.000",
-            newPrice: "Rp 15.000",
-            id: "retro",
-            numericPrice: 15000,
-            hashtag: "#NOSTALGIA",
-            soldCount: "340+ terjual",
-            href: "/catalog/retro",
-            occasions: ["Bestie", "Birthday", "Apology"],
-            features: ["3 Kuota Retro Sekaligus", "Tema Klasik Windows 98", "5 Tahapan Kejutan Interaktif"]
-        },
-        {
-            badgeText: "Storytelling",
-            badgeColor: "#c9184a",
-            titleColor: "#c9184a",
-            imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
-            title: "Wrapped Edition",
-            oldPrice: "Rp 40.000",
-            newPrice: "Rp 20.000",
-            id: "wrapped",
-            numericPrice: 20000,
-            hashtag: "#MEMORIES",
-            soldCount: "420+ terjual",
-            href: "/catalog/wrapped",
-            occasions: ["Year End", "Anniversary", "Birthday"],
-            features: ["6 Halaman Recap Interaktif", "Kustomisasi On/Off Halaman", "Dilengkapi Background Music"]
+    // Handler stabil dengan useCallback — tidak dibuat ulang setiap render
+    const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string }) => {
+        const addSingle = () => addToCart({
+            id: item.id,
+            title: item.title,
+            numericPrice: item.numericPrice,
+            themeColor: item.titleColor,
+        });
+
+        if (SLOT_ELIGIBLE_IDS.has(item.id)) {
+            setSlotPickerConfig({
+                productId: item.id,
+                productTitle: item.title,
+                themeColor: item.titleColor,
+                onSelectSingle: addSingle,
+                onSelectThreeSlot: () => addToCart({
+                    id: item.id,
+                    title: `${item.title} (3 Slot)`,
+                    numericPrice: 20000,
+                    themeColor: item.titleColor,
+                    isThreeSlot: true,
+                    slotCount: 3,
+                }),
+            });
+        } else {
+            addSingle();
         }
-    ];
+    }, [addToCart]);
+
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -185,36 +230,14 @@ export default function CatalogPage() {
                     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", 
                     gap: 32 
                 }}>
-                    {catalogItems.map((item, idx) => {
-                        const isEligible = ["letter", "voices", "retro", "mixtape", "invitation"].includes(item.id);
-                        
-                        const handleAddToCart = () => {
-                            addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, themeColor: item.titleColor });
-                        };
-
-                        const handlePesanClick = () => {
-                            if (isEligible) {
-                                setSlotPickerConfig({
-                                    productId: item.id,
-                                    productTitle: item.title,
-                                    themeColor: item.titleColor,
-                                    onSelectSingle: handleAddToCart,
-                                    onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Slot)`, numericPrice: 20000, themeColor: item.titleColor, isThreeSlot: true, slotCount: 3 }),
-                                });
-                            } else {
-                                handleAddToCart();
-                            }
-                        };
-
-                        return (
-                            <AnimatedSection key={idx} delay={idx * 100}>
-                                <CompactProductCard 
-                                    {...item} 
-                                    onAddToCart={handlePesanClick}
-                                />
-                            </AnimatedSection>
-                        );
-                    })}
+                {CATALOG_ITEMS.map((item, idx) => (
+                    <AnimatedSection key={item.id} delay={idx * 100}>
+                        <CompactProductCard
+                            {...item}
+                            onAddToCart={() => handlePesan(item)}
+                        />
+                    </AnimatedSection>
+                ))}
                 </div>
             </div>
 

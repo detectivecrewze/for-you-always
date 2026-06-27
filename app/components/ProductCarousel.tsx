@@ -253,11 +253,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     width: 80, background: "linear-gradient(270deg, rgba(250,247,242,1) 0%, transparent 100%)",
                     pointerEvents: "none",
                 }} />
-                <style>{`
-                    @media (max-width: 1024px) {
-                        .carousel-fade { display: none !important; }
-                    }
-                `}</style>
+
             </div>
 
             {/* Slot Picker Modal */}
