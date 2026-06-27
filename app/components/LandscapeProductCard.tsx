@@ -1,4 +1,5 @@
 "use client";
+import posthog from 'posthog-js';
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
@@ -857,9 +858,10 @@ export function LandscapeProductCard({
                         {onAddToCart && (
                             <button
                                 onClick={() => {
+                                    posthog.capture('clicked_pesan', { product: title });
                                     if (onAddThreeSlotToCart) {
                                         setSlotPickerConfig({
-                                            productId: "product", // not strictly used inside the modal except for identity
+                                            productId: "product",
                                             productTitle: title,
                                             themeColor: activeAccent,
                                             onSelectSingle: onAddToCart,

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useCart, CartItem } from "../context/CartContext";
 import CartCheckoutModal from "./CartCheckoutModal";
+import posthog from 'posthog-js';
 
 export default function CartDrawer() {
     const { items, removeFromCart, clearCart, cartTotal, isDrawerOpen, closeDrawer } = useCart();
@@ -323,7 +324,15 @@ export default function CartDrawer() {
 
                         {/* Checkout Button */}
                         <button
-                            onClick={() => { closeDrawer(); setShowCheckout(true); }}
+                            onClick={() => {
+                                posthog.capture('checkout_initiated', {
+                                    item_count: items.length,
+                                    total: cartTotal,
+                                    products: items.map(i => i.title),
+                                });
+                                closeDrawer();
+                                setShowCheckout(true);
+                            }}
                             style={{
                                 width: "100%",
                                 padding: "16px",

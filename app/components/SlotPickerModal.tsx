@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import posthog from 'posthog-js';
 
 export interface SlotPickerConfig {
     productId: string;
@@ -28,17 +29,22 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
         setMounted(true);
         // Trigger enter animation
         const t = setTimeout(() => setVisible(true), 10);
+        // Track modal open
+        posthog.capture('slot_picker_opened', { product: config.productTitle });
         return () => clearTimeout(t);
     }, []);
 
     const handleClose = () => {
         setClosing(true);
+        posthog.capture('slot_picker_closed_without_buy', { product: config.productTitle });
         setTimeout(() => onClose(), 220);
     };
 
-    const handleSelect = (fn: () => void) => {
+    const handleSelect = (fn: () => void, slotType: '1_slot' | '3_slot') => {
+        posthog.capture('slot_picker_selected', { product: config.productTitle, slot_type: slotType });
         fn();
-        handleClose();
+        setClosing(true);
+        setTimeout(() => onClose(), 220);
     };
 
     const accentColor = config.themeColor || "#a67c52";
@@ -125,7 +131,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
 
                     {/* Option 1: Satuan */}
                     <button
-                        onClick={() => handleSelect(config.onSelectSingle)}
+                        onClick={() => handleSelect(config.onSelectSingle, '1_slot')}
                         style={{
                             display: "flex", alignItems: "center", justifyContent: "space-between",
                             width: "100%", padding: "16px 18px",
@@ -184,7 +190,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
 
                     {/* Option 2: 3 Slot — Premium */}
                     <button
-                        onClick={() => handleSelect(config.onSelectThreeSlot)}
+                        onClick={() => handleSelect(config.onSelectThreeSlot, '3_slot')}
                         style={{
                             display: "flex", alignItems: "center", justifyContent: "space-between",
                             width: "100%", padding: "16px 18px",
