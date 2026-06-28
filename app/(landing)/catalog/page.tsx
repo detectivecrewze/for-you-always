@@ -231,9 +231,10 @@ export default function CatalogPage() {
                     gap: 32 
                 }}>
                 {CATALOG_ITEMS.map((item, idx) => (
-                    <AnimatedSection key={item.id} delay={idx * 100}>
+                    <AnimatedSection key={item.id} delay={idx * 100} priority={idx < 2}>
                         <CompactProductCard
                             {...item}
+                            priority={idx < 2}
                             onAddToCart={() => handlePesan(item)}
                         />
                     </AnimatedSection>

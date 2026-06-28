@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -20,6 +20,7 @@ interface CompactProductCardProps {
     demoLink?: string;
     addonText?: string;
     onAddToCart?: () => void;
+    priority?: boolean;
 }
 
 export default function CompactProductCard({
@@ -36,10 +37,57 @@ export default function CompactProductCard({
     features,
     occasions,
     demoLink,
-    onAddToCart
+    onAddToCart,
+    priority = false,
 }: CompactProductCardProps) {
 
     const cardBorderGradient = `linear-gradient(135deg, ${titleColor}80, ${titleColor})`;
+
+    const handleCardMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px -8px rgba(0,0,0,0.14), 0 0 0 1px rgba(205,171,143,0.18)";
+    }, []);
+
+    const handleCardMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px -4px rgba(0,0,0,0.07), 0 0 0 1px rgba(205,171,143,0.1)";
+    }, []);
+
+    const handleImageMouseEnter = useCallback((e: React.MouseEvent<HTMLImageElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1.05)";
+    }, []);
+
+    const handleImageMouseLeave = useCallback((e: React.MouseEvent<HTMLImageElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+    }, []);
+
+    const handleDemoMouseEnter = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        (e.currentTarget as HTMLElement).style.background = "rgba(250, 247, 242, 0.95)";
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
+    }, []);
+
+    const handleDemoMouseLeave = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        (e.currentTarget as HTMLElement).style.background = "rgba(250, 247, 242, 0.85)";
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+    }, []);
+
+    const handleLihatMouseEnter = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        (e.currentTarget as HTMLElement).style.background = "#f0eae1";
+    }, []);
+
+    const handleLihatMouseLeave = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        (e.currentTarget as HTMLElement).style.background = "#faf7f2";
+    }, []);
+
+    const handlePesanMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 16px ${titleColor}4D`;
+    }, [titleColor]);
+
+    const handlePesanMouseLeave = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${titleColor}33`;
+    }, [titleColor]);
 
     return (
         <div style={{
@@ -51,23 +99,19 @@ export default function CompactProductCard({
             display: "flex",
             flexDirection: "column",
         } as React.CSSProperties}
-        onMouseEnter={e => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px -8px rgba(0,0,0,0.14), 0 0 0 1px rgba(205,171,143,0.18)";
-        }}
-        onMouseLeave={e => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px -4px rgba(0,0,0,0.07), 0 0 0 1px rgba(205,171,143,0.1)";
-        }}>
+        onMouseEnter={handleCardMouseEnter}
+        onMouseLeave={handleCardMouseLeave}>
             {/* Image Container */}
             <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", zIndex: 1 }}>
                 <Image 
                     src={imageSrc} 
                     alt={title} 
                     fill
+                    priority={priority}
+                    loading={priority ? undefined : "lazy"}
                     style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
-                    onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                    onMouseEnter={handleImageMouseEnter}
+                    onMouseLeave={handleImageMouseLeave}
                 />
                 
                 {/* Top Left Badge */}
@@ -115,14 +159,8 @@ export default function CompactProductCard({
                         textDecoration: "none",
                         transition: "all 0.2s ease"
                     }}
-                    onMouseEnter={e => {
-                        e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
-                        e.currentTarget.style.transform = "translateY(-1px)";
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
-                        e.currentTarget.style.transform = "translateY(0)";
-                    }}>
+                    onMouseEnter={handleDemoMouseEnter}
+                    onMouseLeave={handleDemoMouseLeave}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
@@ -234,12 +272,8 @@ export default function CompactProductCard({
                         letterSpacing: "0.05em", textTransform: "uppercase",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                     }}
-                    onMouseEnter={e => {
-                        e.currentTarget.style.background = "#f0eae1";
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.background = "#faf7f2";
-                    }}>
+                    onMouseEnter={handleLihatMouseEnter}
+                    onMouseLeave={handleLihatMouseLeave}>
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M14 5h5v5"/><path d="M10 14L19 5"/><path d="M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>
                         </svg>
@@ -255,14 +289,8 @@ export default function CompactProductCard({
                         letterSpacing: "0.05em", textTransform: "uppercase",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                     }}
-                    onMouseEnter={e => {
-                        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                        (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 16px ${titleColor}4D`;
-                    }}
-                    onMouseLeave={e => {
-                        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                        (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${titleColor}33`;
-                    }}>
+                    onMouseEnter={handlePesanMouseEnter}
+                    onMouseLeave={handlePesanMouseLeave}>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>

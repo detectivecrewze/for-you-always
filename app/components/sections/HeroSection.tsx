@@ -1,7 +1,10 @@
 import React from "react";
+import { preload } from "react-dom";
 import { AnimatedSection } from "../LandscapeProductCard";
 
 export default function HeroSection() {
+    preload('/assets/favicon/hand-gift.webp', { as: 'image', fetchPriority: 'high' });
+
     return (
         <>
             <style>{`

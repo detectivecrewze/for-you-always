@@ -8,11 +8,13 @@ import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 export function AnimatedSection({
     children,
     delay = 0,
+    priority = false,
 }: {
     children: React.ReactNode;
     delay?: number;
+    priority?: boolean;
 }) {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(priority);
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -25,15 +27,15 @@ export function AnimatedSection({
             },
             { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
         );
-        if (ref.current) observer.observe(ref.current);
+        if (ref.current && !priority) observer.observe(ref.current);
         return () => observer.disconnect();
-    }, [delay]);
+    }, [delay, priority]);
 
     return (
         <div
             ref={ref}
             style={{
-                transition: `all 0.9s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`,
+                transition: priority ? "none" : `all 0.9s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`,
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? "translateY(0)" : "translateY(36px)",
             }}
@@ -70,6 +72,7 @@ export function LandscapeProductCard({
     tiktokHref,
     demoLink,
     demoLabel,
+    priority = false,
 }: {
     label: React.ReactNode;
     title: string;
@@ -94,6 +97,7 @@ export function LandscapeProductCard({
     tiktokHref?: string;
     demoLink?: string;
     demoLabel?: string;
+    priority?: boolean;
 }) {
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
@@ -318,7 +322,7 @@ export function LandscapeProductCard({
     // (Video logic removed as per request to use static images only)
 
     return (
-        <AnimatedSection delay={delay}>
+        <AnimatedSection delay={delay} priority={priority}>
             <div className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
 
                 {/* Media Column Wrapper */}
@@ -336,8 +340,9 @@ export function LandscapeProductCard({
                                 src={(activeFallbackImgSrc || mediaSrc) as string}
                                 alt={title}
                                 fill
-                                loading="lazy"
-                                style={{ objectFit: "cover", display: "block", aspectRatio: "16/9", animation: "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                                priority={priority}
+                                loading={priority ? undefined : "lazy"}
+                                style={{ objectFit: "cover", display: "block", aspectRatio: "16/9", animation: priority ? "none" : "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
                         ) : (
                             <div style={{
