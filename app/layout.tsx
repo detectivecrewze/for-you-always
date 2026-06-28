@@ -97,6 +97,24 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <Analytics />
+        {/* Google Analytics GA4 — afterInteractive agar tidak blokir LCP */}
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZSS29T9B71"
+        />
+        <Script
+          id="google-analytics-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-ZSS29T9B71');
+            `,
+          }}
+        />
         {/* Microsoft Clarity — loaded after page is interactive, no LCP impact */}
         <Script
           id="microsoft-clarity"
