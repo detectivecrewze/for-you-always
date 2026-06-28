@@ -1,7 +1,7 @@
 "use client";
 import posthog from 'posthog-js';
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
@@ -124,56 +124,192 @@ export function LandscapeProductCard({
         }
     }, []);
 
-    // Derived state for media and colors based on selectedIndex
-    let activeAccent = accentColor;
-    let activeGlow = accentGlow;
-    let activeVideoSrc = mediaSrc;
-    let activeFallbackImgSrc = fallbackImgSrc;
-    let activeDemoLink = demoLink;
-    let activeDemoLabel = demoLabel || "Lihat Demo";
+    // Derived state for media and colors — di-memoize agar tidak dihitung ulang setiap render
+    const activeValues = useMemo(() => {
+        let accent = accentColor;
+        let glow = accentGlow;
+        let videoSrc = mediaSrc;
+        let imgSrc = fallbackImgSrc;
+        let dLink = demoLink;
+        let dLabel = demoLabel || "Lihat Demo";
 
-    if (selectedIndex !== null && themes && themes[selectedIndex]) {
-        const theme = themes[selectedIndex];
-        const activeTheme = (theme.subThemes && theme.subThemes.length > 0) 
-            ? theme.subThemes[selectedSubThemeIndex] || theme 
-            : theme;
+        if (selectedIndex !== null && themes && themes[selectedIndex]) {
+            const theme = themes[selectedIndex];
+            const activeTheme = (theme.subThemes && theme.subThemes.length > 0)
+                ? theme.subThemes[selectedSubThemeIndex] || theme
+                : theme;
 
-        const resolvedColor = activeTheme.color || theme.color || accentColor;
-        activeAccent = resolvedColor;
-        activeGlow = resolvedColor ? `${resolvedColor}33` : accentGlow;
+            const resolvedColor = activeTheme.color || theme.color || accentColor;
+            accent = resolvedColor;
+            glow = resolvedColor ? `${resolvedColor}33` : accentGlow;
 
-        if (activeTheme.videoSrc) activeVideoSrc = activeTheme.videoSrc;
-        else if (theme.videoSrc) activeVideoSrc = theme.videoSrc;
-        else if (activeTheme.fallbackImgSrc || theme.fallbackImgSrc) activeVideoSrc = "";
-        else activeVideoSrc = mediaSrc;
+            if (activeTheme.videoSrc) videoSrc = activeTheme.videoSrc;
+            else if (theme.videoSrc) videoSrc = theme.videoSrc;
+            else if (activeTheme.fallbackImgSrc || theme.fallbackImgSrc) videoSrc = "";
+            else videoSrc = mediaSrc;
 
-        if (activeTheme.fallbackImgSrc) activeFallbackImgSrc = activeTheme.fallbackImgSrc;
-        else if (theme.fallbackImgSrc) activeFallbackImgSrc = theme.fallbackImgSrc;
-        else activeFallbackImgSrc = fallbackImgSrc;
+            if (activeTheme.fallbackImgSrc) imgSrc = activeTheme.fallbackImgSrc;
+            else if (theme.fallbackImgSrc) imgSrc = theme.fallbackImgSrc;
+            else imgSrc = fallbackImgSrc;
 
-        if (activeTheme.demoLink) activeDemoLink = activeTheme.demoLink;
-        else if (theme.demoLink) activeDemoLink = theme.demoLink;
-        else activeDemoLink = demoLink;
+            if (activeTheme.demoLink) dLink = activeTheme.demoLink;
+            else if (theme.demoLink) dLink = theme.demoLink;
+            else dLink = demoLink;
 
-        if (activeTheme.demoLabel) activeDemoLabel = activeTheme.demoLabel;
-        else if (theme.demoLabel) activeDemoLabel = theme.demoLabel;
-        else activeDemoLabel = demoLabel || "Lihat Demo";
-    }
+            if (activeTheme.demoLabel) dLabel = activeTheme.demoLabel;
+            else if (theme.demoLabel) dLabel = theme.demoLabel;
+            else dLabel = demoLabel || "Lihat Demo";
+        }
+
+        return { activeAccent: accent, activeGlow: glow, activeVideoSrc: videoSrc, activeFallbackImgSrc: imgSrc, activeDemoLink: dLink, activeDemoLabel: dLabel };
+    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel]);
+
+    const { activeAccent, activeGlow, activeFallbackImgSrc, activeDemoLink, activeDemoLabel } = activeValues;
+
+    // Sub-theme panel — di-memoize agar IIFE tidak dieksekusi ulang setiap render
+    const subThemePanelData = useMemo(() => {
+        const currentTheme = themes?.[selectedIndex !== null ? selectedIndex : 0];
+        const hasColoredSubThemes = !!(currentTheme?.subThemes && currentTheme.subThemes.length > 0 && currentTheme.subThemes.some(s => !!s.color));
+        return { currentTheme, hasColoredSubThemes };
+    }, [themes, selectedIndex]);
+
+    // Feature flags — di-memoize: 24 string check tidak diulang tiap render
+    const featureFlags = useMemo(() => features.map(feat => {
+        const f = feat.toLowerCase();
+        return {
+            feat,
+            isToggleFeature: f.includes("turn on / off") || f.includes("animasi interaktif") || f.includes("animasi visual"),
+            isMusicFeature: f.includes("music pilihan") || f.includes("lagu") || f.includes("playlist"),
+            isPageFeature: f.includes("berbeda") || f.includes("multi-tema") || f.includes("kustomisasi tema"),
+            isVoiceFeature: f.includes("rekam suara"),
+            isGalleryFeature: f.includes("galeri foto") || f.includes("kustomisasi galeri"),
+            isEnvelopeFeature: f.includes("amplop") || f.includes("diurus tim") || f.includes("dikerjakan langsung"),
+            isTypewriterFeature: f.includes("typewriter"),
+            isPremiumFeature: f.includes("premium & eksklusif") || f.includes("kuota"),
+            isPhotoVideoFeature: f.includes("foto / video") || f.includes("foto/video") || f.includes("gif"),
+            isAnonymousFeature: f.includes("anonymous"),
+            isCassetteFeature: f.includes("kaset") || f.includes("mixtape"),
+            isRetroFeature: f.includes("retro windows") || (f.includes("retro") && !f.includes("kaset")),
+            isNostalgiaGallery: f.includes("nostalgia"),
+            isMobileFeature: f.includes("mobile"),
+            isQuotesFeature: f.includes("quotes") || f.includes("pesan personal"),
+            isDateFeature: f.includes("tanggal") || f.includes("waktu"),
+            isActivityFeature: f.includes("aktivitas") || f.includes("dress code"),
+            isTicketFeature: f.includes("tiket"),
+            isNicknameFeature: f.includes("nama") || f.includes("nickname"),
+            isRoomsFeature: f.includes("10 ruang") || f.includes("ruangan"),
+            isGameFeature: f.includes("game") || f.includes("permainan"),
+            isPixelFeature: f.includes("12 karakter") || f.includes("pixel"),
+            isSurpriseFeature: f.includes("surprise") || f.includes("kejutan"),
+        };
+    }), [features]);
+
+    // useCallback untuk semua handler — tidak dibuat ulang setiap render
+    const handleMediaMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.boxShadow = `0 48px 100px -20px ${activeAccent}33`;
+        el.style.borderColor = `${activeAccent}66`;
+    }, [activeAccent]);
+
+    const handleMediaMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
+        el.style.borderColor = "rgba(255,255,255,0.15)";
+    }, []);
+
+    const handleDemoMouseEnter = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
+        e.currentTarget.style.transform = "translateY(-2px)";
+    }, []);
+
+    const handleDemoMouseLeave = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
+        e.currentTarget.style.transform = "translateY(0)";
+    }, []);
+
+    const handleNavBtnMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1.05)";
+        (e.currentTarget as HTMLElement).style.borderColor = activeAccent;
+    }, [activeAccent]);
+
+    const handleNavBtnMouseLeave = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+        (e.currentTarget as HTMLElement).style.borderColor = `${activeAccent}22`;
+    }, [activeAccent]);
+
+    const handleSubNavMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.opacity = "1";
+        (e.currentTarget as HTMLElement).style.transform = "scale(1.1)";
+    }, []);
+
+    const handleSubNavMouseLeave = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.opacity = "0.6";
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+    }, []);
+
+    const handlePrevTheme = useCallback(() => {
+        const prevIndex = selectedIndex === null ? 0 : selectedIndex;
+        setSelectedIndex(prevIndex === 0 ? (themes?.length ?? 1) - 1 : prevIndex - 1);
+    }, [selectedIndex, themes]);
+
+    const handleNextTheme = useCallback(() => {
+        const prevIndex = selectedIndex === null ? 0 : selectedIndex;
+        setSelectedIndex(prevIndex === (themes?.length ?? 1) - 1 ? 0 : prevIndex + 1);
+    }, [selectedIndex, themes]);
+
+    const handlePrevSubTheme = useCallback(() => {
+        const len = subThemePanelData.currentTheme?.subThemes?.length ?? 1;
+        setSelectedSubThemeIndex(prev => prev === 0 ? len - 1 : prev - 1);
+    }, [subThemePanelData.currentTheme]);
+
+    const handleNextSubTheme = useCallback(() => {
+        const len = subThemePanelData.currentTheme?.subThemes?.length ?? 1;
+        setSelectedSubThemeIndex(prev => prev === len - 1 ? 0 : prev + 1);
+    }, [subThemePanelData.currentTheme]);
+
+    const handlePesanClick = useCallback(() => {
+        posthog.capture('clicked_pesan', { product: title });
+        if (onAddThreeSlotToCart) {
+            setSlotPickerConfig({
+                productId: "product",
+                productTitle: title,
+                themeColor: activeAccent,
+                onSelectSingle: onAddToCart!,
+                onSelectThreeSlot: onAddThreeSlotToCart,
+            });
+        } else {
+            onAddToCart?.();
+        }
+    }, [title, activeAccent, onAddToCart, onAddThreeSlotToCart]);
+
+    const handlePesanBtnMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 14px 32px -4px ${activeAccent}77`;
+    }, [activeAccent]);
+
+    const handlePesanBtnMouseLeave = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px -4px ${activeAccent}55`;
+    }, [activeAccent]);
+
+    const handleHrefMouseEnter = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+    }, []);
+
+    const handleHrefMouseLeave = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+    }, []);
+
+    const handleCloseModal = useCallback(() => setSlotPickerConfig(null), []);
 
     // Handle Auto Cycling
     useEffect(() => {
         if (!autoCycle || !themes || themes.length <= 1 || !isInView) return;
-
         const interval = setInterval(() => {
-            setSelectedIndex(prev => {
-                const next = (prev === null ? 0 : prev + 1) % themes.length;
-                return next;
-            });
-        }, 5000); // Change every 5 seconds for better viewing experience
-
+            setSelectedIndex(prev => (prev === null ? 0 : prev + 1) % themes.length);
+        }, 5000);
         return () => clearInterval(interval);
     }, [autoCycle, themes, isInView]);
-
 
     // (Video logic removed as per request to use static images only)
 
@@ -187,16 +323,8 @@ export function LandscapeProductCard({
                     <div
                         className="hub-showcase-media"
                         style={{ position: "relative", flex: "none", width: "100%" }}
-                        onMouseEnter={e => {
-                            const el = e.currentTarget as HTMLElement;
-                            el.style.boxShadow = `0 48px 100px -20px ${activeGlow}`;
-                            el.style.borderColor = `${activeAccent}66`;
-                        }}
-                        onMouseLeave={e => {
-                            const el = e.currentTarget as HTMLElement;
-                            el.style.boxShadow = "0 32px 80px -20px rgba(59,47,37,0.15)";
-                            el.style.borderColor = "rgba(255,255,255,0.15)";
-                        }}
+                        onMouseEnter={handleMediaMouseEnter}
+                        onMouseLeave={handleMediaMouseLeave}
                     >
                         {activeFallbackImgSrc || mediaSrc ? (
                             <Image
@@ -253,14 +381,8 @@ export function LandscapeProductCard({
                                 textDecoration: "none",
                                 transition: "all 0.2s ease"
                             }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
-                                e.currentTarget.style.transform = "translateY(-2px)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
-                                e.currentTarget.style.transform = "translateY(0)";
-                            }}>
+                            onMouseEnter={handleDemoMouseEnter}
+                            onMouseLeave={handleDemoMouseLeave}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
@@ -293,11 +415,7 @@ export function LandscapeProductCard({
                                 {/* Single Active Theme Display with Arrows */}
                                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                                     <button
-                                        onClick={() => {
-                                            const prevIndex = selectedIndex === null ? 0 : selectedIndex;
-                                            const newIndex = prevIndex === 0 ? themes.length - 1 : prevIndex - 1;
-                                            setSelectedIndex(newIndex);
-                                        }}
+                                        onClick={handlePrevTheme}
                                         style={{
                                             width: 36, height: 36, borderRadius: "50%",
                                             background: "#fff", border: `1px solid ${activeAccent}22`,
@@ -306,8 +424,8 @@ export function LandscapeProductCard({
                                             boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
                                             transition: "all 0.3s ease"
                                         }}
-                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.05)"; (e.currentTarget as HTMLElement).style.borderColor = activeAccent; }}
-                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.borderColor = `${activeAccent}22`; }}
+                                        onMouseEnter={handleNavBtnMouseEnter}
+                                        onMouseLeave={handleNavBtnMouseLeave}
                                     >
                                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                                     </button>
@@ -326,11 +444,7 @@ export function LandscapeProductCard({
                                     </div>
 
                                     <button
-                                        onClick={() => {
-                                            const prevIndex = selectedIndex === null ? 0 : selectedIndex;
-                                            const newIndex = prevIndex === themes.length - 1 ? 0 : prevIndex + 1;
-                                            setSelectedIndex(newIndex);
-                                        }}
+                                        onClick={handleNextTheme}
                                         style={{
                                             width: 36, height: 36, borderRadius: "50%",
                                             background: "#fff", border: `1px solid ${activeAccent}22`,
@@ -339,8 +453,8 @@ export function LandscapeProductCard({
                                             boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
                                             transition: "all 0.3s ease"
                                         }}
-                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.05)"; (e.currentTarget as HTMLElement).style.borderColor = activeAccent; }}
-                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.borderColor = `${activeAccent}22`; }}
+                                        onMouseEnter={handleNavBtnMouseEnter}
+                                        onMouseLeave={handleNavBtnMouseLeave}
                                     >
                                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                                     </button>
@@ -374,37 +488,29 @@ export function LandscapeProductCard({
                                 </div>
 
                                 {/* SubThemes Color Dots Indicator — only shown when subThemes have explicit color values */}
-                                {(() => {
-                                    const currentTheme = themes[selectedIndex !== null ? selectedIndex : 0];
-                                    const hasColoredSubThemes = currentTheme?.subThemes && currentTheme.subThemes.length > 0 && currentTheme.subThemes.some(s => !!s.color);
-                                    if (hasColoredSubThemes) {
-                                        return (
-                                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 16, gap: 8 }}>
-                                                <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: activeAccent, opacity: 0.7, textTransform: "uppercase" }}>
-                                                    Pilih Warna
-                                                </span>
-                                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
-                                                    <button
-                                                        onClick={() => {
-                                                            const prevIndex = selectedSubThemeIndex;
-                                                            const newIndex = prevIndex === 0 ? currentTheme.subThemes!.length - 1 : prevIndex - 1;
-                                                            setSelectedSubThemeIndex(newIndex);
-                                                        }}
-                                                        style={{
-                                                            width: 24, height: 24, borderRadius: "50%",
-                                                            background: "transparent", border: "none",
-                                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-                                                            color: activeAccent, opacity: 0.6,
-                                                            transition: "all 0.3s ease"
-                                                        }}
-                                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; }}
-                                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
-                                                    >
-                                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                                                    </button>
+                                {subThemePanelData.hasColoredSubThemes && subThemePanelData.currentTheme && (
+                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 16, gap: 8 }}>
+                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: activeAccent, opacity: 0.7, textTransform: "uppercase" }}>
+                                            Pilih Warna
+                                        </span>
+                                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+                                            <button
+                                                onClick={handlePrevSubTheme}
+                                                style={{
+                                                    width: 24, height: 24, borderRadius: "50%",
+                                                    background: "transparent", border: "none",
+                                                    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                                                    color: activeAccent, opacity: 0.6,
+                                                    transition: "all 0.3s ease"
+                                                }}
+                                                onMouseEnter={handleSubNavMouseEnter}
+                                                onMouseLeave={handleSubNavMouseLeave}
+                                            >
+                                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                                            </button>
 
-                                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                                                        {currentTheme.subThemes?.map((subTheme, i) => {
+                                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                                                {subThemePanelData.currentTheme?.subThemes?.map((subTheme, i) => {
                                                             const themeColor = subTheme.color || activeAccent;
                                                             const isSelected = selectedSubThemeIndex === i;
                                                             return (
@@ -424,32 +530,25 @@ export function LandscapeProductCard({
                                                                 />
                                                             )
                                                         })}
-                                                    </div>
-
-                                                    <button
-                                                        onClick={() => {
-                                                            const prevIndex = selectedSubThemeIndex;
-                                                            const newIndex = prevIndex === currentTheme.subThemes!.length - 1 ? 0 : prevIndex + 1;
-                                                            setSelectedSubThemeIndex(newIndex);
-                                                        }}
-                                                        style={{
-                                                            width: 24, height: 24, borderRadius: "50%",
-                                                            background: "transparent", border: "none",
-                                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-                                                            color: activeAccent, opacity: 0.6,
-                                                            transition: "all 0.3s ease"
-                                                        }}
-                                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; }}
-                                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
-                                                    >
-                                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                                                    </button>
-                                                </div>
                                             </div>
-                                        );
-                                    }
-                                    return null;
-                                })()}
+
+                                            <button
+                                                onClick={handleNextSubTheme}
+                                                style={{
+                                                    width: 24, height: 24, borderRadius: "50%",
+                                                    background: "transparent", border: "none",
+                                                    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                                                    color: activeAccent, opacity: 0.6,
+                                                    transition: "all 0.3s ease"
+                                                }}
+                                                onMouseEnter={handleSubNavMouseEnter}
+                                                onMouseLeave={handleSubNavMouseLeave}
+                                            >
+                                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -504,30 +603,12 @@ export function LandscapeProductCard({
 
                     {/* Features List */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
-                        {features.map((feat) => {
-                            const isToggleFeature = feat.toLowerCase().includes("turn on / off") || feat.toLowerCase().includes("animasi interaktif") || feat.toLowerCase().includes("animasi visual");
-                            const isMusicFeature = feat.toLowerCase().includes("music pilihan") || feat.toLowerCase().includes("lagu") || feat.toLowerCase().includes("playlist");
-                            const isPageFeature = feat.toLowerCase().includes("berbeda") || feat.toLowerCase().includes("multi-tema") || feat.toLowerCase().includes("kustomisasi tema");
-                            const isVoiceFeature = feat.toLowerCase().includes("rekam suara");
-                            const isGalleryFeature = feat.toLowerCase().includes("galeri foto") || feat.toLowerCase().includes("kustomisasi galeri");
-                            const isEnvelopeFeature = feat.toLowerCase().includes("amplop") || feat.toLowerCase().includes("diurus tim") || feat.toLowerCase().includes("dikerjakan langsung");
-                            const isTypewriterFeature = feat.toLowerCase().includes("typewriter");
-                            const isPremiumFeature = feat.toLowerCase().includes("premium & eksklusif") || feat.toLowerCase().includes("kuota");
-                            const isPhotoVideoFeature = feat.toLowerCase().includes("foto / video") || feat.toLowerCase().includes("foto/video") || feat.toLowerCase().includes("gif");
-                            const isAnonymousFeature = feat.toLowerCase().includes("anonymous");
-                            const isCassetteFeature = feat.toLowerCase().includes("kaset") || feat.toLowerCase().includes("mixtape");
-                            const isRetroFeature = feat.toLowerCase().includes("retro windows") || (feat.toLowerCase().includes("retro") && !feat.toLowerCase().includes("kaset"));
-                            const isNostalgiaGallery = feat.toLowerCase().includes("nostalgia");
-                            const isMobileFeature = feat.toLowerCase().includes("mobile");
-                            const isQuotesFeature = feat.toLowerCase().includes("quotes") || feat.toLowerCase().includes("pesan personal");
-                            const isDateFeature = feat.toLowerCase().includes("tanggal") || feat.toLowerCase().includes("waktu");
-                            const isActivityFeature = feat.toLowerCase().includes("aktivitas") || feat.toLowerCase().includes("dress code");
-                            const isTicketFeature = feat.toLowerCase().includes("tiket");
-                            const isNicknameFeature = feat.toLowerCase().includes("nama") || feat.toLowerCase().includes("nickname");
-                            const isRoomsFeature = feat.toLowerCase().includes("10 ruang") || feat.toLowerCase().includes("ruangan");
-                            const isGameFeature = feat.toLowerCase().includes("game") || feat.toLowerCase().includes("permainan");
-                            const isPixelFeature = feat.toLowerCase().includes("12 karakter") || feat.toLowerCase().includes("pixel");
-                            const isSurpriseFeature = feat.toLowerCase().includes("surprise") || feat.toLowerCase().includes("kejutan");
+                        {featureFlags.map((flags) => {
+                            const { feat, isToggleFeature, isMusicFeature, isPageFeature, isVoiceFeature, isGalleryFeature,
+                                isEnvelopeFeature, isTypewriterFeature, isPremiumFeature, isPhotoVideoFeature,
+                                isAnonymousFeature, isCassetteFeature, isRetroFeature, isNostalgiaGallery, isMobileFeature,
+                                isQuotesFeature, isDateFeature, isActivityFeature, isTicketFeature, isNicknameFeature,
+                                isRoomsFeature, isGameFeature, isPixelFeature, isSurpriseFeature } = flags;
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -854,20 +935,7 @@ export function LandscapeProductCard({
                         {/* Add to Cart Button */}
                         {onAddToCart && (
                             <button
-                                onClick={() => {
-                                    posthog.capture('clicked_pesan', { product: title });
-                                    if (onAddThreeSlotToCart) {
-                                        setSlotPickerConfig({
-                                            productId: "product",
-                                            productTitle: title,
-                                            themeColor: activeAccent,
-                                            onSelectSingle: onAddToCart,
-                                            onSelectThreeSlot: onAddThreeSlotToCart,
-                                        });
-                                    } else {
-                                        onAddToCart();
-                                    }
-                                }}
+                                onClick={handlePesanClick}
                                 style={{
                                     padding: "12px 24px", borderRadius: 999, border: "none", cursor: "pointer",
                                     background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent,
@@ -878,14 +946,8 @@ export function LandscapeProductCard({
                                     display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
                                     fontFamily: "var(--font-sans)",
                                 }}
-                                onMouseEnter={e => {
-                                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                                    (e.currentTarget as HTMLElement).style.boxShadow = `0 14px 32px -4px ${activeAccent}77`;
-                                }}
-                                onMouseLeave={e => {
-                                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                                    (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px -4px ${activeAccent}55`;
-                                }}
+                                onMouseEnter={handlePesanBtnMouseEnter}
+                                onMouseLeave={handlePesanBtnMouseLeave}
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -905,8 +967,8 @@ export function LandscapeProductCard({
                                 boxShadow: `0 8px 24px -4px ${activeAccent}55`,
                                 display: "flex", alignItems: "center", justifyContent: "center", gap: 7
                             }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
+                                onMouseEnter={handleHrefMouseEnter}
+                                onMouseLeave={handleHrefMouseLeave}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg>
@@ -936,7 +998,7 @@ export function LandscapeProductCard({
             {slotPickerConfig && (
                 <SlotPickerModal
                     config={slotPickerConfig}
-                    onClose={() => setSlotPickerConfig(null)}
+                    onClose={handleCloseModal}
                 />
             )}
         </AnimatedSection>
