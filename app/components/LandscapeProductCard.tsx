@@ -249,13 +249,17 @@ export function LandscapeProductCard({
 
     const handlePrevTheme = useCallback(() => {
         const prevIndex = selectedIndex === null ? 0 : selectedIndex;
-        setSelectedIndex(prevIndex === 0 ? (themes?.length ?? 1) - 1 : prevIndex - 1);
-    }, [selectedIndex, themes]);
+        const newIndex = prevIndex === 0 ? (themes?.length ?? 1) - 1 : prevIndex - 1;
+        setSelectedIndex(newIndex);
+        posthog.capture('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'prev' });
+    }, [selectedIndex, themes, title]);
 
     const handleNextTheme = useCallback(() => {
         const prevIndex = selectedIndex === null ? 0 : selectedIndex;
-        setSelectedIndex(prevIndex === (themes?.length ?? 1) - 1 ? 0 : prevIndex + 1);
-    }, [selectedIndex, themes]);
+        const newIndex = prevIndex === (themes?.length ?? 1) - 1 ? 0 : prevIndex + 1;
+        setSelectedIndex(newIndex);
+        posthog.capture('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'next' });
+    }, [selectedIndex, themes, title]);
 
     const handlePrevSubTheme = useCallback(() => {
         const len = subThemePanelData.currentTheme?.subThemes?.length ?? 1;

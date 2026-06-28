@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import posthog from 'posthog-js';
 
 interface CartCheckoutModalProps {
     onClose: () => void;
@@ -53,6 +54,12 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
 
             const data = await res.json();
             if (data.redirectUrl) {
+                posthog.capture('payment_submitted', {
+                    order_id: orderId,
+                    total: cartTotal,
+                    item_count: items.length,
+                    products: items.map(i => i.title),
+                });
                 handleClose();
                 clearCart();
                 setIsLoading(false);
