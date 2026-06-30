@@ -47,8 +47,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
-                            onAddToCart={() => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" })}
-                            onAddThreeSlotToCart={() => addToCart({ id: "voices", title: "Voices Gift (3 Slot)", numericPrice: 20000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })}
+                            onAddToCart={() => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52", isThreeSlot: true })}
                             themes={[
                                 { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
                                 { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin" }

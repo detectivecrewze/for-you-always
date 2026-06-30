@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 interface LoopCard {
     badgeText?: string;
@@ -17,9 +16,6 @@ interface LoopCard {
     href: string;
     price?: string;
     onAddToCart?: () => void;
-    // 3-Slot fields
-    isThreeSlotEligible?: boolean;    // show SlotPickerModal on "Pesan"
-    onAddThreeSlotToCart?: () => void; // callback untuk 3 slot
 }
 
 interface AutoScrollCarouselProps {
@@ -31,23 +27,8 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     const singleSetWidth = cards.length * 380; // 360px card + 20px gap
     const duration = singleSetWidth / speed;
 
-    // State for slot picker modal
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
-
     const handlePesanClick = (card: LoopCard) => {
-        if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
-            // Show picker modal
-            setSlotPickerConfig({
-                productId: card.href.split("/").pop() || "",
-                productTitle: card.title,
-                themeColor: card.titleColor || "#a67c52",
-                onSelectSingle: card.onAddToCart,
-                onSelectThreeSlot: card.onAddThreeSlotToCart,
-            });
-        } else {
-            // No 3-slot option, add directly
-            card.onAddToCart?.();
-        }
+        card.onAddToCart?.();
     };
 
     // Render a single card
@@ -256,13 +237,6 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
 
             </div>
 
-            {/* Slot Picker Modal */}
-            {slotPickerConfig && (
-                <SlotPickerModal
-                    config={slotPickerConfig}
-                    onClose={() => setSlotPickerConfig(null)}
-                />
-            )}
         </>
     );
 }

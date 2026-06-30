@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import SlotPickerModal from "../../../components/SlotPickerModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 
 export default function MixtapeCatalogPage() {
     const { addToCart } = useCart();
-    const [showSlotPicker, setShowSlotPicker] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -30,28 +28,24 @@ export default function MixtapeCatalogPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
-                            label={
-                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Mixtape Edition <span style={{ opacity: 0.5 }}>•</span> 1 atau 3 Slot
-                                </div>
-                            }
+                            label="Mixtape Edition"
                             title="Mixtape Edition"
-                            description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik ala kaset retro. Tersedia pilihan 1 slot satuan atau paket bundle 3 slot."
+                            description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik ala kaset retro. Setiap pembelian sudah termasuk paket 3 slot — bisa buat 3 mixtape berbeda."
                             features={[
-                                "Pilihan 1 Slot Satuan atau 3 Slot Bundle",
+                                "3 Slot Bundle Otomatis",
                                 "Desain kaset retro yang bisa di-play",
                                 "Bebas custom foto/video & lagu",
                                 "Bebas custom pesan personal",
                                 "Rekam Suara & Custom Pesan"
                             ]}
-                            price="Mulai dari Rp 15.000"
+                            price="Rp 15.000"
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             mediaSrc=""
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
-                            onAddToCart={() => setShowSlotPicker(true)}
+                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e", isThreeSlot: true })}
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
                                 { name: "Bundle Dashboard", desc: "Sistem quota bundle otomatis", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781035640605-qnr98j.png" },
@@ -66,23 +60,6 @@ export default function MixtapeCatalogPage() {
                     </div>
                 </div>
             </section>
-
-            {showSlotPicker && (
-                <SlotPickerModal
-                    config={{
-                        productId: "mixtape",
-                        productTitle: "Mixtape Edition",
-                        themeColor: "#5a8d9e",
-                        onSelectSingle: () => {
-                            addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e", isThreeSlot: false });
-                        },
-                        onSelectThreeSlot: () => {
-                            addToCart({ id: "mixtape", title: "Mixtape Edition (3 Slot)", numericPrice: 20000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 });
-                        },
-                    }}
-                    onClose={() => setShowSlotPicker(false)}
-                />
-            )}
         </div>
     );
 }

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/LandscapeProductCard";
-import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
 import { useCart } from "../../context/CartContext";
 
 // Konstanta statis di luar komponen — tidak dibuat ulang setiap render
@@ -45,9 +44,9 @@ const CATALOG_ITEMS = [
         imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
         title: "Mixtape Edition",
         oldPrice: "Rp 50.000",
-        newPrice: "Rp 20.000",
+        newPrice: "Rp 15.000",
         id: "mixtape",
-        numericPrice: 20000,
+        numericPrice: 15000,
         hashtag: "#3QUOTAS",
         soldCount: "New Release",
         href: "/catalog/mixtape",
@@ -151,11 +150,10 @@ const CATALOG_ITEMS = [
     soldCount?: string;
 }>;
 
-const SLOT_ELIGIBLE_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
+const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
 
 export default function CatalogPage() {
     const { addToCart } = useCart();
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -163,31 +161,13 @@ export default function CatalogPage() {
 
     // Handler stabil dengan useCallback — tidak dibuat ulang setiap render
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string }) => {
-        const addSingle = () => addToCart({
+        addToCart({
             id: item.id,
             title: item.title,
             numericPrice: item.numericPrice,
             themeColor: item.titleColor,
+            isThreeSlot: THREE_SLOT_IDS.has(item.id),
         });
-
-        if (SLOT_ELIGIBLE_IDS.has(item.id)) {
-            setSlotPickerConfig({
-                productId: item.id,
-                productTitle: item.title,
-                themeColor: item.titleColor,
-                onSelectSingle: addSingle,
-                onSelectThreeSlot: () => addToCart({
-                    id: item.id,
-                    title: `${item.title} (3 Slot)`,
-                    numericPrice: 20000,
-                    themeColor: item.titleColor,
-                    isThreeSlot: true,
-                    slotCount: 3,
-                }),
-            });
-        } else {
-            addSingle();
-        }
     }, [addToCart]);
 
 
@@ -241,14 +221,6 @@ export default function CatalogPage() {
                 ))}
                 </div>
             </div>
-
-            {/* Slot Picker Modal */}
-            {slotPickerConfig && (
-                <SlotPickerModal
-                    config={slotPickerConfig}
-                    onClose={() => setSlotPickerConfig(null)}
-                />
-            )}
 
 
             {/* Floating WhatsApp with label */}

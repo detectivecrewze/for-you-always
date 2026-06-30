@@ -60,8 +60,7 @@ export default function LetterCatalogPage() {
                             mediaType="image"
                             accentColor="#c4858a"
                             accentGlow="rgba(196,133,138,0.2)"
-                            onAddToCart={() => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c" })}
-                            onAddThreeSlotToCart={() => addToCart({ id: "letter", title: "Letter Edition (3 Slot)", numericPrice: 20000, themeColor: "#2a3d5c", isThreeSlot: true, slotCount: 3 })}
+                            onAddToCart={() => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c", isThreeSlot: true })}
                             themesLabel="Koleksi Template"
                             themes={[
                                 {

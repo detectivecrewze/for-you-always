@@ -3,7 +3,6 @@ import posthog from 'posthog-js';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
-import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 export function AnimatedSection({
     children,
@@ -61,7 +60,6 @@ export function LandscapeProductCard({
     accentGlow,
     href,
     onAddToCart,
-    onAddThreeSlotToCart,
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
@@ -86,7 +84,6 @@ export function LandscapeProductCard({
     accentGlow: string;
     href?: string;
     onAddToCart?: () => void;
-    onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
@@ -99,7 +96,6 @@ export function LandscapeProductCard({
     demoLabel?: string;
     priority?: boolean;
 }) {
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     
     // Track selected sub-theme per tema
@@ -277,18 +273,8 @@ export function LandscapeProductCard({
 
     const handlePesanClick = useCallback(() => {
         posthog.capture('clicked_pesan', { product: title });
-        if (onAddThreeSlotToCart) {
-            setSlotPickerConfig({
-                productId: "product",
-                productTitle: title,
-                themeColor: activeAccent,
-                onSelectSingle: onAddToCart!,
-                onSelectThreeSlot: onAddThreeSlotToCart,
-            });
-        } else {
-            onAddToCart?.();
-        }
-    }, [title, activeAccent, onAddToCart, onAddThreeSlotToCart]);
+        onAddToCart?.();
+    }, [title, onAddToCart]);
 
     const handlePesanBtnMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
@@ -308,7 +294,6 @@ export function LandscapeProductCard({
         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
     }, []);
 
-    const handleCloseModal = useCallback(() => setSlotPickerConfig(null), []);
 
     // Handle Auto Cycling
     useEffect(() => {
@@ -1002,14 +987,6 @@ export function LandscapeProductCard({
                     )}
                 </div>
             </div>
-
-            {/* Slot Picker Modal */}
-            {slotPickerConfig && (
-                <SlotPickerModal
-                    config={slotPickerConfig}
-                    onClose={handleCloseModal}
-                />
-            )}
         </AnimatedSection>
     );
 }
