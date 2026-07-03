@@ -22,15 +22,95 @@ const FEMALE_NAMES = [
     "Zahra", "Zara", "Zia", "Ziva", "Nayla", "Syifa", "Kirana", "Aluna",
 ];
 
+// ── SVG Icons ─────────────────────────────────────────────────────────────────
+
+const IconLetter = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="3"/>
+        <polyline points="2,4 12,13 22,4"/>
+    </svg>
+);
+
+const IconVoices = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+    </svg>
+);
+
+const IconMixtape = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18V5l12-2v13"/>
+        <circle cx="6" cy="18" r="3"/>
+        <circle cx="18" cy="16" r="3"/>
+    </svg>
+);
+
+const IconInvitation = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 9a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9z"/>
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+        <line x1="10" y1="14" x2="14" y2="14"/>
+    </svg>
+);
+
+const IconRetro = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+    </svg>
+);
+
+const IconArcade = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="6" y1="11" x2="10" y2="11"/>
+        <line x1="8" y1="9" x2="8" y2="13"/>
+        <line x1="15" y1="12" x2="15.01" y2="12" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="18" y1="10" x2="18.01" y2="10" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.9 7.163A2 2 0 0 0 3.8 18h.001a2 2 0 0 0 1.789-1.106L7 14h10l1.41 2.894A2 2 0 0 0 20.2 18h.001a2 2 0 0 0 1.998-2.247l-.9-7.163A4 4 0 0 0 17.32 5z"/>
+    </svg>
+);
+
+const IconWrapped = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 12 20 22 4 22 4 12"/>
+        <rect x="2" y="7" width="20" height="5"/>
+        <line x1="12" y1="22" x2="12" y2="7"/>
+        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+    </svg>
+);
+
+const IconMemoria = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+);
+
+const PRODUCT_ICONS: Record<string, React.ComponentType<{ color: string }>> = {
+    "Letter Edition":     IconLetter,
+    "Voices Gift":        IconVoices,
+    "Mixtape Edition":    IconMixtape,
+    "Invitation Edition": IconInvitation,
+    "Retro Edition":      IconRetro,
+    "Arcade Edition":     IconArcade,
+    "Wrapped Edition":    IconWrapped,
+    "Memoria Premium":    IconMemoria,
+};
+
 const PRODUCTS = [
-    { label: "Letter Edition", emoji: "✉️", color: "#2a3d5c" },
-    { label: "Voices Gift", emoji: "🎙️", color: "#a67c52" },
-    { label: "Mixtape Edition", emoji: "🎵", color: "#5a8d9e" },
-    { label: "Invitation Edition", emoji: "🎟️", color: "#8a3050" },
-    { label: "Retro Edition", emoji: "💾", color: "#008689" },
-    { label: "Arcade Edition", emoji: "🕹️", color: "#5c8c5c" },
-    { label: "Wrapped Edition", emoji: "🎁", color: "#c9184a" },
-    { label: "Memoria Premium", emoji: "💌", color: "#7b2d3a" },
+    { label: "Letter Edition",     color: "#2a3d5c" },
+    { label: "Voices Gift",        color: "#a67c52" },
+    { label: "Mixtape Edition",    color: "#5a8d9e" },
+    { label: "Invitation Edition", color: "#8a3050" },
+    { label: "Retro Edition",      color: "#008689" },
+    { label: "Arcade Edition",     color: "#5c8c5c" },
+    { label: "Wrapped Edition",    color: "#c9184a" },
+    { label: "Memoria Premium",    color: "#7b2d3a" },
 ];
 
 // Waktu – semakin sering yang pendek agar terasa fresh
@@ -131,13 +211,13 @@ export default function RecentOrderPopup() {
     };
 
     useEffect(() => {
-        // Delay awal acak 5–10 detik
-        const initial = 5000 + Math.random() * 5000;
+        // Delay awal acak 8–12 detik sebelum pertama muncul
+        const initial = 8000 + Math.random() * 4000;
 
         const cycle = () => {
             showNext();
-            // Schedule berikutnya 14–25 detik setelah popup muncul
-            timerRef.current = setTimeout(cycle, 14000 + Math.random() * 11000);
+            // Muncul ~45 detik sekali (39–51 detik), termasuk durasi popup tampil 5.5 detik
+            timerRef.current = setTimeout(cycle, 39500 + Math.random() * 12000);
         };
 
         timerRef.current = setTimeout(cycle, initial);
@@ -194,11 +274,13 @@ export default function RecentOrderPopup() {
                         display:      "flex",
                         alignItems:   "center",
                         justifyContent: "center",
-                        fontSize:     "19px",
                         boxShadow:    "0 2px 8px rgba(0,0,0,0.07)",
                     }}
                 >
-                    {notif.product.emoji}
+                    {(() => {
+                        const Icon = PRODUCT_ICONS[notif.product.label];
+                        return Icon ? <Icon color={notif.product.color} /> : null;
+                    })()}
                 </div>
 
                 {/* Teks */}
