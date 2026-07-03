@@ -211,8 +211,8 @@ export default function RecentOrderPopup() {
     };
 
     useEffect(() => {
-        // Delay awal acak 8–12 detik sebelum pertama muncul
-        const initial = 8000 + Math.random() * 4000;
+        // Delay awal 4 detik sebelum pertama muncul
+        const initial = 4000;
 
         const cycle = () => {
             showNext();
