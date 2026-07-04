@@ -170,7 +170,8 @@ export function LandscapeProductCard({
     const subThemePanelData = useMemo(() => {
         const currentTheme = themes?.[selectedIndex !== null ? selectedIndex : 0];
         const hasColoredSubThemes = !!(currentTheme?.subThemes && currentTheme.subThemes.length > 0 && currentTheme.subThemes.some(s => !!s.color));
-        return { currentTheme, hasColoredSubThemes };
+        const hasStepSubThemes   = !!(currentTheme?.subThemes && currentTheme.subThemes.length > 0 && !currentTheme.subThemes.some(s => !!s.color));
+        return { currentTheme, hasColoredSubThemes, hasStepSubThemes };
     }, [themes, selectedIndex]);
 
     // Feature flags — di-memoize: 24 string check tidak diulang tiap render
@@ -540,6 +541,45 @@ export function LandscapeProductCard({
                                             >
                                                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                                             </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* SubThemes Step Tabs — shown when subThemes have no color (Vintage mode) */}
+                                {subThemePanelData.hasStepSubThemes && subThemePanelData.currentTheme && (
+                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 16, gap: 8 }}>
+                                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: activeAccent, opacity: 0.7, textTransform: "uppercase" }}>
+                                            Features
+                                        </span>
+                                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+                                            {subThemePanelData.currentTheme?.subThemes?.map((subTheme, i) => {
+                                                const isSelected = selectedSubThemeIndex === i;
+                                                return (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => setSelectedSubThemeIndex(i)}
+                                                        onMouseEnter={handleSubNavMouseEnter}
+                                                        onMouseLeave={handleSubNavMouseLeave}
+                                                        style={{
+                                                            fontFamily: "var(--font-sans)",
+                                                            fontSize: 10,
+                                                            fontWeight: isSelected ? 700 : 500,
+                                                            letterSpacing: "0.03em",
+                                                            color: isSelected ? "#fff" : activeAccent,
+                                                            background: isSelected ? activeAccent : `${activeAccent}18`,
+                                                            border: `1px solid ${isSelected ? activeAccent : `${activeAccent}40`}`,
+                                                            borderRadius: 20,
+                                                            padding: "4px 10px",
+                                                            cursor: "pointer",
+                                                            transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
+                                                            whiteSpace: "nowrap",
+                                                        }}
+                                                        title={subTheme.name}
+                                                    >
+                                                        {subTheme.name}
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 )}

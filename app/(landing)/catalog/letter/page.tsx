@@ -56,10 +56,10 @@ export default function LetterCatalogPage() {
                             price="Rp 15.000"
                             demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
 
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777883950201-eede1i.webp"
+                            fallbackImgSrc="https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
                             mediaType="image"
-                            accentColor="#c4858a"
-                            accentGlow="rgba(196,133,138,0.2)"
+                            accentColor="#a68a64"
+                            accentGlow="rgba(166,138,100,0.2)"
                             onAddToCart={() => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c", isThreeSlot: true })}
                             themesLabel="Koleksi Template"
                             themes={[
@@ -106,11 +106,22 @@ export default function LetterCatalogPage() {
                                         { name: "Bordeaux", color: "#581824", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253356734-jbzz6.webp" },
                                         { name: "Violet", color: "#8a6b96", fallbackImgSrc: "https://cdn.for-you-always.my.id/1780253356407-czstjw.webp" }
                                     ]
+                                },
+                                {
+                                    name: "Vintage",
+                                    desc: "Desain surat vintage autentik dengan amplop interaktif",
+                                    demoLink: "https://letter.for-you-always.my.id/vintage/letter-test",
+                                    demoLabel: "Lihat Demo Vintage",
+                                    subThemes: [
+                                        { name: "Envelope Closed", fallbackImgSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp" },
+                                        { name: "Envelope Open", fallbackImgSrc: "https://cdn.for-you-always.my.id/1783163305285-pnx28.webp" },
+                                        { name: "Flower Burst", fallbackImgSrc: "https://cdn.for-you-always.my.id/1783163304579-zn1oa3.webp" }
+                                    ]
                                 }
                             ]}
                             delay={0}
                             reverse={false}
-                            initialSelectedIndex={2}
+                            initialSelectedIndex={3}
                             autoCycle={false}
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7629604229094591764?is_from_webapp=1&sender_device=pc"
                         />

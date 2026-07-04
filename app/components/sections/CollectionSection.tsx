@@ -94,10 +94,10 @@ export default function CollectionSection() {
                                 badgeText: "Popular",
                                 badgeColor: "#2a3d5c",
                                 badgeVariant: "solid",
-                                imageSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp",
+                                imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
                                 price: "Rp 15.000",
                                 title: "Letter Edition",
-                                titleColor: "#2a3d5c",
+                                titleColor: "#7a5438",
                                 description: "Amplop digital interaktif dengan efek typewriter sinematik dan foto/video di akhir surat.",
                                 href: "/catalog/letter",
                                 onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#2a3d5c", isThreeSlot: true })

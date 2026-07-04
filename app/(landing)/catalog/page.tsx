@@ -71,9 +71,9 @@ const CATALOG_ITEMS = [
     },
     {
         badgeText: "Popular",
-        badgeColor: "#9c27b0",
-        titleColor: "#2a3d5c",
-        imageSrc: "https://cdn.for-you-always.my.id/1780253357024-sb9db.webp",
+        badgeColor: "#7a5438",
+        titleColor: "#7a5438",
+        imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         title: "Letter Edition",
         oldPrice: "Rp 25.000",
         newPrice: "Rp 15.000",
