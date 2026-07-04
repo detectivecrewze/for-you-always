@@ -115,15 +115,15 @@ const PRODUCTS = [
 
 // Waktu – semakin sering yang pendek agar terasa fresh
 const TIME_OPTIONS = [
-    "baru saja", "baru saja",                        // double weight
-    "1 menit lalu", "1 menit lalu",
-    "2 menit lalu",
-    "3 menit lalu",
+    "2 menit lalu", "2 menit lalu",
+    "3 menit lalu", "3 menit lalu",
     "5 menit lalu",
     "7 menit lalu",
     "10 menit lalu",
+    "12 menit lalu",
     "15 menit lalu",
     "20 menit lalu",
+    "25 menit lalu",
     "30 menit lalu",
     "45 menit lalu",
     "1 jam lalu",
