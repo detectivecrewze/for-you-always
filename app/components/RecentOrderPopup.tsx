@@ -113,22 +113,20 @@ const PRODUCTS = [
     { label: "Memoria Premium",    color: "#7b2d3a" },
 ];
 
-// Waktu – semakin sering yang pendek agar terasa fresh
 const TIME_OPTIONS = [
-    "2 menit lalu", "2 menit lalu",
-    "3 menit lalu", "3 menit lalu",
-    "5 menit lalu",
-    "7 menit lalu",
-    "10 menit lalu",
-    "12 menit lalu",
-    "15 menit lalu",
-    "20 menit lalu",
-    "25 menit lalu",
-    "30 menit lalu",
-    "45 menit lalu",
-    "1 jam lalu",
-    "2 jam lalu",
-    "3 jam lalu",
+    "35 menit lalu",
+    "42 menit lalu",
+    "50 menit lalu",
+    "1 jam lalu", "1 jam lalu",
+    "2 jam lalu", "2 jam lalu",
+    "3 jam lalu", "3 jam lalu",
+    "4 jam lalu",
+    "5 jam lalu",
+    "6 jam lalu",
+    "8 jam lalu",
+    "11 jam lalu",
+    "14 jam lalu",
+    "18 jam lalu",
 ];
 
 interface NotifData {
