@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/LandscapeProductCard";
 import { useCart } from "../../context/CartContext";
+import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
 
 // Konstanta statis di luar komponen — tidak dibuat ulang setiap render
 const CATALOG_ITEMS = [
@@ -154,22 +155,42 @@ const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitat
 
 export default function CatalogPage() {
     const { addToCart } = useCart();
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    // Handler stabil dengan useCallback — tidak dibuat ulang setiap render
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string }) => {
-        addToCart({
-            id: item.id,
-            title: item.title,
-            numericPrice: item.numericPrice,
-            themeColor: item.titleColor,
-            isThreeSlot: THREE_SLOT_IDS.has(item.id),
-        });
+        if (THREE_SLOT_IDS.has(item.id)) {
+            setSlotPickerConfig({
+                productId: item.id,
+                productTitle: item.title,
+                themeColor: item.titleColor,
+                onSelectSingle: () => addToCart({
+                    id: item.id,
+                    title: item.title,
+                    numericPrice: item.numericPrice,
+                    themeColor: item.titleColor,
+                }),
+                onSelectThreeSlot: () => addToCart({
+                    id: item.id,
+                    title: `${item.title} (3 Gift)`,
+                    numericPrice: 20000,
+                    themeColor: item.titleColor,
+                    isThreeSlot: true,
+                    slotCount: 3,
+                }),
+            });
+        } else {
+            addToCart({
+                id: item.id,
+                title: item.title,
+                numericPrice: item.numericPrice,
+                themeColor: item.titleColor,
+            });
+        }
     }, [addToCart]);
-
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -222,6 +243,13 @@ export default function CatalogPage() {
                 </div>
             </div>
 
+            {/* Slot Picker Modal */}
+            {slotPickerConfig && (
+                <SlotPickerModal
+                    config={slotPickerConfig}
+                    onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
 
             {/* Floating WhatsApp with label */}
             <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"

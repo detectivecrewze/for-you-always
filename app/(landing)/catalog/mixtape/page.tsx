@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
@@ -30,9 +30,9 @@ export default function MixtapeCatalogPage() {
                         <LandscapeProductCard
                             label="Mixtape Edition"
                             title="Mixtape Edition"
-                            description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik ala kaset retro. Setiap pembelian sudah termasuk paket 3 slot — bisa buat 3 mixtape berbeda."
+                            description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik ala kaset retro. Setiap pembelian sudah termasuk paket 3 gift — bisa buat 3 mixtape berbeda."
                             features={[
-                                "3 Slot Bundle Otomatis",
+                                "3 Gift Bundle Otomatis",
                                 "Desain kaset retro yang bisa di-play",
                                 "Bebas custom foto/video & lagu",
                                 "Bebas custom pesan personal",
@@ -45,7 +45,8 @@ export default function MixtapeCatalogPage() {
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
-                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e", isThreeSlot: true })}
+                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 20000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })}
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
                                 { name: "Bundle Dashboard", desc: "Sistem quota bundle otomatis", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781035640605-qnr98j.png" },

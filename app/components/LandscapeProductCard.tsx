@@ -3,6 +3,7 @@ import posthog from 'posthog-js';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
+import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 export function AnimatedSection({
     children,
@@ -60,6 +61,7 @@ export function LandscapeProductCard({
     accentGlow,
     href,
     onAddToCart,
+    onAddThreeSlotToCart,
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
@@ -84,6 +86,7 @@ export function LandscapeProductCard({
     accentGlow: string;
     href?: string;
     onAddToCart?: () => void;
+    onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
@@ -97,6 +100,7 @@ export function LandscapeProductCard({
     priority?: boolean;
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     
     // Track selected sub-theme per tema
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
@@ -274,8 +278,18 @@ export function LandscapeProductCard({
 
     const handlePesanClick = useCallback(() => {
         posthog.capture('clicked_pesan', { product: title });
-        onAddToCart?.();
-    }, [title, onAddToCart]);
+        if (onAddThreeSlotToCart && onAddToCart) {
+            setSlotPickerConfig({
+                productId: title,
+                productTitle: title,
+                themeColor: accentColor,
+                onSelectSingle: onAddToCart,
+                onSelectThreeSlot: onAddThreeSlotToCart,
+            });
+        } else {
+            onAddToCart?.();
+        }
+    }, [title, onAddToCart, onAddThreeSlotToCart, accentColor]);
 
     const handlePesanBtnMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
@@ -308,6 +322,7 @@ export function LandscapeProductCard({
     // (Video logic removed as per request to use static images only)
 
     return (
+        <>
         <AnimatedSection delay={delay} priority={priority}>
             <div className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
 
@@ -1028,6 +1043,15 @@ export function LandscapeProductCard({
                 </div>
             </div>
         </AnimatedSection>
+
+        {/* Slot Picker Modal */}
+        {slotPickerConfig && (
+            <SlotPickerModal
+                config={slotPickerConfig}
+                onClose={() => setSlotPickerConfig(null)}
+            />
+        )}
+        </>
     );
 }
 

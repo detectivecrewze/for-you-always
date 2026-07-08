@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
@@ -43,9 +43,9 @@ export default function InvitationCatalogPage() {
                         <LandscapeProductCard
                             label="Invitation Edition"
                             title="Undangan Kencan Interaktif"
-                            description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Setiap pembelian sudah termasuk paket 3 slot — bisa buat 3 undangan berbeda."
+                            description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Setiap pembelian sudah termasuk paket 3 gift — bisa buat 3 undangan berbeda."
                             features={[
-                                "3 Slot Bundle Otomatis",
+                                "3 Gift Bundle Otomatis",
                                 "Amplop Digital Interaktif",
                                 "Pilih Tanggal Kencan Berdua",
                                 "Pilih Aktivitas & Dress Code",
@@ -58,7 +58,8 @@ export default function InvitationCatalogPage() {
                             mediaType="image"
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
-                            onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050", isThreeSlot: true })}
+                            onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "invitation", title: "Invitation Edition (3 Gift)", numericPrice: 20000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Alur Undangan"
                             themes={[
                                 { name: "Opening", desc: "Animasi amplop terbuka", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },

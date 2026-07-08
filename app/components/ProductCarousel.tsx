@@ -1,13 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
 
 interface LoopCard {
     badgeText?: string;
     badgeColor?: string;
-    badgeVariant?: "solid" | "soft"; // solid=white bg, soft=tinted
+    badgeVariant?: "solid" | "soft";
     imageSrc: string;
     title: string;
     titleColor?: string;
@@ -16,6 +17,8 @@ interface LoopCard {
     href: string;
     price?: string;
     onAddToCart?: () => void;
+    isThreeSlotEligible?: boolean;
+    onAddThreeSlotToCart?: () => void;
 }
 
 interface AutoScrollCarouselProps {
@@ -24,11 +27,22 @@ interface AutoScrollCarouselProps {
 }
 
 export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCarouselProps) {
-    const singleSetWidth = cards.length * 380; // 360px card + 20px gap
+    const singleSetWidth = cards.length * 380;
     const duration = singleSetWidth / speed;
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
 
     const handlePesanClick = (card: LoopCard) => {
-        card.onAddToCart?.();
+        if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
+            setSlotPickerConfig({
+                productId: card.title,
+                productTitle: card.title,
+                themeColor: card.titleColor || "#a67c52",
+                onSelectSingle: card.onAddToCart,
+                onSelectThreeSlot: card.onAddThreeSlotToCart,
+            });
+        } else {
+            card.onAddToCart?.();
+        }
     };
 
     // Render a single card
@@ -236,6 +250,14 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                 }} />
 
             </div>
+
+            {/* Slot Picker Modal */}
+            {slotPickerConfig && (
+                <SlotPickerModal
+                    config={slotPickerConfig}
+                    onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
 
         </>
     );

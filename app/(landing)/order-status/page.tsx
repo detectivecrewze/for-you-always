@@ -34,7 +34,7 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
     
     const meta = {
         ...baseMeta,
-        name: isThreeSlot ? `${baseMeta.name} (3 Slot)` : baseMeta.name,
+        name: isThreeSlot ? `${baseMeta.name} (3 Gift)` : baseMeta.name,
     };
 
     const isLoves = baseKey === "loves";
