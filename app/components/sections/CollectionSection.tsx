@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -79,20 +79,6 @@ export default function CollectionSection() {
                                 onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
                             },
                             {
-                                badgeText: "#1 Terlaris",
-                                badgeColor: "#e91e63",
-                                badgeVariant: "solid",
-                                imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
-                                price: "Rp 15.000",
-                                title: "Voices Gift",
-                                titleColor: "#a67c52",
-                                description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
-                                href: "/catalog/voices",
-                                onAddToCart: () => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" }),
-                                isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 20000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })
-                            },
-                            {
                                 badgeText: "Popular",
                                 badgeColor: "#7a5438",
                                 badgeVariant: "solid",
@@ -105,6 +91,20 @@ export default function CollectionSection() {
                                 onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#7a5438" }),
                                 isThreeSlotEligible: true,
                                 onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 20000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
+                            },
+                            {
+                                badgeText: "#1 Terlaris",
+                                badgeColor: "#e91e63",
+                                badgeVariant: "solid",
+                                imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
+                                price: "Rp 15.000",
+                                title: "Voices Gift",
+                                titleColor: "#a67c52",
+                                description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
+                                href: "/catalog/voices",
+                                onAddToCart: () => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" }),
+                                isThreeSlotEligible: true,
+                                onAddThreeSlotToCart: () => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 20000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "Premium Bundle",

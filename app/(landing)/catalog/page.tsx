@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
@@ -21,6 +21,22 @@ const CATALOG_ITEMS = [
         href: "/catalog/memoria",
         occasions: ["Anniversary", "Birthday", "Crush", "LDR"],
         features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
+    },
+    {
+        badgeText: "Popular",
+        badgeColor: "#7a5438",
+        titleColor: "#7a5438",
+        imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+        title: "Letter Edition",
+        oldPrice: "Rp 25.000",
+        newPrice: "Rp 15.000",
+        id: "letter",
+        numericPrice: 15000,
+        hashtag: "#AESTHETIC",
+        soldCount: "2.1k+ terjual",
+        href: "/catalog/letter",
+        occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
+        features: ["3 Kuota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
     },
     {
         badgeText: "#1 Terlaris",
@@ -69,22 +85,6 @@ const CATALOG_ITEMS = [
         href: "/catalog/invitation",
         occasions: ["Crush", "LDR", "Anniversary", "Birthday"],
         features: ["3 Kuota Invitation Sekaligus", "Pilih Tanggal & Aktivitas Kencan", "Tiket Digital Interaktif"]
-    },
-    {
-        badgeText: "Popular",
-        badgeColor: "#7a5438",
-        titleColor: "#7a5438",
-        imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
-        title: "Letter Edition",
-        oldPrice: "Rp 25.000",
-        newPrice: "Rp 15.000",
-        id: "letter",
-        numericPrice: 15000,
-        hashtag: "#AESTHETIC",
-        soldCount: "2.1k+ terjual",
-        href: "/catalog/letter",
-        occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
-        features: ["3 Kuota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
     },
     {
         badgeText: "10 Rooms",
