@@ -22,7 +22,7 @@ export default function HowItWorksSection() {
 
     return (
         <section id="cara-kerja" style={{ position: "relative", zIndex: 1, padding: "40px 0 120px", background: "#f2ebe1", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.035 }} />
+            <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAAAAP///8BfO6bBAAAACHRSTlMAAAAAAABgAAAFhO91AAAASElEQVQ4y2P4//8/w38GZGAwMDCQAQYGBgYGhgZGBmEGBiaGYoZGBoZShoZShgZGBmGGAUaGhkbGBgbGBkaGhoZGBoZShoZShoYGhgZhhgZGBsaGRgaG/wz8gAABAAAB//8=")', backgroundRepeat: "repeat", opacity: 0.035 }} />
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)", position: "relative", zIndex: 1 }}>
 
                 <AnimatedSection>
