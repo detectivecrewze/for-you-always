@@ -341,6 +341,7 @@ export function LandscapeProductCard({
                                 src={(activeFallbackImgSrc || mediaSrc) as string}
                                 alt={title}
                                 fill
+                                unoptimized={true}
                                 priority={priority}
                                 loading={priority ? undefined : "lazy"}
                                 style={{ objectFit: "cover", display: "block", aspectRatio: "16/9", animation: priority ? "none" : "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}

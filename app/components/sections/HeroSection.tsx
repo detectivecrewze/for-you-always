@@ -3,7 +3,7 @@ import { preload } from "react-dom";
 import { AnimatedSection } from "../LandscapeProductCard";
 
 export default function HeroSection() {
-    preload('/assets/favicon/hand-gift.webp', { as: 'image', fetchPriority: 'high' });
+    preload('https://cdn.for-you-always.my.id/1781807802981-yohlpk.gif', { as: 'image', fetchPriority: 'high' });
 
     return (
         <>
@@ -89,7 +89,7 @@ export default function HeroSection() {
                                     Efek fade digantikan oleh overlay <div> di bawah. */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src="/assets/favicon/hand-gift.webp" 
+                                    src="https://cdn.for-you-always.my.id/1781807802981-yohlpk.gif" 
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     fetchPriority="high"
