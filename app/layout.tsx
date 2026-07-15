@@ -21,17 +21,17 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://for-you-always.my.id"),
   alternates: { canonical: '/' },
   title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
-  description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
+  description: "Delapan kado unik untuk mengabadikan satu cerita. Memoria, Letter, Voices, Mixtape, Invitation, Arcade, Retro, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
   openGraph: {
     title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
-    description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
+    description: "Delapan kado unik untuk mengabadikan satu cerita. Memoria, Letter, Voices, Mixtape, Invitation, Arcade, Retro, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
     url: "https://for-you-always.my.id",
     siteName: "For you, Always.",
     images: [
       {
-        url: "https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif",
-        width: 800,
-        height: 1000,
+        url: "https://for-you-always.my.id/assets/opening_gate.png",
+        width: 1200,
+        height: 630,
         alt: "For you, Always. — Digital Atelier Preview",
       },
     ],
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
-    description: "Tiga cara berbeda untuk mengabadikan satu cerita. Voices, Arcade, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
-    images: ["https://bpahzgewtgfjwobjrpdk.supabase.co/storage/v1/object/public/assets/voices.gif"],
+    description: "Delapan kado unik untuk mengabadikan satu cerita. Memoria, Letter, Voices, Mixtape, Invitation, Arcade, Retro, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
+    images: ["https://for-you-always.my.id/assets/opening_gate.png"],
   },
   icons: {
     icon: [
