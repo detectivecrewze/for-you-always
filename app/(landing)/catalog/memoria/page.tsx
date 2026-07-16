@@ -8,6 +8,7 @@ import Link from "next/link";
 
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
+    const isMemoriaDelay = new Date().getTime() < new Date("2026-07-18T00:00:00+07:00").getTime();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -56,6 +57,11 @@ export default function ProductCatalogPage() {
                 `}</style>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                        {isMemoriaDelay && (
+                            <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "16px 20px", borderRadius: "16px", marginBottom: "30px", color: "#856404", fontSize: 14, fontFamily: "var(--font-sans)", lineHeight: 1.6, boxShadow: "0 4px 12px rgba(133,100,4,0.05)" }}>
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                            </div>
+                        )}
                         <LandscapeProductCard
                         label={
                             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>

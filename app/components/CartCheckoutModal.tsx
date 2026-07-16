@@ -14,6 +14,9 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
     const [closing, setClosing] = useState(false);
+    
+    const hasMemoria = items.some(item => item.id === "loves");
+    const isMemoriaDelay = new Date().getTime() < new Date("2026-07-18T00:00:00+07:00").getTime();
 
     const handleClose = () => {
         setClosing(true);
@@ -148,6 +151,12 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                                 : "Akses kado digital akan dikirim otomatis ke email kamu."}
                         </p>
 
+                        {hasMemoria && isMemoriaDelay && (
+                            <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                            </div>
+                        )}
+
                         <form onSubmit={handleNext} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
                             {[
                                 { label: "Nama Panggilan", type: "text", key: "firstName", placeholder: "Contoh: Budi", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
@@ -204,6 +213,12 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                         <p style={{ fontSize: 13, color: "#8b7e75", margin: "0 0 22px", fontFamily: "var(--font-sans)" }}>
                             Pastikan detail pesanan dan email kamu sudah benar.
                         </p>
+
+                        {hasMemoria && (
+                            <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                            </div>
+                        )}
 
                         <div style={{
                             background: "rgba(250,247,242,0.8)",
