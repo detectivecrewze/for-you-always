@@ -153,7 +153,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
 
                         {hasMemoria && isMemoriaDelay && (
                             <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (17 Juli), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
                             </div>
                         )}
 
@@ -216,7 +216,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
 
                         {hasMemoria && (
                             <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (17 Juli), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
                             </div>
                         )}
 

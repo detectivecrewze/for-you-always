@@ -59,7 +59,7 @@ export default function ProductCatalogPage() {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         {isMemoriaDelay && (
                             <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "16px 20px", borderRadius: "16px", marginBottom: "30px", color: "#856404", fontSize: 14, fontFamily: "var(--font-sans)", lineHeight: 1.6, boxShadow: "0 4px 12px rgba(133,100,4,0.05)" }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (17 Juli), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
                             </div>
                         )}
                         <LandscapeProductCard
