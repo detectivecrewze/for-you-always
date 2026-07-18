@@ -87,6 +87,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (typeof window !== 'undefined' && (window as any).ttq) {
             (window as any).ttq.track('AddToCart', {
                 content_type: 'product',
+                content_id: item.id,
                 content_name: item.title,
                 value: item.numericPrice,
                 currency: 'IDR'

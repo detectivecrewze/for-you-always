@@ -66,6 +66,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                 if (typeof window !== 'undefined' && (window as any).ttq) {
                     (window as any).ttq.track('CompletePayment', {
                         content_type: 'product_group',
+                        content_id: items.map(i => i.id).join(', '),
                         content_name: items.map(i => i.title).join(', '),
                         value: cartTotal,
                         currency: 'IDR'
