@@ -214,6 +214,7 @@ export default function CartDrawer() {
                                                 src={group.themeImgSrc} 
                                                 alt={group.title}
                                                 fill
+                                                unoptimized={true}
                                                 style={{ objectFit: "cover" }}
                                             />
                                         )}
