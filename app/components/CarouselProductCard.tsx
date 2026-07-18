@@ -89,6 +89,8 @@ export default function CarouselProductCard({
                         src={imageSrc}
                         alt={title}
                         fill
+                        unoptimized={true}
+                        loading="lazy"
                         draggable={false}
                         style={{
                             objectFit: "cover",

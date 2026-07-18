@@ -77,6 +77,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     src={card.imageSrc}
                     alt={card.title}
                     fill
+                    unoptimized={true}
                     draggable={false}
                     loading="lazy"
                     style={{

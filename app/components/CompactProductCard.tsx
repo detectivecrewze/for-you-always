@@ -107,6 +107,7 @@ export default function CompactProductCard({
                     src={imageSrc} 
                     alt={title} 
                     fill
+                    unoptimized={true}
                     priority={priority}
                     loading={priority ? undefined : "lazy"}
                     style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
