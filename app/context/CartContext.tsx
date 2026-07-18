@@ -83,6 +83,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         };
         setItems(prev => [...prev, itemWithUniqueId]);
         setLastAdded(itemWithUniqueId);
+        
+        if (typeof window !== 'undefined' && (window as any).ttq) {
+            (window as any).ttq.track('AddToCart', {
+                content_type: 'product',
+                content_name: item.title,
+                value: item.numericPrice,
+                currency: 'IDR'
+            });
+        }
+
         // Clear lastAdded after toast duration
         setTimeout(() => setLastAdded(null), 3500);
     }, []);

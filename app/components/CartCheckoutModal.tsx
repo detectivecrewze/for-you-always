@@ -63,6 +63,14 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                     item_count: items.length,
                     products: items.map(i => i.title),
                 });
+                if (typeof window !== 'undefined' && (window as any).ttq) {
+                    (window as any).ttq.track('CompletePayment', {
+                        content_type: 'product_group',
+                        content_name: items.map(i => i.title).join(', '),
+                        value: cartTotal,
+                        currency: 'IDR'
+                    });
+                }
                 handleClose();
                 clearCart();
                 setIsLoading(false);
