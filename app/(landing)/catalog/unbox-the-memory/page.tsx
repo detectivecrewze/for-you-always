@@ -8,38 +8,9 @@ import Navbar from "../../../components/Navbar";
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
 
-// SPRING ANIMATED SECTION COMPONENT (MOBILE & PERFORMANCE OPTIMIZED)
-function SpringAnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-    const [isVisible, setIsVisible] = useState(true);
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => setIsVisible(true), delay);
-                    observer.disconnect(); // Unobserve to save CPU/GPU on mobile
-                }
-            },
-            { threshold: 0.05, rootMargin: "0px 0px -30px 0px" }
-        );
-        if (ref.current) observer.observe(ref.current);
-        return () => observer.disconnect();
-    }, [delay]);
-
-    return (
-        <div
-            ref={ref}
-            style={{
-                transition: `opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "translateY(0) scale(1)" : "translateY(24px) scale(0.975)",
-                willChange: "opacity, transform"
-            }}
-        >
-            {children}
-        </div>
-    );
+// ULTRA-LIGHT SECTION WRAPPER (MAXIMUM MOBILE PERFORMANCE)
+function SpringAnimatedSection({ children }: { children: React.ReactNode; delay?: number }) {
+    return <>{children}</>;
 }
 
 export default function UnboxTheMemoryPage() {
@@ -484,9 +455,8 @@ export default function UnboxTheMemoryPage() {
                     ].map((card, idx) => (
                         <SpringAnimatedSection key={idx} delay={idx * 100}>
                             <div style={{
-                                backgroundColor: "rgba(255,255,255,0.7)",
-                                backdropFilter: "blur(20px)",
-                                border: "1px solid rgba(255,255,255,0.8)",
+                                backgroundColor: "#ffffff",
+                                border: "1px solid rgba(205,171,143,0.25)",
                                 borderRadius: "24px",
                                 overflow: "hidden",
                                 boxShadow: "0 10px 30px -10px rgba(56,42,36,0.06)",
@@ -598,10 +568,9 @@ export default function UnboxTheMemoryPage() {
                             <SpringAnimatedSection key={i} delay={i * 120}>
                                 <div style={{
                                     padding: "44px 36px",
-                                    background: i === 1 ? "#1d1816" : "rgba(255,255,255,0.7)",
-                                    backdropFilter: "blur(20px)",
+                                    background: i === 1 ? "#1d1816" : "#ffffff",
                                     borderRadius: "24px",
-                                    border: i === 1 ? "1px solid rgba(205,171,143,0.2)" : "1px solid rgba(255,255,255,0.8)",
+                                    border: i === 1 ? "1px solid rgba(205,171,143,0.2)" : "1px solid rgba(205,171,143,0.25)",
                                     boxShadow: i === 1 ? "0 25px 50px -12px rgba(29,24,22,0.4)" : "0 8px 30px -8px rgba(29,24,22,0.04)",
                                     height: "100%"
                                 }}>
@@ -852,32 +821,22 @@ export default function UnboxTheMemoryPage() {
                                     position: "relative",
                                     overflow: "hidden"
                                 }}>
-                                    {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((expKey) => {
-                                        const exp = digitalExperiences[expKey];
-                                        const isActive = expKey === selectedDigitalExperience;
-                                        return (
-                                            <Image
-                                                key={expKey}
-                                                src={exp.imageSrc}
-                                                alt={`Preview ${exp.title}`}
-                                                width={480}
-                                                height={320}
-                                                priority={expKey === "memoria" || expKey === "letter"}
-                                                style={{
-                                                    position: "absolute",
-                                                    inset: 0,
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    objectFit: "cover",
-                                                    display: "block",
-                                                    opacity: isActive ? 1 : 0,
-                                                    transform: isActive ? "scale(1)" : "scale(1.03)",
-                                                    transition: "opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
-                                                    pointerEvents: isActive ? "auto" : "none"
-                                                }}
-                                            />
-                                        );
-                                    })}
+                                    <Image
+                                         key={selectedDigitalExperience}
+                                         src={currentExp.imageSrc}
+                                         alt={`Preview ${currentExp.title}`}
+                                         width={480}
+                                         height={320}
+                                         priority
+                                         style={{
+                                             position: "absolute",
+                                             inset: 0,
+                                             width: "100%",
+                                             height: "100%",
+                                             objectFit: "cover",
+                                             display: "block"
+                                         }}
+                                    />
                                     {/* TOP-RIGHT SCANNER BADGE */}
                                     <div style={{
                                         position: "absolute",
@@ -984,9 +943,8 @@ export default function UnboxTheMemoryPage() {
                             <SpringAnimatedSection key={i} delay={i * 70}>
                                 <div
                                     style={{
-                                        backgroundColor: isOpen ? "#ffffff" : "rgba(255,255,255,0.65)",
-                                        backdropFilter: "blur(16px)",
-                                        border: isOpen ? "1.5px solid rgba(205,171,143,0.5)" : "1px solid rgba(255,255,255,0.8)",
+                                        backgroundColor: isOpen ? "#ffffff" : "#fdfbf7",
+                                        border: isOpen ? "1.5px solid rgba(205,171,143,0.5)" : "1px solid rgba(205,171,143,0.25)",
                                         borderRadius: "20px",
                                         overflow: "hidden",
                                         boxShadow: isOpen ? "0 12px 30px -10px rgba(56,42,36,0.08)" : "0 4px 15px -5px rgba(56,42,36,0.02)",
