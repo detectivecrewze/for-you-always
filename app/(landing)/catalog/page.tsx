@@ -10,7 +10,7 @@ import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerMo
 // Konstanta statis di luar komponen — tidak dibuat ulang setiap render
 const CATALOG_ITEMS = [
     {
-        badgeText: "Physical + Digital 🎁",
+        badgeText: "Physical + Digital",
         badgeColor: "#a67c52",
         titleColor: "#382a24",
         imageSrc: "/assets/unbox_hampers_hero.jpg",
@@ -19,7 +19,7 @@ const CATALOG_ITEMS = [
         id: "unbox-the-memory",
         numericPrice: 0,
         href: "/catalog/unbox-the-memory",
-        occasions: ["Anniversary", "Birthday", "LDR", "Special Gift"],
+        occasions: ["Anniversary", "Birthday", "LDR"],
         features: ["Physical Gift Box Hampers", "Kartu QR Code Eksklusif", "Kado Digital Interaktif"]
     },
     {
@@ -166,6 +166,8 @@ const CATALOG_ITEMS = [
 
 const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
 
+const SHOPEE_URL = "https://shopee.co.id";
+
 export default function CatalogPage() {
     const { addToCart } = useCart();
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
@@ -175,6 +177,11 @@ export default function CatalogPage() {
     }, []);
 
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string }) => {
+        if (item.id === "unbox-the-memory") {
+            window.open(SHOPEE_URL, "_blank");
+            return;
+        }
+
         if (THREE_SLOT_IDS.has(item.id)) {
             setSlotPickerConfig({
                 productId: item.id,
@@ -245,10 +252,10 @@ export default function CatalogPage() {
                     gap: 32 
                 }}>
                 {CATALOG_ITEMS.map((item, idx) => (
-                    <AnimatedSection key={item.id} delay={idx * 100} priority={idx < 2}>
+                    <AnimatedSection key={item.id} delay={idx * 100} priority={idx < 2} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
                         <CompactProductCard
                             {...item}
-                            onAddToCart={item.id === "unbox-the-memory" ? undefined : () => handlePesan(item)}
+                            onAddToCart={() => handlePesan(item)}
                         />
                     </AnimatedSection>
                 ))}

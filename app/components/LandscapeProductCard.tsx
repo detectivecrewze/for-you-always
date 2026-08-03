@@ -9,10 +9,14 @@ export function AnimatedSection({
     children,
     delay = 0,
     priority = false,
+    className = "",
+    style = {},
 }: {
     children: React.ReactNode;
     delay?: number;
     priority?: boolean;
+    className?: string;
+    style?: React.CSSProperties;
 }) {
     const [isVisible, setIsVisible] = useState(priority);
     const ref = useRef<HTMLDivElement>(null);
@@ -34,10 +38,12 @@ export function AnimatedSection({
     return (
         <div
             ref={ref}
+            className={className}
             style={{
                 transition: priority ? "none" : `all 0.9s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`,
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? "translateY(0)" : "translateY(36px)",
+                ...style,
             }}
         >
             {children}

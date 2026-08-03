@@ -98,6 +98,7 @@ export default function CompactProductCard({
             padding: 12,
             display: "flex",
             flexDirection: "column",
+            height: "100%",
         } as React.CSSProperties}
         onMouseEnter={handleCardMouseEnter}
         onMouseLeave={handleCardMouseLeave}>
@@ -172,7 +173,7 @@ export default function CompactProductCard({
             </div>
 
             {/* Content Container */}
-            <div style={{ padding: "16px 4px 4px 4px", display: "flex", flexDirection: "column", gap: 20, position: "relative", zIndex: 1 }}>
+            <div style={{ padding: "16px 4px 4px 4px", display: "flex", flexDirection: "column", justifyContent: "space-between", flex: 1, gap: 20, position: "relative", zIndex: 1 }}>
                 {/* Title and Prices */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     {/* Left Column */}

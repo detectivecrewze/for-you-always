@@ -118,7 +118,7 @@ export default function UnboxTheMemoryPage() {
             badge: "10 Rooms Game",
             color: "#5c8c5c",
             previewUrl: "/catalog/arcade",
-            imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png"
+            imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
         },
         wrapped: {
             title: "Wrapped Edition",
@@ -192,167 +192,25 @@ export default function UnboxTheMemoryPage() {
                     </Link>
                 </div>
 
+                {/* HERO 2-COLUMN LAYOUT: PHOTO ON LEFT, TEXT ON RIGHT */}
                 <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                    gap: "56px",
-                    alignItems: "center"
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "56px"
                 }}>
-                    
-                    {/* LEFT COLUMN: HERO HEADLINE & CTA */}
-                    <div>
-                        <div style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            backgroundColor: "rgba(205,171,143,0.08)",
-                            border: "1.2px solid rgba(205,171,143,0.25)",
-                            color: "#a88365",
-                            fontSize: "0.8rem",
-                            fontWeight: 700,
-                            padding: "6px 18px",
-                            borderRadius: "999px",
-                            marginBottom: "28px",
-                            letterSpacing: "0.2em",
-                            textTransform: "uppercase"
-                        }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                            <span>Physical Hampers + Digital Experience</span>
-                        </div>
-
-                        <h1 style={{
-                            fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
-                            fontSize: "clamp(2.8rem, 5.5vw, 4.5rem)",
-                            fontWeight: 400,
-                            lineHeight: 1.05,
-                            color: "#382a24",
-                            marginBottom: "20px",
-                            letterSpacing: "-0.03em"
-                        }}>
-                            Sentuhan Fisik,<br />
-                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Keajaiban Digital.</span>
-                        </h1>
-
-                        <p style={{
-                            fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
-                            color: "#6e5c53",
-                            lineHeight: 1.7,
-                            marginBottom: "36px",
-                            fontWeight: 400,
-                            maxWidth: "520px"
-                        }}>
-                            Kemasan gift box hampers eksklusif beraroma hangat khas atelier, dipadukan dengan kartu QR stempel emas yang menyimpan surat, musik, dan memori pribadi di dalamnya.
-                        </p>
-
-                        {/* CTA BUTTONS */}
-                        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
-                            <a
-                                href={SHOPEE_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "12px",
-                                    backgroundColor: "#1d1816",
-                                    color: "#faf7f2",
-                                    fontWeight: 600,
-                                    fontSize: "0.98rem",
-                                    padding: "16px 32px",
-                                    borderRadius: "14px",
-                                    textDecoration: "none",
-                                    border: "1px solid rgba(205,171,143,0.3)",
-                                    boxShadow: "0 14px 30px -8px rgba(29,24,22,0.35)",
-                                    transition: "all 0.3s ease",
-                                    cursor: "pointer"
-                                }}
-                                onMouseOver={(e) => {
-                                    e.currentTarget.style.transform = "translateY(-2px)";
-                                    e.currentTarget.style.backgroundColor = "#2a221f";
-                                    e.currentTarget.style.boxShadow = "0 18px 36px -8px rgba(29,24,22,0.5)";
-                                }}
-                                onMouseOut={(e) => {
-                                    e.currentTarget.style.transform = "translateY(0)";
-                                    e.currentTarget.style.backgroundColor = "#1d1816";
-                                    e.currentTarget.style.boxShadow = "0 14px 30px -8px rgba(29,24,22,0.35)";
-                                }}
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                </svg>
-                                <span>Pesan via Shopee Official</span>
-                            </a>
-
-                            <a
-                                href="#cara-kerja"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    backgroundColor: "rgba(255,255,255,0.7)",
-                                    backdropFilter: "blur(12px)",
-                                    color: "#382a24",
-                                    border: "1px solid rgba(205,171,143,0.25)",
-                                    fontWeight: 600,
-                                    fontSize: "0.95rem",
-                                    padding: "16px 26px",
-                                    borderRadius: "14px",
-                                    textDecoration: "none",
-                                    transition: "all 0.3s ease"
-                                }}
-                                onMouseOver={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#ffffff";
-                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.5)";
-                                }}
-                                onMouseOut={(e) => {
-                                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.7)";
-                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.25)";
-                                }}
-                            >
-                                <span>Pelajari Alur Unboxing</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <polyline points="19 12 12 19 5 12"></polyline>
-                                </svg>
-                            </a>
-                        </div>
-
-                        {/* TRUST BADGES ROW */}
-                        <div style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "20px",
-                            paddingTop: "24px",
-                            borderTop: "1px solid rgba(205,171,143,0.18)"
-                        }}>
-                            {[
-                                { title: "Gift Box Hampers Eksklusif" },
-                                { title: "Kartu QR Stempel Emas" },
-                                { title: "Akses Web Tanpa App" },
-                                { title: "Pengiriman Garansi Safepack" }
-                            ].map((item, idx) => (
-                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "#6e5c53", fontWeight: 500 }}>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span>{item.title}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* RIGHT COLUMN: HERO PRODUCT SHOWCASE IMAGE CARD */}
-                    <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD */}
+                    <div style={{
+                        flex: "1 1 400px",
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center"
+                    }}>
                         <div style={{
                             position: "relative",
                             width: "100%",
-                            maxWidth: "460px",
+                            maxWidth: "480px",
                             borderRadius: "28px",
                             overflow: "hidden",
                             border: "1px solid rgba(255,255,255,0.9)",
@@ -373,35 +231,158 @@ export default function UnboxTheMemoryPage() {
                                 }}
                                 priority
                             />
-                            
-                            {/* COMPACT FLOATING GLASS PILL BADGE AT TOP */}
-                            <div style={{
-                                position: "absolute",
-                                top: "18px",
-                                left: "18px",
-                                padding: "8px 16px",
-                                background: "rgba(29,24,22,0.65)",
-                                backdropFilter: "blur(14px)",
-                                border: "1px solid rgba(205,171,143,0.3)",
-                                borderRadius: "999px",
-                                color: "#faf7f2",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "8px",
-                                fontSize: "0.78rem",
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                boxShadow: "0 8px 20px rgba(0,0,0,0.15)"
-                            }}>
-                                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#cdab8f" }} />
-                                <span style={{ color: "#ffffff" }}>Physical Hampers</span>
-                                <span style={{ color: "rgba(205,171,143,0.6)" }}>•</span>
-                                <span style={{ color: "#cdab8f" }}>Gold QR Card</span>
-                            </div>
                         </div>
                     </div>
 
+                    {/* RIGHT COLUMN: BADGE, HEADLINE, SUBTITLE & CTAS */}
+                    <div style={{ flex: "1 1 480px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                        
+                        {/* 1. BREADCRUMB BADGE */}
+                        <div style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            backgroundColor: "rgba(205,171,143,0.08)",
+                            border: "1.2px solid rgba(205,171,143,0.25)",
+                            color: "#a88365",
+                            fontSize: "0.8rem",
+                            fontWeight: 700,
+                            padding: "6px 18px",
+                            borderRadius: "999px",
+                            marginBottom: "24px",
+                            letterSpacing: "0.2em",
+                            textTransform: "uppercase"
+                        }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                            <span>Physical Hampers + Digital Experience</span>
+                        </div>
+
+                        {/* 2. HEADLINE */}
+                        <h1 style={{
+                            fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
+                            fontSize: "clamp(2.5rem, 5vw, 4.2rem)",
+                            fontWeight: 400,
+                            lineHeight: 1.08,
+                            color: "#382a24",
+                            marginBottom: "20px",
+                            letterSpacing: "-0.03em",
+                            textAlign: "left"
+                        }}>
+                            Sentuhan Fisik,<br />
+                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Keajaiban Digital.</span>
+                        </h1>
+
+                        {/* 3. SUBTITLE PARAGRAPH */}
+                        <p style={{
+                            fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
+                            color: "#6e5c53",
+                            lineHeight: 1.7,
+                            marginBottom: "32px",
+                            fontWeight: 400,
+                            maxWidth: "520px",
+                            textAlign: "left"
+                        }}>
+                            Kemasan gift box hampers eksklusif beraroma hangat khas atelier, dipadukan dengan kartu QR code yang menyimpan surat, musik, dan memori pribadi di dalamnya.
+                        </p>
+
+                        {/* 4. CTA BUTTONS */}
+                        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
+                            <a
+                                href={SHOPEE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    backgroundColor: "#382a24",
+                                    color: "#faf7f2",
+                                    fontWeight: 700,
+                                    fontSize: "0.95rem",
+                                    padding: "16px 36px",
+                                    borderRadius: "14px",
+                                    textDecoration: "none",
+                                    boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
+                                    transition: "all 0.3s ease"
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                    e.currentTarget.style.backgroundColor = "#523e35";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.backgroundColor = "#382a24";
+                                }}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                                <span>Pesan via Shopee Official</span>
+                            </a>
+
+                            <a
+                                href="#cara-kerja"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    color: "#6e5c53",
+                                    fontWeight: 600,
+                                    fontSize: "0.95rem",
+                                    padding: "16px 28px",
+                                    borderRadius: "14px",
+                                    textDecoration: "none",
+                                    backgroundColor: "rgba(255,255,255,0.6)",
+                                    border: "1px solid rgba(205,171,143,0.3)",
+                                    transition: "all 0.3s ease"
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.color = "#382a24";
+                                    e.currentTarget.style.backgroundColor = "#ffffff";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.color = "#6e5c53";
+                                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.6)";
+                                }}
+                            >
+                                <span>Pelajari Alur Unboxing</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+
+                        {/* 5. TRUST BADGES ROW */}
+                        <div style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "20px",
+                            paddingTop: "24px",
+                            borderTop: "1px solid rgba(205,171,143,0.18)",
+                            width: "100%"
+                        }}>
+                            {[
+                                { title: "Gift Box Hampers Eksklusif" },
+                                { title: "Kartu QR Code Custom" },
+                                { title: "Akses Web Tanpa App" },
+                                { title: "Pengiriman Garansi Safepack" }
+                            ].map((item, idx) => (
+                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "#6e5c53", fontWeight: 500 }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    <span>{item.title}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </section>
 
