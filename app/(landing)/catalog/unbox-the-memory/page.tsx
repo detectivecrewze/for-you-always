@@ -3,14 +3,24 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Navbar from "../../../components/Navbar";
 
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
 
 export default function UnboxTheMemoryPage() {
-    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"letter" | "voices" | "mixtape" | "memoria">("letter");
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("memoria");
 
     const digitalExperiences = {
+        memoria: {
+            title: "Memoria Premium",
+            subtitle: "Kisah Cinta Sinematik Eksklusif",
+            desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
+            badge: "Ultra Premium",
+            color: "#d4af37",
+            previewUrl: "/catalog/memoria",
+            imageSrc: "/assets/opening_gate.png"
+        },
         letter: {
             title: "Letter Edition",
             subtitle: "Surat Digital & Amplop Interaktif",
@@ -19,6 +29,15 @@ export default function UnboxTheMemoryPage() {
             color: "#a67c52",
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
+        },
+        retro: {
+            title: "Retro Edition",
+            subtitle: "Nostalgia Windows 98",
+            desc: "Kado bertema tampilan desktop Windows 98 klasik dengan 5 tahapan kejutan interaktif yang unik.",
+            badge: "Nostalgic",
+            color: "#008689",
+            previewUrl: "/catalog/retro",
+            imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
         },
         voices: {
             title: "Voices Gift",
@@ -38,20 +57,41 @@ export default function UnboxTheMemoryPage() {
             previewUrl: "/catalog/mixtape",
             imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
         },
-        memoria: {
-            title: "Memoria Premium",
-            subtitle: "Kisah Cinta Sinematik Eksklusif",
-            desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
-            badge: "Ultra Premium",
-            color: "#d4af37",
-            previewUrl: "/catalog/memoria",
-            imageSrc: "/assets/opening_gate.png"
+        invitation: {
+            title: "Invitation Edition",
+            subtitle: "Undangan Kencan Digital Interaktif",
+            desc: "Tiket undangan kencan spesial dengan pilihan aktivitas interaktif, lokasi, dan tanggal kencan manis.",
+            badge: "New Release ✨",
+            color: "#e8789a",
+            previewUrl: "/catalog/invitation",
+            imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
+        },
+        arcade: {
+            title: "Arcade Edition",
+            subtitle: "Game 10 Ruangan Kenangan",
+            desc: "Petualangan mini game retro interaktif berbasis 10 ruangan kenangan yang menyenangkan untuk dimainkan berdua.",
+            badge: "10 Rooms Game",
+            color: "#5c8c5c",
+            previewUrl: "/catalog/arcade",
+            imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png"
+        },
+        wrapped: {
+            title: "Wrapped Edition",
+            subtitle: "Recap 6 Halaman Kenangan",
+            desc: "Rangkuman kisah perjalanan romantis ala Spotify Wrapped yang dikemas dalam 6 halaman kenangan interaktif.",
+            badge: "Storytelling",
+            color: "#c9184a",
+            previewUrl: "/catalog/wrapped",
+            imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
         }
     };
 
     return (
         <div style={{ backgroundColor: "#faf7f2", color: "#382a24", minHeight: "100vh", fontFamily: "var(--font-sans, system-ui, sans-serif)", position: "relative", overflowX: "hidden" }}>
             
+            {/* GLOBAL FLOATING NAVBAR */}
+            <Navbar />
+
             {/* AMBIENT BACKGROUND BLOBS */}
             <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.08)", filter: "blur(130px)" }} />
@@ -62,13 +102,51 @@ export default function UnboxTheMemoryPage() {
             <section style={{
                 position: "relative",
                 zIndex: 1,
-                paddingTop: "clamp(100px, 12vh, 140px)",
+                paddingTop: "clamp(110px, 14vh, 150px)",
                 paddingBottom: "clamp(60px, 8vh, 90px)",
                 maxWidth: "1160px",
                 margin: "0 auto",
                 paddingLeft: "24px",
                 paddingRight: "24px"
             }}>
+                {/* BREADCRUMB BACK BUTTON */}
+                <div style={{ marginBottom: "24px" }}>
+                    <Link
+                        href="/catalog"
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            color: "#6e5c53",
+                            fontSize: "0.85rem",
+                            fontWeight: 600,
+                            textDecoration: "none",
+                            padding: "6px 14px",
+                            borderRadius: "999px",
+                            backgroundColor: "rgba(255,255,255,0.6)",
+                            border: "1px solid rgba(205,171,143,0.25)",
+                            backdropFilter: "blur(8px)",
+                            transition: "all 0.2s ease"
+                        }}
+                        onMouseEnter={e => {
+                            e.currentTarget.style.color = "#a67c52";
+                            e.currentTarget.style.backgroundColor = "#ffffff";
+                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.5)";
+                        }}
+                        onMouseLeave={e => {
+                            e.currentTarget.style.color = "#6e5c53";
+                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.6)";
+                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.25)";
+                        }}
+                    >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span>Kembali ke Katalog Produk</span>
+                    </Link>
+                </div>
+
                 <div style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",

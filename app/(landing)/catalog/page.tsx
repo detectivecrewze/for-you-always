@@ -13,7 +13,7 @@ const CATALOG_ITEMS = [
         badgeText: "Physical + Digital 🎁",
         badgeColor: "#a67c52",
         titleColor: "#382a24",
-        imageSrc: "/assets/opening_gate.png",
+        imageSrc: "/assets/unbox_hampers_hero.jpg",
         title: "Unbox the Memory",
         newPrice: "Via Shopee",
         id: "unbox-the-memory",
@@ -248,8 +248,7 @@ export default function CatalogPage() {
                     <AnimatedSection key={item.id} delay={idx * 100} priority={idx < 2}>
                         <CompactProductCard
                             {...item}
-                            priority={idx < 2}
-                            onAddToCart={() => handlePesan(item)}
+                            onAddToCart={item.id === "unbox-the-memory" ? undefined : () => handlePesan(item)}
                         />
                     </AnimatedSection>
                 ))}

@@ -236,8 +236,14 @@ export default function CompactProductCard({
                                 <line x1="7" y1="7" x2="7.01" y2="7" />
                             </svg>
                             <span>
-                                <span style={{ fontSize: 10, fontWeight: 600, color: "#8b7e75", marginRight: 2 }}>Rp</span>
-                                {newPrice.replace('Rp ', '')}
+                                {newPrice.includes('Rp') ? (
+                                    <>
+                                        <span style={{ fontSize: 10, fontWeight: 600, color: "#8b7e75", marginRight: 2 }}>Rp</span>
+                                        {newPrice.replace('Rp ', '')}
+                                    </>
+                                ) : (
+                                    newPrice
+                                )}
                             </span>
                         </div>
                     </div>
@@ -266,37 +272,41 @@ export default function CompactProductCard({
                 <div style={{ display: "flex", gap: 8 }}>
                     <Link href={href} style={{
                         flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
-                        background: "#faf7f2", color: "#382a24",
+                        background: onAddToCart ? "#faf7f2" : titleColor,
+                        color: onAddToCart ? "#382a24" : "#faf7f2",
                         fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
                         textDecoration: "none", transition: "all 0.2s ease",
-                        border: "1px solid rgba(205,171,143,0.2)",
+                        border: onAddToCart ? "1px solid rgba(205,171,143,0.2)" : "none",
+                        boxShadow: onAddToCart ? "none" : `0 4px 12px ${titleColor}33`,
                         letterSpacing: "0.05em", textTransform: "uppercase",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 6
                     }}
-                    onMouseEnter={handleLihatMouseEnter}
-                    onMouseLeave={handleLihatMouseLeave}>
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    onMouseEnter={onAddToCart ? handleLihatMouseEnter : undefined}
+                    onMouseLeave={onAddToCart ? handleLihatMouseLeave : undefined}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M14 5h5v5"/><path d="M10 14L19 5"/><path d="M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>
                         </svg>
                         Lihat
                     </Link>
                     
-                    <button onClick={onAddToCart} style={{
-                        flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
-                        background: titleColor, color: "#faf7f2",
-                        fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
-                        border: "none", cursor: "pointer", transition: "all 0.2s ease",
-                        boxShadow: `0 4px 12px ${titleColor}33`,
-                        letterSpacing: "0.05em", textTransform: "uppercase",
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6
-                    }}
-                    onMouseEnter={handlePesanMouseEnter}
-                    onMouseLeave={handlePesanMouseLeave}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        Pesan
-                    </button>
+                    {onAddToCart && (
+                        <button onClick={onAddToCart} style={{
+                            flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
+                            background: titleColor, color: "#faf7f2",
+                            fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
+                            border: "none", cursor: "pointer", transition: "all 0.2s ease",
+                            boxShadow: `0 4px 12px ${titleColor}33`,
+                            letterSpacing: "0.05em", textTransform: "uppercase",
+                            display: "flex", alignItems: "center", justifyContent: "center", gap: 6
+                        }}
+                        onMouseEnter={handlePesanMouseEnter}
+                        onMouseLeave={handlePesanMouseLeave}>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            Pesan
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
