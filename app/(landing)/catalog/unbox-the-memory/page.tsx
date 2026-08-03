@@ -10,7 +10,7 @@ const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat s
 
 // SPRING ANIMATED SECTION COMPONENT (MOBILE & PERFORMANCE OPTIMIZED)
 function SpringAnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

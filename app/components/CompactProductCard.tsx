@@ -280,7 +280,8 @@ export default function CompactProductCard({
                         border: onAddToCart ? "1px solid rgba(205,171,143,0.2)" : "none",
                         boxShadow: onAddToCart ? "none" : `0 4px 12px ${titleColor}33`,
                         letterSpacing: "0.05em", textTransform: "uppercase",
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                        touchAction: "manipulation"
                     }}
                     onMouseEnter={onAddToCart ? handleLihatMouseEnter : undefined}
                     onMouseLeave={onAddToCart ? handleLihatMouseLeave : undefined}>
