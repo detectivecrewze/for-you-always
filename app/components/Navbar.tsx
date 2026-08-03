@@ -21,12 +21,14 @@ export default function Navbar() {
     const links = [
         { label: "Home", href: "/" },
         { label: "Catalog", href: "/catalog" },
+        { label: "Unbox Box 🎁", href: "/catalog/unbox-the-memory" },
         { label: "Cara Kerja", href: "/#cara-kerja" },
         { label: "Testimoni", href: "/#testimoni" },
     ];
 
     const mobileLinks = [
         { label: "Catalog", href: "/catalog" },
+        { label: "Unbox the Memory 🎁", href: "/catalog/unbox-the-memory" },
         { label: "Cara Kerja", href: "/#cara-kerja" },
         { label: "Testimoni", href: "/#testimoni" },
         { label: "FAQ", href: "/#faq" },

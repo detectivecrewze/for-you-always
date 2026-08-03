@@ -133,43 +133,49 @@ initialSelectedIndex={2}           <- Tema mana yang aktif saat halaman pertama 
 
 ---
 
-### [pakasir-gateway/] — PAYMENT GATEWAY TERPUSAT (Cloudflare Worker)
-> Ini adalah otak pembayaran seluruh platform. Hati-hati saat mengubah.
+### [pakasir-gateway/] & [doku-gateway/] — PAYMENT GATEWAY TERPUSAT (Cloudflare Workers)
+> Platform ini mendukung dua payment gateway terpisah yang bisa diganti kapan saja.
 
-Deploy : Cloudflare Workers
-Stack  : Vanilla JS, Cloudflare D1 (SQLite serverless)
+Deploy Pakasir : `pakasir-gateway.detectivecrewze.workers.dev`
+Deploy DOKU    : `doku-gateway.detectivecrewze.workers.dev`
+Stack          : Vanilla JS, Cloudflare D1 (SQLite serverless)
+
+#### Skema Dual Payment Gateway & Branching Strategy:
+| Gateway | Branch Git di Valentine-Platform | Backend Worker | Status |
+|---|---|---|---|
+| **Pakasir** | `main` / `gateway/pakasir` | `pakasir-gateway` | Aktif (Live Default) |
+| **DOKU** | `gateway/doku` / `feat/doku-gateway` | `doku-gateway` | Production Ready |
+
+#### Cara Beralih Payment Gateway:
+- **Vercel Settings (Instan):** Di Vercel > Settings > Git > Ubah *Production Branch* ke `gateway/doku` untuk menggunakan DOKU, atau `gateway/pakasir` / `main` untuk Pakasir.
+- **Git Merge:** Merge branch `gateway/doku` ke `main` jika ingin DOKU permanen di live site.
 
 #### Cara Kerja Alur Pembayaran:
-1. User klik "Pesan" di Valentine-Platform
-2. `CheckoutModal.tsx` mengirim POST ke gateway endpoint
-3. Gateway menyimpan order ke Cloudflare D1, lalu redirect ke halaman bayar Pakasir
-4. Setelah bayar sukses, user diredirect ke `/order-status?order_id=xxx`
-5. Gateway men-generate magic link ke produk setelah konfirmasi pembayaran
+1. User klik "Pesan" di Valentine-Platform.
+2. `CartCheckoutModal.tsx` mengirim POST ke gateway endpoint yang aktif (`pakasir-gateway` atau `doku-gateway`).
+3. Gateway menyimpan order ke Cloudflare D1 (`orders_db`), lalu mengembalikan URL redirect bayar (Pakasir / DOKU Checkout).
+4. Setelah bayar sukses, Webhook Gateway dipanggil (`POST /api/confirm`), gateway memicu generator link produk & mengirimkan email akses.
+5. User diredirect ke `/order-status?order_id=xxx` untuk melihat status pesanan & link produk.
 
-#### Endpoint Utama (`src/index.js`):
+#### Endpoint Utama Gateway:
 | Endpoint | Fungsi |
 |---|---|
-| POST /api/checkout | Buat order baru -> redirect ke Pakasir |
-| POST /api/checkout-embedded | Checkout tanpa redirect halaman |
-| GET /api/order-status | Cek status pembayaran |
-| POST /api/confirm | Webhook konfirmasi dari Pakasir |
+| POST /api/checkout | Buat order baru -> redirect ke Payment Provider (Pakasir / DOKU) |
+| GET /api/order-status | Cek status pembayaran dari database D1 |
+| POST /api/confirm | Webhook konfirmasi status pembayaran dari Pakasir / DOKU |
 
-#### Worker Services yang Terhubung:
-| Binding | Service Name | Produk |
+#### Worker Services & API Integrasi Produk:
+| Binding / API | Service / Target | Produk |
 |---|---|---|
 | LETTER_WORKER | letter-edition | Letter Edition |
 | VOICES_WORKER | valentine-upload | Voices Gift |
 | ARCADE_WORKER | arcade-edition | Arcade Edition |
 | RETRO_WORKER | birthday-retro | Retro Edition |
 | WRAPPED_WORKER | loves-edition | Wrapped Edition |
+| HTTP API | `anniv.for-you-always.my.id` | Memoria (Loves) |
+| HTTP API | `mixtape.for-you-always.my.id` | Mixtape Edition |
+| HTTP API | `invitation.for-you-always.my.id` | Invitation Edition |
 
-> **⚠️ Catatan Penting — Dua Pola Integrasi:**
-> Mixtape, Invitation, dan Loves/Memoria **TIDAK menggunakan Worker binding** karena mereka di-host di Vercel (bukan Cloudflare Worker). Sebagai gantinya, gateway memanggil API route Next.js mereka via HTTP biasa:
-> - Mixtape → `https://mixtape.for-you-always.my.id/api/generate-link`
-> - Invitation → `https://invitation.for-you-always.my.id/api/generate-link`
-> - Loves → `https://anniv.for-you-always.my.id/api/generate-link`
->
-> Pembelian semua produk **tetap works** — tapi produk berbasis Vercel sedikit lebih rentan jika Vercel app down saat webhook dipicu.
 
 ---
 

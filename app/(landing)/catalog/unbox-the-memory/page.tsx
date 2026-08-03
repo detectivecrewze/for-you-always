@@ -1,0 +1,736 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+// SHOPEE STORE LINK
+const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
+
+export default function UnboxTheMemoryPage() {
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"letter" | "voices" | "mixtape" | "memoria">("letter");
+
+    const digitalExperiences = {
+        letter: {
+            title: "Letter Edition",
+            subtitle: "Surat Digital & Amplop Interaktif",
+            desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
+            badge: "Paling Populer",
+            color: "#a67c52",
+            previewUrl: "/catalog/letter",
+            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
+        },
+        voices: {
+            title: "Voices Gift",
+            subtitle: "Rekaman Suara Pribadi & Musik",
+            desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
+            badge: "Sangat Menyentuh",
+            color: "#e91e63",
+            previewUrl: "/catalog/voices",
+            imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
+        },
+        mixtape: {
+            title: "Mixtape Edition",
+            subtitle: "Kaset Retro & Playlist Kenangan",
+            desc: "Pengalaman musik nostalgia ala kaset pita retro 90-an dengan lagu favorit dan pesan pribadi interaktif.",
+            badge: "Retro Vibes",
+            color: "#4a7c8e",
+            previewUrl: "/catalog/mixtape",
+            imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
+        },
+        memoria: {
+            title: "Memoria Premium",
+            subtitle: "Kisah Cinta Sinematik Eksklusif",
+            desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
+            badge: "Ultra Premium",
+            color: "#d4af37",
+            previewUrl: "/catalog/memoria",
+            imageSrc: "/assets/opening_gate.png"
+        }
+    };
+
+    return (
+        <div style={{ backgroundColor: "#faf7f2", color: "#382a24", minHeight: "100vh", fontFamily: "var(--font-sans, system-ui, sans-serif)", position: "relative", overflowX: "hidden" }}>
+            
+            {/* AMBIENT BACKGROUND BLOBS */}
+            <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.08)", filter: "blur(130px)" }} />
+                <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.05)", filter: "blur(130px)" }} />
+            </div>
+
+            {/* ── HERO SECTION ── */}
+            <section style={{
+                position: "relative",
+                zIndex: 1,
+                paddingTop: "clamp(100px, 12vh, 140px)",
+                paddingBottom: "clamp(60px, 8vh, 90px)",
+                maxWidth: "1160px",
+                margin: "0 auto",
+                paddingLeft: "24px",
+                paddingRight: "24px"
+            }}>
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                    gap: "56px",
+                    alignItems: "center"
+                }}>
+                    
+                    {/* LEFT COLUMN: HERO HEADLINE & CTA */}
+                    <div>
+                        <div style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            backgroundColor: "rgba(205,171,143,0.08)",
+                            border: "1.2px solid rgba(205,171,143,0.25)",
+                            color: "#a88365",
+                            fontSize: "0.8rem",
+                            fontWeight: 700,
+                            padding: "6px 18px",
+                            borderRadius: "999px",
+                            marginBottom: "28px",
+                            letterSpacing: "0.2em",
+                            textTransform: "uppercase"
+                        }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                            <span>Physical Hampers + Digital Experience</span>
+                        </div>
+
+                        <h1 style={{
+                            fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
+                            fontSize: "clamp(2.8rem, 5.5vw, 4.5rem)",
+                            fontWeight: 400,
+                            lineHeight: 1.05,
+                            color: "#382a24",
+                            marginBottom: "20px",
+                            letterSpacing: "-0.03em"
+                        }}>
+                            Sentuhan Fisik,<br />
+                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Keajaiban Digital.</span>
+                        </h1>
+
+                        <p style={{
+                            fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
+                            color: "#6e5c53",
+                            lineHeight: 1.7,
+                            marginBottom: "36px",
+                            fontWeight: 400,
+                            maxWidth: "520px"
+                        }}>
+                            Kemasan gift box hampers eksklusif beraroma hangat khas atelier, dipadukan dengan kartu QR stempel emas yang menyimpan surat, musik, dan memori pribadi di dalamnya.
+                        </p>
+
+                        {/* CTA BUTTONS */}
+                        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
+                            <a
+                                href={SHOPEE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    backgroundColor: "#1d1816",
+                                    color: "#faf7f2",
+                                    fontWeight: 600,
+                                    fontSize: "0.98rem",
+                                    padding: "16px 32px",
+                                    borderRadius: "14px",
+                                    textDecoration: "none",
+                                    border: "1px solid rgba(205,171,143,0.3)",
+                                    boxShadow: "0 14px 30px -8px rgba(29,24,22,0.35)",
+                                    transition: "all 0.3s ease",
+                                    cursor: "pointer"
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                    e.currentTarget.style.backgroundColor = "#2a221f";
+                                    e.currentTarget.style.boxShadow = "0 18px 36px -8px rgba(29,24,22,0.5)";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.backgroundColor = "#1d1816";
+                                    e.currentTarget.style.boxShadow = "0 14px 30px -8px rgba(29,24,22,0.35)";
+                                }}
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                                <span>Pesan via Shopee Official</span>
+                            </a>
+
+                            <a
+                                href="#cara-kerja"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    backgroundColor: "rgba(255,255,255,0.7)",
+                                    backdropFilter: "blur(12px)",
+                                    color: "#382a24",
+                                    border: "1px solid rgba(205,171,143,0.25)",
+                                    fontWeight: 600,
+                                    fontSize: "0.95rem",
+                                    padding: "16px 26px",
+                                    borderRadius: "14px",
+                                    textDecoration: "none",
+                                    transition: "all 0.3s ease"
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.backgroundColor = "#ffffff";
+                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.5)";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.7)";
+                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.25)";
+                                }}
+                            >
+                                <span>Pelajari Alur Unboxing</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+
+                        {/* TRUST BADGES ROW */}
+                        <div style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "20px",
+                            paddingTop: "24px",
+                            borderTop: "1px solid rgba(205,171,143,0.18)"
+                        }}>
+                            {[
+                                { title: "Gift Box Hampers Eksklusif" },
+                                { title: "Kartu QR Stempel Emas" },
+                                { title: "Akses Web Tanpa App" },
+                                { title: "Pengiriman Garansi Safepack" }
+                            ].map((item, idx) => (
+                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "#6e5c53", fontWeight: 500 }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    <span>{item.title}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: HERO PRODUCT SHOWCASE IMAGE CARD */}
+                    <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+                        <div style={{
+                            position: "relative",
+                            width: "100%",
+                            maxWidth: "460px",
+                            borderRadius: "28px",
+                            overflow: "hidden",
+                            border: "1px solid rgba(255,255,255,0.9)",
+                            boxShadow: "0 25px 60px -15px rgba(56,42,36,0.15)",
+                            background: "rgba(255,255,255,0.5)",
+                            backdropFilter: "blur(20px)"
+                        }}>
+                            <Image
+                                src="/assets/unbox_hampers_hero.jpg"
+                                alt="Unbox the Memory Gift Box Hampers Showcase"
+                                width={560}
+                                height={420}
+                                style={{
+                                    width: "100%",
+                                    height: "auto",
+                                    display: "block",
+                                    objectFit: "cover"
+                                }}
+                                priority
+                            />
+                            
+                            {/* COMPACT FLOATING GLASS PILL BADGE AT TOP */}
+                            <div style={{
+                                position: "absolute",
+                                top: "18px",
+                                left: "18px",
+                                padding: "8px 16px",
+                                background: "rgba(29,24,22,0.65)",
+                                backdropFilter: "blur(14px)",
+                                border: "1px solid rgba(205,171,143,0.3)",
+                                borderRadius: "999px",
+                                color: "#faf7f2",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                fontSize: "0.78rem",
+                                fontWeight: 600,
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase",
+                                boxShadow: "0 8px 20px rgba(0,0,0,0.15)"
+                            }}>
+                                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#cdab8f" }} />
+                                <span style={{ color: "#ffffff" }}>Physical Hampers</span>
+                                <span style={{ color: "rgba(205,171,143,0.6)" }}>•</span>
+                                <span style={{ color: "#cdab8f" }}>Gold QR Card</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            {/* ── PRODUCT SHOWCASE GALLERY GRID (KOMPONEN HAMPERS) ── */}
+            <section style={{ padding: "80px 24px", maxWidth: "1160px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+                <div style={{ textAlign: "center", marginBottom: "60px" }}>
+                    <span style={{
+                        fontSize: "0.8rem",
+                        fontWeight: 700,
+                        letterSpacing: "0.22em",
+                        textTransform: "uppercase",
+                        color: "#a88365",
+                        display: "inline-block",
+                        padding: "6px 20px",
+                        border: "1.2px solid rgba(205,171,143,0.2)",
+                        borderRadius: 999,
+                        background: "rgba(205,171,143,0.08)",
+                        marginBottom: "16px"
+                    }}>
+                        Detail Sentuhan Fisik
+                    </span>
+                    <h2 style={{
+                        fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                        fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                        fontWeight: 400,
+                        color: "#382a24",
+                        lineHeight: 1.1
+                    }}>
+                        Apa Saja Isi Di Dalam <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gift Box?</span>
+                    </h2>
+                </div>
+
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                    gap: "24px"
+                }}>
+                    {[
+                        {
+                            img: "/assets/unbox_hampers_hero.jpg",
+                            tag: "Kemasan Premium",
+                            title: "Gift Box & Pita Satin",
+                            desc: "Kotak kado berbahan linen tebal bertekstur halus, diikat pita satin coklat khas digital atelier."
+                        },
+                        {
+                            img: "/assets/unbox_qr_card.jpg",
+                            tag: "Kartu QR Eksklusif",
+                            title: "Gold Foil QR Card",
+                            desc: "Kartu QR code bertekstur linen dengan stempel emas embossed untuk membuka kado digital."
+                        },
+                        {
+                            img: "/assets/unbox_flowers_detail.jpg",
+                            tag: "Sentuhan Puitis",
+                            title: "Mini Dried Bouquet",
+                            desc: "Rangkaian bunga kering tahan lama yang memberikan aroma hangat dan kesan estetis."
+                        },
+                        {
+                            img: "/assets/unbox_box_detail.jpg",
+                            tag: "Kartu Akses",
+                            title: "Panduan Unboxing",
+                            desc: "Kartu petunjuk simpel agar penerima bisa langsung scan dan menikmati kado digital."
+                        }
+                    ].map((card, idx) => (
+                        <div key={idx} style={{
+                            backgroundColor: "rgba(255,255,255,0.7)",
+                            backdropFilter: "blur(20px)",
+                            border: "1px solid rgba(255,255,255,0.8)",
+                            borderRadius: "24px",
+                            overflow: "hidden",
+                            boxShadow: "0 10px 30px -10px rgba(56,42,36,0.06)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{ height: "200px", overflow: "hidden", position: "relative" }}>
+                                <Image
+                                    src={card.img}
+                                    alt={card.title}
+                                    width={400}
+                                    height={300}
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        transition: "transform 0.5s ease"
+                                    }}
+                                />
+                                <span style={{
+                                    position: "absolute",
+                                    top: "14px",
+                                    left: "14px",
+                                    backgroundColor: "rgba(29,24,22,0.8)",
+                                    backdropFilter: "blur(10px)",
+                                    color: "#cdab8f",
+                                    fontSize: "0.72rem",
+                                    fontWeight: 700,
+                                    padding: "4px 12px",
+                                    borderRadius: "50px",
+                                    letterSpacing: "0.1em",
+                                    textTransform: "uppercase"
+                                }}>
+                                    {card.tag}
+                                </span>
+                            </div>
+                            <div style={{ padding: "24px" }}>
+                                <h3 style={{
+                                    fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                    fontSize: "1.45rem",
+                                    fontWeight: 600,
+                                    color: "#382a24",
+                                    marginBottom: "8px"
+                                }}>
+                                    {card.title}
+                                </h3>
+                                <p style={{ fontSize: "0.88rem", color: "#6e5c53", lineHeight: 1.6, margin: 0 }}>
+                                    {card.desc}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ── WORKFLOW / 3-STEP JOURNEY SECTION ── */}
+            <section id="cara-kerja" style={{ position: "relative", zIndex: 1, padding: "90px 24px", background: "#f2ebe1", overflow: "hidden" }}>
+                <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+                    <div style={{ textAlign: "center", marginBottom: "70px" }}>
+                        <span style={{
+                            fontSize: "0.8rem", fontWeight: 700,
+                            letterSpacing: "0.22em", textTransform: "uppercase", color: "#a88365",
+                            display: "inline-block", padding: "6px 20px",
+                            border: "1.2px solid rgba(205,171,143,0.2)", borderRadius: 999,
+                            background: "rgba(205,171,143,0.08)", marginBottom: "20px"
+                        }}>
+                            Alur Unboxing
+                        </span>
+                        <h2 style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(2.2rem, 5vw, 3.8rem)", fontWeight: 400, color: "#382a24", lineHeight: 0.98 }}>
+                            Semudah<br />
+                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Tiga Langkah.</span>
+                        </h2>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+                        {[
+                            {
+                                num: "01",
+                                title: "Pesan Hampers di Shopee",
+                                desc: "Pilih produk fisik 'Unbox the Memory' di Shopee Official Store. Isi data ucapan digital di studio kado yang kamu inginkan.",
+                                icon: (
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    </svg>
+                                )
+                            },
+                            {
+                                num: "02",
+                                title: "Terima & Open The Box",
+                                desc: "Hampers eksklusif sampai di tangan pasanganmu. Buka pita satin dan temukan Kartu QR Stempel Emas di dalam box.",
+                                icon: (
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                    </svg>
+                                )
+                            },
+                            {
+                                num: "03",
+                                title: "Scan QR & Nikmati Kado",
+                                desc: "Cukup gunakan kamera HP untuk scan kartu. Halaman kado digital sinematik langsung terbuka di browser tanpa perlu install aplikasi!",
+                                icon: (
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                )
+                            }
+                        ].map((step, i) => (
+                            <div key={i} style={{
+                                padding: "44px 36px",
+                                background: i === 1 ? "#1d1816" : "rgba(255,255,255,0.7)",
+                                backdropFilter: "blur(20px)",
+                                borderRadius: "24px",
+                                border: i === 1 ? "1px solid rgba(205,171,143,0.2)" : "1px solid rgba(255,255,255,0.8)",
+                                boxShadow: i === 1 ? "0 25px 50px -12px rgba(29,24,22,0.4)" : "0 8px 30px -8px rgba(29,24,22,0.04)"
+                            }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+                                    <span style={{ fontSize: 12, color: i === 1 ? "#cdab8f" : "#a6968c", fontWeight: 700, letterSpacing: "0.1em" }}>{step.num}</span>
+                                    <div style={{ flex: 1, height: 1, background: i === 1 ? "rgba(205,171,143,0.15)" : "rgba(205,171,143,0.15)" }} />
+                                    <div style={{ color: i === 1 ? "#cdab8f" : "#a6968c", display: "flex" }}>
+                                        {step.icon}
+                                    </div>
+                                </div>
+                                <h3 style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.6rem", fontWeight: 500, color: i === 1 ? "#faf7f2" : "#382a24", marginBottom: 14, lineHeight: 1.15 }}>
+                                    {step.title}
+                                </h3>
+                                <p style={{ fontSize: "0.9rem", color: i === 1 ? "rgba(250,247,242,0.65)" : "#6e5c53", lineHeight: 1.65, margin: 0 }}>
+                                    {step.desc}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── INTERACTIVE DIGITAL EXPERIENCE PREVIEW ── */}
+            <section style={{ padding: "90px 24px", maxWidth: "1160px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+                <div style={{ textAlign: "center", marginBottom: "48px" }}>
+                    <span style={{ fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "#a88365" }}>
+                        Pilihan Konten Digital
+                    </span>
+                    <h2 style={{
+                        fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                        fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                        fontWeight: 400,
+                        color: "#382a24",
+                        marginTop: "8px"
+                    }}>
+                        Apa Isi QR Code Di Dalam <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Kotak?</span>
+                    </h2>
+                    <p style={{ color: "#6e5c53", maxWidth: "580px", margin: "12px auto 0", fontSize: "0.98rem", lineHeight: 1.6 }}>
+                        Pilih salah satu edisi digital favorit untuk disematkan secara eksklusif ke dalam Kartu QR Code hampers fisikmu.
+                    </p>
+                </div>
+
+                {/* EXPERIENCE TABS */}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    marginBottom: "40px"
+                }}>
+                    {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
+                        const exp = digitalExperiences[key];
+                        const isSelected = selectedDigitalExperience === key;
+                        return (
+                            <button
+                                key={key}
+                                onClick={() => setSelectedDigitalExperience(key)}
+                                style={{
+                                    padding: "12px 24px",
+                                    borderRadius: "999px",
+                                    border: isSelected ? `1.5px solid ${exp.color}` : "1px solid rgba(205,171,143,0.3)",
+                                    backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.4)",
+                                    color: isSelected ? exp.color : "#5a483e",
+                                    fontWeight: isSelected ? 700 : 500,
+                                    fontSize: "0.92rem",
+                                    cursor: "pointer",
+                                    boxShadow: isSelected ? "0 6px 20px rgba(0,0,0,0.06)" : "none",
+                                    transition: "all 0.25 ease"
+                                }}
+                            >
+                                {exp.title}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* DISPLAY SELECTED PREVIEW CARD */}
+                {(() => {
+                    const currentExp = digitalExperiences[selectedDigitalExperience];
+                    return (
+                        <div style={{
+                            backgroundColor: "rgba(255,255,255,0.8)",
+                            backdropFilter: "blur(20px)",
+                            border: "1px solid rgba(255,255,255,0.9)",
+                            borderRadius: "28px",
+                            padding: "48px 40px",
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                            gap: "40px",
+                            alignItems: "center",
+                            boxShadow: "0 20px 45px -15px rgba(56,42,36,0.08)"
+                        }}>
+                            <div>
+                                <span style={{
+                                    backgroundColor: `${currentExp.color}15`,
+                                    color: currentExp.color,
+                                    fontSize: "0.78rem",
+                                    fontWeight: 700,
+                                    padding: "6px 14px",
+                                    borderRadius: "20px",
+                                    display: "inline-block",
+                                    marginBottom: "18px",
+                                    letterSpacing: "0.05em"
+                                }}>
+                                    {currentExp.badge}
+                                </span>
+                                <h3 style={{
+                                    fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                    fontSize: "2.4rem",
+                                    fontWeight: 500,
+                                    color: "#382a24",
+                                    marginBottom: "6px"
+                                }}>
+                                    {currentExp.title}
+                                </h3>
+                                <h4 style={{ fontSize: "1.05rem", color: currentExp.color, fontWeight: 600, marginBottom: "16px" }}>
+                                    {currentExp.subtitle}
+                                </h4>
+                                <p style={{ fontSize: "0.95rem", color: "#6e5c53", lineHeight: 1.7, marginBottom: "32px" }}>
+                                    {currentExp.desc}
+                                </p>
+                                <Link
+                                    href={currentExp.previewUrl}
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        color: currentExp.color,
+                                        fontWeight: 700,
+                                        textDecoration: "none",
+                                        fontSize: "0.95rem"
+                                    }}
+                                >
+                                    <span>Prinjau Detail Emas Digital Ini</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </Link>
+                            </div>
+
+                            {/* DYNAMIC SCREENSHOT PREVIEW MOCKUP */}
+                            <div style={{
+                                position: "relative",
+                                borderRadius: "24px",
+                                overflow: "hidden",
+                                border: "1px solid rgba(205,171,143,0.3)",
+                                backgroundColor: "#1d1816",
+                                boxShadow: "0 15px 35px -10px rgba(56,42,36,0.2)"
+                            }}>
+                                <div style={{
+                                    height: "260px",
+                                    position: "relative",
+                                    overflow: "hidden"
+                                }}>
+                                    <Image
+                                        src={currentExp.imageSrc}
+                                        alt={`Preview ${currentExp.title}`}
+                                        width={480}
+                                        height={320}
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            display: "block"
+                                        }}
+                                    />
+                                    {/* TOP-RIGHT SCANNER BADGE */}
+                                    <div style={{
+                                        position: "absolute",
+                                        top: "14px",
+                                        right: "14px",
+                                        backgroundColor: "rgba(29,24,22,0.85)",
+                                        backdropFilter: "blur(12px)",
+                                        border: "1px solid rgba(205,171,143,0.3)",
+                                        color: "#cdab8f",
+                                        fontSize: "0.72rem",
+                                        fontWeight: 700,
+                                        padding: "4px 12px",
+                                        borderRadius: "999px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "6px",
+                                        letterSpacing: "0.08em",
+                                        textTransform: "uppercase"
+                                    }}>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                        </svg>
+                                        <span>QR Scan Result Preview</span>
+                                    </div>
+                                </div>
+                                
+                                <div style={{ padding: "18px 24px", color: "#faf7f2", backgroundColor: "#1d1816" }}>
+                                    <p style={{ fontWeight: 600, fontSize: "0.95rem", margin: 0, color: "#ffffff", display: "flex", alignItems: "center", gap: "8px" }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        </svg>
+                                        <span>Tampilan Saat QR Discanned</span>
+                                    </p>
+                                    <p style={{ fontSize: "0.82rem", color: "rgba(250,247,242,0.65)", marginTop: "4px", lineHeight: 1.5, margin: "4px 0 0 0" }}>
+                                        Saat QR pada kartu di-scan, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
+            </section>
+
+            {/* ── FOOTER CTA BANNER ── */}
+            <section style={{
+                backgroundColor: "#1d1816",
+                color: "#faf7f2",
+                padding: "90px 24px",
+                textAlign: "center",
+                position: "relative",
+                overflow: "hidden"
+            }}>
+                <div style={{ maxWidth: "800px", margin: "0 auto", position: "relative", zIndex: 2 }}>
+                    <span style={{ color: "#cdab8f", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                        EXCLUSIVELY AVAILABLE AT SHOPEE
+                    </span>
+                    <h2 style={{
+                        fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                        fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)",
+                        fontWeight: 400,
+                        marginTop: "14px",
+                        marginBottom: "20px",
+                        color: "#ffffff"
+                    }}>
+                        Siap Memberikan <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Kejutan Terindah?</span>
+                    </h2>
+                    <p style={{ fontSize: "1.05rem", color: "rgba(250,247,242,0.7)", lineHeight: 1.7, marginBottom: "40px" }}>
+                        Pesan hampers <strong>Unbox the Memory</strong> secara resmi melalui Toko Shopee kami. Nikmati pengiriman aman bergaransi dengan kemasan eksklusif.
+                    </p>
+
+                    <a
+                        href={SHOPEE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "12px",
+                            backgroundColor: "#cdab8f",
+                            color: "#1d1816",
+                            fontWeight: 700,
+                            fontSize: "1.05rem",
+                            padding: "18px 42px",
+                            borderRadius: "14px",
+                            textDecoration: "none",
+                            boxShadow: "0 12px 35px rgba(205,171,143,0.3)",
+                            transition: "all 0.3s ease"
+                        }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.transform = "translateY(-2px)";
+                            e.currentTarget.style.backgroundColor = "#d8b99d";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.transform = "translateY(0)";
+                            e.currentTarget.style.backgroundColor = "#cdab8f";
+                        }}
+                    >
+                        <span>Kunjungi Shopee Official Store</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </section>
+        </div>
+    );
+}
