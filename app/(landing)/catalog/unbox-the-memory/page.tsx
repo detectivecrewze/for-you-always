@@ -43,52 +43,26 @@ function SpringAnimatedSection({ children, delay = 0 }: { children: React.ReactN
 }
 
 export default function UnboxTheMemoryPage() {
-    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("memoria");
-    const [isTabMorphing, setIsTabMorphing] = useState(false);
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"letter" | "memoria" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("letter");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-    const [tiltStyle, setTiltStyle] = useState({
-        transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
-        transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
-    });
+    const tabScrollRef = useRef<HTMLDivElement>(null);
 
-    const handleHeroMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        const rotateX = (0.5 - y) * 14;
-        const rotateY = (x - 0.5) * 14;
-        setTiltStyle({
-            transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`,
-            transition: "transform 0.1s ease-out"
-        });
-    };
-
-    const handleHeroMouseLeave = () => {
-        setTiltStyle({
-            transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
-            transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
-        });
+    const scrollTabs = (direction: "left" | "right") => {
+        if (tabScrollRef.current) {
+            const scrollAmount = 260;
+            tabScrollRef.current.scrollBy({
+                left: direction === "left" ? -scrollAmount : scrollAmount,
+                behavior: "smooth"
+            });
+        }
     };
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
         if (key === selectedDigitalExperience) return;
-        setIsTabMorphing(true);
-        setTimeout(() => {
-            setSelectedDigitalExperience(key);
-            setIsTabMorphing(false);
-        }, 130);
+        setSelectedDigitalExperience(key);
     };
 
     const digitalExperiences = {
-        memoria: {
-            title: "Memoria Premium",
-            subtitle: "Kisah Cinta Sinematik Eksklusif",
-            desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
-            badge: "Ultra Premium",
-            color: "#d4af37",
-            previewUrl: "/catalog/memoria",
-            imageSrc: "/assets/opening_gate.png"
-        },
         letter: {
             title: "Letter Edition",
             subtitle: "Surat Digital & Amplop Interaktif",
@@ -97,6 +71,15 @@ export default function UnboxTheMemoryPage() {
             color: "#a67c52",
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
+        },
+        memoria: {
+            title: "Memoria Premium",
+            subtitle: "Kisah Cinta Sinematik Eksklusif",
+            desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
+            badge: "Ultra Premium",
+            color: "#d4af37",
+            previewUrl: "/catalog/memoria",
+            imageSrc: "/assets/opening_gate.png"
         },
         retro: {
             title: "Retro Edition",
@@ -229,11 +212,8 @@ export default function UnboxTheMemoryPage() {
                             flex: "1 1 400px",
                             position: "relative",
                             display: "flex",
-                            justifyContent: "center",
-                            perspective: "1000px"
+                            justifyContent: "center"
                         }}
-                        onMouseMove={handleHeroMouseMove}
-                        onMouseLeave={handleHeroMouseLeave}
                     >
                         <div style={{
                             position: "relative",
@@ -242,12 +222,8 @@ export default function UnboxTheMemoryPage() {
                             borderRadius: "28px",
                             overflow: "hidden",
                             border: "1px solid rgba(255,255,255,0.9)",
-                            boxShadow: "0 25px 60px -15px rgba(56,42,36,0.18)",
-                            background: "rgba(255,255,255,0.5)",
-                            backdropFilter: "blur(20px)",
-                            cursor: "pointer",
-                            willChange: "transform",
-                            ...tiltStyle
+                            boxShadow: "0 20px 50px -15px rgba(56,42,36,0.15)",
+                            background: "rgba(255,255,255,0.5)"
                         }}>
                             <Image
                                 src="/assets/unbox_hampers_hero.jpg"
@@ -262,18 +238,6 @@ export default function UnboxTheMemoryPage() {
                                 }}
                                 priority
                             />
-                            
-                            {/* GLASS LIGHT SHIMMER RAY OVERLAY */}
-                            <div className="glass-shimmer-ray" style={{
-                                position: "absolute",
-                                top: "-50%",
-                                left: "-50%",
-                                width: "200%",
-                                height: "200%",
-                                background: "linear-gradient(45deg, transparent 42%, rgba(255,255,255,0.45) 50%, transparent 58%)",
-                                pointerEvents: "none",
-                                animation: "glass-shimmer-sweep 4.5s ease-in-out infinite"
-                            }} />
                         </div>
                     </div>
 
@@ -352,8 +316,7 @@ export default function UnboxTheMemoryPage() {
                                     borderRadius: "14px",
                                     textDecoration: "none",
                                     boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
-                                    transition: "all 0.3s ease",
-                                    animation: "pulse-btn-glow 3.5s ease-in-out infinite"
+                                    transition: "all 0.3s ease"
                                 }}
                                 onMouseOver={(e) => {
                                     e.currentTarget.style.transform = "translateY(-2px)";
@@ -682,46 +645,132 @@ export default function UnboxTheMemoryPage() {
                     </p>
                 </div>
 
-                {/* EXPERIENCE TABS (TOUCH & SCROLL OPTIMIZED FOR MOBILE) */}
+                {/* EXPERIENCE TABS CONTAINER WITH LEFT & RIGHT NAVIGATION ARROWS */}
                 <div style={{
                     display: "flex",
-                    justifyContent: "flex-start",
                     alignItems: "center",
-                    overflowX: "auto",
-                    gap: "10px",
-                    padding: "4px 4px 14px 4px",
+                    gap: "12px",
                     marginBottom: "32px",
-                    WebkitOverflowScrolling: "touch",
-                    scrollbarWidth: "none",
-                    msOverflowStyle: "none"
-                }} className="no-scrollbar">
-                    {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
-                        const exp = digitalExperiences[key];
-                        const isSelected = selectedDigitalExperience === key;
-                        return (
-                            <button
-                                key={key}
-                                onClick={() => handleTabChange(key)}
-                                style={{
-                                    padding: "10px 22px",
-                                    borderRadius: "999px",
-                                    border: isSelected ? `1.5px solid ${exp.color}` : "1px solid rgba(205,171,143,0.25)",
-                                    backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.45)",
-                                    color: isSelected ? exp.color : "#5a483e",
-                                    fontWeight: isSelected ? 700 : 500,
-                                    fontSize: "0.9rem",
-                                    cursor: "pointer",
-                                    whiteSpace: "nowrap",
-                                    flexShrink: 0,
-                                    boxShadow: isSelected ? "0 6px 18px rgba(0,0,0,0.06)" : "none",
-                                    transform: isSelected ? "scale(1.03)" : "scale(1)",
-                                    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
-                                }}
-                            >
-                                {exp.title}
-                            </button>
-                        );
-                    })}
+                    position: "relative"
+                }}>
+                    {/* LEFT NAV ARROW BUTTON */}
+                    <button
+                        onClick={() => scrollTabs("left")}
+                        aria-label="Scroll Tabs Left"
+                        style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "50%",
+                            backgroundColor: "rgba(255,255,255,0.85)",
+                            backdropFilter: "blur(12px)",
+                            border: "1px solid rgba(205,171,143,0.35)",
+                            color: "#382a24",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                            boxShadow: "0 6px 16px rgba(56,42,36,0.06)",
+                            transition: "all 0.25s ease"
+                        }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "#ffffff";
+                            e.currentTarget.style.transform = "scale(1.08)";
+                            e.currentTarget.style.borderColor = "#cdab8f";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.85)";
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.35)";
+                        }}
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    {/* SCROLLABLE EXPERIENCE TABS BAR */}
+                    <div 
+                        ref={tabScrollRef}
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            overflowX: "auto",
+                            gap: "10px",
+                            padding: "6px 4px",
+                            scrollBehavior: "smooth",
+                            WebkitOverflowScrolling: "touch",
+                            scrollbarWidth: "none",
+                            msOverflowStyle: "none",
+                            flex: 1
+                        }} 
+                        className="no-scrollbar"
+                    >
+                        {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
+                            const exp = digitalExperiences[key];
+                            const isSelected = selectedDigitalExperience === key;
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => handleTabChange(key)}
+                                    style={{
+                                        padding: "10px 22px",
+                                        borderRadius: "999px",
+                                        border: isSelected ? `1.5px solid ${exp.color}` : "1px solid rgba(205,171,143,0.25)",
+                                        backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.45)",
+                                        color: isSelected ? exp.color : "#5a483e",
+                                        fontWeight: isSelected ? 700 : 500,
+                                        fontSize: "0.9rem",
+                                        cursor: "pointer",
+                                        whiteSpace: "nowrap",
+                                        flexShrink: 0,
+                                        boxShadow: isSelected ? "0 6px 18px rgba(0,0,0,0.06)" : "none",
+                                        transform: isSelected ? "scale(1.03)" : "scale(1)",
+                                        transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
+                                    }}
+                                >
+                                    {exp.title}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* RIGHT NAV ARROW BUTTON */}
+                    <button
+                        onClick={() => scrollTabs("right")}
+                        aria-label="Scroll Tabs Right"
+                        style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "50%",
+                            backgroundColor: "rgba(255,255,255,0.85)",
+                            backdropFilter: "blur(12px)",
+                            border: "1px solid rgba(205,171,143,0.35)",
+                            color: "#382a24",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                            boxShadow: "0 6px 16px rgba(56,42,36,0.06)",
+                            transition: "all 0.25s ease"
+                        }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "#ffffff";
+                            e.currentTarget.style.transform = "scale(1.08)";
+                            e.currentTarget.style.borderColor = "#cdab8f";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.85)";
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.35)";
+                        }}
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                 </div>
 
                 {/* DISPLAY SELECTED PREVIEW CARD */}
@@ -803,21 +852,32 @@ export default function UnboxTheMemoryPage() {
                                     position: "relative",
                                     overflow: "hidden"
                                 }}>
-                                    <Image
-                                        src={currentExp.imageSrc}
-                                        alt={`Preview ${currentExp.title}`}
-                                        width={480}
-                                        height={320}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                            display: "block",
-                                            opacity: isTabMorphing ? 0 : 1,
-                                            transform: isTabMorphing ? "scale(0.96)" : "scale(1)",
-                                            transition: "opacity 0.25s ease, transform 0.25s ease"
-                                        }}
-                                    />
+                                    {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((expKey) => {
+                                        const exp = digitalExperiences[expKey];
+                                        const isActive = expKey === selectedDigitalExperience;
+                                        return (
+                                            <Image
+                                                key={expKey}
+                                                src={exp.imageSrc}
+                                                alt={`Preview ${exp.title}`}
+                                                width={480}
+                                                height={320}
+                                                priority={expKey === "memoria" || expKey === "letter"}
+                                                style={{
+                                                    position: "absolute",
+                                                    inset: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    objectFit: "cover",
+                                                    display: "block",
+                                                    opacity: isActive ? 1 : 0,
+                                                    transform: isActive ? "scale(1)" : "scale(1.03)",
+                                                    transition: "opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                    pointerEvents: isActive ? "auto" : "none"
+                                                }}
+                                            />
+                                        );
+                                    })}
                                     {/* TOP-RIGHT SCANNER BADGE */}
                                     <div style={{
                                         position: "absolute",
@@ -1059,22 +1119,11 @@ export default function UnboxTheMemoryPage() {
                 </div>
             </section>
 
-            {/* CSS KEYFRAME ANIMATIONS FOR GLASS SHIMMER & SHOPEE CTA RIBBON GLOW */}
+            {/* CSS KEYFRAME ANIMATIONS */}
             <style>{`
-                @keyframes glass-shimmer-sweep {
-                    0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
-                    15% { opacity: 0.85; }
-                    45%, 100% { transform: translateX(250%) rotate(25deg); opacity: 0; }
-                }
-
                 @keyframes ribbon-beam-sweep {
                     0% { transform: translateX(-140%); }
                     30%, 100% { transform: translateX(240%); }
-                }
-
-                @keyframes pulse-btn-glow {
-                    0%, 100% { boxShadow: 0 10px 30px -8px rgba(56,42,36,0.3); }
-                    50% { boxShadow: 0 14px 38px -4px rgba(205,171,143,0.55); }
                 }
 
                 @keyframes shopee-icon-bounce {

@@ -67,18 +67,6 @@ export default function CollectionSection() {
                         speed={55}
                         cards={[
                             {
-                                badgeText: "#1 Exclusive",
-                                badgeColor: "#d4af37",
-                                badgeVariant: "solid",
-                                imageSrc: "/assets/opening_gate.png",
-                                price: "Rp 40.000",
-                                title: "Memoria (Premium)",
-                                titleColor: "#581824",
-                                description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
-                                href: "/catalog/memoria",
-                                onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
-                            },
-                            {
                                 badgeText: "Popular",
                                 badgeColor: "#7a5438",
                                 badgeVariant: "solid",
@@ -91,6 +79,30 @@ export default function CollectionSection() {
                                 onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#7a5438" }),
                                 isThreeSlotEligible: true,
                                 onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 20000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
+                            },
+                            {
+                                badgeText: "PHYSICAL HAMPERS",
+                                badgeColor: "#1d1816",
+                                badgeVariant: "solid",
+                                imageSrc: "/assets/unbox_hampers_hero.jpg",
+                                price: "Di Shopee",
+                                title: "Unbox the Memory",
+                                titleColor: "#382a24",
+                                description: "Gift box hampers fisik eksklusif aroma khas atelier dipadukan Kartu QR Stempel Emas kado digital.",
+                                href: "/catalog/unbox-the-memory",
+                                onAddToCart: () => window.open("https://shopee.co.id", "_blank")
+                            },
+                            {
+                                badgeText: "#1 Exclusive",
+                                badgeColor: "#d4af37",
+                                badgeVariant: "solid",
+                                imageSrc: "/assets/opening_gate.png",
+                                price: "Rp 40.000",
+                                title: "Memoria (Premium)",
+                                titleColor: "#581824",
+                                description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
+                                href: "/catalog/memoria",
+                                onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
                             },
                             {
                                 badgeText: "#1 Terlaris",
