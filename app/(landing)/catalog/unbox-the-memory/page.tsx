@@ -46,6 +46,29 @@ export default function UnboxTheMemoryPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("memoria");
     const [isTabMorphing, setIsTabMorphing] = useState(false);
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+    const [tiltStyle, setTiltStyle] = useState({
+        transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
+        transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
+    });
+
+    const handleHeroMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotateX = (0.5 - y) * 14;
+        const rotateY = (x - 0.5) * 14;
+        setTiltStyle({
+            transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`,
+            transition: "transform 0.1s ease-out"
+        });
+    };
+
+    const handleHeroMouseLeave = () => {
+        setTiltStyle({
+            transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
+            transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
+        });
+    };
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
         if (key === selectedDigitalExperience) return;
@@ -200,13 +223,18 @@ export default function UnboxTheMemoryPage() {
                     justifyContent: "space-between",
                     gap: "56px"
                 }}>
-                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD */}
-                    <div style={{
-                        flex: "1 1 400px",
-                        position: "relative",
-                        display: "flex",
-                        justifyContent: "center"
-                    }}>
+                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD WITH 3D TILT & LIGHT SHIMMER */}
+                    <div 
+                        style={{
+                            flex: "1 1 400px",
+                            position: "relative",
+                            display: "flex",
+                            justifyContent: "center",
+                            perspective: "1000px"
+                        }}
+                        onMouseMove={handleHeroMouseMove}
+                        onMouseLeave={handleHeroMouseLeave}
+                    >
                         <div style={{
                             position: "relative",
                             width: "100%",
@@ -214,9 +242,12 @@ export default function UnboxTheMemoryPage() {
                             borderRadius: "28px",
                             overflow: "hidden",
                             border: "1px solid rgba(255,255,255,0.9)",
-                            boxShadow: "0 25px 60px -15px rgba(56,42,36,0.15)",
+                            boxShadow: "0 25px 60px -15px rgba(56,42,36,0.18)",
                             background: "rgba(255,255,255,0.5)",
-                            backdropFilter: "blur(20px)"
+                            backdropFilter: "blur(20px)",
+                            cursor: "pointer",
+                            willChange: "transform",
+                            ...tiltStyle
                         }}>
                             <Image
                                 src="/assets/unbox_hampers_hero.jpg"
@@ -231,6 +262,18 @@ export default function UnboxTheMemoryPage() {
                                 }}
                                 priority
                             />
+                            
+                            {/* GLASS LIGHT SHIMMER RAY OVERLAY */}
+                            <div className="glass-shimmer-ray" style={{
+                                position: "absolute",
+                                top: "-50%",
+                                left: "-50%",
+                                width: "200%",
+                                height: "200%",
+                                background: "linear-gradient(45deg, transparent 42%, rgba(255,255,255,0.45) 50%, transparent 58%)",
+                                pointerEvents: "none",
+                                animation: "glass-shimmer-sweep 4.5s ease-in-out infinite"
+                            }} />
                         </div>
                     </div>
 
@@ -289,13 +332,15 @@ export default function UnboxTheMemoryPage() {
                             Kemasan gift box hampers eksklusif beraroma hangat khas atelier, dipadukan dengan kartu QR code yang menyimpan surat, musik, dan memori pribadi di dalamnya.
                         </p>
 
-                        {/* 4. CTA BUTTONS */}
+                        {/* 4. CTA BUTTONS WITH LIVE MOVING RIBBON GLOW & ICON BOUNCE */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
                             <a
                                 href={SHOPEE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
+                                    position: "relative",
+                                    overflow: "hidden",
                                     display: "inline-flex",
                                     alignItems: "center",
                                     gap: "12px",
@@ -307,7 +352,8 @@ export default function UnboxTheMemoryPage() {
                                     borderRadius: "14px",
                                     textDecoration: "none",
                                     boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
-                                    transition: "all 0.3s ease"
+                                    transition: "all 0.3s ease",
+                                    animation: "pulse-btn-glow 3.5s ease-in-out infinite"
                                 }}
                                 onMouseOver={(e) => {
                                     e.currentTarget.style.transform = "translateY(-2px)";
@@ -318,12 +364,39 @@ export default function UnboxTheMemoryPage() {
                                     e.currentTarget.style.backgroundColor = "#382a24";
                                 }}
                             >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                {/* SILKY RIBBON LIGHT BEAM SWEEP OVERLAY */}
+                                <span style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "60%",
+                                    height: "100%",
+                                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent)",
+                                    transform: "skewX(-20deg)",
+                                    animation: "ribbon-beam-sweep 3.2s ease-in-out infinite",
+                                    pointerEvents: "none"
+                                }} />
+                                
+                                <svg 
+                                    width="18" 
+                                    height="18" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    strokeWidth="2" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    style={{ 
+                                        position: "relative", 
+                                        zIndex: 2,
+                                        animation: "shopee-icon-bounce 4s ease-in-out infinite"
+                                    }}
+                                >
                                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                     <line x1="3" y1="6" x2="21" y2="6"></line>
                                     <path d="M16 10a4 4 0 0 1-8 0"></path>
                                 </svg>
-                                <span>Pesan via Shopee Official</span>
+                                <span style={{ position: "relative", zIndex: 2 }}>Pesan via Shopee Official</span>
                             </a>
 
                             <a
@@ -716,7 +789,7 @@ export default function UnboxTheMemoryPage() {
                                 </Link>
                             </div>
 
-                            {/* DYNAMIC SCREENSHOT PREVIEW MOCKUP WITH MORPHING ANIMATION */}
+                            {/* DYNAMIC SCREENSHOT PREVIEW MOCKUP */}
                             <div style={{
                                 position: "relative",
                                 borderRadius: "24px",
@@ -741,8 +814,8 @@ export default function UnboxTheMemoryPage() {
                                             objectFit: "cover",
                                             display: "block",
                                             opacity: isTabMorphing ? 0 : 1,
-                                            transform: isTabMorphing ? "scale(0.94)" : "scale(1)",
-                                            transition: "opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)"
+                                            transform: isTabMorphing ? "scale(0.96)" : "scale(1)",
+                                            transition: "opacity 0.25s ease, transform 0.25s ease"
                                         }}
                                     />
                                     {/* TOP-RIGHT SCANNER BADGE */}
@@ -985,6 +1058,36 @@ export default function UnboxTheMemoryPage() {
                     </a>
                 </div>
             </section>
+
+            {/* CSS KEYFRAME ANIMATIONS FOR GLASS SHIMMER & SHOPEE CTA RIBBON GLOW */}
+            <style>{`
+                @keyframes glass-shimmer-sweep {
+                    0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
+                    15% { opacity: 0.85; }
+                    45%, 100% { transform: translateX(250%) rotate(25deg); opacity: 0; }
+                }
+
+                @keyframes ribbon-beam-sweep {
+                    0% { transform: translateX(-140%); }
+                    30%, 100% { transform: translateX(240%); }
+                }
+
+                @keyframes pulse-btn-glow {
+                    0%, 100% { boxShadow: 0 10px 30px -8px rgba(56,42,36,0.3); }
+                    50% { boxShadow: 0 14px 38px -4px rgba(205,171,143,0.55); }
+                }
+
+                @keyframes shopee-icon-bounce {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    15% { transform: translateY(-3px) rotate(-6deg); }
+                    30% { transform: translateY(0) rotate(4deg); }
+                    45% { transform: translateY(-1px) rotate(0deg); }
+                }
+
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </div>
     );
 }
