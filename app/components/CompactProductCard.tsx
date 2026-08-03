@@ -271,7 +271,7 @@ export default function CompactProductCard({
 
                 {/* Buttons Container */}
                 <div style={{ display: "flex", gap: 8 }}>
-                    <Link href={href} style={{
+                    <Link href={href} prefetch={true} style={{
                         flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
                         background: onAddToCart ? "#faf7f2" : titleColor,
                         color: onAddToCart ? "#382a24" : "#faf7f2",

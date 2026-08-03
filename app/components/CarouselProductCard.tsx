@@ -226,7 +226,7 @@ export default function CarouselProductCard({
 
                 {/* CTA Buttons */}
                 <div style={{ display: "flex", gap: 8, marginTop: 2 }}>
-                    <Link href={href} style={{
+                    <Link href={href} prefetch={true} style={{
                         flex: 1, textAlign: "center", padding: "11px 8px",
                         borderRadius: 14,
                         background: "#faf7f2", color: "#382a24",
