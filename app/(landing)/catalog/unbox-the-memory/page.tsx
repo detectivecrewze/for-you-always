@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../../../components/Navbar";
@@ -8,8 +8,53 @@ import Navbar from "../../../components/Navbar";
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
 
+// SPRING ANIMATED SECTION COMPONENT (MOBILE & PERFORMANCE OPTIMIZED)
+function SpringAnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => setIsVisible(true), delay);
+                    observer.disconnect(); // Unobserve to save CPU/GPU on mobile
+                }
+            },
+            { threshold: 0.05, rootMargin: "0px 0px -30px 0px" }
+        );
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [delay]);
+
+    return (
+        <div
+            ref={ref}
+            style={{
+                transition: `opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateY(0) scale(1)" : "translateY(24px) scale(0.975)",
+                willChange: "opacity, transform"
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
 export default function UnboxTheMemoryPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("memoria");
+    const [isTabMorphing, setIsTabMorphing] = useState(false);
+    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+    const handleTabChange = (key: keyof typeof digitalExperiences) => {
+        if (key === selectedDigitalExperience) return;
+        setIsTabMorphing(true);
+        setTimeout(() => {
+            setSelectedDigitalExperience(key);
+            setIsTabMorphing(false);
+        }, 130);
+    };
 
     const digitalExperiences = {
         memoria: {
@@ -420,60 +465,62 @@ export default function UnboxTheMemoryPage() {
                             desc: "Kartu petunjuk simpel agar penerima bisa langsung scan dan menikmati kado digital."
                         }
                     ].map((card, idx) => (
-                        <div key={idx} style={{
-                            backgroundColor: "rgba(255,255,255,0.7)",
-                            backdropFilter: "blur(20px)",
-                            border: "1px solid rgba(255,255,255,0.8)",
-                            borderRadius: "24px",
-                            overflow: "hidden",
-                            boxShadow: "0 10px 30px -10px rgba(56,42,36,0.06)",
-                            transition: "all 0.3s ease"
-                        }}>
-                            <div style={{ height: "200px", overflow: "hidden", position: "relative" }}>
-                                <Image
-                                    src={card.img}
-                                    alt={card.title}
-                                    width={400}
-                                    height={300}
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                        transition: "transform 0.5s ease"
-                                    }}
-                                />
-                                <span style={{
-                                    position: "absolute",
-                                    top: "14px",
-                                    left: "14px",
-                                    backgroundColor: "rgba(29,24,22,0.8)",
-                                    backdropFilter: "blur(10px)",
-                                    color: "#cdab8f",
-                                    fontSize: "0.72rem",
-                                    fontWeight: 700,
-                                    padding: "4px 12px",
-                                    borderRadius: "50px",
-                                    letterSpacing: "0.1em",
-                                    textTransform: "uppercase"
-                                }}>
-                                    {card.tag}
-                                </span>
+                        <SpringAnimatedSection key={idx} delay={idx * 100}>
+                            <div style={{
+                                backgroundColor: "rgba(255,255,255,0.7)",
+                                backdropFilter: "blur(20px)",
+                                border: "1px solid rgba(255,255,255,0.8)",
+                                borderRadius: "24px",
+                                overflow: "hidden",
+                                boxShadow: "0 10px 30px -10px rgba(56,42,36,0.06)",
+                                transition: "all 0.3s ease"
+                            }}>
+                                <div style={{ height: "200px", overflow: "hidden", position: "relative" }}>
+                                    <Image
+                                        src={card.img}
+                                        alt={card.title}
+                                        width={400}
+                                        height={300}
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            transition: "transform 0.5s ease"
+                                        }}
+                                    />
+                                    <span style={{
+                                        position: "absolute",
+                                        top: "14px",
+                                        left: "14px",
+                                        backgroundColor: "rgba(29,24,22,0.8)",
+                                        backdropFilter: "blur(10px)",
+                                        color: "#cdab8f",
+                                        fontSize: "0.72rem",
+                                        fontWeight: 700,
+                                        padding: "4px 12px",
+                                        borderRadius: "50px",
+                                        letterSpacing: "0.1em",
+                                        textTransform: "uppercase"
+                                    }}>
+                                        {card.tag}
+                                    </span>
+                                </div>
+                                <div style={{ padding: "24px" }}>
+                                    <h3 style={{
+                                        fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                        fontSize: "1.45rem",
+                                        fontWeight: 600,
+                                        color: "#382a24",
+                                        marginBottom: "8px"
+                                    }}>
+                                        {card.title}
+                                    </h3>
+                                    <p style={{ fontSize: "0.88rem", color: "#6e5c53", lineHeight: 1.6, margin: 0 }}>
+                                        {card.desc}
+                                    </p>
+                                </div>
                             </div>
-                            <div style={{ padding: "24px" }}>
-                                <h3 style={{
-                                    fontFamily: "var(--font-display, Cormorant Garamond, serif)",
-                                    fontSize: "1.45rem",
-                                    fontWeight: 600,
-                                    color: "#382a24",
-                                    marginBottom: "8px"
-                                }}>
-                                    {card.title}
-                                </h3>
-                                <p style={{ fontSize: "0.88rem", color: "#6e5c53", lineHeight: 1.6, margin: 0 }}>
-                                    {card.desc}
-                                </p>
-                            </div>
-                        </div>
+                        </SpringAnimatedSection>
                     ))}
                 </div>
             </section>
@@ -531,28 +578,31 @@ export default function UnboxTheMemoryPage() {
                                 )
                             }
                         ].map((step, i) => (
-                            <div key={i} style={{
-                                padding: "44px 36px",
-                                background: i === 1 ? "#1d1816" : "rgba(255,255,255,0.7)",
-                                backdropFilter: "blur(20px)",
-                                borderRadius: "24px",
-                                border: i === 1 ? "1px solid rgba(205,171,143,0.2)" : "1px solid rgba(255,255,255,0.8)",
-                                boxShadow: i === 1 ? "0 25px 50px -12px rgba(29,24,22,0.4)" : "0 8px 30px -8px rgba(29,24,22,0.04)"
-                            }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-                                    <span style={{ fontSize: 12, color: i === 1 ? "#cdab8f" : "#a6968c", fontWeight: 700, letterSpacing: "0.1em" }}>{step.num}</span>
-                                    <div style={{ flex: 1, height: 1, background: i === 1 ? "rgba(205,171,143,0.15)" : "rgba(205,171,143,0.15)" }} />
-                                    <div style={{ color: i === 1 ? "#cdab8f" : "#a6968c", display: "flex" }}>
-                                        {step.icon}
+                            <SpringAnimatedSection key={i} delay={i * 120}>
+                                <div style={{
+                                    padding: "44px 36px",
+                                    background: i === 1 ? "#1d1816" : "rgba(255,255,255,0.7)",
+                                    backdropFilter: "blur(20px)",
+                                    borderRadius: "24px",
+                                    border: i === 1 ? "1px solid rgba(205,171,143,0.2)" : "1px solid rgba(255,255,255,0.8)",
+                                    boxShadow: i === 1 ? "0 25px 50px -12px rgba(29,24,22,0.4)" : "0 8px 30px -8px rgba(29,24,22,0.04)",
+                                    height: "100%"
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+                                        <span style={{ fontSize: 12, color: i === 1 ? "#cdab8f" : "#a6968c", fontWeight: 700, letterSpacing: "0.1em" }}>{step.num}</span>
+                                        <div style={{ flex: 1, height: 1, background: i === 1 ? "rgba(205,171,143,0.15)" : "rgba(205,171,143,0.15)" }} />
+                                        <div style={{ color: i === 1 ? "#cdab8f" : "#a6968c", display: "flex" }}>
+                                            {step.icon}
+                                        </div>
                                     </div>
+                                    <h3 style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.6rem", fontWeight: 500, color: i === 1 ? "#faf7f2" : "#382a24", marginBottom: 14, lineHeight: 1.15 }}>
+                                        {step.title}
+                                    </h3>
+                                    <p style={{ fontSize: "0.9rem", color: i === 1 ? "rgba(250,247,242,0.65)" : "#6e5c53", lineHeight: 1.65, margin: 0 }}>
+                                        {step.desc}
+                                    </p>
                                 </div>
-                                <h3 style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.6rem", fontWeight: 500, color: i === 1 ? "#faf7f2" : "#382a24", marginBottom: 14, lineHeight: 1.15 }}>
-                                    {step.title}
-                                </h3>
-                                <p style={{ fontSize: "0.9rem", color: i === 1 ? "rgba(250,247,242,0.65)" : "#6e5c53", lineHeight: 1.65, margin: 0 }}>
-                                    {step.desc}
-                                </p>
-                            </div>
+                            </SpringAnimatedSection>
                         ))}
                     </div>
                 </div>
@@ -578,32 +628,40 @@ export default function UnboxTheMemoryPage() {
                     </p>
                 </div>
 
-                {/* EXPERIENCE TABS */}
+                {/* EXPERIENCE TABS (TOUCH & SCROLL OPTIMIZED FOR MOBILE) */}
                 <div style={{
                     display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    overflowX: "auto",
                     gap: "10px",
-                    marginBottom: "40px"
-                }}>
+                    padding: "4px 4px 14px 4px",
+                    marginBottom: "32px",
+                    WebkitOverflowScrolling: "touch",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none"
+                }} className="no-scrollbar">
                     {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
                         const exp = digitalExperiences[key];
                         const isSelected = selectedDigitalExperience === key;
                         return (
                             <button
                                 key={key}
-                                onClick={() => setSelectedDigitalExperience(key)}
+                                onClick={() => handleTabChange(key)}
                                 style={{
-                                    padding: "12px 24px",
+                                    padding: "10px 22px",
                                     borderRadius: "999px",
-                                    border: isSelected ? `1.5px solid ${exp.color}` : "1px solid rgba(205,171,143,0.3)",
-                                    backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.4)",
+                                    border: isSelected ? `1.5px solid ${exp.color}` : "1px solid rgba(205,171,143,0.25)",
+                                    backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.45)",
                                     color: isSelected ? exp.color : "#5a483e",
                                     fontWeight: isSelected ? 700 : 500,
-                                    fontSize: "0.92rem",
+                                    fontSize: "0.9rem",
                                     cursor: "pointer",
-                                    boxShadow: isSelected ? "0 6px 20px rgba(0,0,0,0.06)" : "none",
-                                    transition: "all 0.25 ease"
+                                    whiteSpace: "nowrap",
+                                    flexShrink: 0,
+                                    boxShadow: isSelected ? "0 6px 18px rgba(0,0,0,0.06)" : "none",
+                                    transform: isSelected ? "scale(1.03)" : "scale(1)",
+                                    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
                                 }}
                             >
                                 {exp.title}
@@ -621,10 +679,10 @@ export default function UnboxTheMemoryPage() {
                             backdropFilter: "blur(20px)",
                             border: "1px solid rgba(255,255,255,0.9)",
                             borderRadius: "28px",
-                            padding: "48px 40px",
+                            padding: "clamp(24px, 4vw, 48px)",
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                            gap: "40px",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                            gap: "36px",
                             alignItems: "center",
                             boxShadow: "0 20px 45px -15px rgba(56,42,36,0.08)"
                         }}>
@@ -644,17 +702,17 @@ export default function UnboxTheMemoryPage() {
                                 </span>
                                 <h3 style={{
                                     fontFamily: "var(--font-display, Cormorant Garamond, serif)",
-                                    fontSize: "2.4rem",
+                                    fontSize: "clamp(2rem, 3.5vw, 2.5rem)",
                                     fontWeight: 500,
                                     color: "#382a24",
                                     marginBottom: "6px"
                                 }}>
                                     {currentExp.title}
                                 </h3>
-                                <h4 style={{ fontSize: "1.05rem", color: currentExp.color, fontWeight: 600, marginBottom: "16px" }}>
+                                <h4 style={{ fontSize: "1.02rem", color: currentExp.color, fontWeight: 600, marginBottom: "16px" }}>
                                     {currentExp.subtitle}
                                 </h4>
-                                <p style={{ fontSize: "0.95rem", color: "#6e5c53", lineHeight: 1.7, marginBottom: "32px" }}>
+                                <p style={{ fontSize: "0.93rem", color: "#6e5c53", lineHeight: 1.7, marginBottom: "28px" }}>
                                     {currentExp.desc}
                                 </p>
                                 <Link
@@ -677,7 +735,7 @@ export default function UnboxTheMemoryPage() {
                                 </Link>
                             </div>
 
-                            {/* DYNAMIC SCREENSHOT PREVIEW MOCKUP */}
+                            {/* DYNAMIC SCREENSHOT PREVIEW MOCKUP WITH MORPHING ANIMATION */}
                             <div style={{
                                 position: "relative",
                                 borderRadius: "24px",
@@ -700,7 +758,10 @@ export default function UnboxTheMemoryPage() {
                                             width: "100%",
                                             height: "100%",
                                             objectFit: "cover",
-                                            display: "block"
+                                            display: "block",
+                                            opacity: isTabMorphing ? 0 : 1,
+                                            transform: isTabMorphing ? "scale(0.94)" : "scale(1)",
+                                            transition: "opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)"
                                         }}
                                     />
                                     {/* TOP-RIGHT SCANNER BADGE */}
@@ -745,6 +806,140 @@ export default function UnboxTheMemoryPage() {
                         </div>
                     );
                 })()}
+            </section>
+
+            {/* ── FREQUENTLY ASKED QUESTIONS (FAQ) SECTION ── */}
+            <section style={{ padding: "90px 24px", maxWidth: "900px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+                <SpringAnimatedSection>
+                    <div style={{ textAlign: "center", marginBottom: "56px" }}>
+                        <span style={{
+                            fontSize: "0.8rem",
+                            fontWeight: 700,
+                            letterSpacing: "0.22em",
+                            textTransform: "uppercase",
+                            color: "#a88365",
+                            display: "inline-block",
+                            padding: "6px 20px",
+                            border: "1.2px solid rgba(205,171,143,0.2)",
+                            borderRadius: 999,
+                            background: "rgba(205,171,143,0.08)",
+                            marginBottom: "16px"
+                        }}>
+                            Panduan & Jawaban
+                        </span>
+                        <h2 style={{
+                            fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                            fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                            fontWeight: 400,
+                            color: "#382a24",
+                            lineHeight: 1.1
+                        }}>
+                            Pertanyaan Yang Sering <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Diajukan</span>
+                        </h2>
+                        <p style={{ color: "#6e5c53", maxWidth: "540px", margin: "12px auto 0", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                            Temukan jawaban lengkap mengenai pemesanan hampers fisik, kartu QR emas, hingga akses kado digital.
+                        </p>
+                    </div>
+                </SpringAnimatedSection>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    {[
+                        {
+                            q: "Berapa lama estimasi pengiriman hampers ke kota tujuan?",
+                            a: "Hampers fisik dikirim menggunakan ekspedisi terpercaya dari Shopee Official Store kami. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
+                        },
+                        {
+                            q: "Apakah kado digital di dalam Kartu QR memiliki batas waktu (kadaluarsa)?",
+                            a: "Sama sekali tidak! Seluruh kado digital yang disematkan ke Kartu QR Emas bersifat aktif selamanya (lifetime access). Pasanganmu bisa membuka dan mengenang momen ini kapan pun tanpa batas waktu."
+                        },
+                        {
+                            q: "Bagaimana cara memasukkan ucapan & foto ke dalam kado digital?",
+                            a: "Setelah pemesanan di Shopee terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan puitis, dan memilih lagu favorit dengan sangat mudah."
+                        },
+                        {
+                            q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka QR Code?",
+                            a: "Tidak perlu aplikasi apapun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu QR Emas. Halaman kado digital sinematik akan langsung terbuka otomatis di browser bawaan HP."
+                        },
+                        {
+                            q: "Bisakah hampers dikirimkan langsung ke alamat penerima (sebagai hadiah)?",
+                            a: "Tentu saja! Saat checkout di Shopee, kamu bisa langsung memasukkan nama & alamat penerima sebagai tujuan pengiriman. Kami akan mengemas hampers dengan sangat rapi dan aman."
+                        }
+                    ].map((faq, i) => {
+                        const isOpen = openFaqIndex === i;
+                        return (
+                            <SpringAnimatedSection key={i} delay={i * 70}>
+                                <div
+                                    style={{
+                                        backgroundColor: isOpen ? "#ffffff" : "rgba(255,255,255,0.65)",
+                                        backdropFilter: "blur(16px)",
+                                        border: isOpen ? "1.5px solid rgba(205,171,143,0.5)" : "1px solid rgba(255,255,255,0.8)",
+                                        borderRadius: "20px",
+                                        overflow: "hidden",
+                                        boxShadow: isOpen ? "0 12px 30px -10px rgba(56,42,36,0.08)" : "0 4px 15px -5px rgba(56,42,36,0.02)",
+                                        transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+                                    }}
+                                >
+                                    <button
+                                        onClick={() => setOpenFaqIndex(isOpen ? null : i)}
+                                        style={{
+                                            width: "100%",
+                                            padding: "22px 28px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            gap: "16px",
+                                            background: "none",
+                                            border: "none",
+                                            textAlign: "left",
+                                            cursor: "pointer",
+                                            color: "#382a24",
+                                            outline: "none"
+                                        }}
+                                    >
+                                        <span style={{
+                                            fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                            fontSize: "1.25rem",
+                                            fontWeight: 600,
+                                            lineHeight: 1.3,
+                                            color: isOpen ? "#a67c52" : "#382a24"
+                                        }}>
+                                            {faq.q}
+                                        </span>
+                                        <div style={{
+                                            width: "32px",
+                                            height: "32px",
+                                            borderRadius: "50%",
+                                            backgroundColor: isOpen ? "rgba(205,171,143,0.15)" : "rgba(205,171,143,0.08)",
+                                            color: isOpen ? "#a67c52" : "#6e5c53",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            flexShrink: 0,
+                                            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                            transition: "all 0.3s ease"
+                                        }}>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                    {isOpen && (
+                                        <div style={{
+                                            padding: "0 28px 24px 28px",
+                                            fontSize: "0.93rem",
+                                            color: "#6e5c53",
+                                            lineHeight: 1.7,
+                                            borderTop: "1px solid rgba(205,171,143,0.12)",
+                                            paddingTop: "16px"
+                                        }}>
+                                            {faq.a}
+                                        </div>
+                                    )}
+                                </div>
+                            </SpringAnimatedSection>
+                        );
+                    })}
+                </div>
             </section>
 
             {/* ── FOOTER CTA BANNER ── */}
