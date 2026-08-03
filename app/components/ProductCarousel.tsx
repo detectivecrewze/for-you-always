@@ -185,7 +185,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     </svg>
                     Pesan
                 </button>
-                <Link href={card.href} style={{
+                <Link href={card.href} prefetch={true} style={{
                     display: "flex", justifyContent: "center", alignItems: "center", gap: 6,
                     width: "100%", padding: "12px 0", borderRadius: 12,
                         border: "1.5px solid rgba(205,171,143,0.3)",
