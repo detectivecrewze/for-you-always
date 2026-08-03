@@ -177,7 +177,7 @@ export default function UnboxTheMemoryPage() {
                     justifyContent: "space-between",
                     gap: "56px"
                 }}>
-                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD WITH 3D TILT & LIGHT SHIMMER */}
+                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD WITH BLUR SILHOUETTE & UPCOMING BADGE */}
                     <div 
                         style={{
                             flex: "1 1 400px",
@@ -192,10 +192,36 @@ export default function UnboxTheMemoryPage() {
                             maxWidth: "480px",
                             borderRadius: "28px",
                             overflow: "hidden",
-                            border: "1px solid rgba(255,255,255,0.9)",
+                            border: "1px solid rgba(205,171,143,0.3)",
                             boxShadow: "0 20px 50px -15px rgba(56,42,36,0.15)",
-                            background: "rgba(255,255,255,0.5)"
+                            background: "#1d1816"
                         }}>
+                            {/* UPCOMING REVEAL OVERLAY BADGE */}
+                            <div style={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                backgroundColor: "rgba(29,24,22,0.88)",
+                                border: "1px solid rgba(205,171,143,0.4)",
+                                color: "#cdab8f",
+                                padding: "10px 22px",
+                                borderRadius: "999px",
+                                fontSize: "0.8rem",
+                                fontWeight: 700,
+                                letterSpacing: "0.15em",
+                                textTransform: "uppercase",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                zIndex: 10,
+                                whiteSpace: "nowrap",
+                                boxShadow: "0 12px 32px rgba(0,0,0,0.4)"
+                            }}>
+                                <span style={{ fontSize: 13 }}>🔒</span>
+                                <span>REVEALING SOON • UPCOMING</span>
+                            </div>
+
                             <Image
                                 src="/assets/unbox_hampers_hero.jpg"
                                 alt="Unbox the Memory Gift Box Hampers Showcase"
@@ -205,7 +231,9 @@ export default function UnboxTheMemoryPage() {
                                     width: "100%",
                                     height: "auto",
                                     display: "block",
-                                    objectFit: "cover"
+                                    objectFit: "cover",
+                                    filter: "blur(14px) contrast(1.05) brightness(0.9)",
+                                    transform: "scale(1.06)"
                                 }}
                                 priority
                             />
@@ -228,15 +256,11 @@ export default function UnboxTheMemoryPage() {
                             padding: "6px 18px",
                             borderRadius: "999px",
                             marginBottom: "24px",
-                            letterSpacing: "0.2em",
+                            letterSpacing: "0.15em",
                             textTransform: "uppercase"
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                            <span>Physical Hampers + Digital Experience</span>
+                            <span style={{ fontSize: 12 }}>✨</span>
+                            <span>UPCOMING • EXCLUSIVE RELEASE</span>
                         </div>
 
                         {/* 2. HEADLINE */}
@@ -264,26 +288,24 @@ export default function UnboxTheMemoryPage() {
                             maxWidth: "520px",
                             textAlign: "left"
                         }}>
-                            Kemasan gift box hampers eksklusif beraroma hangat khas atelier, dipadukan dengan kartu QR code yang menyimpan surat, musik, dan memori pribadi di dalamnya.
+                            Pengalaman gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif. Segera hadir untuk momen terindahmu.
                         </p>
 
-                        {/* 4. CTA BUTTONS WITH LIVE MOVING RIBBON GLOW & ICON BOUNCE */}
+                        {/* 4. CTA BUTTONS: VIP WA NOTIFICATION WAITLIST */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
                             <a
-                                href={SHOPEE_URL}
+                                href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20mendaftar%20VIP%20Notification%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
-                                    position: "relative",
-                                    overflow: "hidden",
                                     display: "inline-flex",
                                     alignItems: "center",
-                                    gap: "12px",
+                                    gap: "10px",
                                     backgroundColor: "#382a24",
                                     color: "#faf7f2",
                                     fontWeight: 700,
-                                    fontSize: "0.95rem",
-                                    padding: "16px 36px",
+                                    fontSize: "0.92rem",
+                                    padding: "16px 32px",
                                     borderRadius: "14px",
                                     textDecoration: "none",
                                     boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
@@ -298,72 +320,41 @@ export default function UnboxTheMemoryPage() {
                                     e.currentTarget.style.backgroundColor = "#382a24";
                                 }}
                             >
-                                {/* SILKY RIBBON LIGHT BEAM SWEEP OVERLAY */}
-                                <span style={{
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    width: "60%",
-                                    height: "100%",
-                                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent)",
-                                    transform: "skewX(-20deg)",
-                                    animation: "ribbon-beam-sweep 3.2s ease-in-out infinite",
-                                    pointerEvents: "none"
-                                }} />
-                                
-                                <svg 
-                                    width="18" 
-                                    height="18" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round" 
-                                    style={{ 
-                                        position: "relative", 
-                                        zIndex: 2,
-                                        animation: "shopee-icon-bounce 4s ease-in-out infinite"
-                                    }}
-                                >
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                </svg>
-                                <span style={{ position: "relative", zIndex: 2 }}>Pesan via Shopee Official</span>
+                                <span style={{ fontSize: 16 }}>🔔</span>
+                                <span>Kabari Saya Saat Rilis (VIP Access)</span>
                             </a>
 
-                            <a
-                                href="#cara-kerja"
+                            <Link
+                                href="/catalog"
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
                                     gap: "8px",
                                     color: "#6e5c53",
                                     fontWeight: 600,
-                                    fontSize: "0.95rem",
-                                    padding: "16px 28px",
+                                    fontSize: "0.92rem",
+                                    padding: "16px 26px",
                                     borderRadius: "14px",
                                     textDecoration: "none",
-                                    backgroundColor: "rgba(255,255,255,0.6)",
+                                    backgroundColor: "#ffffff",
                                     border: "1px solid rgba(205,171,143,0.3)",
                                     transition: "all 0.3s ease"
                                 }}
                                 onMouseOver={(e) => {
                                     e.currentTarget.style.color = "#382a24";
-                                    e.currentTarget.style.backgroundColor = "#ffffff";
+                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.6)";
                                 }}
                                 onMouseOut={(e) => {
                                     e.currentTarget.style.color = "#6e5c53";
-                                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.6)";
+                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.3)";
                                 }}
                             >
-                                <span>Pelajari Alur Unboxing</span>
+                                <span>Coba Kado Digital Instan</span>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
 
                         {/* 5. TRUST BADGES ROW */}
@@ -431,26 +422,26 @@ export default function UnboxTheMemoryPage() {
                         {
                             img: "/assets/unbox_hampers_hero.jpg",
                             tag: "Kemasan Premium",
-                            title: "Gift Box & Pita Satin",
-                            desc: "Kotak kado berbahan linen tebal bertekstur halus, diikat pita satin coklat khas digital atelier."
+                            title: "Gift Box Exclusive",
+                            desc: "Kotak kado fisik eksklusif berdesain elegan yang dirancang untuk momen kejutan istimewa."
                         },
                         {
                             img: "/assets/unbox_qr_card.jpg",
-                            tag: "Kartu QR Eksklusif",
-                            title: "Gold Foil QR Card",
-                            desc: "Kartu QR code bertekstur linen dengan stempel emas embossed untuk membuka kado digital."
+                            tag: "Kartu QR Code",
+                            title: "QR Experience Card",
+                            desc: "Kartu QR code unik yang langsung terhubung ke halaman kado digital buatanmu."
                         },
                         {
                             img: "/assets/unbox_flowers_detail.jpg",
-                            tag: "Sentuhan Puitis",
-                            title: "Mini Dried Bouquet",
-                            desc: "Rangkaian bunga kering tahan lama yang memberikan aroma hangat dan kesan estetis."
+                            tag: "Sentuhan Manis",
+                            title: "Special Touch",
+                            desc: "Elemen pendukung eksklusif yang mempercantik tampilan unboxing kado saat dibuka."
                         },
                         {
                             img: "/assets/unbox_box_detail.jpg",
                             tag: "Kartu Akses",
                             title: "Panduan Unboxing",
-                            desc: "Kartu petunjuk simpel agar penerima bisa langsung scan dan menikmati kado digital."
+                            desc: "Petunjuk mudah agar penerima bisa langsung scan dan menikmati kejutan kado."
                         }
                     ].map((card, idx) => (
                         <SpringAnimatedSection key={idx} delay={idx * 100}>
@@ -472,7 +463,8 @@ export default function UnboxTheMemoryPage() {
                                             width: "100%",
                                             height: "100%",
                                             objectFit: "cover",
-                                            transition: "transform 0.5s ease"
+                                            filter: "blur(12px) contrast(1.05) brightness(0.95)",
+                                            transform: "scale(1.06)"
                                         }}
                                     />
                                     <span style={{
@@ -535,8 +527,8 @@ export default function UnboxTheMemoryPage() {
                         {[
                             {
                                 num: "01",
-                                title: "Pesan Hampers di Shopee",
-                                desc: "Pilih produk fisik 'Unbox the Memory' di Shopee Official Store. Isi data ucapan digital di studio kado yang kamu inginkan.",
+                                title: "Daftar VIP Notification",
+                                desc: "Klik 'Kabari Saya Saat Rilis' untuk mendaftarkan WhatsApp kamu ke dalam daftar prioritas peluncuran pertama.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -546,7 +538,7 @@ export default function UnboxTheMemoryPage() {
                             {
                                 num: "02",
                                 title: "Terima & Open The Box",
-                                desc: "Hampers eksklusif sampai di tangan pasanganmu. Buka pita satin dan temukan Kartu QR Stempel Emas di dalam box.",
+                                desc: "Buka kemasan hampers eksklusif dan temukan Kartu Akses QR Code spesial di dalam gift box.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -919,23 +911,23 @@ export default function UnboxTheMemoryPage() {
                     {[
                         {
                             q: "Berapa lama estimasi pengiriman hampers ke kota tujuan?",
-                            a: "Hampers fisik dikirim menggunakan ekspedisi terpercaya dari Shopee Official Store kami. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
+                            a: "Hampers fisik dikirim menggunakan ekspedisi terpercaya dengan pengemasan aman dan garansi sampai di tujuan. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
                         },
                         {
                             q: "Apakah kado digital di dalam Kartu QR memiliki batas waktu (kadaluarsa)?",
-                            a: "Sama sekali tidak! Seluruh kado digital yang disematkan ke Kartu QR Emas bersifat aktif selamanya (lifetime access). Pasanganmu bisa membuka dan mengenang momen ini kapan pun tanpa batas waktu."
+                            a: "Sama sekali tidak! Seluruh kado digital yang disematkan ke Kartu Akses QR bersifat aktif selamanya (lifetime access). Pasanganmu bisa membuka dan mengenang momen ini kapan pun tanpa batas waktu."
                         },
                         {
                             q: "Bagaimana cara memasukkan ucapan & foto ke dalam kado digital?",
-                            a: "Setelah pemesanan di Shopee terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan puitis, dan memilih lagu favorit dengan sangat mudah."
+                            a: "Setelah pemesanan terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan puitis, dan memilih lagu favorit dengan sangat mudah."
                         },
                         {
                             q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka QR Code?",
-                            a: "Tidak perlu aplikasi apapun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu QR Emas. Halaman kado digital sinematik akan langsung terbuka otomatis di browser bawaan HP."
+                            a: "Tidak perlu aplikasi apapun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR. Halaman kado digital sinematik akan langsung terbuka otomatis di browser bawaan HP."
                         },
                         {
                             q: "Bisakah hampers dikirimkan langsung ke alamat penerima (sebagai hadiah)?",
-                            a: "Tentu saja! Saat checkout di Shopee, kamu bisa langsung memasukkan nama & alamat penerima sebagai tujuan pengiriman. Kami akan mengemas hampers dengan sangat rapi dan aman."
+                            a: "Tentu saja! Saat pemesanan, kamu bisa langsung memasukkan nama & alamat penerima sebagai tujuan pengiriman. Kami akan mengemas hampers dengan sangat rapi dan aman."
                         }
                     ].map((faq, i) => {
                         const isOpen = openFaqIndex === i;
@@ -1025,7 +1017,7 @@ export default function UnboxTheMemoryPage() {
             }}>
                 <div style={{ maxWidth: "800px", margin: "0 auto", position: "relative", zIndex: 2 }}>
                     <span style={{ color: "#cdab8f", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>
-                        EXCLUSIVELY AVAILABLE AT SHOPEE
+                        OFFICIAL RELEASE • COMING SOON
                     </span>
                     <h2 style={{
                         fontFamily: "var(--font-display, Cormorant Garamond, serif)",
@@ -1035,14 +1027,14 @@ export default function UnboxTheMemoryPage() {
                         marginBottom: "20px",
                         color: "#ffffff"
                     }}>
-                        Siap Memberikan <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Kejutan Terindah?</span>
+                        Ingin Menjadi Yang Pertama <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Memilikinya?</span>
                     </h2>
                     <p style={{ fontSize: "1.05rem", color: "rgba(250,247,242,0.7)", lineHeight: 1.7, marginBottom: "40px" }}>
-                        Pesan hampers <strong>Unbox the Memory</strong> secara resmi melalui Toko Shopee kami. Nikmati pengiriman aman bergaransi dengan kemasan eksklusif.
+                        Daftarkan WhatsApp kamu sekarang untuk mendapatkan pemberitahuan rilis pertama edisi fisik eksklusif <strong>Unbox the Memory</strong>.
                     </p>
 
                     <a
-                        href={SHOPEE_URL}
+                        href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20mendaftar%20VIP%20Notification%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
@@ -1068,11 +1060,7 @@ export default function UnboxTheMemoryPage() {
                             e.currentTarget.style.backgroundColor = "#cdab8f";
                         }}
                     >
-                        <span>Kunjungi Shopee Official Store</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 12h14"></path>
-                            <path d="m12 5 7 7-7 7"></path>
-                        </svg>
+                        <span>🔔 Kabari Saya Saat Rilis (VIP Access)</span>
                     </a>
                 </div>
             </section>

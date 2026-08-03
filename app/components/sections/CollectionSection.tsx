@@ -81,16 +81,16 @@ export default function CollectionSection() {
                                 onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 20000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
                             },
                             {
-                                badgeText: "PHYSICAL HAMPERS",
+                                badgeText: "UPCOMING",
                                 badgeColor: "#1d1816",
                                 badgeVariant: "solid",
                                 imageSrc: "/assets/unbox_hampers_hero.jpg",
-                                price: "Di Shopee",
+                                price: "Coming Soon",
                                 title: "Unbox the Memory",
                                 titleColor: "#382a24",
-                                description: "Gift box hampers fisik eksklusif aroma khas atelier dipadukan Kartu QR Stempel Emas kado digital.",
+                                description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif. Segera hadir untuk momen terindahmu.",
                                 href: "/catalog/unbox-the-memory",
-                                onAddToCart: () => window.open("https://shopee.co.id", "_blank")
+                                onAddToCart: () => window.open("https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20mendaftar%20VIP%20Notification%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis.", "_blank")
                             },
                             {
                                 badgeText: "#1 Exclusive",

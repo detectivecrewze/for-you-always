@@ -72,7 +72,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
             }}
         >
             {/* Image Container with rounded corners all around */}
-            <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem" }}>
+            <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", backgroundColor: "#1d1816" }}>
                 <Image
                     src={card.imageSrc}
                     alt={card.title}
@@ -84,10 +84,40 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         objectFit: "cover",
                         transition: "transform 0.5s ease",
                         pointerEvents: "none",
+                        filter: card.badgeText === "UPCOMING" ? "blur(14px) contrast(1.05) brightness(0.9)" : "none",
+                        transform: card.badgeText === "UPCOMING" ? "scale(1.06)" : "scale(1)"
                     }}
                     onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                 />
+
+                {/* Central Lock Badge for UPCOMING items */}
+                {card.badgeText === "UPCOMING" && (
+                    <div style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "rgba(29,24,22,0.88)",
+                        border: "1px solid rgba(205,171,143,0.4)",
+                        color: "#cdab8f",
+                        padding: "6px 14px",
+                        borderRadius: 999,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                        zIndex: 5,
+                        whiteSpace: "nowrap",
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.3)"
+                    }}>
+                        <span style={{ fontSize: 11 }}>🔒</span>
+                        <span>REVEALING SOON</span>
+                    </div>
+                )}
                 {/* Badge */}
                 {card.badgeText && (
                     <span style={{
@@ -180,10 +210,19 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 14px ${card.titleColor || "#382a24"}33`;
                     }}
                 >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    Pesan
+                    {card.badgeText === "UPCOMING" ? (
+                        <>
+                            <span style={{ fontSize: 13 }}>🔔</span>
+                            KABARI SAYA (VIP)
+                        </>
+                    ) : (
+                        <>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            Pesan
+                        </>
+                    )}
                 </button>
                 <Link href={card.href} prefetch={true} style={{
                     display: "flex", justifyContent: "center", alignItems: "center", gap: 6,

@@ -103,7 +103,7 @@ export default function CompactProductCard({
         onMouseEnter={handleCardMouseEnter}
         onMouseLeave={handleCardMouseLeave}>
             {/* Image Container */}
-            <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", zIndex: 1 }}>
+            <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", zIndex: 1, backgroundColor: "#1d1816" }}>
                 <Image 
                     src={imageSrc} 
                     alt={title} 
@@ -111,10 +111,43 @@ export default function CompactProductCard({
                     unoptimized={true}
                     priority={priority}
                     loading={priority ? undefined : "lazy"}
-                    style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
+                    style={{ 
+                        objectFit: "cover", 
+                        transition: "transform 0.5s ease",
+                        filter: badgeText === "UPCOMING" ? "blur(14px) contrast(1.05) brightness(0.9)" : "none",
+                        transform: badgeText === "UPCOMING" ? "scale(1.06)" : "scale(1)"
+                    }}
                     onMouseEnter={handleImageMouseEnter}
                     onMouseLeave={handleImageMouseLeave}
                 />
+                
+                {/* Central Lock Badge for UPCOMING items */}
+                {badgeText === "UPCOMING" && (
+                    <div style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "rgba(29,24,22,0.88)",
+                        border: "1px solid rgba(205,171,143,0.4)",
+                        color: "#cdab8f",
+                        padding: "6px 14px",
+                        borderRadius: 999,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                        zIndex: 5,
+                        whiteSpace: "nowrap",
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.3)"
+                    }}>
+                        <span style={{ fontSize: 11 }}>🔒</span>
+                        <span>REVEALING SOON</span>
+                    </div>
+                )}
                 
                 {/* Top Left Badge */}
                 {badgeText && (
