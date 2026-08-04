@@ -110,7 +110,7 @@ export default function UnboxTheMemoryPage() {
 
     return (
         <div style={{ backgroundColor: "#faf7f2", color: "#382a24", minHeight: "100vh", fontFamily: "var(--font-sans, system-ui, sans-serif)", position: "relative", overflowX: "hidden" }}>
-            
+
             {/* GLOBAL FLOATING NAVBAR */}
             <Navbar />
 
@@ -178,7 +178,7 @@ export default function UnboxTheMemoryPage() {
                     gap: "56px"
                 }}>
                     {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD WITH BLUR SILHOUETTE & UPCOMING BADGE */}
-                    <div 
+                    <div
                         style={{
                             flex: "1 1 400px",
                             position: "relative",
@@ -242,7 +242,7 @@ export default function UnboxTheMemoryPage() {
 
                     {/* RIGHT COLUMN: BADGE, HEADLINE, SUBTITLE & CTAS */}
                     <div style={{ flex: "1 1 480px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        
+
                         {/* 1. BREADCRUMB BADGE */}
                         <div style={{
                             display: "inline-flex",
@@ -259,7 +259,7 @@ export default function UnboxTheMemoryPage() {
                             letterSpacing: "0.15em",
                             textTransform: "uppercase"
                         }}>
-                            <span style={{ fontSize: 12 }}>✨</span>
+                            <span style={{ fontSize: 12 }}></span>
                             <span>UPCOMING • EXCLUSIVE RELEASE</span>
                         </div>
 
@@ -651,7 +651,7 @@ export default function UnboxTheMemoryPage() {
                     </button>
 
                     {/* SCROLLABLE EXPERIENCE TABS BAR */}
-                    <div 
+                    <div
                         ref={tabScrollRef}
                         style={{
                             display: "flex",
@@ -665,7 +665,7 @@ export default function UnboxTheMemoryPage() {
                             scrollbarWidth: "none",
                             msOverflowStyle: "none",
                             flex: 1
-                        }} 
+                        }}
                         className="no-scrollbar"
                     >
                         {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
@@ -814,20 +814,20 @@ export default function UnboxTheMemoryPage() {
                                     overflow: "hidden"
                                 }}>
                                     <Image
-                                         key={selectedDigitalExperience}
-                                         src={currentExp.imageSrc}
-                                         alt={`Preview ${currentExp.title}`}
-                                         width={480}
-                                         height={320}
-                                         priority
-                                         style={{
-                                             position: "absolute",
-                                             inset: 0,
-                                             width: "100%",
-                                             height: "100%",
-                                             objectFit: "cover",
-                                             display: "block"
-                                         }}
+                                        key={selectedDigitalExperience}
+                                        src={currentExp.imageSrc}
+                                        alt={`Preview ${currentExp.title}`}
+                                        width={480}
+                                        height={320}
+                                        priority
+                                        style={{
+                                            position: "absolute",
+                                            inset: 0,
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            display: "block"
+                                        }}
                                     />
                                     {/* TOP-RIGHT SCANNER BADGE */}
                                     <div style={{
@@ -855,7 +855,7 @@ export default function UnboxTheMemoryPage() {
                                         <span>QR Scan Result Preview</span>
                                     </div>
                                 </div>
-                                
+
                                 <div style={{ padding: "18px 24px", color: "#faf7f2", backgroundColor: "#1d1816" }}>
                                     <p style={{ fontWeight: 600, fontSize: "0.95rem", margin: 0, color: "#ffffff", display: "flex", alignItems: "center", gap: "8px" }}>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
