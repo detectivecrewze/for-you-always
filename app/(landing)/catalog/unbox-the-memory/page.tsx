@@ -83,7 +83,7 @@ export default function UnboxTheMemoryPage() {
             title: "Invitation Edition",
             subtitle: "Undangan Kencan Digital Interaktif",
             desc: "Tiket undangan kencan spesial dengan pilihan aktivitas interaktif, lokasi, dan tanggal kencan manis.",
-            badge: "New Release ✨",
+            badge: "New Release",
             color: "#e8789a",
             previewUrl: "/catalog/invitation",
             imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
@@ -218,7 +218,10 @@ export default function UnboxTheMemoryPage() {
                                 whiteSpace: "nowrap",
                                 boxShadow: "0 12px 32px rgba(0,0,0,0.4)"
                             }}>
-                                <span style={{ fontSize: 13 }}>🔒</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
                                 <span>REVEALING SOON • UPCOMING</span>
                             </div>
 
@@ -320,7 +323,10 @@ export default function UnboxTheMemoryPage() {
                                     e.currentTarget.style.backgroundColor = "#382a24";
                                 }}
                             >
-                                <span style={{ fontSize: 16 }}>🔔</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                </svg>
                                 <span>Kabari Saya Saat Rilis (VIP Access)</span>
                             </a>
 
@@ -1056,7 +1062,11 @@ export default function UnboxTheMemoryPage() {
                             e.currentTarget.style.backgroundColor = "#cdab8f";
                         }}
                     >
-                        <span>🔔 Kabari Saya Saat Rilis (VIP Access)</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span>Kabari Saya Saat Rilis (VIP Access)</span>
                     </a>
                 </div>
             </section>
