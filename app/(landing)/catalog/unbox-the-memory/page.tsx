@@ -293,13 +293,13 @@ export default function UnboxTheMemoryPage() {
                             maxWidth: "520px",
                             textAlign: "left"
                         }}>
-                            Pengalaman gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif. Segera hadir untuk momen terindahmu.
+                            Pengalaman gift box hampers fisik eksklusif berpadu dengan kado digital interaktif. Segera hadir untuk momen terindahmu.
                         </p>
 
                         {/* 4. CTA BUTTONS: VIP WA NOTIFICATION WAITLIST */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
                             <a
-                                href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20mendaftar%20VIP%20Notification%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
+                                href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20dikabari%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
@@ -329,7 +329,7 @@ export default function UnboxTheMemoryPage() {
                                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                                 </svg>
-                                <span>Kabari Saya Saat Rilis (VIP Access)</span>
+                                <span>Kabari Saya Saat Rilis</span>
                             </a>
 
                             <Link
@@ -535,8 +535,8 @@ export default function UnboxTheMemoryPage() {
                         {[
                             {
                                 num: "01",
-                                title: "Daftar VIP Notification",
-                                desc: "Klik 'Kabari Saya Saat Rilis' untuk mendaftarkan WhatsApp kamu ke dalam daftar prioritas peluncuran pertama.",
+                                title: "Notifikasi Rilis",
+                                desc: "Klik 'Kabari Saya Saat Rilis' untuk mendaftarkan WhatsApp kamu agar mendapatkan pemberitahuan saat hampers resmi diluncurkan.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -1038,7 +1038,7 @@ export default function UnboxTheMemoryPage() {
                     </p>
 
                     <a
-                        href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20mendaftar%20VIP%20Notification%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
+                        href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20dikabari%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
@@ -1068,7 +1068,7 @@ export default function UnboxTheMemoryPage() {
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                         </svg>
-                        <span>Kabari Saya Saat Rilis (VIP Access)</span>
+                        <span>Kabari Saya Saat Rilis</span>
                     </a>
                 </div>
             </section>

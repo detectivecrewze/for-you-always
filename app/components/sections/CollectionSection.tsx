@@ -90,7 +90,7 @@ export default function CollectionSection() {
                                 titleColor: "#382a24",
                                 description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif. Segera hadir untuk momen terindahmu.",
                                 href: "/catalog/unbox-the-memory",
-                                onAddToCart: () => window.open("https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20mendaftar%20VIP%20Notification%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis.", "_blank")
+                                onAddToCart: () => window.open("https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20dikabari%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis.", "_blank")
                             },
                             {
                                 badgeText: "#1 Exclusive",
