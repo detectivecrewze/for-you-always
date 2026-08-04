@@ -914,10 +914,6 @@ export default function UnboxTheMemoryPage() {
                             a: "Hampers fisik dikirim menggunakan ekspedisi terpercaya dengan pengemasan aman dan garansi sampai di tujuan. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
                         },
                         {
-                            q: "Apakah kado digital di dalam Kartu QR memiliki batas waktu (kadaluarsa)?",
-                            a: "Sama sekali tidak! Seluruh kado digital yang disematkan ke Kartu Akses QR bersifat aktif selamanya (lifetime access). Pasanganmu bisa membuka dan mengenang momen ini kapan pun tanpa batas waktu."
-                        },
-                        {
                             q: "Bagaimana cara memasukkan ucapan & foto ke dalam kado digital?",
                             a: "Setelah pemesanan terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan puitis, dan memilih lagu favorit dengan sangat mudah."
                         },
