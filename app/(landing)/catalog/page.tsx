@@ -178,7 +178,7 @@ export default function CatalogPage() {
 
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string }) => {
         if (item.id === "unbox-the-memory") {
-            window.open(SHOPEE_URL, "_blank");
+            window.location.href = "/catalog/unbox-the-memory";
             return;
         }
 
