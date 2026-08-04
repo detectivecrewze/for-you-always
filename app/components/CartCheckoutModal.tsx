@@ -16,7 +16,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
     const [closing, setClosing] = useState(false);
     
     const hasMemoria = items.some(item => item.id === "loves");
-    const isMemoriaDelay = new Date().getTime() < new Date("2026-07-30T00:00:00+07:00").getTime();
+    const isMemoriaDelay = new Date().getTime() < new Date("2026-08-06T00:00:00+07:00").getTime();
 
     const handleClose = () => {
         setClosing(true);
@@ -162,7 +162,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
 
                         {hasMemoria && isMemoriaDelay && (
                             <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (29 Juli), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (5 Agustus), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
                             </div>
                         )}
 
@@ -225,7 +225,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
 
                         {hasMemoria && isMemoriaDelay && (
                             <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (29 Juli), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (5 Agustus), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
                             </div>
                         )}
 

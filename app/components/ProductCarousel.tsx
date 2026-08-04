@@ -30,6 +30,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     const singleSetWidth = cards.length * 380;
     const duration = singleSetWidth / speed;
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const [navigatingKey, setNavigatingKey] = useState<string | null>(null);
 
     const handlePesanClick = (card: LoopCard) => {
         if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
@@ -224,9 +225,13 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         </>
                     )}
                 </button>
-                <Link href={card.href} prefetch={true} style={{
-                    display: "flex", justifyContent: "center", alignItems: "center", gap: 6,
-                    width: "100%", padding: "12px 0", borderRadius: 12,
+                <Link 
+                    href={card.href} 
+                    prefetch={true} 
+                    onClick={() => setNavigatingKey(key)}
+                    style={{
+                        display: "flex", justifyContent: "center", alignItems: "center", gap: 6,
+                        width: "100%", padding: "12px 0", borderRadius: 12,
                         border: "1.5px solid rgba(205,171,143,0.3)",
                         background: "transparent", color: "#6e5c53",
                         fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700,
@@ -234,14 +239,32 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         letterSpacing: "0.07em", textTransform: "uppercase",
                         transition: "all 0.2s ease",
                         boxSizing: "border-box",
+                        opacity: navigatingKey === key ? 0.8 : 1
                     }}
                     onMouseEnter={e => { e.currentTarget.style.background = "#faf7f2"; e.currentTarget.style.borderColor = "rgba(205,171,143,0.5)"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(205,171,143,0.3)"; }}
                 >
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 5h5v5"/><path d="M10 14L19 5"/><path d="M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>
-                    </svg>
-                    Preview
+                    {navigatingKey === key ? (
+                        <>
+                            <span style={{
+                                display: "inline-block",
+                                width: 11,
+                                height: 11,
+                                borderRadius: "50%",
+                                border: "2px solid rgba(110,92,83,0.3)",
+                                borderTopColor: "#6e5c53",
+                                animation: "gold-spin 0.8s linear infinite"
+                            }} />
+                            Memuat...
+                        </>
+                    ) : (
+                        <>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M14 5h5v5"/><path d="M10 14L19 5"/><path d="M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>
+                            </svg>
+                            Preview
+                        </>
+                    )}
                 </Link>
             </div>
         </article>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -88,6 +88,8 @@ export default function CompactProductCard({
         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
         (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${titleColor}33`;
     }, [titleColor]);
+
+    const [isNavigating, setIsNavigating] = useState(false);
 
     return (
         <div style={{
@@ -304,24 +306,47 @@ export default function CompactProductCard({
 
                 {/* Buttons Container */}
                 <div style={{ display: "flex", gap: 8 }}>
-                    <Link href={href} prefetch={true} style={{
-                        flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
-                        background: onAddToCart ? "#faf7f2" : titleColor,
-                        color: onAddToCart ? "#382a24" : "#faf7f2",
-                        fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
-                        textDecoration: "none", transition: "all 0.2s ease",
-                        border: onAddToCart ? "1px solid rgba(205,171,143,0.2)" : "none",
-                        boxShadow: onAddToCart ? "none" : `0 4px 12px ${titleColor}33`,
-                        letterSpacing: "0.05em", textTransform: "uppercase",
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                        touchAction: "manipulation"
-                    }}
-                    onMouseEnter={onAddToCart ? handleLihatMouseEnter : undefined}
-                    onMouseLeave={onAddToCart ? handleLihatMouseLeave : undefined}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 5h5v5"/><path d="M10 14L19 5"/><path d="M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>
-                        </svg>
-                        Lihat
+                    <Link 
+                        href={href} 
+                        prefetch={true} 
+                        onClick={() => setIsNavigating(true)}
+                        style={{
+                            flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
+                            background: onAddToCart ? "#faf7f2" : titleColor,
+                            color: onAddToCart ? "#382a24" : "#faf7f2",
+                            fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700,
+                            textDecoration: "none", transition: "all 0.2s ease",
+                            border: onAddToCart ? "1px solid rgba(205,171,143,0.2)" : "none",
+                            boxShadow: onAddToCart ? "none" : `0 4px 12px ${titleColor}33`,
+                            letterSpacing: "0.05em", textTransform: "uppercase",
+                            display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                            touchAction: "manipulation",
+                            opacity: isNavigating ? 0.8 : 1
+                        }}
+                        onMouseEnter={onAddToCart ? handleLihatMouseEnter : undefined}
+                        onMouseLeave={onAddToCart ? handleLihatMouseLeave : undefined}
+                    >
+                        {isNavigating ? (
+                            <>
+                                <span style={{
+                                    display: "inline-block",
+                                    width: 12,
+                                    height: 12,
+                                    borderRadius: "50%",
+                                    border: "2px solid rgba(166,124,82,0.3)",
+                                    borderTopColor: "#a67c52",
+                                    animation: "gold-spin 0.8s linear infinite"
+                                }} />
+                                Memuat...
+                            </>
+                        ) : (
+                            <>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M14 5h5v5"/><path d="M10 14L19 5"/><path d="M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>
+                                </svg>
+                                Lihat
+                            </>
+                        )}
                     </Link>
                     
                     {onAddToCart && (
