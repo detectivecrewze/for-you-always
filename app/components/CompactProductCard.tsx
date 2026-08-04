@@ -328,6 +328,12 @@ export default function CompactProductCard({
                     >
                         {isNavigating ? (
                             <>
+                                <style>{`
+                                    @keyframes gold-spin {
+                                        0% { transform: rotate(0deg); }
+                                        100% { transform: rotate(360deg); }
+                                    }
+                                `}</style>
                                 <span style={{
                                     display: "inline-block",
                                     width: 12,
@@ -335,7 +341,7 @@ export default function CompactProductCard({
                                     borderRadius: "50%",
                                     border: "2px solid rgba(166,124,82,0.3)",
                                     borderTopColor: "#a67c52",
-                                    animation: "gold-spin 0.8s linear infinite"
+                                    animation: "gold-spin 0.75s linear infinite"
                                 }} />
                                 Memuat...
                             </>

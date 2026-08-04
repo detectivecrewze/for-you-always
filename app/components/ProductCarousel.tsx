@@ -246,6 +246,12 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                 >
                     {navigatingKey === key ? (
                         <>
+                            <style>{`
+                                @keyframes gold-spin {
+                                    0% { transform: rotate(0deg); }
+                                    100% { transform: rotate(360deg); }
+                                }
+                            `}</style>
                             <span style={{
                                 display: "inline-block",
                                 width: 11,
@@ -253,7 +259,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                                 borderRadius: "50%",
                                 border: "2px solid rgba(110,92,83,0.3)",
                                 borderTopColor: "#6e5c53",
-                                animation: "gold-spin 0.8s linear infinite"
+                                animation: "gold-spin 0.75s linear infinite"
                             }} />
                             Memuat...
                         </>
