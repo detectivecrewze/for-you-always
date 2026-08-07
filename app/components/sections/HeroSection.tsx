@@ -229,7 +229,7 @@ export default function HeroSection() {
                             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                     <span style={{ fontFamily: "var(--font-sans)", fontSize: "17px", fontWeight: 800, color: "#1d1816" }}>
-                                        800+ Happy Customers
+                                        1.000+ Happy Customers
                                     </span>
                                     <div style={{ display: "flex", gap: 2 }}>
                                         {[...Array(5)].map((_, i) => (
@@ -318,7 +318,7 @@ export default function HeroSection() {
                                     }}>
                                         {[...Array(6)].map((_, arrayIndex) => (
                                             <div key={arrayIndex} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                                                {["DESAIN PREMIUM", "AKTIF SELAMANYA", "PROSES 1 MENIT", "800+ HAPPY CUSTOMERS", "LINK LANGSUNG JADI", "HARGA TERJANGKAU", "FULL CUSTOM"].map((text, i) => (
+                                                {["DESAIN PREMIUM", "AKTIF SELAMANYA", "PROSES 1 MENIT", "1.000+ HAPPY CUSTOMERS", "LINK LANGSUNG JADI", "HARGA TERJANGKAU", "FULL CUSTOM"].map((text, i) => (
                                                     <div key={i} style={{ 
                                                         flexShrink: 0, 
                                                         display: "flex", 

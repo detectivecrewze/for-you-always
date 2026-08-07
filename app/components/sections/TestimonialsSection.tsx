@@ -9,7 +9,7 @@ const testimonials = [
 ];
 
 const stats = [
-    { num: "800+", label: "Happy Customers" },
+    { num: "1.000+", label: "Happy Customers" },
     { num: "5.0", label: "Average Rating" },
     { num: "8", label: "Formats" },
 ];
