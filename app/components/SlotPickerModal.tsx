@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -7,6 +7,8 @@ export interface SlotPickerConfig {
     productId: string;
     productTitle: string;
     themeColor: string;
+    singlePriceText?: string;
+    threeSlotPriceText?: string;
     themeImgSrc?: string;
     onSelectSingle: () => void;
     onSelectThreeSlot: () => void;
@@ -154,7 +156,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
                             <span style={{ fontFamily: "var(--font-display)", fontSize: 18, color: "#382a24", letterSpacing: "-0.02em", fontWeight: 400 }}>
-                                Rp 15.000
+                                {config.singlePriceText || "Rp 15.000"}
                             </span>
                             <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(205,171,143,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#8b7e75" strokeWidth={2.5}>
@@ -212,7 +214,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
                             <span style={{ fontFamily: "var(--font-display)", fontSize: 18, color: accentColor, letterSpacing: "-0.02em", fontWeight: 400 }}>
-                                Rp 20.000
+                                {config.threeSlotPriceText || "Rp 20.000"}
                             </span>
                             <div style={{ width: 28, height: 28, borderRadius: "50%", background: `${accentColor}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke={accentColor} strokeWidth={2.5}>

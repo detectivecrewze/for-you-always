@@ -94,7 +94,7 @@ export function LandscapeProductCard({
     onAddToCart?: () => void;
     onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
-    themes?: { name: string, desc: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
+    themes?: { name: string, desc: string, color?: string, title?: string, description?: string, features?: string[], videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
     initialSelectedIndex?: number;
     autoCycle?: boolean;
     delay?: number;
@@ -142,6 +142,9 @@ export function LandscapeProductCard({
         let imgSrc = fallbackImgSrc;
         let dLink = demoLink;
         let dLabel = demoLabel || "Lihat Demo";
+        let activeTitle = title;
+        let activeDesc = description;
+        let activeFeats = features;
 
         if (selectedIndex !== null && themes && themes[selectedIndex]) {
             const theme = themes[selectedIndex];
@@ -152,6 +155,11 @@ export function LandscapeProductCard({
             const resolvedColor = activeTheme.color || theme.color || accentColor;
             accent = resolvedColor;
             glow = resolvedColor ? `${resolvedColor}33` : accentGlow;
+
+            if (theme.title) activeTitle = theme.title;
+            const themeDesc = theme.desc || theme.description;
+            if (themeDesc) activeDesc = themeDesc;
+            if (theme.features) activeFeats = theme.features;
 
             if (activeTheme.videoSrc) videoSrc = activeTheme.videoSrc;
             else if (theme.videoSrc) videoSrc = theme.videoSrc;
@@ -171,10 +179,10 @@ export function LandscapeProductCard({
             else dLabel = demoLabel || "Lihat Demo";
         }
 
-        return { activeAccent: accent, activeGlow: glow, activeVideoSrc: videoSrc, activeFallbackImgSrc: imgSrc, activeDemoLink: dLink, activeDemoLabel: dLabel };
-    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel]);
+        return { activeAccent: accent, activeGlow: glow, activeVideoSrc: videoSrc, activeFallbackImgSrc: imgSrc, activeDemoLink: dLink, activeDemoLabel: dLabel, activeTitle, activeDescription: activeDesc, activeFeatures: activeFeats };
+    }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel, title, description, features]);
 
-    const { activeAccent, activeGlow, activeFallbackImgSrc, activeDemoLink, activeDemoLabel } = activeValues;
+    const { activeAccent, activeGlow, activeFallbackImgSrc, activeDemoLink, activeDemoLabel, activeTitle, activeDescription, activeFeatures } = activeValues;
 
     // Sub-theme panel — di-memoize agar IIFE tidak dieksekusi ulang setiap render
     const subThemePanelData = useMemo(() => {
@@ -185,7 +193,7 @@ export function LandscapeProductCard({
     }, [themes, selectedIndex]);
 
     // Feature flags — di-memoize: 24 string check tidak diulang tiap render
-    const featureFlags = useMemo(() => features.map(feat => {
+    const featureFlags = useMemo(() => activeFeatures.map(feat => {
         const f = feat.toLowerCase();
         return {
             feat,
@@ -285,10 +293,13 @@ export function LandscapeProductCard({
     const handlePesanClick = useCallback(() => {
         posthog.capture('clicked_pesan', { product: title });
         if (onAddThreeSlotToCart && onAddToCart) {
+            const isInv = title.toLowerCase().includes("invitation");
             setSlotPickerConfig({
                 productId: title,
                 productTitle: title,
                 themeColor: accentColor,
+                singlePriceText: isInv ? "Rp 20.000" : "Rp 15.000",
+                threeSlotPriceText: isInv ? "Rp 25.000" : "Rp 20.000",
                 onSelectSingle: onAddToCart,
                 onSelectThreeSlot: onAddThreeSlotToCart,
             });
@@ -614,11 +625,21 @@ export function LandscapeProductCard({
 
                 {/* Text Content */}
                 <div className="hub-showcase-content" style={{
-                    backgroundColor: activeAccent === '#c9184a' ? `${activeAccent}0D` : `${activeAccent}26`,
-                    border: `1.5px solid ${activeAccent === '#c9184a' ? `${activeAccent}26` : `${activeAccent}40`}`,
+                    backgroundColor: (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
+                        ? "rgba(224, 237, 252, 0.85)"
+                        : activeAccent === '#c9184a'
+                            ? `${activeAccent}0D`
+                            : `${activeAccent}1A`,
+                    border: (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
+                        ? "1.5px solid rgba(43, 92, 143, 0.3)"
+                        : `1.5px solid ${activeAccent === '#c9184a' ? `${activeAccent}26` : `${activeAccent}33`}`,
                     borderRadius: "var(--radius-lg)",
                     padding: "clamp(32px, 4.5vw, 48px)",
-                    boxShadow: `0 24px 48px -16px ${activeAccent === '#c9184a' ? `${activeAccent}14` : `${activeAccent}26`}`,
+                    boxShadow: (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
+                        ? "0 24px 48px -16px rgba(43, 92, 143, 0.25)"
+                        : `0 24px 48px -16px ${activeAccent === '#c9184a' ? `${activeAccent}14` : `${activeAccent}20`}`,
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
                     transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
                 }}>
                     {/* Label Badge */}
@@ -644,7 +665,7 @@ export function LandscapeProductCard({
                         marginBottom: 16,
                         transition: "color 0.5s ease"
                     }}>
-                        {title}
+                        {activeTitle}
                     </h3>
 
                     <p style={{
@@ -654,7 +675,7 @@ export function LandscapeProductCard({
                         lineHeight: 1.7,
                         marginBottom: 28,
                     }}>
-                        {description}
+                        {activeDescription}
                     </p>
 
                     {/* Features List */}

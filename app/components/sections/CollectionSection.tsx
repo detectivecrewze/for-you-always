@@ -137,14 +137,14 @@ export default function CollectionSection() {
                                 badgeColor: "#e8789a",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
-                                price: "Mulai Rp 15.000",
+                                price: "Mulai Rp 20.000",
                                 title: "Invitation Edition",
                                 titleColor: "#8a3050",
                                 description: "Undangan kencan interaktif — pilih tanggal, aktivitas, dan kirim tiket kencan digital.",
                                 href: "/catalog/invitation",
-                                onAddToCart: () => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 15000, themeColor: "#8a3050" }),
+                                onAddToCart: () => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 20000, themeColor: "#8a3050" }),
                                 isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "invitation", title: "Invitation Edition (3 Gift)", numericPrice: 20000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })
+                                onAddThreeSlotToCart: () => addToCart({ id: "invitation", title: "Invitation Edition (3 Gift)", numericPrice: 25000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "10 Rooms",

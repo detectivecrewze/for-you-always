@@ -89,10 +89,10 @@ const CATALOG_ITEMS = [
         titleColor: "#8a3050",
         imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
         title: "Invitation Edition",
-        oldPrice: "Rp 30.000",
-        newPrice: "Rp 15.000",
+        oldPrice: "Rp 35.000",
+        newPrice: "Rp 20.000",
         id: "invitation",
-        numericPrice: 15000,
+        numericPrice: 20000,
         hashtag: "#DATEINVITATION",
         soldCount: "New Release",
         href: "/catalog/invitation",
@@ -183,10 +183,13 @@ export default function CatalogPage() {
         }
 
         if (THREE_SLOT_IDS.has(item.id)) {
+            const isInv = item.id === "invitation";
             setSlotPickerConfig({
                 productId: item.id,
                 productTitle: item.title,
                 themeColor: item.titleColor,
+                singlePriceText: isInv ? "Rp 20.000" : "Rp 15.000",
+                threeSlotPriceText: isInv ? "Rp 25.000" : "Rp 20.000",
                 onSelectSingle: () => addToCart({
                     id: item.id,
                     title: item.title,
@@ -196,7 +199,7 @@ export default function CatalogPage() {
                 onSelectThreeSlot: () => addToCart({
                     id: item.id,
                     title: `${item.title} (3 Gift)`,
-                    numericPrice: 20000,
+                    numericPrice: isInv ? 25000 : 20000,
                     themeColor: item.titleColor,
                     isThreeSlot: true,
                     slotCount: 3,
