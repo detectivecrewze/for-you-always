@@ -4,6 +4,7 @@ import posthog from 'posthog-js';
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
+import DiscountPrice from "./DiscountPrice";
 
 export function AnimatedSection({
     children,
@@ -59,6 +60,7 @@ export function LandscapeProductCard({
     title,
     description,
     price,
+    oldPrice,
     features,
     mediaSrc,
     fallbackImgSrc,
@@ -84,6 +86,7 @@ export function LandscapeProductCard({
     title: string;
     description: string;
     price: React.ReactNode;
+    oldPrice?: string;  // harga asli sebelum diskon (untuk display coret premium)
     features: string[];
     mediaSrc?: string;
     fallbackImgSrc?: string;
@@ -157,8 +160,7 @@ export function LandscapeProductCard({
             glow = resolvedColor ? `${resolvedColor}33` : accentGlow;
 
             if (theme.title) activeTitle = theme.title;
-            const themeDesc = theme.desc || theme.description;
-            if (themeDesc) activeDesc = themeDesc;
+            if (theme.description) activeDesc = theme.description;
             if (theme.features) activeFeats = theme.features;
 
             if (activeTheme.videoSrc) videoSrc = activeTheme.videoSrc;
@@ -221,7 +223,7 @@ export function LandscapeProductCard({
             isPixelFeature: f.includes("12 karakter") || f.includes("pixel"),
             isSurpriseFeature: f.includes("surprise") || f.includes("kejutan"),
         };
-    }), [features]);
+    }), [activeFeatures]);
 
     // useCallback untuk semua handler — tidak dibuat ulang setiap render
     const handleMediaMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -293,13 +295,13 @@ export function LandscapeProductCard({
     const handlePesanClick = useCallback(() => {
         posthog.capture('clicked_pesan', { product: title });
         if (onAddThreeSlotToCart && onAddToCart) {
-            const isInv = title.toLowerCase().includes("invitation");
+            const isVoices = title.toLowerCase().includes("voices");
             setSlotPickerConfig({
                 productId: title,
                 productTitle: title,
                 themeColor: accentColor,
-                singlePriceText: isInv ? "Rp 20.000" : "Rp 15.000",
-                threeSlotPriceText: isInv ? "Rp 25.000" : "Rp 20.000",
+                singlePriceText: isVoices ? "Rp 15.000" : "Rp 20.000",
+                threeSlotPriceText: "Rp 25.000",
                 onSelectSingle: onAddToCart,
                 onSelectThreeSlot: onAddThreeSlotToCart,
             });
@@ -995,18 +997,21 @@ export function LandscapeProductCard({
                         <div style={{
                             padding: "10px 20px", borderRadius: 999,
                             background: "rgba(255,255,255,0.9)",
-                            border: "1px solid rgba(205,171,143,0.35)",
+                            border: oldPrice ? "1px solid rgba(192,57,43,0.2)" : "1px solid rgba(205,171,143,0.35)",
                             boxShadow: "inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 12px rgba(205,171,143,0.15)",
                             fontSize: 12, fontWeight: 700, letterSpacing: "0.05em",
                             color: "#6e5c53",
                             display: "flex", alignItems: "center", gap: 8,
                             transition: "all 0.5s ease"
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={oldPrice ? "#c0392b" : "currentColor"} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: oldPrice ? 0.75 : 1, flexShrink: 0 }}>
                                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
                                 <line x1="7" y1="7" x2="7.01" y2="7" />
                             </svg>
-                            {price}
+                            {oldPrice
+                                ? <DiscountPrice oldPrice={oldPrice} newPrice={typeof price === "string" ? price : ""} size="md" layout="inline" />
+                                : price
+                            }
                         </div>
 
                         {/* Add to Cart Button */}

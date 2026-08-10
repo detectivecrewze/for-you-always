@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
@@ -38,15 +38,16 @@ export default function MixtapeCatalogPage() {
                                 "Bebas custom pesan personal",
                                 "Rekam Suara & Custom Pesan"
                             ]}
-                            price="Rp 15.000"
+                            price="Rp 20.000"
+                            oldPrice="Rp 30.000"
                             demoLink="https://mixtape.for-you-always.my.id/auto-w2ykcoi"
                             mediaSrc=""
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
-                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" })}
-                            onAddThreeSlotToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 20000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })}
+                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#5a8d9e" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 25000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })}
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
                                 { name: "Bundle Dashboard", desc: "Sistem quota bundle otomatis", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781035640605-qnr98j.png" },

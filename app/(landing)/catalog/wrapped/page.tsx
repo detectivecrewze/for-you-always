@@ -36,11 +36,8 @@ export default function ProductCatalogPage() {
                                 "Bisa Turn On / Off Halaman",
                                 "Background Music Pilihan"
                             ]}
-                            price={
-                                <>
-                                    <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
-                                </>
-                            }
+                            price="Rp 25.000"
+                            oldPrice="Rp 30.000"
 
                             demoLink="https://love.for-you-always.my.id/love-test"
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7627348817905470741?is_from_webapp=1&sender_device=pc"
@@ -48,7 +45,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
-                            onAddToCart={() => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })}
+                            onAddToCart={() => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 25000, oldNumericPrice: 30000, themeColor: "#c9184a" })}
                             themesLabel="Koleksi Halaman"
                             themes={[
                                 { name: "Login", desc: "Halaman masuk", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },

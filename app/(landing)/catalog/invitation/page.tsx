@@ -52,13 +52,14 @@ export default function InvitationCatalogPage() {
                                 "Background Music Pilihan"
                             ]}
                             price="Rp 20.000"
+                            oldPrice="Rp 30.000"
                             demoLink="https://invitation.for-you-always.my.id/WRcVb-mY0f"
                             mediaSrc="https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
                             mediaType="image"
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
-                            onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 20000, themeColor: "#8a3050" })}
+                            onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#8a3050" })}
                             onAddThreeSlotToCart={() => addToCart({ id: "invitation", title: "Invitation Edition (3 Gift)", numericPrice: 25000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Pilih Mode & Template"
                             themes={[

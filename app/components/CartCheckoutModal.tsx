@@ -263,9 +263,22 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                                                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.themeColor || "#cdab8f", flexShrink: 0 }} />
                                                 <span style={{ fontSize: 13, color: "#382a24", fontFamily: "var(--font-sans)", fontWeight: 500 }}>{item.title}</span>
                                             </div>
-                                            <span style={{ fontSize: 13, fontWeight: 700, color: "#382a24", fontFamily: "var(--font-sans)" }}>
-                                                Rp {item.numericPrice.toLocaleString("id-ID")}
-                                            </span>
+                                            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                                                {item.oldNumericPrice && (
+                                                    <span style={{
+                                                        fontSize: 11, fontWeight: 600,
+                                                        color: "#c0392b",
+                                                        textDecoration: "line-through",
+                                                        opacity: 0.65,
+                                                        fontFamily: "var(--font-sans)",
+                                                    }}>
+                                                        Rp {item.oldNumericPrice.toLocaleString("id-ID")}
+                                                    </span>
+                                                )}
+                                                <span style={{ fontSize: 13, fontWeight: 700, color: "#382a24", fontFamily: "var(--font-sans)" }}>
+                                                    Rp {item.numericPrice.toLocaleString("id-ID")}
+                                                </span>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>

@@ -28,6 +28,7 @@ const CATALOG_ITEMS = [
         titleColor: "#581824",
         imageSrc: "/assets/opening_gate.png",
         title: "Memoria (Premium)",
+        oldPrice: "Rp 50.000",
         newPrice: "Rp 40.000",
         id: "loves",
         numericPrice: 40000,
@@ -41,10 +42,10 @@ const CATALOG_ITEMS = [
         titleColor: "#7a5438",
         imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         title: "Letter Edition",
-        oldPrice: "Rp 25.000",
-        newPrice: "Rp 15.000",
+        oldPrice: "Rp 30.000",
+        newPrice: "Rp 20.000",
         id: "letter",
-        numericPrice: 15000,
+        numericPrice: 20000,
         hashtag: "#AESTHETIC",
         soldCount: "2.1k+ terjual",
         href: "/catalog/letter",
@@ -58,7 +59,7 @@ const CATALOG_ITEMS = [
         imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
         title: "Voices Gift",
         newPrice: "Rp 15.000",
-        oldPrice: "Rp 30.000",
+        oldPrice: "Rp 25.000",
         id: "voices",
         numericPrice: 15000,
         hashtag: "#BESTSELLER",
@@ -73,10 +74,10 @@ const CATALOG_ITEMS = [
         titleColor: "#5a8d9e",
         imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
         title: "Mixtape Edition",
-        oldPrice: "Rp 50.000",
-        newPrice: "Rp 15.000",
+        oldPrice: "Rp 30.000",
+        newPrice: "Rp 20.000",
         id: "mixtape",
-        numericPrice: 15000,
+        numericPrice: 20000,
         hashtag: "#3QUOTAS",
         soldCount: "New Release",
         href: "/catalog/mixtape",
@@ -89,7 +90,7 @@ const CATALOG_ITEMS = [
         titleColor: "#8a3050",
         imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
         title: "Invitation Edition",
-        oldPrice: "Rp 35.000",
+        oldPrice: "Rp 30.000",
         newPrice: "Rp 20.000",
         id: "invitation",
         numericPrice: 20000,
@@ -105,10 +106,10 @@ const CATALOG_ITEMS = [
         titleColor: "#5c8c5c",
         imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
         title: "Arcade Edition",
-        oldPrice: "Rp 40.000",
-        newPrice: "Rp 20.000",
+        oldPrice: "Rp 30.000",
+        newPrice: "Rp 25.000",
         id: "arcade",
-        numericPrice: 20000,
+        numericPrice: 25000,
         hashtag: "#10ROOMS",
         soldCount: "560+ terjual",
         href: "/catalog/arcade",
@@ -122,9 +123,9 @@ const CATALOG_ITEMS = [
         imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
         title: "Retro Edition",
         oldPrice: "Rp 30.000",
-        newPrice: "Rp 15.000",
+        newPrice: "Rp 20.000",
         id: "retro",
-        numericPrice: 15000,
+        numericPrice: 20000,
         hashtag: "#NOSTALGIA",
         soldCount: "340+ terjual",
         href: "/catalog/retro",
@@ -137,10 +138,10 @@ const CATALOG_ITEMS = [
         titleColor: "#c9184a",
         imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
         title: "Wrapped Edition",
-        oldPrice: "Rp 40.000",
-        newPrice: "Rp 20.000",
+        oldPrice: "Rp 30.000",
+        newPrice: "Rp 25.000",
         id: "wrapped",
-        numericPrice: 20000,
+        numericPrice: 25000,
         hashtag: "#MEMORIES",
         soldCount: "420+ terjual",
         href: "/catalog/wrapped",
@@ -176,30 +177,39 @@ export default function CatalogPage() {
         window.scrollTo(0, 0);
     }, []);
 
-    const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string }) => {
+    const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string; oldPrice?: string }) => {
         if (item.id === "unbox-the-memory") {
             window.location.href = "/catalog/unbox-the-memory";
             return;
         }
 
+        // Map oldPrice string ke oldNumericPrice number
+        const parseOldPrice = (s?: string) => {
+            if (!s) return undefined;
+            const match = s.replace(/\./g, "").match(/\d+/);
+            return match ? parseInt(match[0]) : undefined;
+        };
+        const oldNumericPrice = parseOldPrice(item.oldPrice);
+
         if (THREE_SLOT_IDS.has(item.id)) {
-            const isInv = item.id === "invitation";
             setSlotPickerConfig({
                 productId: item.id,
                 productTitle: item.title,
                 themeColor: item.titleColor,
-                singlePriceText: isInv ? "Rp 20.000" : "Rp 15.000",
-                threeSlotPriceText: isInv ? "Rp 25.000" : "Rp 20.000",
+                singlePriceText: item.id === "voices" ? "Rp 15.000" : "Rp 20.000",
+                singleOldPriceText: item.id === "voices" ? "Rp 25.000" : "Rp 30.000",
+                threeSlotPriceText: "Rp 25.000",
                 onSelectSingle: () => addToCart({
                     id: item.id,
                     title: item.title,
                     numericPrice: item.numericPrice,
+                    oldNumericPrice,
                     themeColor: item.titleColor,
                 }),
                 onSelectThreeSlot: () => addToCart({
                     id: item.id,
                     title: `${item.title} (3 Gift)`,
-                    numericPrice: isInv ? 25000 : 20000,
+                    numericPrice: 25000,
                     themeColor: item.titleColor,
                     isThreeSlot: true,
                     slotCount: 3,
@@ -210,6 +220,7 @@ export default function CatalogPage() {
                 id: item.id,
                 title: item.title,
                 numericPrice: item.numericPrice,
+                oldNumericPrice,
                 themeColor: item.titleColor,
             });
         }

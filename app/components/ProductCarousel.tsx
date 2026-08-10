@@ -15,7 +15,7 @@ interface LoopCard {
     description: string;
     demoLink?: string;
     href: string;
-    price?: string;
+    price?: string | React.ReactNode;
     onAddToCart?: () => void;
     isThreeSlotEligible?: boolean;
     onAddThreeSlotToCart?: () => void;
@@ -34,10 +34,13 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
 
     const handlePesanClick = (card: LoopCard) => {
         if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
+            const isVoices = card.title.toLowerCase().includes("voices");
             setSlotPickerConfig({
                 productId: card.title,
                 productTitle: card.title,
                 themeColor: card.titleColor || "#a67c52",
+                singlePriceText: isVoices ? "Rp 15.000" : "Rp 20.000",
+                threeSlotPriceText: "Rp 25.000",
                 onSelectSingle: card.onAddToCart,
                 onSelectThreeSlot: card.onAddThreeSlotToCart,
             });

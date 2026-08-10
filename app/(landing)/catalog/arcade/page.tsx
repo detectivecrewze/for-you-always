@@ -36,17 +36,14 @@ export default function ProductCatalogPage() {
                                 "Bisa Turn On / Off Room",
                                 "Background Music Pilihan"
                             ]}
-                            price={
-                                <>
-                                    <span style={{ marginLeft: 8 }}>Promo Rp 20.000</span>
-                                </>
-                            }
+                            price="Rp 25.000"
+                            oldPrice="Rp 30.000"
 
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
                             mediaType="image"
                             accentColor="#5c8c5c"
                             accentGlow="rgba(92,140,92,0.2)"
-                            onAddToCart={() => addToCart({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })}
+                            onAddToCart={() => addToCart({ id: "arcade", title: "Arcade Edition", numericPrice: 25000, oldNumericPrice: 30000, themeColor: "#5c8c5c" })}
                             themesLabel="Koleksi Ruangan"
                             themes={[
                                 { name: "Main Menu", desc: "Tampilan utama Arcade", },

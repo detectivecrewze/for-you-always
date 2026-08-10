@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import AutoScrollCarousel from "../ProductCarousel";
 import { useCart } from "../../context/CartContext";
+import DiscountPrice from "../DiscountPrice";
 
 export default function CollectionSection() {
     const { addToCart } = useCart();
@@ -71,14 +72,14 @@ export default function CollectionSection() {
                                 badgeColor: "#7a5438",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
-                                price: "Rp 15.000",
+                                price: "Mulai Rp 20.000",
                                 title: "Letter Edition",
                                 titleColor: "#7a5438",
                                 description: "Amplop digital interaktif dengan efek typewriter sinematik dan foto/video di akhir surat.",
                                 href: "/catalog/letter",
-                                onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#7a5438" }),
+                                onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 20000, themeColor: "#7a5438" }),
                                 isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 20000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
+                                onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 25000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "UPCOMING",
@@ -97,40 +98,40 @@ export default function CollectionSection() {
                                 badgeColor: "#d4af37",
                                 badgeVariant: "solid",
                                 imageSrc: "/assets/opening_gate.png",
-                                price: "Rp 40.000",
+                                price: <DiscountPrice oldPrice="Rp 50.000" newPrice="Rp 40.000" size="sm" layout="inline" />,
                                 title: "Memoria (Premium)",
                                 titleColor: "#581824",
                                 description: "Kado eksklusif done-for-you paling premium untuk momen anniversary dan ulang tahun.",
                                 href: "/catalog/memoria",
-                                onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })
+                                onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })
                             },
                             {
                                 badgeText: "#1 Terlaris",
                                 badgeColor: "#e91e63",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
-                                price: "Rp 15.000",
+                                price: "Mulai Rp 15.000",
                                 title: "Voices Gift",
                                 titleColor: "#a67c52",
                                 description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
                                 href: "/catalog/voices",
                                 onAddToCart: () => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, themeColor: "#a67c52" }),
                                 isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 20000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })
+                                onAddThreeSlotToCart: () => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 25000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "Premium Bundle",
                                 badgeColor: "#4a7c8e",
                                 badgeVariant: "soft",
                                 imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png",
-                                price: "Mulai Rp 15.000",
+                                price: "Mulai Rp 20.000",
                                 title: "Mixtape Edition",
                                 titleColor: "#5a8d9e",
                                 description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
                                 href: "/catalog/mixtape",
-                                onAddToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 15000, themeColor: "#5a8d9e" }),
+                                onAddToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5a8d9e" }),
                                 isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 20000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })
+                                onAddThreeSlotToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 25000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "New ✨",
@@ -151,38 +152,38 @@ export default function CollectionSection() {
                                 badgeColor: "#5c8c5c",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1781032826300-poixyb.png",
-                                price: "Rp 20.000",
+                                price: "Rp 25.000",
                                 title: "Arcade Edition",
                                 titleColor: "#5c8c5c",
                                 description: "10 ruangan interaktif penuh kejutan dengan background music pilihan.",
                                 href: "/catalog/arcade",
-                                onAddToCart: () => addToCart({ id: "arcade", title: "Arcade Edition", numericPrice: 20000, themeColor: "#5c8c5c" })
+                                onAddToCart: () => addToCart({ id: "arcade", title: "Arcade Edition", numericPrice: 25000, themeColor: "#5c8c5c" })
                             },
                             {
                                 badgeText: "Nostalgic",
                                 badgeColor: "#008689",
                                 badgeVariant: "soft",
                                 imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png",
-                                price: "Rp 15.000",
+                                price: "Mulai Rp 20.000",
                                 title: "Retro Edition",
                                 titleColor: "#008689",
                                 description: "Tampilan retro Windows 98 dengan 5 stages of surprises dan custom GIF pilihan.",
                                 href: "/catalog/retro",
-                                onAddToCart: () => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" }),
+                                onAddToCart: () => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 20000, themeColor: "#008689" }),
                                 isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "retro", title: "Retro Edition (3 Gift)", numericPrice: 20000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })
+                                onAddThreeSlotToCart: () => addToCart({ id: "retro", title: "Retro Edition (3 Gift)", numericPrice: 25000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "Storytelling",
                                 badgeColor: "#c9184a",
                                 badgeVariant: "soft",
                                 imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp",
-                                price: "Rp 20.000",
+                                price: "Rp 25.000",
                                 title: "Wrapped Edition",
                                 titleColor: "#c9184a",
                                 description: "6 halaman interaktif bercerita — perfect untuk anniversary dan year-end recap.",
                                 href: "/catalog/wrapped",
-                                onAddToCart: () => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 20000, themeColor: "#c9184a" })
+                                onAddToCart: () => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 25000, themeColor: "#c9184a" })
                             },
                         ]}
                     />

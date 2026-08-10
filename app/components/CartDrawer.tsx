@@ -234,7 +234,17 @@ export default function CartDrawer() {
                                             fontFamily: "var(--font-sans)",
                                             fontSize: 12, fontWeight: 600,
                                             color: "#a67c52",
+                                            display: "flex", alignItems: "center", gap: 5,
                                         }}>
+                                            {group.oldNumericPrice && (
+                                                <span style={{
+                                                    fontSize: 10, color: "#c0392b",
+                                                    textDecoration: "line-through", opacity: 0.65,
+                                                    fontWeight: 500,
+                                                }}>
+                                                    Rp {(group.oldNumericPrice * group.quantity).toLocaleString("id-ID")}
+                                                </span>
+                                            )}
                                             Rp {(group.numericPrice * group.quantity).toLocaleString("id-ID")}
                                         </div>
                                     </div>

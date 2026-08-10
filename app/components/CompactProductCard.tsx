@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import DiscountPrice from "./DiscountPrice";
 
 interface CompactProductCardProps {
     badgeText?: string;
@@ -258,30 +259,48 @@ export default function CompactProductCard({
 
                     {/* Right Column (Price) */}
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", flexShrink: 0 }}>
-                        <div style={{
-                            padding: "6px 10px", borderRadius: 8,
-                            background: "#faf7f2", color: "#1d1816",
-                            fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 800,
-                            letterSpacing: "0.02em",
-                            display: "flex", alignItems: "center", gap: 6,
-                            border: "1px solid rgba(205,171,143,0.3)",
-                            boxShadow: "0 2px 8px -2px rgba(0,0,0,0.05)"
-                        }}>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                <line x1="7" y1="7" x2="7.01" y2="7" />
-                            </svg>
-                            <span>
-                                {newPrice.includes('Rp') ? (
-                                    <>
-                                        <span style={{ fontSize: 10, fontWeight: 600, color: "#8b7e75", marginRight: 2 }}>Rp</span>
-                                        {newPrice.replace('Rp ', '')}
-                                    </>
-                                ) : (
-                                    newPrice
-                                )}
-                            </span>
-                        </div>
+                        {oldPrice ? (
+                            /* Discount price — premium design */
+                            <div style={{
+                                padding: "6px 10px", borderRadius: 10,
+                                background: "#faf7f2",
+                                border: "1px solid rgba(192,57,43,0.18)",
+                                boxShadow: "0 2px 8px -2px rgba(0,0,0,0.05)",
+                                display: "flex", alignItems: "center", gap: 5,
+                            }}>
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c0392b" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7, flexShrink: 0 }}>
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                                </svg>
+                                <DiscountPrice oldPrice={oldPrice} newPrice={newPrice} size="sm" />
+                            </div>
+                        ) : (
+                            /* Regular price — no discount */
+                            <div style={{
+                                padding: "6px 10px", borderRadius: 8,
+                                background: "#faf7f2", color: "#1d1816",
+                                fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 800,
+                                letterSpacing: "0.02em",
+                                display: "flex", alignItems: "center", gap: 6,
+                                border: "1px solid rgba(205,171,143,0.3)",
+                                boxShadow: "0 2px 8px -2px rgba(0,0,0,0.05)"
+                            }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                                </svg>
+                                <span>
+                                    {newPrice.includes('Rp') ? (
+                                        <>
+                                            <span style={{ fontSize: 10, fontWeight: 600, color: "#8b7e75", marginRight: 2 }}>Rp</span>
+                                            {newPrice.replace('Rp ', '')}
+                                        </>
+                                    ) : (
+                                        newPrice
+                                    )}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
 

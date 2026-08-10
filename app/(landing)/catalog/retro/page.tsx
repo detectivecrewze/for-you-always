@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
@@ -42,19 +42,16 @@ export default function ProductCatalogPage() {
                                 "Support Mobile Experiences",
                                 "Background Music Pilihan"
                             ]}
-                            price={
-                                <>
-                                    <span style={{ marginLeft: 8 }}>Promo Rp 15.000</span>
-                                </>
-                            }
+                            price="Rp 20.000"
+                            oldPrice="Rp 30.000"
                             demoLink="https://retro.for-you-always.my.id/?to=retro-test"
 
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
                             mediaType="image"
                             accentColor="#008689"
                             accentGlow="rgba(0,134,137,0.2)"
-                            onAddToCart={() => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 15000, themeColor: "#008689" })}
-                            onAddThreeSlotToCart={() => addToCart({ id: "retro", title: "Retro Edition (3 Gift)", numericPrice: 20000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })}
+                            onAddToCart={() => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#008689" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "retro", title: "Retro Edition (3 Gift)", numericPrice: 25000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Koleksi Halaman"
                             themes={[
                                 { name: "Greeting", desc: "Tampilan awal greeting card", color: "#008689", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png" },

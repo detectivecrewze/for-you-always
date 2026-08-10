@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
@@ -53,15 +53,16 @@ export default function LetterCatalogPage() {
                                 "Foto / Video di Akhir Surat",
                                 "Background Music Pilihan"
                             ]}
-                            price="Rp 15.000"
+                            price="Rp 20.000"
+                            oldPrice="Rp 30.000"
                             demoLink="https://letter.for-you-always.my.id/ribbon/letter-test"
 
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
                             mediaType="image"
                             accentColor="#a68a64"
                             accentGlow="rgba(166,138,100,0.2)"
-                            onAddToCart={() => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 15000, themeColor: "#7a5438" })}
-                            onAddThreeSlotToCart={() => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 20000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })}
+                            onAddToCart={() => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#7a5438" })}
+                            onAddThreeSlotToCart={() => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 25000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Koleksi Template"
                             themes={[
                                 {

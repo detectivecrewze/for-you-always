@@ -8,6 +8,7 @@ export interface CartItem {
     cartItemId?: string;
     title: string;
     numericPrice: number;
+    oldNumericPrice?: number; // harga asli sebelum diskon (untuk display coret)
     themeColor: string;
     themeImgSrc?: string;
     isThreeSlot?: boolean;   // true = user membeli 3 slot (bundle code)

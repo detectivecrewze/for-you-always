@@ -311,16 +311,16 @@ birthday-retro/
 
 ## 4. DAFTAR PRODUK & HARGA SAAT INI
 
-| Produk | Harga | ID di Katalog | Subdomain Produk |
-|---|---|---|---|
-| Memoria (Premium) | Rp 40.000 | loves | — |
-| Voices Gift | Rp 15.000 | voices | voices.for-you-always.my.id |
-| Mixtape Edition | Rp 15.000 | mixtape | mixtape.for-you-always.my.id |
-| Invitation Edition | Rp 15.000 | invitation | invitation.for-you-always.my.id |
-| Letter Edition | Rp 15.000 | letter | letter.for-you-always.my.id |
-| Arcade Edition | Rp 20.000 | arcade | arcade.for-you-always.my.id |
-| Retro Edition | Rp 15.000 | retro | retro.for-you-always.my.id |
-| Wrapped Edition | Rp 20.000 | wrapped | wrapped.for-you-always.my.id |
+| Produk | Harga Single | Harga 3-Slot Bundle | ID di Katalog | Subdomain Produk |
+|---|---|---|---|---|
+| Memoria (Premium) | Rp 40.000 | — | loves | — |
+| Voices Gift | Rp 15.000 | Rp 25.000 | voices | voices.for-you-always.my.id |
+| Mixtape Edition | Rp 20.000 | Rp 25.000 | mixtape | mixtape.for-you-always.my.id |
+| Invitation Edition | Rp 20.000 | Rp 25.000 | invitation | invitation.for-you-always.my.id |
+| Letter Edition | Rp 20.000 | Rp 25.000 | letter | letter.for-you-always.my.id |
+| Arcade Edition | Rp 25.000 | — | arcade | arcade.for-you-always.my.id |
+| Retro Edition | Rp 20.000 | Rp 25.000 | retro | retro.for-you-always.my.id |
+| Wrapped Edition | Rp 25.000 | — | wrapped | wrapped.for-you-always.my.id |
 
 ---
 

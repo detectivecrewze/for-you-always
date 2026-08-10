@@ -78,13 +78,14 @@ export default function ProductCatalogPage() {
                             "Dikerjakan Langsung oleh Kami"
                         ]}
                         price="Rp 40.000"
+                        oldPrice="Rp 50.000"
                         demoLink="https://anniv.for-you-always.my.id/"
                         mediaSrc=""
                         fallbackImgSrc="/assets/opening_gate.png"
                         mediaType="image"
                         accentColor="#faf7f2"
                         accentGlow="rgba(250,247,242,0.15)"
-                        onAddToCart={() => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, themeColor: "#581824" })}
+                        onAddToCart={() => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })}
                         themesLabel="Koleksi Pages"
                         themes={[
                             { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
