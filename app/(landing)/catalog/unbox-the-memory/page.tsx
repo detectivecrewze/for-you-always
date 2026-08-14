@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../../../components/Navbar";
 
+import { trackViewContent } from "@/lib/pixel";
+
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
 
@@ -17,6 +19,10 @@ export default function UnboxTheMemoryPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"letter" | "memoria" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("letter");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
     const tabScrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        trackViewContent({ id: "unbox-the-memory", name: "Unbox the Memory" });
+    }, []);
 
     const scrollTabs = (direction: "left" | "right") => {
         if (tabScrollRef.current) {

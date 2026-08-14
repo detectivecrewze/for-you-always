@@ -5,12 +5,14 @@ import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
+import { trackViewContent } from "@/lib/pixel";
 
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        trackViewContent({ id: "wrapped", name: "Wrapped Edition", price: 25000 });
     }, []);
 
     return (

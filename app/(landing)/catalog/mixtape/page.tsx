@@ -5,12 +5,14 @@ import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
+import { trackViewContent } from "@/lib/pixel";
 
 export default function MixtapeCatalogPage() {
     const { addToCart } = useCart();
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        trackViewContent({ id: "mixtape", name: "Mixtape Edition", price: 20000 });
     }, []);
 
     return (

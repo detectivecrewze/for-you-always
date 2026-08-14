@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCart } from "../context/CartContext";
+import { trackContact } from "@/lib/pixel";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -177,6 +178,7 @@ export default function Navbar() {
                         </button>
 
                         <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
+                            onClick={() => trackContact("WhatsApp Navbar")}
                             style={{
                                 padding: "7px 18px", borderRadius: 999,
                                 background: "#1d1816", color: "#faf7f2",
@@ -241,7 +243,7 @@ export default function Navbar() {
                         </Link>
                     ))}
                     <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
-                        onClick={() => setMobileOpen(false)}
+                        onClick={() => { setMobileOpen(false); trackContact("WhatsApp Mobile Menu"); }}
                         style={{
                             marginTop: 16, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             padding: "12px 28px", borderRadius: 999,

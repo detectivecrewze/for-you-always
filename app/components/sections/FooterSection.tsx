@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { AnimatedSection } from "../LandscapeProductCard";
+import { trackContact } from "@/lib/pixel";
 
 const trustBadges = [
     { label: "5.0 Rating" },
@@ -48,6 +51,7 @@ export default function FooterSection() {
                     <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
                         {footerLinks.map(link => (
                             <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer"
+                                onClick={() => trackContact(`WhatsApp ${link.label}`)}
                                 style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "#6e5c53", textDecoration: "none", borderBottom: "1.5px solid transparent", transition: "all 0.3s ease" }}>
                                 {link.label}
                             </a>
@@ -87,6 +91,7 @@ export default function FooterSection() {
             <a
                 href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian."
                 target="_blank" rel="noopener noreferrer"
+                onClick={() => trackContact("WhatsApp Floating")}
                 aria-label="Hubungi via WhatsApp"
                 style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
             >

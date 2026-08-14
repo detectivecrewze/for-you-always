@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import posthog from 'posthog-js';
+import { trackInitiateCheckout } from "@/lib/pixel";
 
 interface CartCheckoutModalProps {
     onClose: () => void;
@@ -14,6 +15,12 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
     const [closing, setClosing] = useState(false);
+
+    useEffect(() => {
+        if (items.length > 0) {
+            trackInitiateCheckout(items, cartTotal);
+        }
+    }, []);
     
     const hasMemoria = items.some(item => item.id === "loves");
     const isMemoriaDelay = new Date().getTime() < new Date("2026-08-06T00:00:00+07:00").getTime();
