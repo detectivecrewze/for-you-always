@@ -31,7 +31,7 @@ export default function DiscountPrice({
 
     if (layout === "inline") {
         return (
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
                 {/* Harga coret */}
                 <span style={{
                     fontFamily: "var(--font-sans)",
@@ -41,6 +41,7 @@ export default function DiscountPrice({
                     textDecoration: "line-through",
                     opacity: 0.85,
                     letterSpacing: "0.01em",
+                    whiteSpace: "nowrap",
                 }}>
                     {oldPrice}
                 </span>
@@ -55,6 +56,7 @@ export default function DiscountPrice({
                     fontWeight: 800,
                     color: "#1d1816",
                     letterSpacing: "0.01em",
+                    whiteSpace: "nowrap",
                 }}>
                     {newPrice}
                 </span>

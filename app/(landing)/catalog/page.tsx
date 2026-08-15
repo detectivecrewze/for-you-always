@@ -10,17 +10,18 @@ import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerMo
 // Konstanta statis di luar komponen — tidak dibuat ulang setiap render
 const CATALOG_ITEMS = [
     {
-        badgeText: "UPCOMING",
+        badgeText: "PHYSICAL GIFT",
         badgeColor: "#1d1816",
         titleColor: "#382a24",
         imageSrc: "/assets/unbox_hampers_hero.jpg",
         title: "Unbox the Memory",
-        newPrice: "Coming Soon",
+        oldPrice: "Rp 200.000",
+        newPrice: "Rp 150.000",
         id: "unbox-the-memory",
-        numericPrice: 0,
+        numericPrice: 150000,
         href: "/catalog/unbox-the-memory",
         occasions: ["Anniversary", "Birthday", "LDR"],
-        features: ["Physical Gift Box Hampers", "Kartu Access QR Code", "Integrated Digital Experience"]
+        features: ["Physical Gift Box Hampers", "Kartu Access QR Code", "Pilihan Memoria, Letter & Voices"]
     },
     {
         badgeText: "#1 Exclusive",

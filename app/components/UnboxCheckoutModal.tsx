@@ -16,8 +16,8 @@ const DIGITAL_OPTIONS = [
     { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "Best Seller" },
 ];
 
-const BOX_PRICE = 149000;
-const BOX_OLD_PRICE = 199000;
+const BOX_PRICE = 150000;
+const BOX_OLD_PRICE = 200000;
 
 export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "loves" }: UnboxCheckoutModalProps) {
     const [step, setStep] = useState<"details" | "review">("details");
@@ -361,37 +361,60 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                 {/* 1. PILIH DIGITAL GIFT */}
                                 <div>
                                     <label className="unbox-label">1. Format Kado Digital di Kartu QR</label>
-                                    <div className="unbox-digital-grid">
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                                         {DIGITAL_OPTIONS.map((opt) => {
                                             const isSelected = selectedDigital === opt.id;
                                             return (
                                                 <div
                                                     key={opt.id}
                                                     onClick={() => setSelectedDigital(opt.id)}
-                                                    className={`unbox-digital-card ${isSelected ? 'selected' : ''}`}
+                                                    style={{
+                                                        padding: "9px 12px",
+                                                        borderRadius: 11,
+                                                        border: isSelected ? "1.8px solid #a67c52" : "1px solid #e2d7ce",
+                                                        background: isSelected ? "rgba(166, 124, 82, 0.08)" : "#ffffff",
+                                                        cursor: "pointer",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "space-between",
+                                                        gap: 10,
+                                                        transition: "all 0.18s ease",
+                                                    }}
                                                 >
-                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
-                                                        <span style={{ fontSize: 12, fontWeight: 700, color: "#1d1816", fontFamily: "var(--font-sans)", whiteSpace: "nowrap" }}>
-                                                            {opt.title}
-                                                        </span>
-                                                        {opt.badge && (
-                                                            <span style={{
-                                                                fontSize: 8.5,
-                                                                fontWeight: 700,
-                                                                color: opt.color,
-                                                                background: "rgba(0,0,0,0.04)",
-                                                                padding: "1px 6px",
-                                                                borderRadius: 999,
-                                                                whiteSpace: "nowrap",
-                                                                flexShrink: 0,
-                                                            }}>
-                                                                {opt.badge}
-                                                            </span>
-                                                        )}
+                                                    <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                                                        <div style={{
+                                                            width: 15,
+                                                            height: 15,
+                                                            borderRadius: "50%",
+                                                            border: isSelected ? "4.5px solid #a67c52" : "1.5px solid #c0b4ac",
+                                                            background: "#ffffff",
+                                                            flexShrink: 0,
+                                                        }} />
+                                                        <div style={{ minWidth: 0 }}>
+                                                            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1d1816", fontFamily: "var(--font-sans)", lineHeight: 1.2 }}>
+                                                                {opt.title}
+                                                            </div>
+                                                            <div style={{ fontSize: 10.5, color: "#7a685e", fontFamily: "var(--font-sans)", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                                {opt.subtitle}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <span style={{ fontSize: 10, color: "#7a685e", fontFamily: "var(--font-sans)", lineHeight: 1.25 }}>
-                                                        {opt.subtitle}
-                                                    </span>
+                                                    {opt.badge && (
+                                                        <span style={{
+                                                            fontSize: 9,
+                                                            fontWeight: 700,
+                                                            color: opt.color,
+                                                            background: `${opt.color}14`,
+                                                            border: `1px solid ${opt.color}30`,
+                                                            padding: "2px 8px",
+                                                            borderRadius: 999,
+                                                            whiteSpace: "nowrap",
+                                                            flexShrink: 0,
+                                                            letterSpacing: "0.03em",
+                                                        }}>
+                                                            {opt.badge}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             );
                                         })}

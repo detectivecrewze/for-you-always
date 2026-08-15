@@ -7,6 +7,7 @@ import Navbar from "../../../components/Navbar";
 
 import { trackViewContent } from "@/lib/pixel";
 import UnboxCheckoutModal from "../../../components/UnboxCheckoutModal";
+import DiscountPrice from "../../../components/DiscountPrice";
 
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
@@ -17,24 +18,13 @@ function SpringAnimatedSection({ children }: { children: React.ReactNode; delay?
 }
 
 export default function UnboxTheMemoryPage() {
-    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"letter" | "memoria" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("letter");
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("memoria");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-    const tabScrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         trackViewContent({ id: "unbox-the-memory", name: "Unbox the Memory" });
     }, []);
-
-    const scrollTabs = (direction: "left" | "right") => {
-        if (tabScrollRef.current) {
-            const scrollAmount = 260;
-            tabScrollRef.current.scrollBy({
-                left: direction === "left" ? -scrollAmount : scrollAmount,
-                behavior: "smooth"
-            });
-        }
-    };
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
         if (key === selectedDigitalExperience) return;
@@ -42,77 +32,32 @@ export default function UnboxTheMemoryPage() {
     };
 
     const digitalExperiences = {
-        letter: {
-            title: "Letter Edition",
-            subtitle: "Surat Digital & Amplop Interaktif",
-            desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
-            badge: "Paling Populer",
-            color: "#a67c52",
-            previewUrl: "/catalog/letter",
-            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
-        },
         memoria: {
-            title: "Memoria Premium",
+            title: "Memoria",
             subtitle: "Kisah Cinta Sinematik Eksklusif",
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
-            badge: "Ultra Premium",
+            badge: "Signature",
             color: "#d4af37",
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
-        retro: {
-            title: "Retro Edition",
-            subtitle: "Nostalgia Windows 98",
-            desc: "Kado bertema tampilan desktop Windows 98 klasik dengan 5 tahapan kejutan interaktif yang unik.",
-            badge: "Nostalgic",
-            color: "#008689",
-            previewUrl: "/catalog/retro",
-            imageSrc: "https://cdn.for-you-always.my.id/1778444079509-72xi4d.png"
+        letter: {
+            title: "Letter Edition",
+            subtitle: "Surat Digital & Amplop Interaktif",
+            desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
+            badge: "Favorit",
+            color: "#a67c52",
+            previewUrl: "/catalog/letter",
+            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
         voices: {
             title: "Voices Gift",
-            subtitle: "Rekaman Suara Pribadi & Musik",
+            subtitle: "Rekaman Suara Pribadi & Galeri Foto",
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
-            badge: "Sangat Menyentuh",
+            badge: "Best Seller",
             color: "#e91e63",
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
-        },
-        mixtape: {
-            title: "Mixtape Edition",
-            subtitle: "Kaset Retro & Playlist Kenangan",
-            desc: "Pengalaman musik nostalgia ala kaset pita retro 90-an dengan lagu favorit dan pesan pribadi interaktif.",
-            badge: "Retro Vibes",
-            color: "#4a7c8e",
-            previewUrl: "/catalog/mixtape",
-            imageSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png"
-        },
-        invitation: {
-            title: "Invitation Edition",
-            subtitle: "Undangan Kencan Digital Interaktif",
-            desc: "Tiket undangan kencan spesial dengan pilihan aktivitas interaktif, lokasi, dan tanggal kencan manis.",
-            badge: "New Release",
-            color: "#e8789a",
-            previewUrl: "/catalog/invitation",
-            imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp"
-        },
-        arcade: {
-            title: "Arcade Edition",
-            subtitle: "Game 10 Ruangan Kenangan",
-            desc: "Petualangan mini game retro interaktif berbasis 10 ruangan kenangan yang menyenangkan untuk dimainkan berdua.",
-            badge: "10 Rooms Game",
-            color: "#5c8c5c",
-            previewUrl: "/catalog/arcade",
-            imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
-        },
-        wrapped: {
-            title: "Wrapped Edition",
-            subtitle: "Recap 6 Halaman Kenangan",
-            desc: "Rangkuman kisah perjalanan romantis ala Spotify Wrapped yang dikemas dalam 6 halaman kenangan interaktif.",
-            badge: "Storytelling",
-            color: "#c9184a",
-            previewUrl: "/catalog/wrapped",
-            imageSrc: "https://cdn.for-you-always.my.id/1777887751232-efe0ge.webp"
         }
     };
 
@@ -204,35 +149,6 @@ export default function UnboxTheMemoryPage() {
                             boxShadow: "0 20px 50px -15px rgba(56,42,36,0.15)",
                             background: "#1d1816"
                         }}>
-                            {/* UPCOMING REVEAL OVERLAY BADGE */}
-                            <div style={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                backgroundColor: "rgba(29,24,22,0.88)",
-                                border: "1px solid rgba(205,171,143,0.4)",
-                                color: "#cdab8f",
-                                padding: "10px 22px",
-                                borderRadius: "999px",
-                                fontSize: "0.8rem",
-                                fontWeight: 700,
-                                letterSpacing: "0.15em",
-                                textTransform: "uppercase",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "8px",
-                                zIndex: 10,
-                                whiteSpace: "nowrap",
-                                boxShadow: "0 12px 32px rgba(0,0,0,0.4)"
-                            }}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                </svg>
-                                <span>REVEALING SOON • UPCOMING</span>
-                            </div>
-
                             <Image
                                 src="/assets/unbox_hampers_hero.jpg"
                                 alt="Unbox the Memory Gift Box Hampers Showcase"
@@ -243,40 +159,17 @@ export default function UnboxTheMemoryPage() {
                                     height: "auto",
                                     display: "block",
                                     objectFit: "cover",
-                                    filter: "blur(14px) contrast(1.05) brightness(0.9)",
-                                    transform: "scale(1.06)"
+                                    borderRadius: "28px",
                                 }}
                                 priority
                             />
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: BADGE, HEADLINE, SUBTITLE & CTAS */}
+                    {/* RIGHT COLUMN: HEADLINE, SUBTITLE, PRICE & CTAS */}
                     <div style={{ flex: "1 1 480px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
 
-                        {/* 1. BREADCRUMB BADGE */}
-                        <div style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            backgroundColor: "rgba(205,171,143,0.08)",
-                            border: "1.2px solid rgba(205,171,143,0.25)",
-                            color: "#a88365",
-                            fontSize: "0.8rem",
-                            fontWeight: 700,
-                            padding: "6px 18px",
-                            borderRadius: "999px",
-                            marginBottom: "24px",
-                            letterSpacing: "0.15em",
-                            textTransform: "uppercase"
-                        }}>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            <span>UPCOMING • EXCLUSIVE RELEASE</span>
-                        </div>
-
-                        {/* 2. HEADLINE */}
+                        {/* 1. HEADLINE */}
                         <h1 style={{
                             fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
                             fontSize: "clamp(2.5rem, 5vw, 4.2rem)",
@@ -291,18 +184,56 @@ export default function UnboxTheMemoryPage() {
                             <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Keajaiban Digital.</span>
                         </h1>
 
-                        {/* 3. SUBTITLE PARAGRAPH */}
+                        {/* 2. SUBTITLE PARAGRAPH */}
                         <p style={{
-                            fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
+                            fontSize: "clamp(1rem, 1.8vw, 1.12rem)",
                             color: "#6e5c53",
                             lineHeight: 1.7,
-                            marginBottom: "32px",
+                            marginBottom: "20px",
                             fontWeight: 400,
                             maxWidth: "520px",
                             textAlign: "left"
                         }}>
                             Pengalaman gift box hampers fisik eksklusif berpadu dengan kado digital interaktif. Segera hadir untuk momen terindahmu.
                         </p>
+
+                        {/* 3. ATELIER SIGNATURE PRICE PILL */}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "12px",
+                            marginBottom: "28px",
+                            flexWrap: "wrap",
+                        }}>
+                            <div style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                padding: "8px 18px",
+                                borderRadius: "999px",
+                                backgroundColor: "#ffffff",
+                                border: "1px solid rgba(205, 171, 143, 0.35)",
+                                boxShadow: "0 2px 10px rgba(56, 42, 36, 0.04)",
+                                whiteSpace: "nowrap",
+                            }}>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                                </svg>
+                                <DiscountPrice oldPrice="Rp 200.000" newPrice="Rp 150.000" size="md" layout="inline" />
+                            </div>
+
+                            <span style={{
+                                fontSize: "0.8rem",
+                                color: "#8a7569",
+                                letterSpacing: "0.02em",
+                                fontWeight: 500,
+                                fontFamily: "var(--font-sans)",
+                                whiteSpace: "nowrap",
+                            }}>
+                                Termasuk Kartu QR Digital
+                            </span>
+                        </div>
 
                         {/* 4. CTA BUTTONS: VIP WA NOTIFICATION WAITLIST */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
@@ -623,131 +554,41 @@ export default function UnboxTheMemoryPage() {
                 </div>
 
                 {/* EXPERIENCE TABS CONTAINER WITH LEFT & RIGHT NAVIGATION ARROWS */}
+                {/* 3 DIGITAL EXPERIENCE TABS (CENTERED) */}
                 <div style={{
                     display: "flex",
+                    justifyContent: "center",
                     alignItems: "center",
+                    flexWrap: "wrap",
                     gap: "12px",
-                    marginBottom: "32px",
-                    position: "relative"
+                    marginBottom: "36px",
                 }}>
-                    {/* LEFT NAV ARROW BUTTON */}
-                    <button
-                        onClick={() => scrollTabs("left")}
-                        aria-label="Scroll Tabs Left"
-                        style={{
-                            width: "42px",
-                            height: "42px",
-                            borderRadius: "50%",
-                            backgroundColor: "rgba(255,255,255,0.85)",
-                            backdropFilter: "blur(12px)",
-                            border: "1px solid rgba(205,171,143,0.35)",
-                            color: "#382a24",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                            flexShrink: 0,
-                            boxShadow: "0 6px 16px rgba(56,42,36,0.06)",
-                            transition: "all 0.25s ease"
-                        }}
-                        onMouseOver={(e) => {
-                            e.currentTarget.style.backgroundColor = "#ffffff";
-                            e.currentTarget.style.transform = "scale(1.08)";
-                            e.currentTarget.style.borderColor = "#cdab8f";
-                        }}
-                        onMouseOut={(e) => {
-                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.85)";
-                            e.currentTarget.style.transform = "scale(1)";
-                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.35)";
-                        }}
-                    >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                    </button>
-
-                    {/* SCROLLABLE EXPERIENCE TABS BAR */}
-                    <div
-                        ref={tabScrollRef}
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            alignItems: "center",
-                            overflowX: "auto",
-                            gap: "10px",
-                            padding: "6px 4px",
-                            scrollBehavior: "smooth",
-                            WebkitOverflowScrolling: "touch",
-                            scrollbarWidth: "none",
-                            msOverflowStyle: "none",
-                            flex: 1
-                        }}
-                        className="no-scrollbar"
-                    >
-                        {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
-                            const exp = digitalExperiences[key];
-                            const isSelected = selectedDigitalExperience === key;
-                            return (
-                                <button
-                                    key={key}
-                                    onClick={() => handleTabChange(key)}
-                                    style={{
-                                        padding: "10px 22px",
-                                        borderRadius: "999px",
-                                        border: isSelected ? `1.5px solid ${exp.color}` : "1px solid rgba(205,171,143,0.25)",
-                                        backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.45)",
-                                        color: isSelected ? exp.color : "#5a483e",
-                                        fontWeight: isSelected ? 700 : 500,
-                                        fontSize: "0.9rem",
-                                        cursor: "pointer",
-                                        whiteSpace: "nowrap",
-                                        flexShrink: 0,
-                                        boxShadow: isSelected ? "0 6px 18px rgba(0,0,0,0.06)" : "none",
-                                        transform: isSelected ? "scale(1.03)" : "scale(1)",
-                                        transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
-                                    }}
-                                >
-                                    {exp.title}
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    {/* RIGHT NAV ARROW BUTTON */}
-                    <button
-                        onClick={() => scrollTabs("right")}
-                        aria-label="Scroll Tabs Right"
-                        style={{
-                            width: "42px",
-                            height: "42px",
-                            borderRadius: "50%",
-                            backgroundColor: "rgba(255,255,255,0.85)",
-                            backdropFilter: "blur(12px)",
-                            border: "1px solid rgba(205,171,143,0.35)",
-                            color: "#382a24",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                            flexShrink: 0,
-                            boxShadow: "0 6px 16px rgba(56,42,36,0.06)",
-                            transition: "all 0.25s ease"
-                        }}
-                        onMouseOver={(e) => {
-                            e.currentTarget.style.backgroundColor = "#ffffff";
-                            e.currentTarget.style.transform = "scale(1.08)";
-                            e.currentTarget.style.borderColor = "#cdab8f";
-                        }}
-                        onMouseOut={(e) => {
-                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.85)";
-                            e.currentTarget.style.transform = "scale(1)";
-                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.35)";
-                        }}
-                    >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </button>
+                    {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
+                        const exp = digitalExperiences[key];
+                        const isSelected = selectedDigitalExperience === key;
+                        return (
+                            <button
+                                key={key}
+                                onClick={() => handleTabChange(key)}
+                                style={{
+                                    padding: "12px 28px",
+                                    borderRadius: "999px",
+                                    border: isSelected ? `2px solid ${exp.color}` : "1.2px solid rgba(205,171,143,0.3)",
+                                    backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.6)",
+                                    color: isSelected ? exp.color : "#5a483e",
+                                    fontWeight: isSelected ? 700 : 600,
+                                    fontSize: "0.95rem",
+                                    cursor: "pointer",
+                                    whiteSpace: "nowrap",
+                                    boxShadow: isSelected ? "0 8px 24px rgba(0,0,0,0.08)" : "none",
+                                    transform: isSelected ? "scale(1.04)" : "scale(1)",
+                                    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
+                                }}
+                            >
+                                {exp.title}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* DISPLAY SELECTED PREVIEW CARD */}
@@ -1029,21 +870,37 @@ export default function UnboxTheMemoryPage() {
             }}>
                 <div style={{ maxWidth: "800px", margin: "0 auto", position: "relative", zIndex: 2 }}>
                     <span style={{ color: "#cdab8f", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>
-                        OFFICIAL RELEASE • COMING SOON
+                        SPECIAL EDITION
                     </span>
                     <h2 style={{
                         fontFamily: "var(--font-display, Cormorant Garamond, serif)",
                         fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)",
                         fontWeight: 400,
                         marginTop: "14px",
-                        marginBottom: "20px",
+                        marginBottom: "16px",
                         color: "#ffffff"
                     }}>
-                        Ingin Menjadi Yang Pertama <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Memilikinya?</span>
+                        Pesan <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Unbox the Memory</span>
                     </h2>
-                    <p style={{ fontSize: "1.05rem", color: "rgba(250,247,242,0.7)", lineHeight: 1.7, marginBottom: "40px" }}>
-                        Daftarkan WhatsApp kamu sekarang untuk mendapatkan pemberitahuan rilis pertama edisi fisik eksklusif <strong>Unbox the Memory</strong>.
+                    <p style={{ fontSize: "1.05rem", color: "rgba(250,247,242,0.7)", lineHeight: 1.7, marginBottom: "20px" }}>
+                        Dapatkan paket hampers fisik eksklusif lengkap dengan kado digital interaktif pilihanmu.
                     </p>
+
+                    <div style={{
+                        display: "inline-flex",
+                        alignItems: "baseline",
+                        gap: "10px",
+                        marginBottom: "32px",
+                        whiteSpace: "nowrap",
+                    }}>
+                        <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
+                            Rp 150.000
+                        </span>
+                        <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
+                            Rp 200.000
+                        </span>
+                    </div>
+                    <br />
 
                     <button
                         onClick={() => setShowCheckoutModal(true)}
