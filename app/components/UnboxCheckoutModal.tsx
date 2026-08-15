@@ -11,20 +11,15 @@ interface UnboxCheckoutModalProps {
 }
 
 const DIGITAL_OPTIONS = [
-    { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Populer" },
-    { id: "mixtape", title: "Mixtape Edition", subtitle: "Kaset Retro & Playlist Lagu", color: "#4a7c8e", badge: "Aesthetic" },
-    { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Kenangan", color: "#e91e63", badge: "Best Seller" },
-    { id: "arcade", title: "Arcade Edition", subtitle: "Game Interaktif 10 Ruangan", color: "#5c8c5c", badge: "10 Rooms" },
-    { id: "retro", title: "Retro Edition", subtitle: "Nostalgia Windows 98", color: "#008689", badge: "Retro 90s" },
-    { id: "wrapped", title: "Wrapped Edition", subtitle: "6 Halaman Rekap Kenangan", color: "#c9184a", badge: "Storytelling" },
-    { id: "invitation", title: "Invitation Edition", subtitle: "Tiket Undangan Kencan Digital", color: "#e8789a", badge: "New" },
-    { id: "loves", title: "Memoria (Premium)", subtitle: "Kisah Cinta Sinematik Eksklusif", color: "#d4af37", badge: "Ultra Premium" },
+    { id: "loves", title: "Memoria", subtitle: "Kisah Sinematik & Galeri", color: "#d4af37", badge: "Signature" },
+    { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Favorit" },
+    { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "Best Seller" },
 ];
 
 const BOX_PRICE = 149000;
 const BOX_OLD_PRICE = 199000;
 
-export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "letter" }: UnboxCheckoutModalProps) {
+export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "loves" }: UnboxCheckoutModalProps) {
     const [step, setStep] = useState<"details" | "review">("details");
     const [isLoading, setIsLoading] = useState(false);
     const [closing, setClosing] = useState(false);
@@ -206,10 +201,10 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                 }
                 .unbox-digital-grid {
                     display: grid;
-                    grid-template-columns: 1fr 1fr;
+                    grid-template-columns: repeat(3, 1fr);
                     gap: 8px;
                 }
-                @media (max-width: 440px) {
+                @media (max-width: 480px) {
                     .unbox-digital-grid {
                         grid-template-columns: 1fr;
                         gap: 6px;
