@@ -203,6 +203,7 @@ export default function OrderStatusPage() {
         ? Object.keys(magicLinks).length
         : 1;
     const isBundle = productCount > 1;
+    const isUnbox = Boolean(productId?.startsWith("unbox_") || orderId?.startsWith("ORDER-UNBOX"));
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
@@ -273,8 +274,78 @@ export default function OrderStatusPage() {
                                 </p>
                             </div>
 
+                            {/* Unbox Physical Reminder Banner */}
+                            {isUnbox && (
+                                <div style={{
+                                    background: "#fff8f0",
+                                    border: "1px solid #ffe0b2",
+                                    borderRadius: 16,
+                                    padding: "18px 20px",
+                                    marginBottom: 24,
+                                    textAlign: "left",
+                                    fontFamily: "var(--font-sans)",
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e65100" }} />
+                                        <strong style={{ fontSize: 13, color: "#e65100", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                            Informasi Pengiriman Gift Box
+                                        </strong>
+                                    </div>
+                                    <p style={{ margin: 0, fontSize: 12.5, color: "#8c5b23", lineHeight: 1.55 }}>
+                                        Paket Gift Box fisik kamu akan segera kami rakit dan kirimkan ke kurir <strong>setelah kamu menyelesaikan pengisian foto dan pesan di Studio Editor digital</strong> di bawah ini.
+                                    </p>
+                                </div>
+                            )}
+
                             {/* Product Cards */}
                             {renderProductCards()}
+
+                            {/* Unbox Physical Delivery Stepper */}
+                            {isUnbox && (
+                                <div style={{
+                                    background: "#ffffff",
+                                    border: "1.5px solid rgba(205,171,143,0.25)",
+                                    borderRadius: 16,
+                                    padding: "20px 24px",
+                                    marginBottom: 32,
+                                    textAlign: "left",
+                                    fontFamily: "var(--font-sans)",
+                                }}>
+                                    <h4 style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700, color: "#1d1816", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                        Status Pemrosesan Paket Fisik
+                                    </h4>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#4CAF50", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>✓</div>
+                                            <div>
+                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1d1816" }}>1. Pembayaran Berhasil Dikonfirmasi</div>
+                                                <div style={{ fontSize: 11, color: "#7a685e" }}>Pesanan telah masuk ke antrean produksi atelier</div>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#a67c52", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>2</div>
+                                            <div>
+                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1d1816" }}>2. Kustomisasi Studio Digital (Sedang Berlangsung)</div>
+                                                <div style={{ fontSize: 11, color: "#7a685e" }}>Klik tombol Buka Studio di atas untuk mulai mengisi kenanganmu</div>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#e2d7ce", color: "#7a685e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>3</div>
+                                            <div>
+                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7a685e" }}>3. Perakitan & Pengemasan Box Fisik</div>
+                                                <div style={{ fontSize: 11, color: "#a6968c" }}>Akan dimulai setelah kustomisasi digital selesai</div>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#e2d7ce", color: "#7a685e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>4</div>
+                                            <div>
+                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7a685e" }}>4. Penyerahan ke Kurir & Pengiriman</div>
+                                                <div style={{ fontSize: 11, color: "#a6968c" }}>Nomor resi pengiriman akan dikirimkan ke WhatsApp & Email kamu</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Fallback text if no cards */}
                             {!magicLinks && (

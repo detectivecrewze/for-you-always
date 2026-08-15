@@ -6,6 +6,7 @@ import Image from "next/image";
 import Navbar from "../../../components/Navbar";
 
 import { trackViewContent } from "@/lib/pixel";
+import UnboxCheckoutModal from "../../../components/UnboxCheckoutModal";
 
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
@@ -18,6 +19,7 @@ function SpringAnimatedSection({ children }: { children: React.ReactNode; delay?
 export default function UnboxTheMemoryPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"letter" | "memoria" | "retro" | "voices" | "mixtape" | "invitation" | "arcade" | "wrapped">("letter");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const tabScrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -304,10 +306,8 @@ export default function UnboxTheMemoryPage() {
 
                         {/* 4. CTA BUTTONS: VIP WA NOTIFICATION WAITLIST */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
-                            <a
-                                href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20dikabari%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <button
+                                onClick={() => setShowCheckoutModal(true)}
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -318,7 +318,8 @@ export default function UnboxTheMemoryPage() {
                                     fontSize: "0.92rem",
                                     padding: "16px 32px",
                                     borderRadius: "14px",
-                                    textDecoration: "none",
+                                    border: "none",
+                                    cursor: "pointer",
                                     boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
                                     transition: "all 0.3s ease"
                                 }}
@@ -332,11 +333,12 @@ export default function UnboxTheMemoryPage() {
                                 }}
                             >
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
                                 </svg>
-                                <span>Kabari Saya Saat Rilis</span>
-                            </a>
+                                <span>Pesan Gift Box Sekarang</span>
+                            </button>
 
                             <Link
                                 href="/catalog"
@@ -1043,10 +1045,8 @@ export default function UnboxTheMemoryPage() {
                         Daftarkan WhatsApp kamu sekarang untuk mendapatkan pemberitahuan rilis pertama edisi fisik eksklusif <strong>Unbox the Memory</strong>.
                     </p>
 
-                    <a
-                        href="https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20dikabari%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis."
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <button
+                        onClick={() => setShowCheckoutModal(true)}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -1057,7 +1057,8 @@ export default function UnboxTheMemoryPage() {
                             fontSize: "1.05rem",
                             padding: "18px 42px",
                             borderRadius: "14px",
-                            textDecoration: "none",
+                            border: "none",
+                            cursor: "pointer",
                             boxShadow: "0 12px 35px rgba(205,171,143,0.3)",
                             transition: "all 0.3s ease"
                         }}
@@ -1071,13 +1072,22 @@ export default function UnboxTheMemoryPage() {
                         }}
                     >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
                         </svg>
-                        <span>Kabari Saya Saat Rilis</span>
-                    </a>
+                        <span>Pesan Gift Box Sekarang</span>
+                    </button>
                 </div>
             </section>
+
+            {/* UNBOX CHECKOUT MODAL */}
+            {showCheckoutModal && (
+                <UnboxCheckoutModal
+                    onClose={() => setShowCheckoutModal(false)}
+                    initialDigitalProduct={selectedDigitalExperience}
+                />
+            )}
 
             {/* CSS KEYFRAME ANIMATIONS */}
             <style>{`

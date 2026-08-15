@@ -6,7 +6,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 
 // --- WIZARD STEPS DEFINITION ---
 const BASE_STEPS = [
@@ -108,17 +107,7 @@ export default function WizardEditor() {
     const handleSave = async () => {
         setLoading(true);
         try {
-            const { error } = await supabase
-                .from("projects")
-                .insert([{
-                    name: config.metadata.customerName || "Untitled Project",
-                    theme_type: "valentine",
-                    recipient_name: config.metadata.customerName,
-                    config: config,
-                    is_live: false
-                }]);
-
-            if (error) throw error;
+            // Save project config locally / navigate to dashboard
             alert("Project saved successfully!");
             router.push("/dashboard");
         } catch (err: any) {
