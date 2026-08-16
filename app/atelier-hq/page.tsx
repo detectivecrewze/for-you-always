@@ -100,6 +100,39 @@ export default function Dashboard() {
     const [qrModalUrl, setQrModalUrl] = useState<string | null>(null);
     const [qrModalTitle, setQrModalTitle] = useState<string>("");
 
+    // Live Biteship Tracking Modal State
+    const [liveTrackingModal, setLiveTrackingModal] = useState<{
+        order_id: string;
+        tracking_number: string;
+        courier: string;
+        loading: boolean;
+        data: any;
+        error: string | null;
+    } | null>(null);
+
+    const handleOpenTrackingModal = async (order: OrderItem) => {
+        if (!order.tracking_number) return;
+        setLiveTrackingModal({
+            order_id: order.order_id,
+            tracking_number: order.tracking_number,
+            courier: order.courier || "SiCepat",
+            loading: true,
+            data: null,
+            error: null,
+        });
+        try {
+            const res = await fetch(`/api/shipping/track?waybill_id=${encodeURIComponent(order.tracking_number)}&courier=${encodeURIComponent(order.courier || "sicepat")}`);
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setLiveTrackingModal(prev => prev ? { ...prev, loading: false, data, error: null } : null);
+            } else {
+                setLiveTrackingModal(prev => prev ? { ...prev, loading: false, data: null, error: data.message || "Gagal memuat status live dari Biteship." } : null);
+            }
+        } catch {
+            setLiveTrackingModal(prev => prev ? { ...prev, loading: false, data: null, error: "Gagal menghubungkan ke server pelacakan." } : null);
+        }
+    };
+
     // Inventory & Physical Stock State
     const [inventoryStock, setInventoryStock] = useState<number>(12);
     const [inventoryThreshold, setInventoryThreshold] = useState<number>(3);
@@ -1544,7 +1577,26 @@ export default function Dashboard() {
                                                                                 </span>
                                                                             </div>
 
-                                                                            <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 6, flexWrap: "wrap" }}>
+                                                                            <div style={{ display: "flex", gap: 6, alignItems: "center", marginTop: 6, flexWrap: "wrap" }}>
+                                                                                <button
+                                                                                    onClick={() => handleOpenTrackingModal(order)}
+                                                                                    style={{
+                                                                                        display: "inline-flex",
+                                                                                        alignItems: "center",
+                                                                                        gap: 3,
+                                                                                        padding: "4px 8px",
+                                                                                        borderRadius: 6,
+                                                                                        border: "1px solid #1d1816",
+                                                                                        background: "#1d1816",
+                                                                                        color: "#faf7f2",
+                                                                                        fontSize: 9.5,
+                                                                                        fontWeight: 700,
+                                                                                        cursor: "pointer"
+                                                                                    }}
+                                                                                >
+                                                                                    Lacak Live
+                                                                                </button>
+
                                                                                 {order.tracking_link && (
                                                                                     <a
                                                                                         href={order.tracking_link}
@@ -1564,7 +1616,7 @@ export default function Dashboard() {
                                                                                             textDecoration: "none"
                                                                                         }}
                                                                                     >
-                                                                                        🌐 Buka di Biteship
+                                                                                        🌐 Biteship
                                                                                     </a>
                                                                                 )}
 
@@ -2289,6 +2341,153 @@ export default function Dashboard() {
                     </div>
                 );
             })()}
+
+            {/* ── 7. MODAL: LIVE BITESHIP TRACKING ── */}
+            {liveTrackingModal && (
+                <div style={{
+                    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: "rgba(29, 24, 22, 0.65)",
+                    backdropFilter: "blur(4px)",
+                    zIndex: 100000,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "16px",
+                    fontFamily: "var(--font-sans)",
+                }}>
+                    <div style={{
+                        background: "#ffffff",
+                        width: "100%", maxWidth: "520px",
+                        borderRadius: "16px",
+                        padding: "24px",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+                        maxHeight: "90vh",
+                        overflowY: "auto",
+                    }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <div>
+                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#2563eb", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                    Biteship Live Tracking
+                                </div>
+                                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800, color: "#1d1816" }}>
+                                    📍 Status Pengiriman Paket
+                                </h3>
+                                <div style={{ fontSize: "0.8rem", color: "#8d7971", marginTop: 2 }}>
+                                    Order: <strong>{liveTrackingModal.order_id}</strong> • Resi: <span style={{ fontFamily: "monospace", fontWeight: 700 }}>{liveTrackingModal.tracking_number}</span>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setLiveTrackingModal(null)}
+                                style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer", color: "#8d7971" }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {liveTrackingModal.loading && (
+                            <div style={{ padding: "30px 0", textAlign: "center", color: "#8d7971", fontSize: "0.88rem" }}>
+                                <div style={{ width: 24, height: 24, border: "3px solid #a67c52", borderTopColor: "transparent", borderRadius: "50%", margin: "0 auto 12px", animation: "spin 0.8s linear infinite" }} />
+                                Mengambil data checkpoint dari server ekspedisi...
+                            </div>
+                        )}
+
+                        {liveTrackingModal.error && (
+                            <div style={{ padding: "16px", background: "#fde8e8", borderRadius: "10px", color: "#9b1c1c", fontSize: "0.85rem", marginBottom: 16 }}>
+                                ⚠️ {liveTrackingModal.error}
+                            </div>
+                        )}
+
+                        {liveTrackingModal.data && (
+                            <div>
+                                <div style={{ background: "#faf7f2", borderRadius: "12px", padding: "14px 16px", border: "1px solid #ebdcd0", marginBottom: 16 }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <span style={{
+                                            padding: "3px 10px",
+                                            borderRadius: 999,
+                                            fontSize: "0.75rem",
+                                            fontWeight: 800,
+                                            color: "#fff",
+                                            backgroundColor: liveTrackingModal.data.status_color || "#2e7d32"
+                                        }}>
+                                            {liveTrackingModal.data.status_display}
+                                        </span>
+                                        <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#6e5c53" }}>
+                                            {liveTrackingModal.courier}
+                                        </span>
+                                    </div>
+                                    <div style={{ fontSize: "0.84rem", color: "#382a24", marginTop: 8, fontWeight: 500 }}>
+                                        {liveTrackingModal.data.status_desc}
+                                    </div>
+                                </div>
+
+                                {/* Timeline History */}
+                                <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#1d1816", marginBottom: 10 }}>
+                                    Riwayat Perjalanan Paket:
+                                </div>
+
+                                {liveTrackingModal.data.history && liveTrackingModal.data.history.length > 0 ? (
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 14, position: "relative", paddingLeft: 16, marginBottom: 20 }}>
+                                        <div style={{ position: "absolute", left: 5, top: 4, bottom: 4, width: 2, background: "#ebdcd0" }} />
+                                        {liveTrackingModal.data.history.map((item: any, idx: number) => {
+                                            const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) : "-";
+                                            return (
+                                                <div key={idx} style={{ position: "relative" }}>
+                                                    <div style={{
+                                                        position: "absolute",
+                                                        left: -15,
+                                                        top: 3,
+                                                        width: 10,
+                                                        height: 10,
+                                                        borderRadius: "50%",
+                                                        backgroundColor: idx === 0 ? "#2e7d32" : "#a67c52"
+                                                    }} />
+                                                    <div style={{ fontSize: "0.82rem", fontWeight: idx === 0 ? 700 : 500, color: idx === 0 ? "#1d1816" : "#59483f" }}>
+                                                        {item.note || item.status}
+                                                    </div>
+                                                    <div style={{ fontSize: "0.72rem", color: "#a6968c", marginTop: 2 }}>
+                                                        {dateStr}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div style={{ fontSize: "0.8rem", color: "#8d7971", marginBottom: 20 }}>
+                                        Belum ada riwayat checkpoint transit baru dari kurir.
+                                    </div>
+                                )}
+
+                                <div style={{ display: "flex", gap: "10px", marginTop: 12 }}>
+                                    {liveTrackingModal.data.tracking_link && (
+                                        <a
+                                            href={liveTrackingModal.data.tracking_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                flex: 1, padding: "10px", borderRadius: "8px",
+                                                background: "#2563eb", color: "#fff",
+                                                fontSize: "0.84rem", fontWeight: 700,
+                                                textDecoration: "none", textAlign: "center",
+                                                display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6
+                                            }}
+                                        >
+                                            🌐 Buka di Portal Biteship ↗
+                                        </a>
+                                    )}
+                                    <button
+                                        onClick={() => setLiveTrackingModal(null)}
+                                        style={{
+                                            padding: "10px 18px", borderRadius: "8px",
+                                            background: "#faf7f2", color: "#6e5c53",
+                                            border: "1px solid #dcd1c6", fontSize: "0.84rem", fontWeight: 700, cursor: "pointer"
+                                        }}
+                                    >
+                                        Tutup
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </>
     );
 }

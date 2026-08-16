@@ -118,6 +118,31 @@ export default function OrderStatusPage() {
     const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
     const [courier, setCourier] = useState<string | null>(null);
     const [copiedResi, setCopiedResi] = useState(false);
+    const [liveTracking, setLiveTracking] = useState<{
+        loading: boolean;
+        data: any;
+        error: string | null;
+        showHistory: boolean;
+    } | null>(null);
+
+    const handleFetchLiveTracking = async (waybill: string, courierName: string) => {
+        if (liveTracking?.data) {
+            setLiveTracking(prev => prev ? { ...prev, showHistory: !prev.showHistory } : null);
+            return;
+        }
+        setLiveTracking({ loading: true, data: null, error: null, showHistory: true });
+        try {
+            const res = await fetch(`/api/shipping/track?waybill_id=${encodeURIComponent(waybill)}&courier=${encodeURIComponent(courierName)}`);
+            const result = await res.json();
+            if (res.ok && result.success) {
+                setLiveTracking({ loading: false, data: result, error: null, showHistory: true });
+            } else {
+                setLiveTracking({ loading: false, data: null, error: result.message || "Gagal memuat status live.", showHistory: true });
+            }
+        } catch {
+            setLiveTracking({ loading: false, data: null, error: "Gagal terhubung ke layanan pelacakan.", showHistory: true });
+        }
+    };
 
     const fetchOrder = async (id: string) => {
         setStatus("loading");
@@ -427,48 +452,166 @@ export default function OrderStatusPage() {
                                                 </div>
                                                 <div style={{ flex: 1 }}>
                                                     <div style={{ fontSize: 13, fontWeight: 700, color: isShipped ? "#1d1816" : "#7a685e" }}>
-                                                        4. {isShipped ? `Paket Sedang Dalam Pengiriman (${courier || "Kurir"})` : "Penyerahan ke Kurir & Pengiriman"}
+                                                        4. {isShipped ? "Paket Sedang Dalam Pengiriman" : "Penyerahan ke Kurir & Pengiriman"}
                                                     </div>
+                                                    <div style={{ fontSize: 11.5, color: isShipped ? "#2e7d32" : "#a6968c", marginTop: 2 }}>
+                                                        {isShipped
+                                                            ? (courier ? `Kurir: ${courier}` : "Paket sedang dalam perjalanan ekspedisi.")
+                                                            : "Nomor resi pengiriman akan otomatis muncul di sini setelah kurir dipanggil."}
+                                                    </div>
+
                                                     {isShipped && trackingNumber ? (
-                                                        <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                                                            <span style={{ fontSize: 11.5, color: "#6e5c53" }}>No. Resi:</span>
-                                                            <span style={{
-                                                                fontFamily: "monospace",
-                                                                fontSize: 12,
-                                                                fontWeight: 700,
-                                                                color: "#1d1816",
-                                                                background: "#f3ede7",
-                                                                padding: "3px 8px",
-                                                                borderRadius: 6,
-                                                                border: "1px solid #dcd1c6"
-                                                            }}>
-                                                                {trackingNumber}
-                                                            </span>
-                                                            <button
-                                                                onClick={() => {
-                                                                    navigator.clipboard.writeText(trackingNumber);
-                                                                    setCopiedResi(true);
-                                                                    setTimeout(() => setCopiedResi(false), 2000);
-                                                                }}
-                                                                style={{
-                                                                    background: "none",
-                                                                    border: "none",
-                                                                    color: "#a67c52",
-                                                                    fontSize: 11,
+                                                        <div style={{ marginTop: 8 }}>
+                                                            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                                                <span style={{ fontSize: 11.5, color: "#6e5c53" }}>No. Resi:</span>
+                                                                <span style={{
+                                                                    fontFamily: "monospace",
+                                                                    fontSize: 12,
                                                                     fontWeight: 700,
-                                                                    cursor: "pointer",
-                                                                    textDecoration: "underline",
-                                                                    padding: 0
-                                                                }}
-                                                            >
-                                                                {copiedResi ? "✓ Disalin" : "Salin Resi"}
-                                                            </button>
+                                                                    color: "#1d1816",
+                                                                    background: "#f3ede7",
+                                                                    padding: "3px 8px",
+                                                                    borderRadius: 6,
+                                                                    border: "1px solid #dcd1c6"
+                                                                }}>
+                                                                    {trackingNumber}
+                                                                </span>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        navigator.clipboard.writeText(trackingNumber);
+                                                                        setCopiedResi(true);
+                                                                        setTimeout(() => setCopiedResi(false), 2000);
+                                                                    }}
+                                                                    style={{
+                                                                        background: "none",
+                                                                        border: "none",
+                                                                        color: "#a67c52",
+                                                                        fontSize: 11,
+                                                                        fontWeight: 700,
+                                                                        cursor: "pointer",
+                                                                        textDecoration: "underline",
+                                                                        padding: 0
+                                                                    }}
+                                                                >
+                                                                    {copiedResi ? "Disalin" : "Salin Resi"}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleFetchLiveTracking(trackingNumber, courier || "sicepat")}
+                                                                    style={{
+                                                                        display: "inline-flex",
+                                                                        alignItems: "center",
+                                                                        padding: "4px 9px",
+                                                                        borderRadius: 6,
+                                                                        border: "1px solid #2e7d32",
+                                                                        background: "#e8f5e9",
+                                                                        color: "#2e7d32",
+                                                                        fontSize: 10.5,
+                                                                        fontWeight: 700,
+                                                                        cursor: "pointer"
+                                                                    }}
+                                                                >
+                                                                    {liveTracking?.loading ? "Memuat..." : (liveTracking?.data ? (liveTracking.showHistory ? "Tutup Riwayat" : "Lacak Posisi Paket") : "Lacak Posisi Paket")}
+                                                                </button>
+                                                            </div>
+
+                                                            {/* Live Tracking Timeline */}
+                                                            {liveTracking?.showHistory && (
+                                                                <div style={{
+                                                                    marginTop: 12,
+                                                                    background: "#fdfbfa",
+                                                                    border: "1px solid #ebdcd0",
+                                                                    borderRadius: 10,
+                                                                    padding: "12px 14px",
+                                                                    fontSize: "0.82rem"
+                                                                }}>
+                                                                    {liveTracking.loading && (
+                                                                        <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8d7971", fontSize: "0.8rem" }}>
+                                                                            <div style={{ width: 14, height: 14, border: "2px solid #a67c52", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+                                                                            Menghubungkan ke server kurir {courier || "Biteship"}...
+                                                                        </div>
+                                                                    )}
+
+                                                                    {liveTracking.error && (
+                                                                        <div style={{ color: "#c62828", fontSize: "0.8rem" }}>
+                                                                            {liveTracking.error}
+                                                                        </div>
+                                                                    )}
+
+                                                                    {liveTracking.data && (
+                                                                        <div>
+                                                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid #eee5dd", paddingBottom: 8, marginBottom: 10, gap: 8 }}>
+                                                                                <div>
+                                                                                    <span style={{
+                                                                                        display: "inline-block",
+                                                                                        padding: "2px 8px",
+                                                                                        borderRadius: 999,
+                                                                                        fontSize: "0.72rem",
+                                                                                        fontWeight: 800,
+                                                                                        color: "#ffffff",
+                                                                                        backgroundColor: liveTracking.data.status_color || "#2e7d32"
+                                                                                    }}>
+                                                                                        {liveTracking.data.status_display}
+                                                                                    </span>
+                                                                                    <div style={{ fontSize: "0.78rem", color: "#6e5c53", marginTop: 4, lineHeight: 1.4 }}>
+                                                                                        {liveTracking.data.status_desc}
+                                                                                    </div>
+                                                                                </div>
+                                                                                {liveTracking.data.tracking_link && (
+                                                                                    <a
+                                                                                        href={liveTracking.data.tracking_link}
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        style={{
+                                                                                            fontSize: "0.75rem",
+                                                                                            fontWeight: 700,
+                                                                                            color: "#2563eb",
+                                                                                            textDecoration: "underline",
+                                                                                            whiteSpace: "nowrap"
+                                                                                        }}
+                                                                                    >
+                                                                                        Website Ekspedisi ↗
+                                                                                    </a>
+                                                                                )}
+                                                                            </div>
+
+                                                                            {/* History checkpoints */}
+                                                                            {liveTracking.data.history && liveTracking.data.history.length > 0 ? (
+                                                                                <div style={{ display: "flex", flexDirection: "column", gap: 10, position: "relative", paddingLeft: 12 }}>
+                                                                                    <div style={{ position: "absolute", left: 3, top: 4, bottom: 4, width: 2, background: "#ebdcd0" }} />
+                                                                                    {liveTracking.data.history.map((item: any, idx: number) => {
+                                                                                        const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) : "-";
+                                                                                        return (
+                                                                                            <div key={idx} style={{ position: "relative" }}>
+                                                                                                <div style={{
+                                                                                                    position: "absolute",
+                                                                                                    left: -13,
+                                                                                                    top: 3,
+                                                                                                    width: 8,
+                                                                                                    height: 8,
+                                                                                                    borderRadius: "50%",
+                                                                                                    backgroundColor: idx === 0 ? "#2e7d32" : "#a67c52"
+                                                                                                }} />
+                                                                                                <div style={{ fontSize: "0.78rem", fontWeight: idx === 0 ? 700 : 500, color: idx === 0 ? "#1d1816" : "#59483f" }}>
+                                                                                                    {item.note || item.status}
+                                                                                                </div>
+                                                                                                <div style={{ fontSize: "0.7rem", color: "#a6968c", marginTop: 1 }}>
+                                                                                                    {dateStr}
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        );
+                                                                                    })}
+                                                                                </div>
+                                                                            ) : (
+                                                                                <div style={{ fontSize: "0.76rem", color: "#8d7971" }}>
+                                                                                    Belum ada riwayat checkpoint transit baru dari kurir.
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    ) : (
-                                                        <div style={{ fontSize: 11.5, color: "#a6968c", marginTop: 2 }}>
-                                                            Nomor resi pengiriman akan otomatis muncul di sini setelah kurir dipanggil.
-                                                        </div>
-                                                    )}
+                                                    ) : null}
                                                 </div>
                                             </div>
                                         </div>
