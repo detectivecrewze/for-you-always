@@ -82,16 +82,16 @@ export default function CollectionSection() {
                                 onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 25000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
                             },
                             {
-                                badgeText: "UPCOMING",
+                                badgeText: "PHYSICAL GIFT",
                                 badgeColor: "#1d1816",
                                 badgeVariant: "solid",
-                                imageSrc: "/assets/unbox_hampers_hero.jpg",
-                                price: "Coming Soon",
+                                imageSrc: "/assets/unbox-the-memory/showcase1.webp",
+                                price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 130.000" size="sm" layout="inline" />,
                                 title: "Unbox the Memory",
                                 titleColor: "#382a24",
-                                description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif. Segera hadir untuk momen terindahmu.",
+                                description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif pilihanmu.",
                                 href: "/catalog/unbox-the-memory",
-                                onAddToCart: () => window.open("https://wa.me/6281936109076?text=Halo%20Admin!%20Saya%20ingin%20dikabari%20saat%20Hampers%20Unbox%20the%20Memory%20resmi%20dirilis.", "_blank")
+                                onAddToCart: () => window.location.href = "/catalog/unbox-the-memory/checkout"
                             },
                             {
                                 badgeText: "#1 Exclusive",

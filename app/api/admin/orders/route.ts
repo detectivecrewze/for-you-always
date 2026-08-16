@@ -51,3 +51,43 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ success: false, orders: [], error: String(error) }, { status: 500 });
     }
 }
+
+export async function DELETE(req: NextRequest) {
+    const sessionCookie = req.cookies.get(COOKIE_NAME);
+    if (!sessionCookie || sessionCookie.value !== "authenticated_session_valid") {
+        return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    try {
+        const { order_id } = await req.json();
+        if (!order_id) {
+            return NextResponse.json({ success: false, message: "Missing order_id" }, { status: 400 });
+        }
+
+        if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
+            const cfRes = await fetch(
+                `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${CF_API_KEY}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        sql: "DELETE FROM orders WHERE order_id = ?",
+                        params: [order_id],
+                    }),
+                }
+            );
+
+            if (cfRes.ok) {
+                return NextResponse.json({ success: true, message: `Pesanan ${order_id} berhasil dihapus.` });
+            }
+        }
+
+        return NextResponse.json({ success: false, message: "Gagal menghapus pesanan dari database." }, { status: 500 });
+    } catch (error) {
+        console.error("Failed to delete order:", error);
+        return NextResponse.json({ success: false, message: String(error) }, { status: 500 });
+    }
+}

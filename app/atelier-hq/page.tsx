@@ -48,7 +48,7 @@ export default function Dashboard() {
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [productFilter, setProductFilter] = useState("all");
-    const [statusFilter, setStatusFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("paid_only");
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -57,6 +57,50 @@ export default function Dashboard() {
     const [trackingInput, setTrackingInput] = useState("");
     const [courierInput, setCourierInput] = useState("SiCepat");
     const [savingTracking, setSavingTracking] = useState(false);
+
+    // Gift Link & Customization Edit States
+    const [editingGiftOrderId, setEditingGiftOrderId] = useState<string | null>(null);
+    const [giftLinkInput, setGiftLinkInput] = useState("");
+    const [customizationStatusInput, setCustomizationStatusInput] = useState<"draft" | "published">("draft");
+    const [savingGiftStatus, setSavingGiftStatus] = useState(false);
+    const [qrModalUrl, setQrModalUrl] = useState<string | null>(null);
+    const [qrModalTitle, setQrModalTitle] = useState<string>("");
+
+    // Inventory & Physical Stock State
+    const [inventoryStock, setInventoryStock] = useState<number>(12);
+    const [inventoryThreshold, setInventoryThreshold] = useState<number>(3);
+    const [stockInputVal, setStockInputVal] = useState<string>("12");
+    const [loadingInventory, setLoadingInventory] = useState(false);
+    const [savingInventory, setSavingInventory] = useState(false);
+    const [inventoryFeedback, setInventoryFeedback] = useState<string | null>(null);
+
+    // Order Delete State
+    const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
+
+    const handleDeleteOrder = async (orderId: string) => {
+        const confirmed = window.confirm(`Hapus pesanan ${orderId}? Tindakan ini tidak dapat dibatalkan.`);
+        if (!confirmed) return;
+
+        setDeletingOrderId(orderId);
+        try {
+            const res = await fetch("/api/admin/orders", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order_id: orderId }),
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setOrders((prev) => prev.filter((o) => o.order_id !== orderId));
+            } else {
+                alert(data.message || "Gagal menghapus pesanan.");
+            }
+        } catch (e) {
+            console.error("Failed to delete order:", e);
+            alert("Terjadi kesalahan jaringan.");
+        } finally {
+            setDeletingOrderId(null);
+        }
+    };
 
     useEffect(() => {
         checkAuth();
@@ -68,11 +112,59 @@ export default function Dashboard() {
             if (res.ok) {
                 setIsAuthenticated(true);
                 fetchOrders();
+                fetchInventory();
             } else {
                 setIsAuthenticated(false);
             }
         } catch {
             setIsAuthenticated(false);
+        }
+    };
+
+    const fetchInventory = async () => {
+        setLoadingInventory(true);
+        try {
+            const res = await fetch("/api/admin/inventory");
+            const data = await res.json();
+            if (res.ok && data.success && data.inventory?.length > 0) {
+                const item = data.inventory[0];
+                setInventoryStock(item.stock);
+                setStockInputVal(String(item.stock));
+                setInventoryThreshold(item.low_stock_threshold || 3);
+            }
+        } catch (e) {
+            console.error("Failed to fetch inventory:", e);
+        } finally {
+            setLoadingInventory(false);
+        }
+    };
+
+    const handleUpdateStock = async (newVal: number) => {
+        const targetStock = Math.max(0, newVal);
+        setSavingInventory(true);
+        setInventoryFeedback(null);
+        try {
+            const res = await fetch("/api/admin/inventory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    product_id: "unbox-the-memory",
+                    stock: targetStock,
+                    low_stock_threshold: inventoryThreshold,
+                }),
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setInventoryStock(targetStock);
+                setStockInputVal(String(targetStock));
+                setInventoryFeedback(`Stok berhasil diupdate jadi ${targetStock} Box!`);
+                setTimeout(() => setInventoryFeedback(null), 3500);
+            }
+        } catch (e) {
+            console.error("Failed to update stock:", e);
+            setInventoryFeedback("Gagal memperbarui stok.");
+        } finally {
+            setSavingInventory(false);
         }
     };
 
@@ -91,6 +183,7 @@ export default function Dashboard() {
             if (res.ok && data.success) {
                 setIsAuthenticated(true);
                 fetchOrders();
+                fetchInventory();
             } else {
                 setAuthError(data.message || "Kata sandi salah. Akses ditolak.");
             }
@@ -216,6 +309,39 @@ export default function Dashboard() {
         }
     };
 
+    const handleSaveGiftStatus = async (orderId: string) => {
+        setSavingGiftStatus(true);
+        try {
+            const isFinished = customizationStatusInput === "published";
+            const res = await fetch("/api/admin/update-resi", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    magic_link: giftLinkInput.trim() || undefined,
+                    customization_status: customizationStatusInput,
+                    fulfillment_status: isFinished ? "ready_to_pack" : "pending_customization",
+                }),
+            });
+
+            if (res.ok) {
+                setOrders(orders.map(o => o.order_id === orderId ? {
+                    ...o,
+                    magic_link: giftLinkInput.trim() || o.magic_link,
+                    customization_status: customizationStatusInput,
+                    fulfillment_status: isFinished ? "ready_to_pack" : "pending_customization",
+                } : o));
+                setEditingGiftOrderId(null);
+            } else {
+                alert("Gagal memperbarui status kado.");
+            }
+        } catch {
+            alert("Terjadi kesalahan sistem saat memperbarui status kado.");
+        } finally {
+            setSavingGiftStatus(false);
+        }
+    };
+
     // Filtered lists
     const physicalOrders = orders.filter(o => {
         const pType = getProductType(o);
@@ -234,10 +360,12 @@ export default function Dashboard() {
     const paidOrdersCount = orders.filter(o => o.status === "paid" || o.status === "success").length;
     const pendingOrdersCount = orders.filter(o => o.status === "pending").length;
 
-    // Physical metrics
-    const pendingCustomizationCount = physicalOrders.filter(o => o.fulfillment_status === "pending_customization" || o.customization_status !== "published").length;
-    const readyToPackCount = physicalOrders.filter(o => o.customization_status === "published" && o.fulfillment_status !== "shipped").length;
-    const shippedPhysicalCount = physicalOrders.filter(o => o.fulfillment_status === "shipped").length;
+    // Physical metrics (calculated from PAID orders)
+    const paidPhysicalOrders = physicalOrders.filter(o => o.status === "paid" || o.status === "success");
+    const pendingCustomizationCount = paidPhysicalOrders.filter(o => o.customization_status !== "published" && o.fulfillment_status !== "shipped").length;
+    const readyToPackCount = paidPhysicalOrders.filter(o => o.customization_status === "published" && o.fulfillment_status !== "shipped").length;
+    const shippedPhysicalCount = paidPhysicalOrders.filter(o => o.fulfillment_status === "shipped").length;
+    const unpaidPhysicalCount = physicalOrders.filter(o => o.status === "pending").length;
 
     // Filtered physical view
     const filteredPhysical = physicalOrders.filter(o => {
@@ -249,11 +377,16 @@ export default function Dashboard() {
             (ship.recipient_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
             cust.phone.includes(searchQuery);
 
-        if (statusFilter === "all") return matchesSearch;
-        if (statusFilter === "pending_customization") return matchesSearch && (o.fulfillment_status === "pending_customization" || o.customization_status !== "published");
-        if (statusFilter === "ready_to_pack") return matchesSearch && (o.customization_status === "published" && o.fulfillment_status !== "shipped");
-        if (statusFilter === "shipped") return matchesSearch && o.fulfillment_status === "shipped";
-        return matchesSearch;
+        if (!matchesSearch) return false;
+
+        const isPaid = o.status === "paid" || o.status === "success";
+        if (statusFilter === "paid_only") return isPaid;
+        if (statusFilter === "all") return true;
+        if (statusFilter === "pending_payment") return o.status === "pending";
+        if (statusFilter === "pending_customization") return isPaid && (o.customization_status !== "published" && o.fulfillment_status !== "shipped");
+        if (statusFilter === "ready_to_pack") return isPaid && (o.customization_status === "published" && o.fulfillment_status !== "shipped");
+        if (statusFilter === "shipped") return isPaid && o.fulfillment_status === "shipped";
+        return true;
     });
 
     // Filtered digital view
@@ -814,8 +947,148 @@ export default function Dashboard() {
                                 </button>
                             </header>
 
+                            {/* Live Stock & Inventory Control */}
+                            <div style={{
+                                background: "#ffffff",
+                                padding: "18px 20px",
+                                borderRadius: 14,
+                                border: "1px solid #e8dfd8",
+                                marginBottom: 16,
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 12,
+                                boxShadow: "0 2px 10px rgba(0,0,0,0.02)"
+                            }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                        <div style={{
+                                            width: 44,
+                                            height: 44,
+                                            borderRadius: 10,
+                                            background: "rgba(166,124,82,0.1)",
+                                            color: "#a67c52",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}>
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: 11, fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                                Inventaris Gift Box Fisik (Unbox the Memory)
+                                            </div>
+                                            <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 2 }}>
+                                                <span style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "#1d1816" }}>
+                                                    {inventoryStock} <span style={{ fontSize: 16, fontWeight: 600, color: "#7a685e" }}>Box Tersedia</span>
+                                                </span>
+                                                <span style={{
+                                                    padding: "3px 8px",
+                                                    borderRadius: 6,
+                                                    fontSize: 10.5,
+                                                    fontWeight: 700,
+                                                    background: inventoryStock === 0 ? "#ffebee" : inventoryStock <= inventoryThreshold ? "#fff3e0" : "#e8f5e9",
+                                                    color: inventoryStock === 0 ? "#c62828" : inventoryStock <= inventoryThreshold ? "#e65100" : "#2e7d32",
+                                                }}>
+                                                    {inventoryStock === 0 ? "HABIS (SOLD OUT)" : inventoryStock <= inventoryThreshold ? "STOK MENIPIS" : "STOK AMAN"}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Quick Increment Controls & Manual Input */}
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                        <div style={{ display: "flex", gap: 4 }}>
+                                            <button
+                                                onClick={() => handleUpdateStock(inventoryStock - 1)}
+                                                disabled={savingInventory || inventoryStock <= 0}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Kurangi 1"
+                                            >
+                                                -1
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateStock(inventoryStock + 1)}
+                                                disabled={savingInventory}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Tambah 1"
+                                            >
+                                                +1
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateStock(inventoryStock + 5)}
+                                                disabled={savingInventory}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Tambah 5"
+                                            >
+                                                +5
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateStock(inventoryStock + 10)}
+                                                disabled={savingInventory}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Tambah 10"
+                                            >
+                                                +10
+                                            </button>
+                                        </div>
+
+                                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                value={stockInputVal}
+                                                onChange={(e) => setStockInputVal(e.target.value)}
+                                                style={{
+                                                    width: 65,
+                                                    padding: "6px 8px",
+                                                    borderRadius: 6,
+                                                    border: "1px solid #dcd1c6",
+                                                    fontSize: 12,
+                                                    fontWeight: 700,
+                                                    textAlign: "center"
+                                                }}
+                                            />
+                                            <button
+                                                onClick={() => handleUpdateStock(parseInt(stockInputVal, 10) || 0)}
+                                                disabled={savingInventory}
+                                                style={{
+                                                    padding: "7px 12px",
+                                                    borderRadius: 6,
+                                                    border: "none",
+                                                    background: "#1d1816",
+                                                    color: "#fff",
+                                                    fontSize: 11,
+                                                    fontWeight: 700,
+                                                    cursor: "pointer"
+                                                }}
+                                            >
+                                                {savingInventory ? "..." : "Set Stok"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {inventoryFeedback && (
+                                    <div style={{ fontSize: 11, fontWeight: 600, color: "#2e7d32", background: "#e8f5e9", padding: "6px 10px", borderRadius: 6 }}>
+                                        {inventoryFeedback}
+                                    </div>
+                                )}
+                            </div>
+
                             {/* Physical Counters */}
                             <div className="dash-stats-grid-3">
+                                <div style={{ background: "#ffffff", padding: "14px 16px", borderRadius: 12, border: "1px solid #e8dfd8" }}>
+                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#b26a00", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                        Belum Bayar (Pending)
+                                    </div>
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#b26a00", marginTop: 2 }}>
+                                        {unpaidPhysicalCount}
+                                    </div>
+                                </div>
                                 <div style={{ background: "#ffffff", padding: "14px 16px", borderRadius: 12, border: "1px solid #e8dfd8" }}>
                                     <div style={{ fontSize: 10, fontWeight: 700, color: "#e65100", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                                         Menunggu Kustomisasi
@@ -826,18 +1099,10 @@ export default function Dashboard() {
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "14px 16px", borderRadius: 12, border: "1px solid #e8dfd8" }}>
                                     <div style={{ fontSize: 10, fontWeight: 700, color: "#a67c52", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                                        Siap Dirakit & Dipacking
+                                        Siap Cetak & Packing
                                     </div>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#a67c52", marginTop: 2 }}>
                                         {readyToPackCount}
-                                    </div>
-                                </div>
-                                <div style={{ background: "#ffffff", padding: "14px 16px", borderRadius: 12, border: "1px solid #e8dfd8" }}>
-                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#2e7d32", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                                        Terkirim ke Ekspedisi
-                                    </div>
-                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#2e7d32", marginTop: 2 }}>
-                                        {shippedPhysicalCount}
                                     </div>
                                 </div>
                             </div>
@@ -856,10 +1121,12 @@ export default function Dashboard() {
                                     onChange={(e) => setStatusFilter(e.target.value)}
                                     style={{ padding: "9px 12px", borderRadius: 8, border: "1px solid #dcd1c6", background: "#fff", fontSize: 12, fontWeight: 600 }}
                                 >
-                                    <option value="all">Semua Status Fulfillment</option>
-                                    <option value="pending_customization">Menunggu Kustomisasi</option>
-                                    <option value="ready_to_pack">Siap Dirakit / Packing</option>
-                                    <option value="shipped">Terkirim</option>
+                                    <option value="paid_only">Hanya Pesanan Lunas (Siap Diproses)</option>
+                                    <option value="all">Semua Pesanan (Termasuk Belum Bayar)</option>
+                                    <option value="pending_payment">Belum Bayar (Pending)</option>
+                                    <option value="pending_customization">Menunggu Customer Mengisi</option>
+                                    <option value="ready_to_pack">Siap Cetak & Packing</option>
+                                    <option value="shipped">Terkirim (Resi Ada)</option>
                                 </select>
                             </div>
 
@@ -870,14 +1137,15 @@ export default function Dashboard() {
                                 ) : filteredPhysical.length === 0 ? (
                                     <div style={{ padding: "30px", textAlign: "center", color: "#7a685e", fontSize: 12.5 }}>Tidak ada pesanan fisik yang cocok.</div>
                                 ) : (
-                                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 11.5, minWidth: 680 }}>
+                                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 11.5, minWidth: 720 }}>
                                         <thead>
                                             <tr style={{ background: "#faf7f2", borderBottom: "1px solid #e8dfd8" }}>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>ID & Waktu</th>
+                                                <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Bayar</th>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Pemesan</th>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Format Kado</th>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Alamat Penerima</th>
-                                                <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Status Studio</th>
+                                                <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Kado Digital & QR</th>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Pengiriman & Resi</th>
                                             </tr>
                                         </thead>
@@ -885,6 +1153,10 @@ export default function Dashboard() {
                                             {filteredPhysical.map((order) => {
                                                 const cust = getCustomer(order);
                                                 const ship = parseMeta(order.shipping_details);
+                                                const isPaid = order.status === "paid" || order.status === "success";
+                                                const giftLink = order.magic_link || order.studio_link || "";
+                                                const isCustomized = order.customization_status === "published";
+
                                                 return (
                                                     <tr key={order.order_id} style={{ borderBottom: "1px solid #f0e9e2" }}>
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
@@ -893,6 +1165,35 @@ export default function Dashboard() {
                                                             <div style={{ fontSize: 11, fontWeight: 700, color: "#a67c52", marginTop: 2 }}>
                                                                 Rp {order.gross_amount?.toLocaleString("id-ID")}
                                                             </div>
+                                                            <button
+                                                                onClick={() => handleDeleteOrder(order.order_id)}
+                                                                disabled={deletingOrderId === order.order_id}
+                                                                style={{
+                                                                    marginTop: 6,
+                                                                    padding: "2px 7px",
+                                                                    borderRadius: 4,
+                                                                    border: "1px solid #ffcdd2",
+                                                                    background: "#fff5f5",
+                                                                    color: "#c62828",
+                                                                    fontSize: 9.5,
+                                                                    fontWeight: 600,
+                                                                    cursor: "pointer",
+                                                                    display: "inline-block",
+                                                                }}
+                                                                title="Hapus pesanan ini"
+                                                            >
+                                                                {deletingOrderId === order.order_id ? "Menghapus..." : "Hapus"}
+                                                            </button>
+                                                        </td>
+                                                        <td style={{ padding: "12px", verticalAlign: "top" }}>
+                                                            <span style={{
+                                                                display: "inline-block", padding: "3px 8px", borderRadius: 6,
+                                                                fontSize: 10, fontWeight: 700,
+                                                                background: isPaid ? "#e8f5e9" : order.status === "pending" ? "#fff8e1" : "#ffebee",
+                                                                color: isPaid ? "#2e7d32" : order.status === "pending" ? "#b26a00" : "#c62828",
+                                                            }}>
+                                                                {isPaid ? "LUNAS" : order.status === "pending" ? "BELUM BAYAR" : "BATAL"}
+                                                            </span>
                                                         </td>
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             <div style={{ fontWeight: 700, color: "#1d1816" }}>{cust.name}</div>
@@ -908,7 +1209,7 @@ export default function Dashboard() {
                                                                 {order.product_type?.replace("unbox_", "") || "Letter"}
                                                             </span>
                                                         </td>
-                                                        <td style={{ padding: "12px", verticalAlign: "top", maxWidth: 220 }}>
+                                                        <td style={{ padding: "12px", verticalAlign: "top", maxWidth: 200 }}>
                                                             <div style={{ fontWeight: 700, color: "#1d1816" }}>
                                                                 {ship.recipient_name || "-"} ({ship.recipient_phone || "-"})
                                                             </div>
@@ -927,14 +1228,85 @@ export default function Dashboard() {
                                                                 {copiedId === `addr_${order.order_id}` ? "Tersalin" : "Salin Alamat"}
                                                             </button>
                                                         </td>
-                                                        <td style={{ padding: "12px", verticalAlign: "top" }}>
-                                                            <span style={{
-                                                                display: "inline-block", padding: "3px 7px", borderRadius: 6, fontSize: 10, fontWeight: 700,
-                                                                background: order.customization_status === "published" ? "#e8f5e9" : "#fff3e0",
-                                                                color: order.customization_status === "published" ? "#2e7d32" : "#e65100",
-                                                            }}>
-                                                                {order.customization_status === "published" ? "Selesai Diisi" : "Menunggu Pengisian"}
-                                                            </span>
+                                                        <td style={{ padding: "12px", verticalAlign: "top", minWidth: 160 }}>
+                                                            {editingGiftOrderId === order.order_id ? (
+                                                                <div style={{ display: "flex", flexDirection: "column", gap: 5, background: "#faf7f2", padding: 8, borderRadius: 8, border: "1px solid #dcd1c6" }}>
+                                                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#7a685e" }}>Status Kustomisasi:</div>
+                                                                    <select
+                                                                        value={customizationStatusInput}
+                                                                        onChange={(e) => setCustomizationStatusInput(e.target.value as any)}
+                                                                        style={{ padding: "4px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: 10.5 }}
+                                                                    >
+                                                                        <option value="draft">Menunggu Pengisian</option>
+                                                                        <option value="published">Selesai Diisi / Siap Packing</option>
+                                                                    </select>
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Link Kado (https://...)"
+                                                                        value={giftLinkInput}
+                                                                        onChange={(e) => setGiftLinkInput(e.target.value)}
+                                                                        style={{ padding: "4px 6px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: 10.5 }}
+                                                                    />
+                                                                    <div style={{ display: "flex", gap: 4 }}>
+                                                                        <button
+                                                                            onClick={() => handleSaveGiftStatus(order.order_id)}
+                                                                            disabled={savingGiftStatus}
+                                                                            style={{ padding: "4px 8px", borderRadius: 6, border: "none", background: "#1d1816", color: "#fff", fontSize: 9.5, fontWeight: 700, cursor: "pointer" }}
+                                                                        >
+                                                                            {savingGiftStatus ? "..." : "Simpan"}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => setEditingGiftOrderId(null)}
+                                                                            style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#fff", fontSize: 9.5, cursor: "pointer" }}
+                                                                        >
+                                                                            Batal
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                                                    <span style={{
+                                                                        display: "inline-block", padding: "3px 7px", borderRadius: 6, fontSize: 10, fontWeight: 700, width: "fit-content",
+                                                                        background: isCustomized ? "#e8f5e9" : "#fff3e0",
+                                                                        color: isCustomized ? "#2e7d32" : "#e65100",
+                                                                    }}>
+                                                                        {isCustomized ? "Selesai Diisi / Siap Packing" : "Menunggu Pengisian"}
+                                                                    </span>
+
+                                                                    {giftLink && (
+                                                                        <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 2 }}>
+                                                                            <a
+                                                                                href={giftLink}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                style={{ fontSize: 9.5, fontWeight: 700, color: "#a67c52", textDecoration: "none", background: "#faf7f2", padding: "2px 6px", borderRadius: 4, border: "1px solid #e8dfd8" }}
+                                                                            >
+                                                                                Buka Kado ↗
+                                                                            </a>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    setQrModalUrl(giftLink);
+                                                                                    setQrModalTitle(`${order.order_id} - ${cust.name}`);
+                                                                                }}
+                                                                                style={{ fontSize: 9.5, fontWeight: 700, color: "#1d1816", background: "#faf7f2", border: "1px solid #e8dfd8", padding: "2px 6px", borderRadius: 4, cursor: "pointer" }}
+                                                                            >
+                                                                                Cetak QR
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
+
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            setEditingGiftOrderId(order.order_id);
+                                                                            setGiftLinkInput(giftLink);
+                                                                            setCustomizationStatusInput(order.customization_status || "draft");
+                                                                        }}
+                                                                        style={{ background: "none", border: "none", color: "#a67c52", fontSize: 9.5, fontWeight: 700, cursor: "pointer", padding: 0, textAlign: "left", marginTop: 2 }}
+                                                                    >
+                                                                        {giftLink ? "Ubah Status / Link" : "+ Masukkan Link Kado"}
+                                                                    </button>
+                                                                </div>
+                                                            )}
                                                         </td>
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             {editingOrderId === order.order_id ? (
@@ -949,6 +1321,7 @@ export default function Dashboard() {
                                                                         <option value="J&T">J&T</option>
                                                                         <option value="Anteraja">Anteraja</option>
                                                                         <option value="Paxel">Paxel</option>
+                                                                        <option value="GoSend">GoSend</option>
                                                                     </select>
                                                                     <input
                                                                         type="text"
@@ -996,8 +1369,12 @@ export default function Dashboard() {
                                                                             onClick={() => {
                                                                                 setEditingOrderId(order.order_id);
                                                                                 setTrackingInput("");
+                                                                                setCourierInput("SiCepat");
                                                                             }}
-                                                                            style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #a67c52", background: "#fff", color: "#a67c52", fontSize: 10, fontWeight: 700, cursor: "pointer" }}
+                                                                            style={{
+                                                                                padding: "4px 9px", borderRadius: 6, border: "1px solid #dcd1c6",
+                                                                                background: "#faf7f2", color: "#382a24", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                                                                            }}
                                                                         >
                                                                             Input Resi
                                                                         </button>
@@ -1102,6 +1479,25 @@ export default function Dashboard() {
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             <div style={{ fontWeight: 700, color: "#1d1816" }}>{order.order_id}</div>
                                                             <div style={{ fontSize: 10.5, color: "#8a7b73" }}>{formatWIB(order.created_at)}</div>
+                                                            <button
+                                                                onClick={() => handleDeleteOrder(order.order_id)}
+                                                                disabled={deletingOrderId === order.order_id}
+                                                                style={{
+                                                                    marginTop: 6,
+                                                                    padding: "2px 7px",
+                                                                    borderRadius: 4,
+                                                                    border: "1px solid #ffcdd2",
+                                                                    background: "#fff5f5",
+                                                                    color: "#c62828",
+                                                                    fontSize: 9.5,
+                                                                    fontWeight: 600,
+                                                                    cursor: "pointer",
+                                                                    display: "inline-block",
+                                                                }}
+                                                                title="Hapus pesanan ini"
+                                                            >
+                                                                {deletingOrderId === order.order_id ? "Menghapus..." : "Hapus"}
+                                                            </button>
                                                         </td>
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             <span style={{
@@ -1158,6 +1554,98 @@ export default function Dashboard() {
                     )}
                 </main>
             </div>
+
+            {/* ── QR CODE MODAL FOR PRINTING ── */}
+            {qrModalUrl && (
+                <div style={{
+                    position: "fixed",
+                    inset: 0,
+                    backgroundColor: "rgba(0,0,0,0.6)",
+                    backdropFilter: "blur(6px)",
+                    zIndex: 100000,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "20px"
+                }}>
+                    <div style={{
+                        backgroundColor: "#ffffff",
+                        borderRadius: "20px",
+                        padding: "28px",
+                        maxWidth: "400px",
+                        width: "100%",
+                        textAlign: "center",
+                        boxShadow: "0 25px 60px rgba(0,0,0,0.3)",
+                        border: "1px solid rgba(205,171,143,0.3)"
+                    }}>
+                        <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#a67c52", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px" }}>
+                            Cetak Kartu QR Fisik
+                        </div>
+                        <h3 style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.4rem", fontWeight: 600, color: "#1d1816", margin: "0 0 16px" }}>
+                            {qrModalTitle || "QR Code Kado Digital"}
+                        </h3>
+
+                        <div style={{
+                            padding: "16px",
+                            backgroundColor: "#faf7f2",
+                            borderRadius: "16px",
+                            border: "1px solid #e8dfd8",
+                            display: "inline-block",
+                            marginBottom: "16px"
+                        }}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(qrModalUrl)}`}
+                                alt="QR Code Preview"
+                                style={{ width: "240px", height: "240px", display: "block", borderRadius: "8px" }}
+                            />
+                        </div>
+
+                        <div style={{ fontSize: "0.8rem", color: "#6e5c53", wordBreak: "break-all", background: "#f5eee6", padding: "8px 12px", borderRadius: "8px", marginBottom: "20px" }}>
+                            {qrModalUrl}
+                        </div>
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                            <a
+                                href={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(qrModalUrl)}`}
+                                download="qr_code_kado.png"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    flex: 1,
+                                    padding: "12px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#1d1816",
+                                    color: "#faf7f2",
+                                    fontSize: "0.86rem",
+                                    fontWeight: 700,
+                                    textDecoration: "none",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                Download HD
+                            </a>
+                            <button
+                                onClick={() => setQrModalUrl(null)}
+                                style={{
+                                    padding: "12px 18px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#faf7f2",
+                                    color: "#6e5c53",
+                                    border: "1px solid #dcd1c6",
+                                    fontSize: "0.86rem",
+                                    fontWeight: 700,
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

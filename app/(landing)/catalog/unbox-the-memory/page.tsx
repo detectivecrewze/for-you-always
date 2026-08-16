@@ -18,12 +18,29 @@ function SpringAnimatedSection({ children }: { children: React.ReactNode; delay?
 }
 
 export default function UnboxTheMemoryPage() {
-    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("memoria");
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("letter");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [stockData, setStockData] = useState<{
+        stock: number;
+        in_stock: boolean;
+        is_low_stock: boolean;
+    }>({ stock: 12, in_stock: true, is_low_stock: false });
 
     useEffect(() => {
         trackViewContent({ id: "unbox-the-memory", name: "Unbox the Memory" });
+        fetch("/api/inventory?product_id=unbox-the-memory")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && typeof data.stock === "number") {
+                    setStockData({
+                        stock: data.stock,
+                        in_stock: data.in_stock,
+                        is_low_stock: data.is_low_stock,
+                    });
+                }
+            })
+            .catch(() => {});
     }, []);
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
@@ -38,6 +55,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#d4af37",
+            price: "Rp 150.000",
+            oldPrice: "Rp 200.000",
+            numericPrice: 150000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
@@ -47,6 +67,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Favorit",
             color: "#a67c52",
+            price: "Rp 130.000",
+            oldPrice: "Rp 180.000",
+            numericPrice: 130000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -56,6 +79,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "Best Seller",
             color: "#e91e63",
+            price: "Rp 130.000",
+            oldPrice: "Rp 180.000",
+            numericPrice: 130000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
@@ -130,7 +156,7 @@ export default function UnboxTheMemoryPage() {
                     justifyContent: "space-between",
                     gap: "56px"
                 }}>
-                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD WITH BLUR SILHOUETTE & UPCOMING BADGE */}
+                    {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD */}
                     <div
                         style={{
                             flex: "1 1 400px",
@@ -143,6 +169,7 @@ export default function UnboxTheMemoryPage() {
                             position: "relative",
                             width: "100%",
                             maxWidth: "480px",
+                            aspectRatio: "4 / 3",
                             borderRadius: "28px",
                             overflow: "hidden",
                             border: "1px solid rgba(205,171,143,0.3)",
@@ -150,15 +177,12 @@ export default function UnboxTheMemoryPage() {
                             background: "#1d1816"
                         }}>
                             <Image
-                                src="/assets/unbox_hampers_hero.jpg"
+                                src="/assets/unbox-the-memory/showcase1.webp"
                                 alt="Unbox the Memory Gift Box Hampers Showcase"
-                                width={560}
-                                height={420}
+                                fill
                                 style={{
-                                    width: "100%",
-                                    height: "auto",
-                                    display: "block",
                                     objectFit: "cover",
+                                    objectPosition: "center 48%",
                                     borderRadius: "28px",
                                 }}
                                 priority
@@ -180,8 +204,8 @@ export default function UnboxTheMemoryPage() {
                             letterSpacing: "-0.03em",
                             textAlign: "left"
                         }}>
-                            Sentuhan Fisik,<br />
-                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Keajaiban Digital.</span>
+                            Dibuka dengan Tangan,<br />
+                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Dirasakan dengan Hati.</span>
                         </h1>
 
                         {/* 2. SUBTITLE PARAGRAPH */}
@@ -194,7 +218,7 @@ export default function UnboxTheMemoryPage() {
                             maxWidth: "520px",
                             textAlign: "left"
                         }}>
-                            Pengalaman gift box hampers fisik eksklusif berpadu dengan kado digital interaktif. Segera hadir untuk momen terindahmu.
+                            Sebuah gift box eksklusif dengan kejutan digital personal yang dibuat untuk menyampaikan hal-hal yang mungkin sulit diucapkan langsung.
                         </p>
 
                         {/* 3. ATELIER SIGNATURE PRICE PILL */}
@@ -220,7 +244,12 @@ export default function UnboxTheMemoryPage() {
                                     <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
                                     <line x1="7" y1="7" x2="7.01" y2="7" />
                                 </svg>
-                                <DiscountPrice oldPrice="Rp 200.000" newPrice="Rp 150.000" size="md" layout="inline" />
+                                <DiscountPrice
+                                    oldPrice={digitalExperiences[selectedDigitalExperience].oldPrice}
+                                    newPrice={digitalExperiences[selectedDigitalExperience].price}
+                                    size="md"
+                                    layout="inline"
+                                />
                             </div>
 
                             <span style={{
@@ -235,40 +264,94 @@ export default function UnboxTheMemoryPage() {
                             </span>
                         </div>
 
-                        {/* 4. CTA BUTTONS: GO TO WIZARD CHECKOUT */}
+                        {/* 4. LIVE STOCK SCARCITY BADGE */}
+                        <div style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "6px 14px",
+                            borderRadius: "999px",
+                            fontSize: "0.8rem",
+                            fontWeight: 700,
+                            backgroundColor: stockData.stock === 0 ? "#ffebee" : stockData.is_low_stock ? "#fff3e0" : "#f5eee6",
+                            color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#59483f",
+                            border: `1px solid ${stockData.stock === 0 ? "#ffcdd2" : stockData.is_low_stock ? "#ffe0b2" : "#e8dfd8"}`,
+                            marginBottom: "20px"
+                        }}>
+                            <span style={{
+                                width: 6,
+                                height: 6,
+                                borderRadius: "50%",
+                                backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#a67c52",
+                                display: "inline-block",
+                            }} />
+                            <span>
+                                {stockData.stock === 0
+                                    ? "Slot Batch Ini Habis (Sold Out)"
+                                    : stockData.is_low_stock
+                                    ? `Slot Terbatas: Sisa ${stockData.stock} Box Saja`
+                                    : `Tersedia ${stockData.stock} Box untuk Batch Ini`}
+                            </span>
+                        </div>
+
+                        {/* 5. CTA BUTTONS: GO TO WIZARD CHECKOUT */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
-                            <Link
-                                href="/catalog/unbox-the-memory/checkout"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                    backgroundColor: "#382a24",
-                                    color: "#faf7f2",
-                                    fontWeight: 700,
-                                    fontSize: "0.92rem",
-                                    padding: "16px 32px",
-                                    borderRadius: "14px",
-                                    textDecoration: "none",
-                                    boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
-                                    transition: "all 0.3s ease"
-                                }}
-                                onMouseOver={(e) => {
-                                    e.currentTarget.style.transform = "translateY(-2px)";
-                                    e.currentTarget.style.backgroundColor = "#523e35";
-                                }}
-                                onMouseOut={(e) => {
-                                    e.currentTarget.style.transform = "translateY(0)";
-                                    e.currentTarget.style.backgroundColor = "#382a24";
-                                }}
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                </svg>
-                                <span>Pesan Gift Box Sekarang</span>
-                            </Link>
+                            {stockData.stock > 0 ? (
+                                <Link
+                                    href="/catalog/unbox-the-memory/checkout"
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        backgroundColor: "#382a24",
+                                        color: "#faf7f2",
+                                        fontWeight: 700,
+                                        fontSize: "0.92rem",
+                                        padding: "16px 32px",
+                                        borderRadius: "14px",
+                                        textDecoration: "none",
+                                        boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
+                                        transition: "all 0.3s ease"
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.transform = "translateY(-2px)";
+                                        e.currentTarget.style.backgroundColor = "#523e35";
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.transform = "translateY(0)";
+                                        e.currentTarget.style.backgroundColor = "#382a24";
+                                    }}
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                    </svg>
+                                    <span>Pesan Gift Box Sekarang</span>
+                                </Link>
+                            ) : (
+                                <a
+                                    href="https://wa.me/6281234567890?text=Halo%20For%20You%20Always,%20saya%20tertarik%20dengan%20Unbox%20The%20Memory%20Gift%20Box.%20Apakah%20bisa%20ikut%20pre-order%20batch%20berikutnya?"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        backgroundColor: "#7a685e",
+                                        color: "#faf7f2",
+                                        fontWeight: 700,
+                                        fontSize: "0.92rem",
+                                        padding: "16px 32px",
+                                        borderRadius: "14px",
+                                        textDecoration: "none",
+                                        boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
+                                        transition: "all 0.3s ease"
+                                    }}
+                                >
+                                    <span>Pre-Order Batch Berikutnya (WA) ↗</span>
+                                </a>
+                            )}
 
                             <Link
                                 href="/catalog"
@@ -346,16 +429,18 @@ export default function UnboxTheMemoryPage() {
                         background: "rgba(205,171,143,0.08)",
                         marginBottom: "16px"
                     }}>
-                        Detail Sentuhan Fisik
+                        Curated Experience
                     </span>
                     <h2 style={{
                         fontFamily: "var(--font-display, Cormorant Garamond, serif)",
-                        fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                        fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)",
                         fontWeight: 400,
                         color: "#382a24",
-                        lineHeight: 1.1
+                        lineHeight: 1.18,
+                        letterSpacing: "-0.02em",
                     }}>
-                        Apa Saja Isi Di Dalam <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gift Box?</span>
+                        Everything Inside<br />
+                        <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Your Special Moment</span>
                     </h2>
                 </div>
 
@@ -366,28 +451,22 @@ export default function UnboxTheMemoryPage() {
                 }}>
                     {[
                         {
-                            img: "/assets/unbox_hampers_hero.jpg",
-                            tag: "Kemasan Premium",
-                            title: "Gift Box Exclusive",
-                            desc: "Kotak kado fisik eksklusif berdesain elegan yang dirancang untuk momen kejutan istimewa."
+                            img: "/assets/unbox-the-memory/box-luar.webp",
+                            tag: "LUXURY PRESENTATION",
+                            title: "Luxury Gift Box",
+                            desc: "Hardbox eksklusif dengan balutan pita satin elegan, dilengkapi kartu ucapan personal untuk seseorang yang spesial."
                         },
                         {
-                            img: "/assets/unbox_qr_card.jpg",
-                            tag: "Kartu QR Code",
-                            title: "QR Experience Card",
-                            desc: "Kartu QR code unik yang langsung terhubung ke halaman kado digital buatanmu."
+                            img: "/assets/unbox-the-memory/showcase1.webp",
+                            tag: "CURATED KEEPSAKES",
+                            title: "Curated Keepsakes",
+                            desc: "Koleksi kecil penuh perhatian, mulai dari teddy bear mini, dried flowers, hingga sweet treats pilihan yang melengkapi momen spesialmu."
                         },
                         {
-                            img: "/assets/unbox_flowers_detail.jpg",
-                            tag: "Sentuhan Manis",
-                            title: "Special Touch",
-                            desc: "Elemen pendukung eksklusif yang mempercantik tampilan unboxing kado saat dibuka."
-                        },
-                        {
-                            img: "/assets/unbox_box_detail.jpg",
-                            tag: "Kartu Akses",
-                            title: "Panduan Unboxing",
-                            desc: "Petunjuk mudah agar penerima bisa langsung scan dan menikmati kejutan kado."
+                            img: "/assets/unbox-the-memory/barcode.png",
+                            tag: "DIGITAL MEMORY CARD",
+                            title: "Digital Memory Card",
+                            desc: "Kartu QR personal berbentuk hati yang membuka sebuah digital gift berisi pesan, kenangan, dan momen spesial yang hanya untuknya."
                         }
                     ].map((card, idx) => (
                         <SpringAnimatedSection key={idx} delay={idx * 100}>
@@ -399,7 +478,7 @@ export default function UnboxTheMemoryPage() {
                                 boxShadow: "0 10px 30px -10px rgba(56,42,36,0.06)",
                                 transition: "all 0.3s ease"
                             }}>
-                                <div style={{ height: "200px", overflow: "hidden", position: "relative" }}>
+                                <div style={{ height: "230px", overflow: "hidden", position: "relative" }}>
                                     <Image
                                         src={card.img}
                                         alt={card.title}
@@ -409,8 +488,7 @@ export default function UnboxTheMemoryPage() {
                                             width: "100%",
                                             height: "100%",
                                             objectFit: "cover",
-                                            filter: "blur(12px) contrast(1.05) brightness(0.95)",
-                                            transform: "scale(1.06)"
+                                            objectPosition: idx === 2 ? "center center" : "center 48%",
                                         }}
                                     />
                                     <span style={{
@@ -473,32 +551,36 @@ export default function UnboxTheMemoryPage() {
                         {[
                             {
                                 num: "01",
-                                title: "Notifikasi Rilis",
-                                desc: "Klik 'Kabari Saya Saat Rilis' untuk mendaftarkan WhatsApp kamu agar mendapatkan pemberitahuan saat hampers resmi diluncurkan.",
+                                title: "Pilih & Personalisasi",
+                                desc: "Pilih format kado digital favoritmu (Letter, Voices, atau Memoria) dan lengkapi alamat pengiriman saat checkout.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
                                     </svg>
                                 )
                             },
                             {
                                 num: "02",
-                                title: "Terima & Open The Box",
-                                desc: "Buka kemasan hampers eksklusif dan temukan Kartu Akses QR Code spesial di dalam gift box.",
+                                title: "Kami Rangkai & Kirim",
+                                desc: "Kami merangkai gift box eksklusif, mencetak Kartu Akses QR kado digitalmu, dan mengirimkannya dengan aman.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
                                     </svg>
                                 )
                             },
                             {
                                 num: "03",
-                                title: "Scan QR & Nikmati Kado",
-                                desc: "Cukup gunakan kamera HP untuk scan kartu. Halaman kado digital sinematik langsung terbuka di browser tanpa perlu install aplikasi!",
+                                title: "Scan QR & Buka Kado",
+                                desc: "Penerima cukup scan kartu QR dengan kamera HP. Halaman kado digital langsung terbuka dengan musik dan animasi.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
                                     </svg>
                                 )
                             }
@@ -584,7 +666,10 @@ export default function UnboxTheMemoryPage() {
                                     transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
                                 }}
                             >
-                                {exp.title}
+                                <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                    <span>{exp.title}</span>
+                                    <span style={{ fontSize: "0.78rem", opacity: isSelected ? 1 : 0.7, fontWeight: 700 }}>• {exp.price}</span>
+                                </span>
                             </button>
                         );
                     })}
@@ -607,19 +692,31 @@ export default function UnboxTheMemoryPage() {
                             boxShadow: "0 20px 45px -15px rgba(56,42,36,0.08)"
                         }}>
                             <div>
-                                <span style={{
-                                    backgroundColor: `${currentExp.color}15`,
-                                    color: currentExp.color,
-                                    fontSize: "0.78rem",
-                                    fontWeight: 700,
-                                    padding: "6px 14px",
-                                    borderRadius: "20px",
-                                    display: "inline-block",
-                                    marginBottom: "18px",
-                                    letterSpacing: "0.05em"
-                                }}>
-                                    {currentExp.badge}
-                                </span>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "18px" }}>
+                                    <span style={{
+                                        backgroundColor: `${currentExp.color}15`,
+                                        color: currentExp.color,
+                                        fontSize: "0.78rem",
+                                        fontWeight: 700,
+                                        padding: "6px 14px",
+                                        borderRadius: "20px",
+                                        display: "inline-block",
+                                        letterSpacing: "0.05em"
+                                    }}>
+                                        {currentExp.badge}
+                                    </span>
+                                    <span style={{
+                                        fontSize: "0.82rem",
+                                        fontWeight: 700,
+                                        color: "#1d1816",
+                                        background: "#ffffff",
+                                        border: "1px solid rgba(205,171,143,0.3)",
+                                        padding: "5px 12px",
+                                        borderRadius: "999px",
+                                    }}>
+                                        Paket Box: {currentExp.price}
+                                    </span>
+                                </div>
                                 <h3 style={{
                                     fontFamily: "var(--font-display, Cormorant Garamond, serif)",
                                     fontSize: "clamp(2rem, 3.5vw, 2.5rem)",
@@ -766,20 +863,20 @@ export default function UnboxTheMemoryPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     {[
                         {
-                            q: "Berapa lama estimasi pengiriman hampers ke kota tujuan?",
-                            a: "Hampers fisik dikirim menggunakan ekspedisi terpercaya dengan pengemasan aman dan garansi sampai di tujuan. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
+                            q: "Berapa lama estimasi pengiriman gift box ke kota tujuan?",
+                            a: "Gift box fisik dikirim menggunakan ekspedisi terpercaya dengan pengemasan aman berlapis bubble wrap. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
                         },
                         {
                             q: "Bagaimana cara memasukkan ucapan & foto ke dalam kado digital?",
-                            a: "Setelah pemesanan terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan puitis, dan memilih lagu favorit dengan sangat mudah."
+                            a: "Setelah pemesanan terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan, dan memilih lagu favorit dengan sangat mudah."
                         },
                         {
                             q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka QR Code?",
-                            a: "Tidak perlu aplikasi apapun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR. Halaman kado digital sinematik akan langsung terbuka otomatis di browser bawaan HP."
+                            a: "Tidak perlu aplikasi apa pun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR. Halaman kado digital sinematik akan langsung terbuka otomatis di browser HP."
                         },
                         {
-                            q: "Bisakah hampers dikirimkan langsung ke alamat penerima (sebagai hadiah)?",
-                            a: "Tentu saja! Saat pemesanan, kamu bisa langsung memasukkan nama & alamat penerima sebagai tujuan pengiriman. Kami akan mengemas hampers dengan sangat rapi dan aman."
+                            q: "Bisakah gift box dikirimkan langsung ke alamat penerima (sebagai kejutan)?",
+                            a: "Tentu saja! Saat pemesanan, kamu bisa langsung memasukkan nama & alamat penerima sebagai tujuan pengiriman. Kami akan mengemas paket dengan sangat rapi dan tanpa mencantumkan nota harga."
                         }
                     ].map((faq, i) => {
                         const isOpen = openFaqIndex === i;
@@ -893,10 +990,10 @@ export default function UnboxTheMemoryPage() {
                         whiteSpace: "nowrap",
                     }}>
                         <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
-                            Rp 150.000
+                            Mulai Rp 130.000
                         </span>
                         <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
-                            Rp 200.000
+                            Rp 180.000
                         </span>
                     </div>
                     <br />

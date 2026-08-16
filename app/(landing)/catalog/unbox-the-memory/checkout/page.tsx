@@ -16,6 +16,9 @@ interface DigitalOption {
     badgeColor: string;
     image: string;
     demoUrl: string;
+    price: string;
+    oldPrice: string;
+    numericPrice: number;
 }
 
 const DIGITAL_OPTIONS: DigitalOption[] = [
@@ -27,6 +30,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#b38742",
         image: "/assets/opening_gate.png",
         demoUrl: "https://anniv.for-you-always.my.id/",
+        price: "Rp 150.000",
+        oldPrice: "Rp 200.000",
+        numericPrice: 150000,
     },
     {
         id: "letter",
@@ -36,6 +42,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#a67c52",
         image: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         demoUrl: "https://letter.for-you-always.my.id/",
+        price: "Rp 130.000",
+        oldPrice: "Rp 180.000",
+        numericPrice: 130000,
     },
     {
         id: "voices",
@@ -45,18 +54,23 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#994d5d",
         image: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
         demoUrl: "https://voices.for-you-always.my.id/",
+        price: "Rp 130.000",
+        oldPrice: "Rp 180.000",
+        numericPrice: 130000,
     },
 ];
-
-const BOX_PRICE = 150000;
-const BOX_OLD_PRICE = 200000;
 
 export default function UnboxCheckoutWizardPage() {
     const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [stockData, setStockData] = useState<{
+        stock: number;
+        in_stock: boolean;
+        is_low_stock: boolean;
+    }>({ stock: 12, in_stock: true, is_low_stock: false });
 
     // Form States
-    const [selectedDigital, setSelectedDigital] = useState("loves");
+    const [selectedDigital, setSelectedDigital] = useState("letter");
     const [customerDetails, setCustomerDetails] = useState({
         senderName: "",
         email: "",
@@ -66,26 +80,137 @@ export default function UnboxCheckoutWizardPage() {
         recipientName: "",
         recipientPhone: "",
         address: "",
-        province: "DKI Jakarta",
-        city: "Jakarta Selatan",
+        province: "",
+        city: "",
         district: "",
+        village: "",
         postalCode: "",
     });
 
     // Dynamic Shipping Rate Calculation
-    const currentProvinceObj =
-        INDONESIA_SHIPPING_DATA.find((p) => p.name === shippingDetails.province) ||
-        INDONESIA_SHIPPING_DATA[0];
-    const availableCities = currentProvinceObj.cities;
+    const currentProvinceObj = INDONESIA_SHIPPING_DATA.find((p) => p.name === shippingDetails.province);
+    const availableCities = currentProvinceObj ? currentProvinceObj.cities : [];
 
-    const { cost: shippingCost, estimate: shippingEstimate } = getShippingRate(
-        shippingDetails.province,
-        shippingDetails.city
-    );
+    // Courier Rates Options from Biteship API / Local Matrix
+    interface CourierRateOption {
+        courier_name: string;
+        courier_code: string;
+        service_type: string;
+        service_name: string;
+        category: "instant" | "sameday" | "nextday" | "regular";
+        price: number;
+        etd: string;
+        description?: string;
+    }
 
-    const totalAmount = BOX_PRICE + shippingCost;
+    const [courierOptions, setCourierOptions] = useState<CourierRateOption[]>([]);
+    const [selectedCourierCode, setSelectedCourierCode] = useState<string>("");
+    const [selectedCourier, setSelectedCourier] = useState<CourierRateOption | null>(null);
+    const [loadingRates, setLoadingRates] = useState(false);
+
+    // District & Village (Kelurahan / Desa) Options
+    interface AreaOption {
+        name: string;
+        id: string;
+        postal_code?: string;
+    }
+    const [availableDistricts, setAvailableDistricts] = useState<AreaOption[]>([]);
+    const [loadingDistricts, setLoadingDistricts] = useState(false);
+
+    const [availableVillages, setAvailableVillages] = useState<AreaOption[]>([]);
+    const [loadingVillages, setLoadingVillages] = useState(false);
+
+    const shippingCost = selectedCourier ? selectedCourier.price : 0;
+    const shippingEstimate = selectedCourier ? selectedCourier.etd : "-";
+    const shippingCourierTitle = selectedCourier
+        ? `${selectedCourier.service_name}`
+        : "Belum dipilih";
+
     const selectedDigitalObj =
         DIGITAL_OPTIONS.find((d) => d.id === selectedDigital) || DIGITAL_OPTIONS[0];
+    const currentBoxPrice = selectedDigitalObj.numericPrice;
+    const totalAmount = currentBoxPrice + shippingCost;
+
+    // Fetch dynamic districts whenever city changes
+    useEffect(() => {
+        if (!shippingDetails.city) {
+            setAvailableDistricts([]);
+            setAvailableVillages([]);
+            return;
+        }
+
+        let isMounted = true;
+        setLoadingDistricts(true);
+
+        fetch(`/api/shipping/areas?city=${encodeURIComponent(shippingDetails.city)}&province=${encodeURIComponent(shippingDetails.province)}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (isMounted && data && Array.isArray(data.districts)) {
+                    setAvailableDistricts(data.districts);
+                }
+            })
+            .catch((err) => {
+                console.error("Failed to load districts:", err);
+            })
+            .finally(() => {
+                if (isMounted) setLoadingDistricts(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [shippingDetails.city, shippingDetails.province]);
+
+    // Fetch dynamic courier rates whenever address changes
+    useEffect(() => {
+        if (!shippingDetails.province || !shippingDetails.city) {
+            setCourierOptions([]);
+            setSelectedCourier(null);
+            setSelectedCourierCode("");
+            return;
+        }
+
+        let isMounted = true;
+        setLoadingRates(true);
+
+        fetch("/api/shipping/rates", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                destination_postal_code: shippingDetails.postalCode,
+                destination_province: shippingDetails.province,
+                destination_city: shippingDetails.city,
+                items_value: currentBoxPrice,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (isMounted && data && Array.isArray(data.options)) {
+                    setCourierOptions(data.options);
+                    const found =
+                        data.options.find(
+                            (o: CourierRateOption) =>
+                                `${o.courier_code}_${o.service_type}` === selectedCourierCode
+                        ) ||
+                        data.options.find((o: CourierRateOption) => o.category === "regular") ||
+                        data.options[0];
+                    if (found) {
+                        setSelectedCourier(found);
+                        setSelectedCourierCode(`${found.courier_code}_${found.service_type}`);
+                    }
+                }
+            })
+            .catch((err) => {
+                console.error("Failed to fetch rates:", err);
+            })
+            .finally(() => {
+                if (isMounted) setLoadingRates(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [shippingDetails.province, shippingDetails.city, shippingDetails.postalCode, currentBoxPrice]);
 
     useEffect(() => {
         trackInitiateCheckout(
@@ -98,15 +223,79 @@ export default function UnboxCheckoutWizardPage() {
             ],
             totalAmount
         );
+
+        fetch("/api/inventory?product_id=unbox-the-memory")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && typeof data.stock === "number") {
+                    setStockData({
+                        stock: data.stock,
+                        in_stock: data.in_stock,
+                        is_low_stock: data.is_low_stock,
+                    });
+                }
+            })
+            .catch(() => {});
     }, []);
 
     const handleProvinceChange = (newProv: string) => {
-        const provObj = INDONESIA_SHIPPING_DATA.find((p) => p.name === newProv);
-        const firstCity = provObj && provObj.cities.length > 0 ? provObj.cities[0].name : "";
         setShippingDetails((prev) => ({
             ...prev,
             province: newProv,
-            city: firstCity,
+            city: "",
+            district: "",
+            village: "",
+            postalCode: "",
+        }));
+        setSelectedCourier(null);
+        setSelectedCourierCode("");
+        setCourierOptions([]);
+        setAvailableDistricts([]);
+        setAvailableVillages([]);
+    };
+
+    const handleCityChange = (newCity: string) => {
+        setShippingDetails((prev) => ({
+            ...prev,
+            city: newCity,
+            district: "",
+            village: "",
+            postalCode: "",
+        }));
+        setSelectedCourier(null);
+        setSelectedCourierCode("");
+        setCourierOptions([]);
+        setAvailableVillages([]);
+    };
+
+    const handleDistrictChange = (districtName: string) => {
+        const found = availableDistricts.find((d) => d.name === districtName);
+        setShippingDetails((prev) => ({
+            ...prev,
+            district: districtName,
+            village: "",
+        }));
+        setAvailableVillages([]);
+
+        // Load Villages for this district
+        if (found && found.id) {
+            setLoadingVillages(true);
+            fetch(`/api/shipping/areas?district_id=${found.id}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data && Array.isArray(data.villages)) {
+                        setAvailableVillages(data.villages);
+                    }
+                })
+                .catch(() => {})
+                .finally(() => setLoadingVillages(false));
+        }
+    };
+
+    const handleVillageChange = (villageName: string) => {
+        setShippingDetails((prev) => ({
+            ...prev,
+            village: villageName,
         }));
     };
 
@@ -123,6 +312,22 @@ export default function UnboxCheckoutWizardPage() {
 
     const handleStep3Submit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!shippingDetails.province) {
+            alert("Silakan pilih Provinsi tujuan pengiriman.");
+            return;
+        }
+        if (!shippingDetails.city) {
+            alert("Silakan pilih Kota / Kabupaten tujuan pengiriman.");
+            return;
+        }
+        if (!shippingDetails.district) {
+            alert("Silakan pilih Kecamatan tujuan pengiriman.");
+            return;
+        }
+        if (!selectedCourier) {
+            alert("Silakan pilih salah satu layanan kurir pengiriman.");
+            return;
+        }
         window.scrollTo({ top: 0, behavior: "smooth" });
         setCurrentStep(4);
     };
@@ -130,6 +335,19 @@ export default function UnboxCheckoutWizardPage() {
     const handleCheckoutPayment = async () => {
         setIsLoading(true);
         try {
+            // Pre-check stock availability
+            try {
+                const checkRes = await fetch("/api/inventory?product_id=unbox-the-memory");
+                const checkData = await checkRes.json();
+                if (checkData && typeof checkData.stock === "number" && checkData.stock <= 0) {
+                    alert("Mohon maaf, slot gift box fisik untuk batch ini baru saja habis. Silakan hubungi admin kami untuk pre-order batch berikutnya.");
+                    setIsLoading(false);
+                    return;
+                }
+            } catch (e) {
+                console.warn("Stock pre-check bypassed:", e);
+            }
+
             const orderId = `ORDER-UNBOX-${Date.now()}`;
             const res = await fetch(
                 "https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout",
@@ -149,18 +367,20 @@ export default function UnboxCheckoutWizardPage() {
                             recipient_name: shippingDetails.recipientName,
                             recipient_phone: shippingDetails.recipientPhone,
                             address: shippingDetails.address,
+                            village: shippingDetails.village,
                             district: shippingDetails.district,
                             city: shippingDetails.city,
                             province: shippingDetails.province,
                             postal_code: shippingDetails.postalCode,
                             zone: shippingDetails.province,
+                            courier: shippingCourierTitle,
                             shipping_cost: shippingCost,
                             shipping_estimate: shippingEstimate,
                         },
                         item_details: [
                             {
                                 id: `unbox-box`,
-                                price: BOX_PRICE,
+                                price: currentBoxPrice,
                                 quantity: 1,
                                 name: `Unbox the Memory Gift Box + ${selectedDigitalObj.title} QR`,
                             },
@@ -168,7 +388,7 @@ export default function UnboxCheckoutWizardPage() {
                                 id: `shipping-rate`,
                                 price: shippingCost,
                                 quantity: 1,
-                                name: `Ekspedisi Reguler (${shippingDetails.city}, ${shippingDetails.province})`,
+                                name: `${shippingCourierTitle} (${shippingDetails.city})`,
                             },
                         ],
                     }),
@@ -449,6 +669,18 @@ export default function UnboxCheckoutWizardPage() {
                                                             }}
                                                         >
                                                             {opt.badge}
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: "0.82rem",
+                                                                fontWeight: 700,
+                                                                color: "#1d1816",
+                                                                backgroundColor: "rgba(205,171,143,0.18)",
+                                                                padding: "2px 8px",
+                                                                borderRadius: "999px",
+                                                            }}
+                                                        >
+                                                            {opt.price}
                                                         </span>
                                                     </div>
                                                     <div
@@ -779,15 +1011,16 @@ export default function UnboxCheckoutWizardPage() {
                                                 Provinsi
                                             </label>
                                             <select
+                                                required
                                                 value={shippingDetails.province}
                                                 onChange={(e) => handleProvinceChange(e.target.value)}
                                                 style={{
                                                     width: "100%",
-                                                    padding: "12px 14px",
+                                                    padding: "12px 10px",
                                                     borderRadius: "12px",
                                                     border: "1px solid #dcd1c6",
                                                     backgroundColor: "#faf7f2",
-                                                    fontSize: "0.92rem",
+                                                    fontSize: "0.88rem",
                                                     fontWeight: 600,
                                                     color: "#1d1816",
                                                     outline: "none",
@@ -795,6 +1028,7 @@ export default function UnboxCheckoutWizardPage() {
                                                     boxSizing: "border-box",
                                                 }}
                                             >
+                                                <option value="">Pilih Provinsi</option>
                                                 {INDONESIA_SHIPPING_DATA.map((p) => (
                                                     <option key={p.name} value={p.name}>
                                                         {p.name}
@@ -807,27 +1041,27 @@ export default function UnboxCheckoutWizardPage() {
                                                 Kota / Kabupaten
                                             </label>
                                             <select
+                                                required
+                                                disabled={!shippingDetails.province}
                                                 value={shippingDetails.city}
-                                                onChange={(e) =>
-                                                    setShippingDetails({
-                                                        ...shippingDetails,
-                                                        city: e.target.value,
-                                                    })
-                                                }
+                                                onChange={(e) => handleCityChange(e.target.value)}
                                                 style={{
                                                     width: "100%",
-                                                    padding: "12px 14px",
+                                                    padding: "12px 10px",
                                                     borderRadius: "12px",
                                                     border: "1px solid #dcd1c6",
-                                                    backgroundColor: "#faf7f2",
-                                                    fontSize: "0.92rem",
+                                                    backgroundColor: shippingDetails.province ? "#faf7f2" : "#f0ece7",
+                                                    fontSize: "0.88rem",
                                                     fontWeight: 600,
                                                     color: "#1d1816",
                                                     outline: "none",
-                                                    cursor: "pointer",
+                                                    cursor: shippingDetails.province ? "pointer" : "not-allowed",
                                                     boxSizing: "border-box",
                                                 }}
                                             >
+                                                <option value="">
+                                                    {shippingDetails.province ? "Pilih Kota / Kab." : "Pilih Provinsi Dulu"}
+                                                </option>
                                                 {availableCities.map((c) => (
                                                     <option key={c.name} value={c.name}>
                                                         {c.name}
@@ -837,15 +1071,190 @@ export default function UnboxCheckoutWizardPage() {
                                         </div>
                                     </div>
 
+                                    {/* Kecamatan & Kelurahan / Desa */}
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
+                                        <div>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "5px" }}>
+                                                <label style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                                    Kecamatan
+                                                </label>
+                                                {loadingDistricts && (
+                                                    <span style={{ fontSize: "0.68rem", color: "#a67c52", fontStyle: "italic" }}>
+                                                        Memuat...
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {availableDistricts.length > 0 ? (
+                                                <select
+                                                    required
+                                                    value={shippingDetails.district}
+                                                    onChange={(e) => handleDistrictChange(e.target.value)}
+                                                    style={{
+                                                        width: "100%",
+                                                        padding: "12px 10px",
+                                                        borderRadius: "12px",
+                                                        border: "1px solid #dcd1c6",
+                                                        backgroundColor: "#faf7f2",
+                                                        fontSize: "0.88rem",
+                                                        fontWeight: 600,
+                                                        color: "#1d1816",
+                                                        outline: "none",
+                                                        cursor: "pointer",
+                                                        boxSizing: "border-box",
+                                                    }}
+                                                >
+                                                    <option value="">Pilih Kecamatan</option>
+                                                    {availableDistricts.map((d) => (
+                                                        <option key={d.name} value={d.name}>
+                                                            {d.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    disabled={!shippingDetails.city}
+                                                    placeholder={
+                                                        !shippingDetails.city
+                                                            ? "Pilih Kota Dulu"
+                                                            : loadingDistricts
+                                                            ? "Memuat..."
+                                                            : "Ketik nama kecamatan"
+                                                    }
+                                                    value={shippingDetails.district}
+                                                    onChange={(e) =>
+                                                        setShippingDetails({
+                                                            ...shippingDetails,
+                                                            district: e.target.value,
+                                                        })
+                                                    }
+                                                    style={{
+                                                        width: "100%",
+                                                        padding: "12px 10px",
+                                                        borderRadius: "12px",
+                                                        border: "1px solid #dcd1c6",
+                                                        backgroundColor: shippingDetails.city ? "#faf7f2" : "#f0ece7",
+                                                        fontSize: "0.88rem",
+                                                        color: "#1d1816",
+                                                        outline: "none",
+                                                        boxSizing: "border-box",
+                                                        cursor: shippingDetails.city ? "text" : "not-allowed",
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+
+                                        <div>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "5px" }}>
+                                                <label style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                                    Kelurahan / Desa
+                                                </label>
+                                                {loadingVillages && (
+                                                    <span style={{ fontSize: "0.68rem", color: "#a67c52", fontStyle: "italic" }}>
+                                                        Memuat...
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {availableVillages.length > 0 ? (
+                                                <select
+                                                    value={shippingDetails.village}
+                                                    onChange={(e) => handleVillageChange(e.target.value)}
+                                                    style={{
+                                                        width: "100%",
+                                                        padding: "12px 10px",
+                                                        borderRadius: "12px",
+                                                        border: "1px solid #dcd1c6",
+                                                        backgroundColor: "#faf7f2",
+                                                        fontSize: "0.88rem",
+                                                        fontWeight: 600,
+                                                        color: "#1d1816",
+                                                        outline: "none",
+                                                        cursor: "pointer",
+                                                        boxSizing: "border-box",
+                                                    }}
+                                                >
+                                                    <option value="">Pilih Kelurahan</option>
+                                                    {availableVillages.map((v) => (
+                                                        <option key={v.name} value={v.name}>
+                                                            {v.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    disabled={!shippingDetails.district}
+                                                    placeholder={
+                                                        !shippingDetails.district
+                                                            ? "Pilih Kecamatan Dulu"
+                                                            : loadingVillages
+                                                            ? "Memuat..."
+                                                            : "Nama desa (opsional)"
+                                                    }
+                                                    value={shippingDetails.village}
+                                                    onChange={(e) =>
+                                                        setShippingDetails({
+                                                            ...shippingDetails,
+                                                            village: e.target.value,
+                                                        })
+                                                    }
+                                                    style={{
+                                                        width: "100%",
+                                                        padding: "12px 10px",
+                                                        borderRadius: "12px",
+                                                        border: "1px solid #dcd1c6",
+                                                        backgroundColor: shippingDetails.district ? "#faf7f2" : "#f0ece7",
+                                                        fontSize: "0.88rem",
+                                                        color: "#1d1816",
+                                                        outline: "none",
+                                                        boxSizing: "border-box",
+                                                        cursor: shippingDetails.district ? "text" : "not-allowed",
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Kode Pos */}
+                                    <div>
+                                        <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "5px" }}>
+                                            Kode Pos
+                                        </label>
+                                        <input
+                                            type="text"
+                                            maxLength={5}
+                                            placeholder="Contoh: 12190"
+                                            value={shippingDetails.postalCode}
+                                            onChange={(e) =>
+                                                setShippingDetails({
+                                                    ...shippingDetails,
+                                                    postalCode: e.target.value.replace(/\D/g, ""),
+                                                })
+                                            }
+                                            style={{
+                                                width: "100%",
+                                                padding: "12px 14px",
+                                                borderRadius: "12px",
+                                                border: "1px solid #dcd1c6",
+                                                backgroundColor: "#faf7f2",
+                                                fontSize: "0.92rem",
+                                                color: "#1d1816",
+                                                outline: "none",
+                                                boxSizing: "border-box",
+                                            }}
+                                        />
+                                    </div>
+
                                     {/* Alamat Lengkap */}
                                     <div>
                                         <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "5px" }}>
-                                            Alamat Lengkap & Kode Pos
+                                            Alamat Lengkap & Patokan
                                         </label>
                                         <textarea
                                             required
                                             rows={2}
-                                            placeholder="Jl. Sukasenang No. 12, RT 02 / RW 05, Kel. Pasirkaliki (Kode Pos 40162)"
+                                            placeholder="Nama jalan, nomor rumah, RT/RW, dan patokan dekat lokasi..."
                                             value={shippingDetails.address}
                                             onChange={(e) =>
                                                 setShippingDetails({
@@ -870,30 +1279,154 @@ export default function UnboxCheckoutWizardPage() {
                                     </div>
                                 </div>
 
-                                {/* Ekspedisi Minimalis */}
-                                <div
-                                    style={{
-                                        backgroundColor: "#faf7f2",
-                                        border: "1.5px solid #a67c52",
-                                        borderRadius: "14px",
-                                        padding: "14px 16px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        gap: "12px",
-                                    }}
-                                >
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div style={{ fontSize: "0.92rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                            Ekspedisi Reguler ({shippingDetails.city})
-                                        </div>
-                                        <div style={{ fontSize: "0.78rem", color: "#7a685e", marginTop: "2px" }}>
-                                            Estimasi tiba {shippingEstimate}
-                                        </div>
+                                {/* Pilihan Layanan Kurir (Biteship & SameDay) */}
+                                <div>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+                                        <label style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                            Pilihan Layanan Pengiriman
+                                        </label>
+                                        {loadingRates && (
+                                            <span style={{ fontSize: "0.72rem", color: "#a67c52", fontStyle: "italic" }}>
+                                                Menghitung tarif...
+                                            </span>
+                                        )}
                                     </div>
-                                    <span style={{ fontSize: "1.05rem", fontWeight: 700, color: "#a67c52", whiteSpace: "nowrap", flexShrink: 0 }}>
-                                        Rp {shippingCost.toLocaleString("id-ID")}
-                                    </span>
+
+                                    {!shippingDetails.province || !shippingDetails.city ? (
+                                        <div
+                                            style={{
+                                                backgroundColor: "#faf7f2",
+                                                border: "1px dashed #dcd1c6",
+                                                borderRadius: "14px",
+                                                padding: "22px 18px",
+                                                textAlign: "center",
+                                                color: "#8a7b73",
+                                                fontSize: "0.86rem",
+                                                lineHeight: 1.5,
+                                            }}
+                                        >
+                                            Pilih <strong>Provinsi</strong> dan <strong>Kota / Kabupaten</strong> di atas untuk memuat pilihan kurir & tarif ongkir.
+                                        </div>
+                                    ) : loadingRates ? (
+                                        <div
+                                            style={{
+                                                backgroundColor: "#faf7f2",
+                                                border: "1px solid #dcd1c6",
+                                                borderRadius: "14px",
+                                                padding: "22px 18px",
+                                                textAlign: "center",
+                                                color: "#a67c52",
+                                                fontSize: "0.86rem",
+                                            }}
+                                        >
+                                            Sedang mengambil tarif kurir pengiriman...
+                                        </div>
+                                    ) : courierOptions.length === 0 ? (
+                                        <div
+                                            style={{
+                                                backgroundColor: "#faf7f2",
+                                                border: "1px dashed #dcd1c6",
+                                                borderRadius: "14px",
+                                                padding: "22px 18px",
+                                                textAlign: "center",
+                                                color: "#8a7b73",
+                                                fontSize: "0.86rem",
+                                            }}
+                                        >
+                                            Tidak ada layanan kurir yang tersedia untuk area ini.
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                            {courierOptions.map((opt) => {
+                                                const isSelected = selectedCourierCode === `${opt.courier_code}_${opt.service_type}`;
+                                                const badgeBg =
+                                                    opt.category === "instant"
+                                                        ? "#fbe9e7"
+                                                        : opt.category === "sameday"
+                                                        ? "#e8f5e9"
+                                                        : opt.category === "nextday"
+                                                        ? "#e3f2fd"
+                                                        : "#f5eee6";
+                                                const badgeColor =
+                                                    opt.category === "instant"
+                                                        ? "#d84315"
+                                                        : opt.category === "sameday"
+                                                        ? "#2e7d32"
+                                                        : opt.category === "nextday"
+                                                        ? "#1565c0"
+                                                        : "#8d6e63";
+                                                const badgeText =
+                                                    opt.category === "instant"
+                                                        ? "Instant (1-2 Jam)"
+                                                        : opt.category === "sameday"
+                                                        ? "Same Day"
+                                                        : opt.category === "nextday"
+                                                        ? "Next Day (1 Hari)"
+                                                        : "Reguler";
+
+                                                return (
+                                                    <div
+                                                        key={`${opt.courier_code}_${opt.service_type}`}
+                                                        onClick={() => {
+                                                            setSelectedCourier(opt);
+                                                            setSelectedCourierCode(`${opt.courier_code}_${opt.service_type}`);
+                                                        }}
+                                                        style={{
+                                                            backgroundColor: isSelected ? "#ffffff" : "#faf7f2",
+                                                            border: isSelected ? "1.5px solid #a67c52" : "1px solid #dcd1c6",
+                                                            borderRadius: "14px",
+                                                            padding: "12px 14px",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "space-between",
+                                                            gap: "12px",
+                                                            cursor: "pointer",
+                                                            boxShadow: isSelected ? "0 4px 14px rgba(166,124,82,0.12)" : "none",
+                                                            transition: "all 0.2s ease",
+                                                        }}
+                                                    >
+                                                        <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: 0 }}>
+                                                            <div
+                                                                style={{
+                                                                    width: 16,
+                                                                    height: 16,
+                                                                    borderRadius: "50%",
+                                                                    border: isSelected ? "5px solid #a67c52" : "1.5px solid #a6968c",
+                                                                    backgroundColor: "#ffffff",
+                                                                    flexShrink: 0,
+                                                                }}
+                                                            />
+                                                            <div style={{ minWidth: 0 }}>
+                                                                <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                                                                    <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "#1d1816" }}>
+                                                                        {opt.service_name || opt.courier_name}
+                                                                    </span>
+                                                                    <span
+                                                                        style={{
+                                                                            fontSize: "0.68rem",
+                                                                            fontWeight: 700,
+                                                                            padding: "1px 6px",
+                                                                            borderRadius: "4px",
+                                                                            backgroundColor: badgeBg,
+                                                                            color: badgeColor,
+                                                                        }}
+                                                                    >
+                                                                        {badgeText}
+                                                                    </span>
+                                                                </div>
+                                                                <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "2px" }}>
+                                                                    Estimasi: {opt.etd}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#a67c52", flexShrink: 0 }}>
+                                                            Rp {opt.price.toLocaleString("id-ID")}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div style={{ display: "flex", gap: "10px", marginTop: "8px" }}>
@@ -987,7 +1520,7 @@ export default function UnboxCheckoutWizardPage() {
                                             </div>
                                         </div>
                                         <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#a67c52", whiteSpace: "nowrap", flexShrink: 0 }}>
-                                            Rp {BOX_PRICE.toLocaleString("id-ID")}
+                                            Rp {currentBoxPrice.toLocaleString("id-ID")}
                                         </span>
                                     </div>
 
@@ -999,8 +1532,13 @@ export default function UnboxCheckoutWizardPage() {
                                         <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", marginTop: "2px" }}>
                                             {shippingDetails.recipientName} ({shippingDetails.recipientPhone})
                                         </div>
-                                        <div style={{ fontSize: "0.82rem", color: "#59483f", marginTop: "2px" }}>
-                                            {shippingDetails.address}, {shippingDetails.city}, {shippingDetails.province}
+                                        <div style={{ fontSize: "0.82rem", color: "#59483f", marginTop: "2px", lineHeight: 1.4 }}>
+                                            {shippingDetails.address}
+                                            {shippingDetails.village ? `, ${shippingDetails.village}` : ""}
+                                            {shippingDetails.district ? `, Kec. ${shippingDetails.district}` : ""}
+                                            {shippingDetails.city ? `, ${shippingDetails.city}` : ""}
+                                            {shippingDetails.province ? `, ${shippingDetails.province}` : ""}
+                                            {shippingDetails.postalCode ? ` (${shippingDetails.postalCode})` : ""}
                                         </div>
                                     </div>
 
@@ -1008,13 +1546,16 @@ export default function UnboxCheckoutWizardPage() {
                                     <div style={{ borderTop: "1px dashed #dcd1c6", paddingTop: "10px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase" }}>
-                                                Ongkos Kirim
+                                                Layanan Pengiriman
                                             </div>
-                                            <div style={{ fontSize: "0.82rem", color: "#7a685e" }}>
+                                            <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", marginTop: "2px" }}>
+                                                {shippingCourierTitle}
+                                            </div>
+                                            <div style={{ fontSize: "0.8rem", color: "#7a685e" }}>
                                                 Estimasi {shippingEstimate}
                                             </div>
                                         </div>
-                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", flexShrink: 0 }}>
+                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#a67c52", whiteSpace: "nowrap", flexShrink: 0 }}>
                                             Rp {shippingCost.toLocaleString("id-ID")}
                                         </span>
                                     </div>
@@ -1087,7 +1628,7 @@ export default function UnboxCheckoutWizardPage() {
                                 }}
                             >
                                 <Image
-                                    src="/assets/unbox_hampers_hero.jpg"
+                                    src="/assets/unbox-the-memory/showcase1.webp"
                                     alt="Unbox the Memory"
                                     fill
                                     style={{ objectFit: "cover" }}
@@ -1110,11 +1651,15 @@ export default function UnboxCheckoutWizardPage() {
                         <div style={{ borderTop: "1px solid rgba(205,171,143,0.2)", borderBottom: "1px solid rgba(205,171,143,0.2)", padding: "12px 0", display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.85rem" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
                                 <span style={{ color: "#6e5c53", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Gift Box + Cetak QR</span>
-                                <span style={{ fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", flexShrink: 0 }}>Rp {BOX_PRICE.toLocaleString("id-ID")}</span>
+                                <span style={{ fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", flexShrink: 0 }}>Rp {currentBoxPrice.toLocaleString("id-ID")}</span>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
-                                <span style={{ color: "#6e5c53", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Ongkir ({shippingDetails.city})</span>
-                                <span style={{ fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", flexShrink: 0 }}>Rp {shippingCost.toLocaleString("id-ID")}</span>
+                                <span style={{ color: "#6e5c53", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                    {selectedCourier ? `Ongkir (${shippingDetails.city})` : "Ongkos Kirim"}
+                                </span>
+                                <span style={{ fontWeight: 700, color: selectedCourier ? "#1d1816" : "#a6968c", whiteSpace: "nowrap", flexShrink: 0 }}>
+                                    {selectedCourier ? `Rp ${shippingCost.toLocaleString("id-ID")}` : "Dihitung di alamat"}
+                                </span>
                             </div>
                         </div>
 

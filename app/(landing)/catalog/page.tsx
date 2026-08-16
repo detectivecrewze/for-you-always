@@ -13,15 +13,15 @@ const CATALOG_ITEMS = [
         badgeText: "PHYSICAL GIFT",
         badgeColor: "#1d1816",
         titleColor: "#382a24",
-        imageSrc: "/assets/unbox_hampers_hero.jpg",
+        imageSrc: "/assets/unbox-the-memory/showcase1.webp",
         title: "Unbox the Memory",
-        oldPrice: "Rp 200.000",
-        newPrice: "Rp 150.000",
+        oldPrice: "Rp 180.000",
+        newPrice: "Rp 130.000",
         id: "unbox-the-memory",
-        numericPrice: 150000,
+        numericPrice: 130000,
         href: "/catalog/unbox-the-memory",
         occasions: ["Anniversary", "Birthday", "LDR"],
-        features: ["Physical Gift Box Hampers", "Kartu Access QR Code", "Pilihan Memoria, Letter & Voices"]
+        features: ["Luxury Physical Gift Box", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
     },
     {
         badgeText: "#1 Exclusive",

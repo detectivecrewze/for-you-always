@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { order_id, tracking_number, courier, fulfillment_status } = body;
+        const { order_id, tracking_number, courier, fulfillment_status, magic_link, customization_status } = body;
 
         if (!order_id) {
             return NextResponse.json({ success: false, message: "Missing order_id" }, { status: 400 });
@@ -30,14 +30,27 @@ export async function POST(req: NextRequest) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        sql: "UPDATE orders SET tracking_number = ?, courier = ?, fulfillment_status = ? WHERE order_id = ?",
-                        params: [tracking_number, courier, fulfillment_status || "shipped", order_id],
+                        sql: `UPDATE orders SET 
+                                tracking_number = COALESCE(?, tracking_number),
+                                courier = COALESCE(?, courier),
+                                fulfillment_status = COALESCE(?, fulfillment_status),
+                                magic_link = COALESCE(?, magic_link),
+                                customization_status = COALESCE(?, customization_status)
+                              WHERE order_id = ?`,
+                        params: [
+                            tracking_number !== undefined ? tracking_number : null,
+                            courier !== undefined ? courier : null,
+                            fulfillment_status !== undefined ? fulfillment_status : null,
+                            magic_link !== undefined ? magic_link : null,
+                            customization_status !== undefined ? customization_status : null,
+                            order_id
+                        ],
                     }),
                 }
             );
 
             if (cfRes.ok) {
-                return NextResponse.json({ success: true, message: "Resi berhasil diperbarui di D1" });
+                return NextResponse.json({ success: true, message: "Status pesanan berhasil diperbarui di D1" });
             }
         }
 
@@ -45,11 +58,11 @@ export async function POST(req: NextRequest) {
         const workerRes = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/admin/update-tracking", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ order_id, tracking_number, courier, fulfillment_status }),
+            body: JSON.stringify({ order_id, tracking_number, courier, fulfillment_status, magic_link, customization_status }),
         });
 
         if (workerRes.ok) {
-            return NextResponse.json({ success: true, message: "Resi berhasil diperbarui via worker" });
+            return NextResponse.json({ success: true, message: "Status pesanan berhasil diperbarui via worker" });
         }
 
         return NextResponse.json({ success: true, message: "Updated locally" });
