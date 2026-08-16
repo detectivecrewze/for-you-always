@@ -15,10 +15,10 @@ Saat nanti branch `feat/unbox-ecommerce` di-merge ke branch `main`, tambahkan / 
 | `CLOUDFLARE_ACCOUNT_ID` | `1fd49662a11579a8f5e6f842f77ee5bd` | **WAJIB** |
 | `CLOUDFLARE_DATABASE_ID` | `1fa17bf3-d594-442a-8c77-e7244b22c1a5` | **WAJIB** |
 | `BITESHIP_API_KEY` | **GANTI KE API KEY PRODUCTION BITESHIP** (`biteship_live.xxxx`) | **KRITIKAL** |
-| `BITESHIP_ORIGIN_POSTAL_CODE` | Kode pos penjemputan paket kurir (default: `16820`) | **WAJIB** |
-| `BITESHIP_ORIGIN_LATITUDE` | Latitude penjemputan kurir (default: `-6.3593181`) | **WAJIB** |
-| `BITESHIP_ORIGIN_LONGITUDE` | Longitude penjemputan kurir (default: `106.9736382`) | **WAJIB** |
 | `NEXT_PUBLIC_PAYMENT_GATEWAY_URL` | `https://pakasir-gateway.aldoramadhan16.workers.dev` (Worker Production) | **KRITIKAL** |
+
+> 💡 **Info Alamat Penjemputan Kurir:**
+> * Alamat penjemputan paket kurir (Origin) **TIDAK PERLU** diatur di `.env`, karena sudah bisa kamu pilih dan ubah secara dinamis langsung di form modal **Admin Dashboard (`/atelier-hq`)**.
 
 > ⚠️ **PERHATIAN KHUSUS API KEY BITESHIP:**
 > * API Key yang saat ini ada di `.env.local` adalah **Biteship Sandbox (`biteship_test.xxx`)**.
