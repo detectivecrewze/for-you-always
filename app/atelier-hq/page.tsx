@@ -457,7 +457,12 @@ export default function Dashboard() {
     const handleSaveGiftStatus = async (orderId: string) => {
         setSavingGiftStatus(true);
         try {
+            const currentOrder = orders.find(o => o.order_id === orderId);
             const isFinished = customizationStatusInput === "published";
+            const targetFulfillment = (currentOrder?.tracking_number || currentOrder?.fulfillment_status === "shipped")
+                ? "shipped"
+                : (isFinished ? "ready_to_pack" : "pending_customization");
+
             const res = await fetch("/api/admin/update-resi", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -465,7 +470,7 @@ export default function Dashboard() {
                     order_id: orderId,
                     magic_link: giftLinkInput.trim() || undefined,
                     customization_status: customizationStatusInput,
-                    fulfillment_status: isFinished ? "ready_to_pack" : "pending_customization",
+                    fulfillment_status: targetFulfillment,
                 }),
             });
 
@@ -474,7 +479,7 @@ export default function Dashboard() {
                     ...o,
                     magic_link: giftLinkInput.trim() || o.magic_link,
                     customization_status: customizationStatusInput,
-                    fulfillment_status: isFinished ? "ready_to_pack" : "pending_customization",
+                    fulfillment_status: targetFulfillment,
                 } : o));
                 setEditingGiftOrderId(null);
             } else {

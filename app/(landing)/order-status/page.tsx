@@ -321,10 +321,10 @@ export default function OrderStatusPage() {
 
                             {/* Unbox Physical Delivery Stepper */}
                             {isUnbox && (() => {
-                                const isCustomizationDone = customizationStatus === "published" || fulfillmentStatus === "ready_to_pack" || fulfillmentStatus === "shipped";
-                                const isPackingDone = fulfillmentStatus === "shipped";
-                                const isPackingActive = (fulfillmentStatus === "ready_to_pack" || customizationStatus === "published") && fulfillmentStatus !== "shipped";
                                 const isShipped = fulfillmentStatus === "shipped" || Boolean(trackingNumber);
+                                const isPackingDone = isShipped;
+                                const isCustomizationDone = isPackingDone || customizationStatus === "published" || fulfillmentStatus === "ready_to_pack";
+                                const isPackingActive = (fulfillmentStatus === "ready_to_pack" || customizationStatus === "published") && !isPackingDone;
 
                                 return (
                                     <div style={{
