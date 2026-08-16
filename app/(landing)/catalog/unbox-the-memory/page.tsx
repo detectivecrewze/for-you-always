@@ -235,10 +235,10 @@ export default function UnboxTheMemoryPage() {
                             </span>
                         </div>
 
-                        {/* 4. CTA BUTTONS: VIP WA NOTIFICATION WAITLIST */}
+                        {/* 4. CTA BUTTONS: GO TO WIZARD CHECKOUT */}
                         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
-                            <button
-                                onClick={() => setShowCheckoutModal(true)}
+                            <Link
+                                href="/catalog/unbox-the-memory/checkout"
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -249,8 +249,7 @@ export default function UnboxTheMemoryPage() {
                                     fontSize: "0.92rem",
                                     padding: "16px 32px",
                                     borderRadius: "14px",
-                                    border: "none",
-                                    cursor: "pointer",
+                                    textDecoration: "none",
                                     boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
                                     transition: "all 0.3s ease"
                                 }}
@@ -269,7 +268,7 @@ export default function UnboxTheMemoryPage() {
                                     <path d="M16 10a4 4 0 0 1-8 0"></path>
                                 </svg>
                                 <span>Pesan Gift Box Sekarang</span>
-                            </button>
+                            </Link>
 
                             <Link
                                 href="/catalog"
@@ -902,8 +901,8 @@ export default function UnboxTheMemoryPage() {
                     </div>
                     <br />
 
-                    <button
-                        onClick={() => setShowCheckoutModal(true)}
+                    <Link
+                        href="/catalog/unbox-the-memory/checkout"
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -914,8 +913,7 @@ export default function UnboxTheMemoryPage() {
                             fontSize: "1.05rem",
                             padding: "18px 42px",
                             borderRadius: "14px",
-                            border: "none",
-                            cursor: "pointer",
+                            textDecoration: "none",
                             boxShadow: "0 12px 35px rgba(205,171,143,0.3)",
                             transition: "all 0.3s ease"
                         }}
@@ -934,7 +932,7 @@ export default function UnboxTheMemoryPage() {
                             <path d="M16 10a4 4 0 0 1-8 0"></path>
                         </svg>
                         <span>Pesan Gift Box Sekarang</span>
-                    </button>
+                    </Link>
                 </div>
             </section>
 
