@@ -12,32 +12,7 @@ export async function GET(req: NextRequest) {
 
     try {
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
-            // Ensure table exists & initial seed if missing
-            await fetch(
-                `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${CF_API_KEY}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        sql: `CREATE TABLE IF NOT EXISTS inventory (
-                            id TEXT PRIMARY KEY,
-                            product_id TEXT UNIQUE NOT NULL,
-                            product_name TEXT NOT NULL,
-                            stock INTEGER NOT NULL DEFAULT 0,
-                            low_stock_threshold INTEGER NOT NULL DEFAULT 3,
-                            is_active INTEGER NOT NULL DEFAULT 1,
-                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                        );
-                        INSERT OR IGNORE INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active)
-                        VALUES ('inv_unbox', 'unbox-the-memory', 'Unbox the Memory Gift Box', 12, 3, 1);`,
-                    }),
-                }
-            );
-
-            // Fetch current stock record
+            // Fetch current stock record directly in a single fast query
             const queryRes = await fetch(
                 `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`,
                 {
@@ -57,15 +32,22 @@ export async function GET(req: NextRequest) {
                 const data = await queryRes.json();
                 const record = data.result?.[0]?.results?.[0];
                 if (record) {
-                    return NextResponse.json({
-                        success: true,
-                        product_id: record.product_id,
-                        product_name: record.product_name,
-                        stock: record.stock,
-                        in_stock: record.stock > 0,
-                        is_low_stock: record.stock <= (record.low_stock_threshold || 3) && record.stock > 0,
-                        low_stock_threshold: record.low_stock_threshold || 3,
-                    });
+                    return NextResponse.json(
+                        {
+                            success: true,
+                            product_id: record.product_id,
+                            product_name: record.product_name,
+                            stock: record.stock,
+                            in_stock: record.stock > 0,
+                            is_low_stock: record.stock <= (record.low_stock_threshold || 3) && record.stock > 0,
+                            low_stock_threshold: record.low_stock_threshold || 3,
+                        },
+                        {
+                            headers: {
+                                "Cache-Control": "public, s-maxage=10, stale-while-revalidate=30",
+                            },
+                        }
+                    );
                 }
             }
         }

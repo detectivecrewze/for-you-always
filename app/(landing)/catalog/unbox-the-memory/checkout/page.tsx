@@ -290,6 +290,25 @@ export default function UnboxCheckoutWizardPage() {
                 .catch(() => {})
                 .finally(() => setLoadingVillages(false));
         }
+
+        // Auto-fetch Postal Code for district if available
+        if (districtName && shippingDetails.city) {
+            fetch(
+                `/api/shipping/areas?city=${encodeURIComponent(shippingDetails.city)}&district=${encodeURIComponent(
+                    districtName
+                )}`
+            )
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data && data.postal_code) {
+                        setShippingDetails((prev) => ({
+                            ...prev,
+                            postalCode: String(data.postal_code),
+                        }));
+                    }
+                })
+                .catch(() => {});
+        }
     };
 
     const handleVillageChange = (villageName: string) => {
@@ -297,6 +316,25 @@ export default function UnboxCheckoutWizardPage() {
             ...prev,
             village: villageName,
         }));
+
+        // Auto-fetch Postal Code for village
+        if (villageName && shippingDetails.district && shippingDetails.city) {
+            fetch(
+                `/api/shipping/areas?city=${encodeURIComponent(shippingDetails.city)}&district=${encodeURIComponent(
+                    shippingDetails.district
+                )}&village=${encodeURIComponent(villageName)}`
+            )
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data && data.postal_code) {
+                        setShippingDetails((prev) => ({
+                            ...prev,
+                            postalCode: String(data.postal_code),
+                        }));
+                    }
+                })
+                .catch(() => {});
+        }
     };
 
     const handleStep1Submit = () => {
