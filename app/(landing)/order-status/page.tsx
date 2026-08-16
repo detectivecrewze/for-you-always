@@ -107,10 +107,55 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
 }
 
 export default function OrderStatusPage() {
-    const [status, setStatus] = useState<"loading" | "paid" | "pending" | "error">("loading");
+    const [status, setStatus] = useState<"loading" | "paid" | "pending" | "error" | "search">("loading");
     const [orderId, setOrderId] = useState<string | null>(null);
+    const [searchInput, setSearchInput] = useState("");
     const [magicLinks, setMagicLinks] = useState<MagicLinks | null>(null);
     const [productId, setProductId] = useState<string>("");
+
+    const fetchOrder = async (id: string) => {
+        setStatus("loading");
+        setOrderId(id);
+        try {
+            const res = await fetch(`https://pakasir-gateway.aldoramadhan16.workers.dev/api/status?order_id=${id}`);
+            const data = await res.json();
+
+            if (!res.ok || data.error) {
+                setStatus("error");
+                return;
+            }
+
+            if (data.status === "paid" || data.status === "success") {
+                setStatus("paid");
+                if (data.magic_link) {
+                    let linksData = data.magic_link;
+                    if (typeof linksData === "string") {
+                        try {
+                            const parsed = JSON.parse(linksData);
+                            if (parsed && typeof parsed === "object") {
+                                linksData = parsed;
+                            }
+                        } catch (_) {}
+                    }
+
+                    if (typeof linksData === "object" && linksData !== null) {
+                        setMagicLinks(linksData);
+                    } else {
+                        setMagicLinks(data.product_id
+                            ? { [data.product_id]: linksData as string }
+                            : linksData as string
+                        );
+                    }
+                }
+                if (data.product_id) setProductId(data.product_id);
+            } else {
+                setStatus("pending");
+            }
+        } catch (err) {
+            console.error("Failed to check status", err);
+            setStatus("error");
+        }
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -119,57 +164,20 @@ export default function OrderStatusPage() {
         const id = urlParams.get("order_id") || urlParams.get("invoice_number");
 
         if (!id) {
-            setStatus("error");
+            setStatus("search");
             return;
         }
 
-        setOrderId(id);
-
-        const checkStatus = async () => {
-            try {
-                const res = await fetch(`https://pakasir-gateway.aldoramadhan16.workers.dev/api/status?order_id=${id}`);
-                const data = await res.json();
-
-                if (!res.ok) {
-                    setStatus("error");
-                    return;
-                }
-
-                if (data.status === "paid" || data.status === "success") {
-                    setStatus("paid");
-                    if (data.magic_link) {
-                        let linksData = data.magic_link;
-                        if (typeof linksData === "string") {
-                            try {
-                                const parsed = JSON.parse(linksData);
-                                if (parsed && typeof parsed === "object") {
-                                    linksData = parsed;
-                                }
-                            } catch (_) {}
-                        }
-
-                        if (typeof linksData === "object" && linksData !== null) {
-                            setMagicLinks(linksData);
-                        } else {
-                            // Plain string — wrap with product_id key for uniform rendering
-                            setMagicLinks(data.product_id
-                                ? { [data.product_id]: linksData as string }
-                                : linksData as string
-                            );
-                        }
-                    }
-                    if (data.product_id) setProductId(data.product_id);
-                } else {
-                    setStatus("pending");
-                }
-            } catch (err) {
-                console.error("Failed to check status", err);
-                setStatus("error");
-            }
-        };
-
-        checkStatus();
+        fetchOrder(id);
     }, []);
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const cleanId = searchInput.trim();
+        if (!cleanId) return;
+        window.history.pushState({}, "", `/order-status?order_id=${encodeURIComponent(cleanId)}`);
+        fetchOrder(cleanId);
+    };
 
     // Build product cards from magicLinks
     const renderProductCards = () => {
@@ -483,15 +491,94 @@ export default function OrderStatusPage() {
                         </div>
                     )}
 
+                    {/* ── Search Form (Lacak Pesanan) ── */}
+                    {status === "search" && (
+                        <div style={{ animation: "fadeIn 0.5s ease-out", textAlign: "center", width: "100%" }}>
+                            <div style={{
+                                width: 72, height: 72, borderRadius: "50%", background: "rgba(205,171,143,0.15)",
+                                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                margin: "0 auto 20px", color: "#a67c52",
+                            }}>
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </div>
+
+                            <h1 style={{
+                                fontFamily: "var(--font-display)",
+                                fontSize: "clamp(2rem, 5vw, 3rem)",
+                                fontWeight: 400, lineHeight: 1.1,
+                                letterSpacing: "-0.02em", color: "#382a24", marginBottom: 12,
+                            }}>
+                                Lacak <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Pesanan Kamu</span>
+                            </h1>
+
+                            <p style={{
+                                fontFamily: "var(--font-sans)", fontSize: "clamp(0.92rem, 2vw, 1rem)",
+                                color: "#6e5c53", lineHeight: 1.6, maxWidth: 460, margin: "0 auto 28px",
+                            }}>
+                                Masukkan <strong>Order ID</strong> untuk memeriksa status pembayaran, nomor resi pengiriman, dan link studio kado digitalmu.
+                            </p>
+
+                            <form onSubmit={handleSearchSubmit} style={{ maxWidth: 440, margin: "0 auto 32px" }}>
+                                <div style={{
+                                    display: "flex",
+                                    gap: 8,
+                                    backgroundColor: "#ffffff",
+                                    padding: "6px",
+                                    borderRadius: "16px",
+                                    border: "1.5px solid rgba(205,171,143,0.35)",
+                                    boxShadow: "0 4px 20px rgba(56,42,36,0.06)",
+                                }}>
+                                    <input
+                                        type="text"
+                                        required
+                                        placeholder="Contoh: ORDER-UNBOX-..."
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput(e.target.value)}
+                                        style={{
+                                            flex: 1,
+                                            padding: "12px 16px",
+                                            border: "none",
+                                            outline: "none",
+                                            fontSize: "0.95rem",
+                                            color: "#1d1816",
+                                            backgroundColor: "transparent",
+                                            fontFamily: "var(--font-sans)",
+                                        }}
+                                    />
+                                    <button
+                                        type="submit"
+                                        style={{
+                                            padding: "12px 24px",
+                                            borderRadius: "12px",
+                                            backgroundColor: "#1d1816",
+                                            color: "#faf7f2",
+                                            fontSize: "0.88rem",
+                                            fontWeight: 700,
+                                            border: "none",
+                                            cursor: "pointer",
+                                            whiteSpace: "nowrap",
+                                            transition: "background 0.2s ease",
+                                        }}
+                                    >
+                                        Cari
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
                     {/* ── Error ── */}
                     {status === "error" && (
-                        <div style={{ animation: "fadeIn 0.5s ease-out", textAlign: "center" }}>
+                        <div style={{ animation: "fadeIn 0.5s ease-out", textAlign: "center", width: "100%" }}>
                             <div style={{
-                                width: 80, height: 80, borderRadius: "50%", background: "#ffebee",
+                                width: 72, height: 72, borderRadius: "50%", background: "#ffebee",
                                 display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                margin: "0 auto 28px", boxShadow: "0 12px 32px -8px rgba(244,67,54,0.3)",
+                                margin: "0 auto 20px", boxShadow: "0 8px 24px -6px rgba(244,67,54,0.25)",
                             }}>
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F44336" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#F44336" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="12" cy="12" r="10" />
                                     <line x1="15" y1="9" x2="9" y2="15" />
                                     <line x1="9" y1="9" x2="15" y2="15" />
@@ -500,26 +587,73 @@ export default function OrderStatusPage() {
 
                             <h1 style={{
                                 fontFamily: "var(--font-display)",
-                                fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                                fontSize: "clamp(1.8rem, 4.5vw, 2.5rem)",
                                 fontWeight: 400, lineHeight: 1.1,
-                                letterSpacing: "-0.03em", color: "#382a24", marginBottom: 20,
+                                letterSpacing: "-0.02em", color: "#382a24", marginBottom: 12,
                             }}>
                                 Pesanan <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Tidak Ditemukan</span>
                             </h1>
 
                             <p style={{
-                                fontFamily: "var(--font-sans)", fontSize: "clamp(1rem, 2vw, 1.05rem)",
-                                color: "#6e5c53", lineHeight: 1.8, maxWidth: 440, margin: "0 auto 40px",
+                                fontFamily: "var(--font-sans)", fontSize: "clamp(0.9rem, 2vw, 0.96rem)",
+                                color: "#6e5c53", lineHeight: 1.6, maxWidth: 440, margin: "0 auto 24px",
                             }}>
-                                Kami tidak dapat memverifikasi status pembayaran Anda atau pesanan tidak valid. Silakan coba kembali.
+                                Kami tidak dapat menemukan data pesanan dengan ID <strong>{orderId || "-"}</strong>. Silakan periksa kembali atau masukkan Order ID yang benar.
                             </p>
+
+                            <form onSubmit={handleSearchSubmit} style={{ maxWidth: 440, margin: "0 auto 24px" }}>
+                                <div style={{
+                                    display: "flex",
+                                    gap: 8,
+                                    backgroundColor: "#ffffff",
+                                    padding: "6px",
+                                    borderRadius: "16px",
+                                    border: "1.5px solid rgba(205,171,143,0.35)",
+                                    boxShadow: "0 4px 20px rgba(56,42,36,0.06)",
+                                }}>
+                                    <input
+                                        type="text"
+                                        required
+                                        placeholder="Ketik Order ID..."
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput(e.target.value)}
+                                        style={{
+                                            flex: 1,
+                                            padding: "12px 16px",
+                                            border: "none",
+                                            outline: "none",
+                                            fontSize: "0.95rem",
+                                            color: "#1d1816",
+                                            backgroundColor: "transparent",
+                                            fontFamily: "var(--font-sans)",
+                                        }}
+                                    />
+                                    <button
+                                        type="submit"
+                                        style={{
+                                            padding: "12px 24px",
+                                            borderRadius: "12px",
+                                            backgroundColor: "#1d1816",
+                                            color: "#faf7f2",
+                                            fontSize: "0.88rem",
+                                            fontWeight: 700,
+                                            border: "none",
+                                            cursor: "pointer",
+                                            whiteSpace: "nowrap",
+                                        }}
+                                    >
+                                        Cari Ulang
+                                    </button>
+                                </div>
+                            </form>
 
                             <Link href="/catalog"
                                 style={{
                                     display: "inline-flex", alignItems: "center", gap: 8, justifyContent: "center",
-                                    padding: "14px 36px", borderRadius: 999,
-                                    background: "#1d1816", color: "#faf7f2",
-                                    fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                    padding: "12px 28px", borderRadius: 999,
+                                    background: "transparent", color: "#6e5c53",
+                                    border: "1.5px solid rgba(205,171,143,0.35)",
+                                    fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
                                     textDecoration: "none",
                                 }}
                             >

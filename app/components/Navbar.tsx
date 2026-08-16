@@ -37,6 +37,7 @@ export default function Navbar() {
             ), 
             href: "/catalog/unbox-the-memory" 
         },
+        { label: "Lacak Pesanan", href: "/order-status" },
         { label: "Cara Kerja", href: "/#cara-kerja" },
         { label: "Testimoni", href: "/#testimoni" },
     ];
@@ -58,6 +59,7 @@ export default function Navbar() {
             ), 
             href: "/catalog/unbox-the-memory" 
         },
+        { label: "Lacak Pesanan", href: "/order-status" },
         { label: "Cara Kerja", href: "/#cara-kerja" },
         { label: "Testimoni", href: "/#testimoni" },
         { label: "FAQ", href: "/#faq" },
