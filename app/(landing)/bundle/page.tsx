@@ -913,11 +913,11 @@ export default function BundleSalesPage() {
                                 >
                                     Contoh: Jual{" "}
                                     <span style={{ color: "var(--accent-light)", fontWeight: 700 }}>
-                                        @ Rp 15.000/kado
+                                        @ Rp 20.000/kado
                                     </span>{" "}
-                                    → total Rp 75.000 → untung{" "}
+                                    → total Rp 100.000 → untung{" "}
                                     <span style={{ color: "var(--accent-light)", fontWeight: 700 }}>
-                                        Rp 45.000
+                                        Rp 70.000
                                     </span>
                                 </p>
                             </div>

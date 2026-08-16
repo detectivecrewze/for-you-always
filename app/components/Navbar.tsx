@@ -28,6 +28,7 @@ export default function Navbar() {
     ];
 
     const mobileLinks = [
+        { label: "Home", href: "/" },
         { label: "Catalog", href: "/catalog" },
         { 
             label: (
@@ -106,20 +107,6 @@ export default function Navbar() {
                                 </Link>
                             )
                         })}
-                    </div>
-
-                    {/* Mobile quick links — center */}
-                    <div style={{ alignItems: "center", gap: 16 }} className="nav-mobile-quicklinks">
-                        <Link href="/" style={{
-                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
-                            letterSpacing: "0.1em", textTransform: "uppercase",
-                            color: pathname === "/" ? "#a67c52" : "#6e5c53", textDecoration: "none",
-                        }}>HOME</Link>
-                        <Link href="/catalog" style={{
-                            fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
-                            letterSpacing: "0.1em", textTransform: "uppercase",
-                            color: pathname === "/catalog" || pathname.startsWith("/catalog/") ? "#a67c52" : "#6e5c53", textDecoration: "none",
-                        }}>CATALOG</Link>
                     </div>
 
                     {/* CTA + Hamburger */}
@@ -249,12 +236,10 @@ export default function Navbar() {
                     .nav-desktop-links { display: none !important; }
                     .nav-cta { display: none !important; }
                     .nav-hamburger { display: flex !important; }
-                    .nav-mobile-quicklinks { display: flex !important; }
                 }
                 @media (min-width: 769px) {
                     .nav-hamburger { display: none !important; }
                     .nav-mobile-dropdown { display: none !important; }
-                    .nav-mobile-quicklinks { display: none !important; }
                 }
             `}</style>
         </>

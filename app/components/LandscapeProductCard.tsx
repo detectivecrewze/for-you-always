@@ -295,12 +295,11 @@ export function LandscapeProductCard({
     const handlePesanClick = useCallback(() => {
         posthog.capture('clicked_pesan', { product: title });
         if (onAddThreeSlotToCart && onAddToCart) {
-            const isVoices = title.toLowerCase().includes("voices");
             setSlotPickerConfig({
                 productId: title,
                 productTitle: title,
                 themeColor: accentColor,
-                singlePriceText: isVoices ? "Rp 15.000" : "Rp 20.000",
+                singlePriceText: "Rp 20.000",
                 threeSlotPriceText: "Rp 25.000",
                 onSelectSingle: onAddToCart,
                 onSelectThreeSlot: onAddThreeSlotToCart,

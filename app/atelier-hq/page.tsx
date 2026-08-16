@@ -289,6 +289,17 @@ export default function Dashboard() {
         }
     };
 
+    const handleRefreshAll = () => {
+        fetchOrders();
+        fetchInventory();
+    };
+
+    useEffect(() => {
+        if (isAuthenticated && (activeTab === "physical" || activeTab === "overview")) {
+            fetchInventory();
+        }
+    }, [activeTab, isAuthenticated]);
+
     // Helpers
     const parseMeta = (val: any) => {
         if (!val) return {};
@@ -1005,7 +1016,7 @@ export default function Dashboard() {
                                     </p>
                                 </div>
                                 <button
-                                    onClick={fetchOrders}
+                                    onClick={handleRefreshAll}
                                     style={{
                                         padding: "8px 14px", borderRadius: 8, border: "1px solid #dcd1c6",
                                         background: "#ffffff", color: "#1d1816", fontSize: 11.5, fontWeight: 700, cursor: "pointer",
@@ -1120,7 +1131,7 @@ export default function Dashboard() {
                                     </p>
                                 </div>
                                 <button
-                                    onClick={fetchOrders}
+                                    onClick={handleRefreshAll}
                                     style={{
                                         padding: "8px 14px", borderRadius: 8, border: "1px solid #dcd1c6",
                                         background: "#ffffff", color: "#1d1816", fontSize: 11.5, fontWeight: 700, cursor: "pointer",
@@ -1707,7 +1718,7 @@ export default function Dashboard() {
                                     </p>
                                 </div>
                                 <button
-                                    onClick={fetchOrders}
+                                    onClick={handleRefreshAll}
                                     style={{
                                         padding: "8px 14px", borderRadius: 8, border: "1px solid #dcd1c6",
                                         background: "#ffffff", color: "#1d1816", fontSize: 11.5, fontWeight: 700, cursor: "pointer",

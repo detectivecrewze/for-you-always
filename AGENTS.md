@@ -314,7 +314,7 @@ birthday-retro/
 | Produk | Harga Single | Harga 3-Slot Bundle | ID di Katalog | Subdomain Produk |
 |---|---|---|---|---|
 | Memoria (Premium) | Rp 40.000 | — | loves | — |
-| Voices Gift | Rp 15.000 | Rp 25.000 | voices | voices.for-you-always.my.id |
+| Voices Gift | Rp 20.000 | Rp 25.000 | voices | voices.for-you-always.my.id |
 | Mixtape Edition | Rp 20.000 | Rp 25.000 | mixtape | mixtape.for-you-always.my.id |
 | Invitation Edition | Rp 20.000 | Rp 25.000 | invitation | invitation.for-you-always.my.id |
 | Letter Edition | Rp 20.000 | Rp 25.000 | letter | letter.for-you-always.my.id |

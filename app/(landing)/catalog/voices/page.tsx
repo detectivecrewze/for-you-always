@@ -12,7 +12,7 @@ export default function ProductCatalogPage() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        trackViewContent({ id: "voices", name: "Voices Gift", price: 15000 });
+        trackViewContent({ id: "voices", name: "Voices Gift", price: 20000 });
     }, []);
 
     return (
@@ -42,15 +42,15 @@ export default function ProductCatalogPage() {
                                 "Galeri Foto Sinematik",
                                 "Background Music Pilihan"
                             ]}
-                            price="Rp 15.000"
-                            oldPrice="Rp 25.000"
+                            price="Rp 20.000"
+                            oldPrice="Rp 30.000"
                             demoLink="https://voice.for-you-always.my.id/gift/for-nadin"
 
                             fallbackImgSrc="https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
                             mediaType="image"
                             accentColor="#a67c52"
                             accentGlow="rgba(166,124,82,0.2)"
-                            onAddToCart={() => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 15000, oldNumericPrice: 25000, themeColor: "#a67c52" })}
+                            onAddToCart={() => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#a67c52" })}
                             onAddThreeSlotToCart={() => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 25000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })}
                             themes={[
                                 { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },

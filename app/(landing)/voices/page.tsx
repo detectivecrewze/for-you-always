@@ -1682,7 +1682,7 @@ export default function VoicesLandingPage() {
                                 </div>
                                 <div style={{ marginBottom: 6 }}>
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 16, color: "rgba(245,239,230,0.4)" }}>Rp </span>
-                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>15</span>
+                                    <span style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 600, color: "#f5efe6", letterSpacing: "-0.03em" }}>20</span>
                                     <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 600, color: "#f5efe6" }}>.000</span>
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, flex: 1, marginTop: 14 }}>
@@ -1696,7 +1696,7 @@ export default function VoicesLandingPage() {
                                     ))}
                                 </div>
                                 <a
-                                    href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Premium)*%20seharga%20Rp%2015.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
+                                    href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20tertarik%20untuk%20memesan%20*Voices%20Edition%20(Premium)*%20seharga%20Rp%2020.000.%0A%0AMohon%20info%20langkah%20selanjutnyaya.%20Terima%20kasih!"
                                     target="_blank" rel="noopener noreferrer"
                                     style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px 0", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, textDecoration: "none", transition: "all 0.4s ease", boxShadow: "0 12px 30px -8px rgba(166,124,82,0.4)", textAlign: "center" }}
                                 >

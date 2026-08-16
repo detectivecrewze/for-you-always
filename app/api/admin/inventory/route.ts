@@ -42,7 +42,15 @@ export async function GET(req: NextRequest) {
 
             if (queryRes.ok) {
                 const data = await queryRes.json();
-                const results = data.result?.[2]?.results || data.result?.[0]?.results || [];
+                let results: any[] = [];
+                if (Array.isArray(data.result)) {
+                    for (const r of data.result) {
+                        if (Array.isArray(r.results) && r.results.length > 0) {
+                            results = r.results;
+                            break;
+                        }
+                    }
+                }
                 return NextResponse.json({ success: true, inventory: results });
             }
         }
