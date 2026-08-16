@@ -10,7 +10,7 @@ export default function CollectionSection() {
     const { addToCart } = useCart();
 
     return (
-        <section id="collection" style={{ position: "relative", zIndex: 1, padding: "120px 0 40px" }}>
+        <section id="collection" style={{ position: "relative", zIndex: 1, padding: "40px 0 40px" }}>
             <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
 
                 {/* Minimal header */}

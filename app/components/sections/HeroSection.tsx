@@ -76,7 +76,7 @@ export default function HeroSection() {
             `}</style>
 
             {/* ── HERO ── */}
-            <section id="hero" style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(80px, 12vh, 130px)" }}>
+            <section id="hero" style={{ position: "relative", zIndex: 1, paddingTop: "clamp(80px, 12vh, 120px)", paddingBottom: "clamp(24px, 4vh, 40px)" }}>
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "60px" }}>
                     
                     {/* LEFT COLUMN: HERO MOCKUP */}
@@ -275,70 +275,6 @@ export default function HeroSection() {
                                 </div>
                             </div>
                         </AnimatedSection>
-                        
-                        {/* ── MARQUEE SCROLLING TEXT ── */}
-                        <div style={{
-                            position: "absolute",
-                            left: 0,
-                            width: "100vw",
-                            marginTop: 40
-                        }}>
-                            <style dangerouslySetInnerHTML={{__html: `
-                                    @keyframes marquee-scroll {
-                                        0% { transform: translateX(0); }
-                                        100% { transform: translateX(-50%); }
-                                    }
-                                    .marquee-animate {
-                                        animation: marquee-scroll 25s linear infinite;
-                                        will-change: transform;
-                                    }
-                                    @media (max-width: 768px) {
-                                        .marquee-animate {
-                                            animation: marquee-scroll 12s linear infinite;
-                                        }
-                                    }
-                                    .marquee-hover:hover {
-                                        animation-play-state: paused !important;
-                                    }
-                                `}} />
-                                <div style={{ 
-                                    overflow: "hidden", 
-                                    whiteSpace: "nowrap", 
-                                    display: "flex", 
-                                    width: "100%", 
-                                    background: "#efebe6", 
-                                    borderTop: "1px solid #e5dbcf", 
-                                    borderBottom: "1px solid #e5dbcf", 
-                                    padding: "16px 0" 
-                                }}>
-                                    <div className="marquee-hover marquee-animate" style={{ 
-                                        display: "flex", 
-                                        flexDirection: "row", 
-                                        width: "max-content"
-                                    }}>
-                                        {[...Array(6)].map((_, arrayIndex) => (
-                                            <div key={arrayIndex} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                                                {["DESAIN PREMIUM", "AKTIF SELAMANYA", "PROSES 1 MENIT", "1.000+ HAPPY CUSTOMERS", "LINK LANGSUNG JADI", "HARGA TERJANGKAU", "FULL CUSTOM"].map((text, i) => (
-                                                    <div key={i} style={{ 
-                                                        flexShrink: 0, 
-                                                        display: "flex", 
-                                                        alignItems: "center",
-                                                        fontFamily: "var(--font-sans)",
-                                                        fontSize: "12px",
-                                                        fontWeight: 800,
-                                                        letterSpacing: "0.15em",
-                                                        textTransform: "uppercase",
-                                                        color: "#a88365"
-                                                    }}>
-                                                        <span>{text}</span>
-                                                        <span style={{ margin: "0 32px", opacity: 0.4, fontSize: "16px" }}>•</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
                     </div>
                 </div>
             </section>
