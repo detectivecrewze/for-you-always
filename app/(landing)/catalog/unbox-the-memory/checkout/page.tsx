@@ -816,22 +816,22 @@ export default function UnboxCheckoutWizardPage() {
                                             lineHeight: 1.2,
                                         }}
                                     >
-                                        Data Pemesan
+                                        Data Pemesan (Kamu / Pembeli)
                                     </h2>
                                     <p style={{ fontSize: "0.86rem", color: "#6e5c53", margin: 0, lineHeight: 1.5 }}>
-                                        Akses studio kado <strong>{selectedDigitalObj.title}</strong> akan dikirimkan otomatis ke Email & WhatsApp kamu.
+                                        Data kamu sebagai pembuat & pembeli kado. Link akses studio kado <strong style={{ fontWeight: 700, color: "#1d1816" }}>{selectedDigitalObj.title}</strong> akan dikirimkan otomatis ke Email & WhatsApp kamu (bukan ke penerima kado).
                                     </p>
                                 </div>
 
                                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                     <div>
                                         <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "5px" }}>
-                                            Nama Lengkap Pemesan
+                                            Nama Lengkap Pemesan (Kamu / Pembeli)
                                         </label>
                                         <input
                                             required
                                             type="text"
-                                            placeholder="Contoh: Aldo Ramadhan"
+                                            placeholder="Contoh: Nadya Safira"
                                             value={customerDetails.senderName}
                                             onChange={(e) =>
                                                 setCustomerDetails({
@@ -856,7 +856,7 @@ export default function UnboxCheckoutWizardPage() {
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
                                         <div>
                                             <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "5px" }}>
-                                                Email (Akses Studio)
+                                                Email Pemesan (Akses Studio)
                                             </label>
                                             <input
                                                 required
@@ -884,7 +884,7 @@ export default function UnboxCheckoutWizardPage() {
                                         </div>
                                         <div>
                                             <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "5px" }}>
-                                                No. WhatsApp (Resi)
+                                                No. WhatsApp Pemesan (Kamu)
                                             </label>
                                             <input
                                                 required
@@ -894,7 +894,7 @@ export default function UnboxCheckoutWizardPage() {
                                                 onChange={(e) =>
                                                     setCustomerDetails({
                                                         ...customerDetails,
-                                                        whatsapp: e.target.value,
+                                                        whatsapp: e.target.value.replace(/\D/g, ""),
                                                     })
                                                 }
                                                 style={{
@@ -978,7 +978,7 @@ export default function UnboxCheckoutWizardPage() {
                                         Alamat Pengiriman
                                     </h2>
                                     <p style={{ fontSize: "0.86rem", color: "#6e5c53", margin: 0, lineHeight: 1.5 }}>
-                                        Box kado dikemas aman dengan kardus tebal dan *bubble wrap* ekstra.
+                                        Box kado dikemas aman dengan kardus tebal dan <strong style={{ fontWeight: 700, color: "#1d1816" }}>bubble wrap</strong> ekstra.
                                     </p>
                                 </div>
 
@@ -1561,6 +1561,16 @@ export default function UnboxCheckoutWizardPage() {
                                         <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#a67c52", whiteSpace: "nowrap", flexShrink: 0 }}>
                                             Rp {currentBoxPrice.toLocaleString("id-ID")}
                                         </span>
+                                    </div>
+
+                                    {/* Pemesan & Email */}
+                                    <div style={{ borderTop: "1px dashed #dcd1c6", paddingTop: "10px" }}>
+                                        <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase" }}>
+                                            Pemesan (Akses Studio Kado)
+                                        </div>
+                                        <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", marginTop: "2px" }}>
+                                            {customerDetails.senderName} <span style={{ fontWeight: 400, color: "#7a685e" }}>({customerDetails.whatsapp ? `${customerDetails.whatsapp} • ` : ""}{customerDetails.email})</span>
+                                        </div>
                                     </div>
 
                                     {/* Alamat */}
