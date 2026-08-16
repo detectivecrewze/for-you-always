@@ -29,12 +29,13 @@ function parseMagicLinks(raw: string): MagicLinks {
 // Single product card shown in the paid state
 function ProductCard({ productKey, link }: { productKey: string; link: string }) {
     const isThreeSlot = productKey.endsWith("_3slot");
-    const baseKey = isThreeSlot ? productKey.replace("_3slot", "") : productKey;
+    const isUnbox = productKey.startsWith("unbox_");
+    const baseKey = productKey.replace("unbox_", "").replace("_3slot", "");
     const baseMeta = PRODUCT_META[baseKey] || { name: baseKey, icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>, color: "#a88365", desc: "Kado digital" };
     
     const meta = {
         ...baseMeta,
-        name: isThreeSlot ? `${baseMeta.name} (3 Gift)` : baseMeta.name,
+        name: isUnbox ? `${baseMeta.name} (Gift Box)` : isThreeSlot ? `${baseMeta.name} (3 Gift)` : baseMeta.name,
     };
 
     const isLoves = baseKey === "loves";
@@ -112,12 +113,18 @@ export default function OrderStatusPage() {
     const [searchInput, setSearchInput] = useState("");
     const [magicLinks, setMagicLinks] = useState<MagicLinks | null>(null);
     const [productId, setProductId] = useState<string>("");
+    const [fulfillmentStatus, setFulfillmentStatus] = useState<string | null>(null);
+    const [customizationStatus, setCustomizationStatus] = useState<string | null>(null);
+    const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
+    const [courier, setCourier] = useState<string | null>(null);
+    const [copiedResi, setCopiedResi] = useState(false);
 
     const fetchOrder = async (id: string) => {
         setStatus("loading");
         setOrderId(id);
         try {
-            const res = await fetch(`https://pakasir-gateway.aldoramadhan16.workers.dev/api/status?order_id=${id}`);
+            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway.aldoramadhan16.workers.dev";
+            const res = await fetch(`${gatewayUrl}/api/status?order_id=${id}`);
             const data = await res.json();
 
             if (!res.ok || data.error) {
@@ -148,6 +155,10 @@ export default function OrderStatusPage() {
                     }
                 }
                 if (data.product_id) setProductId(data.product_id);
+                setFulfillmentStatus(data.fulfillment_status || null);
+                setCustomizationStatus(data.customization_status || null);
+                setTrackingNumber(data.tracking_number || null);
+                setCourier(data.courier || null);
             } else {
                 setStatus("pending");
             }
@@ -309,51 +320,161 @@ export default function OrderStatusPage() {
                             {renderProductCards()}
 
                             {/* Unbox Physical Delivery Stepper */}
-                            {isUnbox && (
-                                <div style={{
-                                    background: "#ffffff",
-                                    border: "1.5px solid rgba(205,171,143,0.25)",
-                                    borderRadius: 16,
-                                    padding: "20px 24px",
-                                    marginBottom: 32,
-                                    textAlign: "left",
-                                    fontFamily: "var(--font-sans)",
-                                }}>
-                                    <h4 style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700, color: "#1d1816", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                                        Status Pemrosesan Paket Fisik
-                                    </h4>
-                                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#4CAF50", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>✓</div>
-                                            <div>
-                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1d1816" }}>1. Pembayaran Berhasil Dikonfirmasi</div>
-                                                <div style={{ fontSize: 11, color: "#7a685e" }}>Pesanan telah masuk ke antrean produksi atelier</div>
-                                            </div>
+                            {isUnbox && (() => {
+                                const isCustomizationDone = customizationStatus === "published" || fulfillmentStatus === "ready_to_pack" || fulfillmentStatus === "shipped";
+                                const isPackingDone = fulfillmentStatus === "shipped";
+                                const isPackingActive = (fulfillmentStatus === "ready_to_pack" || customizationStatus === "published") && fulfillmentStatus !== "shipped";
+                                const isShipped = fulfillmentStatus === "shipped" || Boolean(trackingNumber);
+
+                                return (
+                                    <div style={{
+                                        background: "#ffffff",
+                                        border: "1.5px solid rgba(205,171,143,0.25)",
+                                        borderRadius: 16,
+                                        padding: "20px 24px",
+                                        marginBottom: 32,
+                                        textAlign: "left",
+                                        fontFamily: "var(--font-sans)",
+                                    }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                                            <h4 style={{ margin: 0, fontSize: 13.5, fontWeight: 700, color: "#1d1816", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                                Status Pemrosesan Paket Fisik
+                                            </h4>
+                                            {isShipped ? (
+                                                <span style={{ fontSize: 11, fontWeight: 700, color: "#2e7d32", background: "#e8f5e9", padding: "3px 8px", borderRadius: 999, border: "1px solid #c8e6c9" }}>
+                                                    Dalam Pengiriman
+                                                </span>
+                                            ) : isPackingActive ? (
+                                                <span style={{ fontSize: 11, fontWeight: 700, color: "#a67c52", background: "#fdf8f4", padding: "3px 8px", borderRadius: 999, border: "1px solid #ecdacf" }}>
+                                                    Sedang Dikemas
+                                                </span>
+                                            ) : null}
                                         </div>
-                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#a67c52", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>2</div>
-                                            <div>
-                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1d1816" }}>2. Kustomisasi Studio Digital (Sedang Berlangsung)</div>
-                                                <div style={{ fontSize: 11, color: "#7a685e" }}>Klik tombol Buka Studio di atas untuk mulai mengisi kenanganmu</div>
+
+                                        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                                            {/* STEP 1 */}
+                                            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                                                <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#4CAF50", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>
+                                                    ✓
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: 13, fontWeight: 700, color: "#1d1816" }}>
+                                                        1. Pembayaran Berhasil Dikonfirmasi
+                                                    </div>
+                                                    <div style={{ fontSize: 11.5, color: "#7a685e", marginTop: 2 }}>
+                                                        Pesanan telah masuk ke antrean atelier kami
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#e2d7ce", color: "#7a685e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>3</div>
-                                            <div>
-                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7a685e" }}>3. Perakitan & Pengemasan Box Fisik</div>
-                                                <div style={{ fontSize: 11, color: "#a6968c" }}>Akan dimulai setelah kustomisasi digital selesai</div>
+
+                                            {/* STEP 2 */}
+                                            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                                                <div style={{
+                                                    width: 24, height: 24, borderRadius: "50%",
+                                                    background: isCustomizationDone ? "#4CAF50" : "#a67c52",
+                                                    color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+                                                    fontSize: isCustomizationDone ? 12 : 11, fontWeight: 700, flexShrink: 0, marginTop: 1
+                                                }}>
+                                                    {isCustomizationDone ? "✓" : "2"}
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: 13, fontWeight: 700, color: "#1d1816" }}>
+                                                        2. Kustomisasi Studio Digital {isCustomizationDone ? "(Selesai)" : "(Sedang Berlangsung)"}
+                                                    </div>
+                                                    <div style={{ fontSize: 11.5, color: isCustomizationDone ? "#2e7d32" : "#7a685e", marginTop: 2 }}>
+                                                        {isCustomizationDone
+                                                            ? "Kreasi foto & pesan kado digitalmu telah selesai diisi & disimpan."
+                                                            : "Klik tombol di atas untuk mulai mengisi foto & pesan kado digitalmu."}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#e2d7ce", color: "#7a685e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>4</div>
-                                            <div>
-                                                <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7a685e" }}>4. Penyerahan ke Kurir & Pengiriman</div>
-                                                <div style={{ fontSize: 11, color: "#a6968c" }}>Nomor resi pengiriman akan dikirimkan ke WhatsApp & Email kamu</div>
+
+                                            {/* STEP 3 */}
+                                            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                                                <div style={{
+                                                    width: 24, height: 24, borderRadius: "50%",
+                                                    background: isPackingDone ? "#4CAF50" : isPackingActive ? "#a67c52" : "#e2d7ce",
+                                                    color: (isPackingDone || isPackingActive) ? "#fff" : "#7a685e",
+                                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                                    fontSize: isPackingDone ? 12 : 11, fontWeight: 700, flexShrink: 0, marginTop: 1
+                                                }}>
+                                                    {isPackingDone ? "✓" : "3"}
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: 13, fontWeight: 700, color: (isPackingDone || isPackingActive) ? "#1d1816" : "#7a685e" }}>
+                                                        3. Perakitan & Pengemasan Box Fisik {isPackingDone ? "(Selesai)" : isPackingActive ? "(Sedang Diproses)" : ""}
+                                                    </div>
+                                                    <div style={{ fontSize: 11.5, color: isPackingDone ? "#2e7d32" : isPackingActive ? "#a67c52" : "#a6968c", marginTop: 2 }}>
+                                                        {isPackingDone
+                                                            ? "Hampers fisik telah selesai dirakit dan dikemas rapi."
+                                                            : isPackingActive
+                                                            ? "Atelier sedang merakit & mengemas kado fisik pesananmu."
+                                                            : "Akan dimulai setelah kustomisasi digital selesai."}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* STEP 4 */}
+                                            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                                                <div style={{
+                                                    width: 24, height: 24, borderRadius: "50%",
+                                                    background: isShipped ? "#2e7d32" : "#e2d7ce",
+                                                    color: isShipped ? "#fff" : "#7a685e",
+                                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                                    fontSize: isShipped ? 12 : 11, fontWeight: 700, flexShrink: 0, marginTop: 1
+                                                }}>
+                                                    {isShipped ? "✓" : "4"}
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ fontSize: 13, fontWeight: 700, color: isShipped ? "#1d1816" : "#7a685e" }}>
+                                                        4. {isShipped ? `Paket Sedang Dalam Pengiriman (${courier || "Kurir"})` : "Penyerahan ke Kurir & Pengiriman"}
+                                                    </div>
+                                                    {isShipped && trackingNumber ? (
+                                                        <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                                            <span style={{ fontSize: 11.5, color: "#6e5c53" }}>No. Resi:</span>
+                                                            <span style={{
+                                                                fontFamily: "monospace",
+                                                                fontSize: 12,
+                                                                fontWeight: 700,
+                                                                color: "#1d1816",
+                                                                background: "#f3ede7",
+                                                                padding: "3px 8px",
+                                                                borderRadius: 6,
+                                                                border: "1px solid #dcd1c6"
+                                                            }}>
+                                                                {trackingNumber}
+                                                            </span>
+                                                            <button
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(trackingNumber);
+                                                                    setCopiedResi(true);
+                                                                    setTimeout(() => setCopiedResi(false), 2000);
+                                                                }}
+                                                                style={{
+                                                                    background: "none",
+                                                                    border: "none",
+                                                                    color: "#a67c52",
+                                                                    fontSize: 11,
+                                                                    fontWeight: 700,
+                                                                    cursor: "pointer",
+                                                                    textDecoration: "underline",
+                                                                    padding: 0
+                                                                }}
+                                                            >
+                                                                {copiedResi ? "✓ Disalin" : "Salin Resi"}
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{ fontSize: 11.5, color: "#a6968c", marginTop: 2 }}>
+                                                            Nomor resi pengiriman akan otomatis muncul di sini setelah kurir dipanggil.
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
+                                );
+                            })()}
 
                             {/* Fallback text if no cards */}
                             {!magicLinks && (

@@ -20,9 +20,12 @@ interface OrderItem {
         recipient_name?: string;
         recipient_phone?: string;
         address?: string;
+        village?: string;
+        district?: string;
         city?: string;
         province?: string;
         postal_code?: string;
+        courier?: string;
         zone?: string;
         shipping_cost?: number;
     };
@@ -32,8 +35,12 @@ interface OrderItem {
     fulfillment_status?: "pending_customization" | "ready_to_pack" | "shipped";
     tracking_number?: string;
     courier?: string;
+    tracking_link?: string;
+    biteship_order_id?: string;
     created_at?: string;
 }
+
+
 
 export default function Dashboard() {
     // Auth States
@@ -57,6 +64,33 @@ export default function Dashboard() {
     const [trackingInput, setTrackingInput] = useState("");
     const [courierInput, setCourierInput] = useState("SiCepat");
     const [savingTracking, setSavingTracking] = useState(false);
+
+    // Biteship Shipping Dispatch & Origin Selection States
+    const [dispatchingOrderId, setDispatchingOrderId] = useState<string | null>(null);
+    const [dispatchConfirmOrder, setDispatchConfirmOrder] = useState<OrderItem | null>(null);
+    const [selectedOriginPreset, setSelectedOriginPreset] = useState<"loc1" | "loc2">("loc1");
+    const [loc2Origin, setLoc2Origin] = useState({
+        contact_name: "For you, Always. (Studio 2)",
+        contact_phone: "081381543981",
+        address: "",
+        postal_code: "",
+        note: "Paket kado hampers siap pick up",
+    });
+
+    // Recipient Address Edit State
+    const [editingAddressOrder, setEditingAddressOrder] = useState<OrderItem | null>(null);
+    const [addressForm, setAddressForm] = useState({
+        recipient_name: "",
+        recipient_phone: "",
+        address: "",
+        village: "",
+        district: "",
+        city: "",
+        province: "",
+        postal_code: "",
+        courier: "SiCepat",
+    });
+    const [savingAddress, setSavingAddress] = useState(false);
 
     // Gift Link & Customization Edit States
     const [editingGiftOrderId, setEditingGiftOrderId] = useState<string | null>(null);
@@ -104,6 +138,12 @@ export default function Dashboard() {
 
     useEffect(() => {
         checkAuth();
+        try {
+            const savedLoc2 = localStorage.getItem("fya_origin_warehouse_loc2");
+            if (savedLoc2) {
+                setLoc2Origin(JSON.parse(savedLoc2));
+            }
+        } catch (_) {}
     }, []);
 
     const checkAuth = async () => {
@@ -260,6 +300,21 @@ export default function Dashboard() {
         return order.product_type || order.product_id || "Digital Gift";
     };
 
+    const getDigitalFormatName = (order: OrderItem) => {
+        const raw = (order.product_type || order.product_id || "").replace("unbox_", "").replace("_3slot", "");
+        const map: Record<string, string> = {
+            loves: "Memoria",
+            letter: "Letter",
+            voices: "Voices",
+            arcade: "Arcade",
+            retro: "Retro",
+            wrapped: "Wrapped",
+            mixtape: "Mixtape",
+            invitation: "Invitation",
+        };
+        return map[raw] || raw || "Memoria";
+    };
+
     const handleCopyAddress = (order: OrderItem) => {
         const ship = parseMeta(order.shipping_details);
         const districtText = ship.district ? `${ship.district}, ` : "";
@@ -306,6 +361,96 @@ export default function Dashboard() {
             alert("Terjadi kesalahan sistem saat menyimpan resi.");
         } finally {
             setSavingTracking(false);
+        }
+    };
+
+    const handleOpenEditAddress = (order: OrderItem) => {
+        const ship = parseMeta(order.shipping_details);
+        setAddressForm({
+            recipient_name: ship.recipient_name || order.customer_name || "",
+            recipient_phone: ship.recipient_phone || order.customer_phone || "",
+            address: ship.address || "",
+            village: ship.village || "",
+            district: ship.district || "",
+            city: ship.city || "",
+            province: ship.province || "",
+            postal_code: ship.postal_code || "",
+            courier: ship.courier || order.courier || "SiCepat",
+        });
+        setEditingAddressOrder(order);
+    };
+
+    const handleSaveRecipientAddress = async () => {
+        if (!editingAddressOrder) return;
+        setSavingAddress(true);
+        try {
+            const res = await fetch("/api/admin/update-resi", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    order_id: editingAddressOrder.order_id,
+                    shipping_details: addressForm,
+                    courier: addressForm.courier,
+                }),
+            });
+            if (res.ok) {
+                setOrders(orders.map(o => o.order_id === editingAddressOrder.order_id ? {
+                    ...o,
+                    shipping_details: JSON.stringify(addressForm),
+                    courier: addressForm.courier,
+                } : o));
+                setEditingAddressOrder(null);
+            } else {
+                alert("Gagal memperbarui alamat penerima.");
+            }
+        } catch {
+            alert("Terjadi kesalahan sistem saat menyimpan alamat.");
+        } finally {
+            setSavingAddress(false);
+        }
+    };
+
+    const handleOpenDispatchModal = (order: OrderItem) => {
+        setDispatchConfirmOrder(order);
+    };
+
+    const handleExecuteDispatch = async (order: OrderItem, originDetails: any) => {
+        setDispatchingOrderId(order.order_id);
+        try {
+            const res = await fetch("/api/shipping/dispatch", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    order_id: order.order_id,
+                    order_data: order,
+                    origin_details: originDetails,
+                }),
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                alert(`🎉 ${data.message}\n\nNomor Resi: ${data.tracking_number}\nKurir: ${data.courier}`);
+                const updatedOrder: OrderItem = {
+                    ...order,
+                    tracking_number: data.tracking_number,
+                    courier: data.courier,
+                    tracking_link: data.tracking_link,
+                    biteship_order_id: data.biteship_order_id,
+                    fulfillment_status: "shipped",
+                };
+                // Update local state
+                setOrders((prev) =>
+                    prev.map((o) => (o.order_id === order.order_id ? updatedOrder : o))
+                );
+                setDispatchConfirmOrder(null);
+            } else {
+                alert(`⚠️ Gagal dispatch Biteship: ${data.message || "Terjadi kesalahan."}`);
+            }
+        } catch (err) {
+            console.error("Failed to dispatch order to Biteship:", err);
+            alert("Terjadi kesalahan jaringan saat memproses ke Biteship.");
+        } finally {
+            setDispatchingOrderId(null);
         }
     };
 
@@ -1206,27 +1351,54 @@ export default function Dashboard() {
                                                                 background: "rgba(166,124,82,0.1)", color: "#a67c52", fontWeight: 700,
                                                                 fontSize: 10, textTransform: "capitalize",
                                                             }}>
-                                                                {order.product_type?.replace("unbox_", "") || "Letter"}
+                                                                {getDigitalFormatName(order)}
                                                             </span>
                                                         </td>
-                                                        <td style={{ padding: "12px", verticalAlign: "top", maxWidth: 200 }}>
+                                                        <td style={{ padding: "12px", verticalAlign: "top", maxWidth: 220 }}>
                                                             <div style={{ fontWeight: 700, color: "#1d1816" }}>
                                                                 {ship.recipient_name || "-"} ({ship.recipient_phone || "-"})
                                                             </div>
                                                             <div style={{ fontSize: 10.5, color: "#59483f", lineHeight: 1.3, marginTop: 2 }}>
-                                                                {ship.address || "-"}, {ship.city || "-"}, {ship.province || "-"} {ship.postal_code || "-"}
+                                                                {ship.address ? (
+                                                                    <>
+                                                                        {ship.address}
+                                                                        {ship.village ? `, Kel. ${ship.village}` : ""}
+                                                                        {ship.district ? `, Kec. ${ship.district}` : ""}
+                                                                        {ship.city ? `, ${ship.city}` : ""}
+                                                                        {ship.province ? `, ${ship.province}` : ""}
+                                                                        {ship.postal_code ? ` ${ship.postal_code}` : ""}
+                                                                    </>
+                                                                ) : (
+                                                                    <span style={{ color: "#d32f2f", fontStyle: "italic", fontSize: 10 }}>
+                                                                        Alamat belum diisi / kosong
+                                                                    </span>
+                                                                )}
                                                             </div>
-                                                            <button
-                                                                onClick={() => handleCopyAddress(order)}
-                                                                style={{
-                                                                    marginTop: 4, padding: "3px 8px", borderRadius: 6, border: "1px solid #dcd1c6",
-                                                                    background: copiedId === `addr_${order.order_id}` ? "#2e7d32" : "#faf7f2",
-                                                                    color: copiedId === `addr_${order.order_id}` ? "#fff" : "#7a685e",
-                                                                    fontSize: 9.5, fontWeight: 700, cursor: "pointer",
-                                                                }}
-                                                            >
-                                                                {copiedId === `addr_${order.order_id}` ? "Tersalin" : "Salin Alamat"}
-                                                            </button>
+                                                            <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
+                                                                {ship.address && (
+                                                                    <button
+                                                                        onClick={() => handleCopyAddress(order)}
+                                                                        style={{
+                                                                            padding: "3px 8px", borderRadius: 6, border: "1px solid #dcd1c6",
+                                                                            background: copiedId === `addr_${order.order_id}` ? "#2e7d32" : "#faf7f2",
+                                                                            color: copiedId === `addr_${order.order_id}` ? "#fff" : "#7a685e",
+                                                                            fontSize: 9.5, fontWeight: 700, cursor: "pointer",
+                                                                        }}
+                                                                    >
+                                                                        {copiedId === `addr_${order.order_id}` ? "Tersalin" : "Salin Alamat"}
+                                                                    </button>
+                                                                )}
+                                                                <button
+                                                                    onClick={() => handleOpenEditAddress(order)}
+                                                                    style={{
+                                                                        padding: "3px 8px", borderRadius: 6, border: "1px solid #dcd1c6",
+                                                                        background: "#faf7f2", color: "#a67c52",
+                                                                        fontSize: 9.5, fontWeight: 700, cursor: "pointer",
+                                                                    }}
+                                                                >
+                                                                    ✏️ Edit Alamat
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                         <td style={{ padding: "12px", verticalAlign: "top", minWidth: 160 }}>
                                                             {editingGiftOrderId === order.order_id ? (
@@ -1350,34 +1522,107 @@ export default function Dashboard() {
                                                                 <div>
                                                                     {order.tracking_number ? (
                                                                         <div>
-                                                                            <div style={{ fontSize: 10.5, fontWeight: 700, color: "#2e7d32" }}>
-                                                                                {order.courier}: {order.tracking_number}
+                                                                            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                                                                                <span style={{
+                                                                                    fontSize: 10,
+                                                                                    fontWeight: 800,
+                                                                                    color: "#1b5e20",
+                                                                                    backgroundColor: "#e8f5e9",
+                                                                                    padding: "2px 6px",
+                                                                                    borderRadius: 4,
+                                                                                    border: "1px solid #c8e6c9"
+                                                                                }}>
+                                                                                    {order.courier || "Kurir"}
+                                                                                </span>
+                                                                                <span style={{ fontSize: 10.5, fontWeight: 700, color: "#1d1816", fontFamily: "monospace" }}>
+                                                                                    {order.tracking_number}
+                                                                                </span>
                                                                             </div>
+
+                                                                            <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 6, flexWrap: "wrap" }}>
+                                                                                {order.tracking_link && (
+                                                                                    <a
+                                                                                        href={order.tracking_link}
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        style={{
+                                                                                            display: "inline-flex",
+                                                                                            alignItems: "center",
+                                                                                            gap: 4,
+                                                                                            padding: "4px 8px",
+                                                                                            borderRadius: 6,
+                                                                                            border: "1px solid #2e7d32",
+                                                                                            background: "#e8f5e9",
+                                                                                            color: "#2e7d32",
+                                                                                            fontSize: 9.5,
+                                                                                            fontWeight: 700,
+                                                                                            textDecoration: "none"
+                                                                                        }}
+                                                                                    >
+                                                                                        🌐 Buka di Biteship
+                                                                                    </a>
+                                                                                )}
+
+                                                                                <button
+                                                                                    onClick={() => {
+                                                                                        setEditingOrderId(order.order_id);
+                                                                                        setTrackingInput(order.tracking_number || "");
+                                                                                        setCourierInput(order.courier || "SiCepat");
+                                                                                    }}
+                                                                                    style={{ background: "none", border: "none", color: "#a67c52", fontSize: 9.5, fontWeight: 700, cursor: "pointer", padding: 0 }}
+                                                                                >
+                                                                                    Edit Resi
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                                                                            <div style={{ fontSize: 9.5, color: "#6e5c53" }}>
+                                                                                Kurir: <strong>{ship.courier || "SiCepat"}</strong>
+                                                                            </div>
+
+                                                                            <button
+                                                                                onClick={() => handleOpenDispatchModal(order)}
+                                                                                disabled={dispatchingOrderId === order.order_id}
+                                                                                style={{
+                                                                                    padding: "5px 9px",
+                                                                                    borderRadius: 6,
+                                                                                    border: "none",
+                                                                                    background: dispatchingOrderId === order.order_id ? "#8d7971" : "#2e7d32",
+                                                                                    color: "#fff",
+                                                                                    fontSize: 10,
+                                                                                    fontWeight: 800,
+                                                                                    cursor: dispatchingOrderId === order.order_id ? "not-allowed" : "pointer",
+                                                                                    display: "inline-flex",
+                                                                                    alignItems: "center",
+                                                                                    gap: 4,
+                                                                                    width: "fit-content",
+                                                                                    boxShadow: "0 2px 4px rgba(46,125,50,0.15)"
+                                                                                }}
+                                                                            >
+                                                                                {dispatchingOrderId === order.order_id ? "Memproses..." : "Request Pick-up (Biteship)"}
+                                                                            </button>
+
                                                                             <button
                                                                                 onClick={() => {
                                                                                     setEditingOrderId(order.order_id);
-                                                                                    setTrackingInput(order.tracking_number || "");
-                                                                                    setCourierInput(order.courier || "SiCepat");
+                                                                                    setTrackingInput("");
+                                                                                    setCourierInput(ship.courier || "SiCepat");
                                                                                 }}
-                                                                                style={{ marginTop: 2, background: "none", border: "none", color: "#a67c52", fontSize: 9.5, fontWeight: 700, cursor: "pointer", padding: 0 }}
+                                                                                style={{
+                                                                                    background: "none",
+                                                                                    border: "none",
+                                                                                    color: "#8d7971",
+                                                                                    fontSize: 9,
+                                                                                    fontWeight: 600,
+                                                                                    cursor: "pointer",
+                                                                                    padding: 0,
+                                                                                    textAlign: "left"
+                                                                                }}
                                                                             >
-                                                                                Edit Resi
+                                                                                + Input Resi Manual
                                                                             </button>
                                                                         </div>
-                                                                    ) : (
-                                                                        <button
-                                                                            onClick={() => {
-                                                                                setEditingOrderId(order.order_id);
-                                                                                setTrackingInput("");
-                                                                                setCourierInput("SiCepat");
-                                                                            }}
-                                                                            style={{
-                                                                                padding: "4px 9px", borderRadius: 6, border: "1px solid #dcd1c6",
-                                                                                background: "#faf7f2", color: "#382a24", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                                                                            }}
-                                                                        >
-                                                                            Input Resi
-                                                                        </button>
                                                                     )}
                                                                 </div>
                                                             )}
@@ -1646,6 +1891,399 @@ export default function Dashboard() {
                     </div>
                 </div>
             )}
+
+            {/* ── 5. MODAL: EDIT ALAMAT PENERIMA ── */}
+            {editingAddressOrder && (
+                <div style={{
+                    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: "rgba(29, 24, 22, 0.65)",
+                    backdropFilter: "blur(4px)",
+                    zIndex: 9999,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "16px",
+                    fontFamily: "var(--font-sans)",
+                }}>
+                    <div style={{
+                        background: "#ffffff",
+                        width: "100%", maxWidth: "520px",
+                        borderRadius: "16px",
+                        padding: "24px",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+                        maxHeight: "90vh",
+                        overflowY: "auto",
+                    }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: "#1d1816" }}>
+                                    ✏️ Edit Alamat Penerima
+                                </h3>
+                                <div style={{ fontSize: "0.8rem", color: "#8d7971", marginTop: 2 }}>
+                                    Order ID: {editingAddressOrder.order_id}
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setEditingAddressOrder(null)}
+                                style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer", color: "#8d7971" }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Nama Penerima</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.recipient_name}
+                                    onChange={(e) => setAddressForm({ ...addressForm, recipient_name: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="Nama Lengkap"
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>No. WhatsApp / HP</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.recipient_phone}
+                                    onChange={(e) => setAddressForm({ ...addressForm, recipient_phone: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="08123456789"
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ marginBottom: "12px" }}>
+                            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Alamat Lengkap (Jalan, No Rumah, RT/RW, Patokan)</label>
+                            <textarea
+                                rows={2}
+                                value={addressForm.address}
+                                onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
+                                style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem", resize: "vertical" }}
+                                placeholder="Jl. Mawar No. 12, RT 01/RW 02..."
+                            />
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Kelurahan / Desa</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.village}
+                                    onChange={(e) => setAddressForm({ ...addressForm, village: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="Kelurahan"
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Kecamatan</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.district}
+                                    onChange={(e) => setAddressForm({ ...addressForm, district: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="Kecamatan"
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Kota / Kabupaten</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.city}
+                                    onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="Kota / Kabupaten"
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Provinsi</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.province}
+                                    onChange={(e) => setAddressForm({ ...addressForm, province: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="Provinsi"
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Kode Pos</label>
+                                <input
+                                    type="text"
+                                    value={addressForm.postal_code}
+                                    onChange={(e) => setAddressForm({ ...addressForm, postal_code: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                    placeholder="Contoh: 16820"
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#59483f", display: "block", marginBottom: 4 }}>Pilihan Kurir</label>
+                                <select
+                                    value={addressForm.courier}
+                                    onChange={(e) => setAddressForm({ ...addressForm, courier: e.target.value })}
+                                    style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
+                                >
+                                    <option value="SiCepat">SiCepat (Reguler)</option>
+                                    <option value="JNE">JNE (Reguler)</option>
+                                    <option value="J&T">J&T (EZ)</option>
+                                    <option value="Anteraja">Anteraja (Reguler)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                            <button
+                                onClick={handleSaveRecipientAddress}
+                                disabled={savingAddress}
+                                style={{
+                                    flex: 1, padding: "12px", borderRadius: "10px",
+                                    background: "#1d1816", color: "#fff",
+                                    fontSize: "0.88rem", fontWeight: 700, border: "none", cursor: "pointer"
+                                }}
+                            >
+                                {savingAddress ? "Menyimpan..." : "Simpan Alamat"}
+                            </button>
+                            <button
+                                onClick={() => setEditingAddressOrder(null)}
+                                style={{
+                                    padding: "12px 18px", borderRadius: "10px",
+                                    background: "#faf7f2", color: "#6e5c53",
+                                    border: "1px solid #dcd1c6", fontSize: "0.88rem", fontWeight: 700, cursor: "pointer"
+                                }}
+                            >
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── 6. MODAL: KONFIRMASI DISPATCH & PILIH ASAL PICK-UP ── */}
+            {dispatchConfirmOrder && (() => {
+                const ship = parseMeta(dispatchConfirmOrder.shipping_details);
+                const courierName = ship.courier || dispatchConfirmOrder.courier || "SiCepat Reguler";
+                const recipientName = ship.recipient_name || dispatchConfirmOrder.customer_name || "-";
+                const fullAddr = [ship.address, ship.village, ship.district, ship.city, ship.province, ship.postal_code].filter(Boolean).join(", ");
+
+                const loc1 = {
+                    contact_name: "For you, Always.",
+                    contact_phone: "081381543981",
+                    address: "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820",
+                    postal_code: "16820",
+                    note: "Paket kado hampers siap pick up di depan rumah",
+                };
+
+                const handleSaveLoc2ToStorage = (updated: typeof loc2Origin) => {
+                    setLoc2Origin(updated);
+                    try {
+                        localStorage.setItem("fya_origin_warehouse_loc2", JSON.stringify(updated));
+                    } catch (_) {}
+                };
+
+                const currentOrigin = selectedOriginPreset === "loc1" ? loc1 : loc2Origin;
+
+                return (
+                    <div style={{
+                        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: "rgba(29, 24, 22, 0.65)",
+                        backdropFilter: "blur(4px)",
+                        zIndex: 9999,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        padding: "16px",
+                        fontFamily: "var(--font-sans)",
+                    }}>
+                        <div style={{
+                            background: "#ffffff",
+                            width: "100%", maxWidth: "560px",
+                            borderRadius: "16px",
+                            padding: "24px",
+                            boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+                            maxHeight: "92vh",
+                            overflowY: "auto",
+                        }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                                <div>
+                                    <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800, color: "#1d1816" }}>
+                                        📦 Request Pick-up Kurir (Biteship)
+                                    </h3>
+                                    <div style={{ fontSize: "0.8rem", color: "#8d7971", marginTop: 2 }}>
+                                        Order: {dispatchConfirmOrder.order_id}
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setDispatchConfirmOrder(null)}
+                                    style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer", color: "#8d7971" }}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            {/* Recipient summary card */}
+                            <div style={{ background: "#faf7f2", border: "1px solid #dcd1c6", borderRadius: 12, padding: "14px 16px", marginBottom: 18 }}>
+                                <div style={{ fontSize: "0.75rem", fontWeight: 800, textTransform: "uppercase", color: "#8d7971", marginBottom: 4 }}>
+                                    Tujuan Pengantaran (Penerima)
+                                </div>
+                                <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#1d1816" }}>
+                                    {recipientName} ({ship.recipient_phone || "-"})
+                                </div>
+                                <div style={{ fontSize: "0.85rem", color: "#59483f", marginTop: 2, lineHeight: 1.35 }}>
+                                    {fullAddr || <span style={{ color: "#d32f2f", fontWeight: 700 }}>⚠️ Alamat penerima masih kosong! Klik tombol Edit Alamat dulu di tabel.</span>}
+                                </div>
+                                <div style={{ marginTop: 6, fontSize: "0.82rem", fontWeight: 700, color: "#2e7d32" }}>
+                                    Kurir: {courierName}
+                                </div>
+                            </div>
+
+                            {/* Warehouse Origin Selection */}
+                            <div style={{ marginBottom: 20 }}>
+                                <label style={{ fontSize: "0.82rem", fontWeight: 800, color: "#1d1816", display: "block", marginBottom: 8 }}>
+                                    📍 Pilih Lokasi Penjemputan Paket (Alamat Pengirim):
+                                </label>
+
+                                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                                    {/* Preset 1: Cileungsi */}
+                                    <div
+                                        onClick={() => setSelectedOriginPreset("loc1")}
+                                        style={{
+                                            border: selectedOriginPreset === "loc1" ? "2px solid #2e7d32" : "1.5px solid #dcd1c6",
+                                            borderRadius: 12,
+                                            padding: "12px 14px",
+                                            background: selectedOriginPreset === "loc1" ? "#f1f8e9" : "#fff",
+                                            cursor: "pointer",
+                                            transition: "all 0.2s ease",
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                            <input
+                                                type="radio"
+                                                name="originPreset"
+                                                checked={selectedOriginPreset === "loc1"}
+                                                onChange={() => setSelectedOriginPreset("loc1")}
+                                            />
+                                            <strong style={{ fontSize: "0.9rem", color: "#1d1816" }}>
+                                                Lokasi 1 (Cileungsi - Rumah)
+                                            </strong>
+                                            <span style={{ fontSize: "0.72rem", background: "#e8f5e9", color: "#2e7d32", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>
+                                                Default
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: "0.82rem", color: "#59483f", marginLeft: 22, lineHeight: 1.35 }}>
+                                            {loc1.contact_name} — {loc1.contact_phone}<br />
+                                            {loc1.address} (Kode Pos: {loc1.postal_code})
+                                        </div>
+                                    </div>
+
+                                    {/* Preset 2: Tempat Kedua */}
+                                    <div
+                                        onClick={() => setSelectedOriginPreset("loc2")}
+                                        style={{
+                                            border: selectedOriginPreset === "loc2" ? "2px solid #2e7d32" : "1.5px solid #dcd1c6",
+                                            borderRadius: 12,
+                                            padding: "12px 14px",
+                                            background: selectedOriginPreset === "loc2" ? "#f1f8e9" : "#fff",
+                                            cursor: "pointer",
+                                            transition: "all 0.2s ease",
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                            <input
+                                                type="radio"
+                                                name="originPreset"
+                                                checked={selectedOriginPreset === "loc2"}
+                                                onChange={() => setSelectedOriginPreset("loc2")}
+                                            />
+                                            <strong style={{ fontSize: "0.9rem", color: "#1d1816" }}>
+                                                Lokasi 2 (Tempat Kedua / Studio Lain)
+                                            </strong>
+                                        </div>
+
+                                        {selectedOriginPreset === "loc2" ? (
+                                            <div style={{ marginTop: 10, marginLeft: 22, display: "flex", flexDirection: "column", gap: 8 }} onClick={e => e.stopPropagation()}>
+                                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Nama Pengirim / PIC"
+                                                        value={loc2Origin.contact_name}
+                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, contact_name: e.target.value })}
+                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="No. HP Pengirim"
+                                                        value={loc2Origin.contact_phone}
+                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, contact_phone: e.target.value })}
+                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
+                                                    />
+                                                </div>
+                                                <textarea
+                                                    rows={2}
+                                                    placeholder="Alamat Lengkap Penjemputan..."
+                                                    value={loc2Origin.address}
+                                                    onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, address: e.target.value })}
+                                                    style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", resize: "vertical" }}
+                                                />
+                                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Kode Pos (misal: 12190)"
+                                                        value={loc2Origin.postal_code}
+                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, postal_code: e.target.value })}
+                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Catatan untuk Kurir"
+                                                        value={loc2Origin.note}
+                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, note: e.target.value })}
+                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
+                                                    />
+                                                </div>
+                                                <span style={{ fontSize: "0.72rem", color: "#8d7971" }}>
+                                                    💡 Alamat Lokasi 2 otomatis tersimpan di browser untuk order berikutnya.
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <div style={{ fontSize: "0.82rem", color: "#59483f", marginLeft: 22, lineHeight: 1.35 }}>
+                                                {loc2Origin.address ? `${loc2Origin.contact_name} — ${loc2Origin.address}` : "(Klik untuk mengisi alamat kedua)"}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{ display: "flex", gap: "10px" }}>
+                                <button
+                                    onClick={() => handleExecuteDispatch(dispatchConfirmOrder, currentOrigin)}
+                                    disabled={dispatchingOrderId === dispatchConfirmOrder.order_id || !ship.address}
+                                    style={{
+                                        flex: 1, padding: "12px", borderRadius: "10px",
+                                        background: !ship.address ? "#9e9e9e" : "#2e7d32",
+                                        color: "#fff",
+                                        fontSize: "0.88rem", fontWeight: 800, border: "none",
+                                        cursor: !ship.address ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    {dispatchingOrderId === dispatchConfirmOrder.order_id ? "Memproses..." : "Panggil Kurir Sekarang (Biteship)"}
+                                </button>
+                                <button
+                                    onClick={() => setDispatchConfirmOrder(null)}
+                                    style={{
+                                        padding: "12px 18px", borderRadius: "10px",
+                                        background: "#faf7f2", color: "#6e5c53",
+                                        border: "1px solid #dcd1c6", fontSize: "0.88rem", fontWeight: 700, cursor: "pointer"
+                                    }}
+                                >
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })()}
         </>
     );
 }

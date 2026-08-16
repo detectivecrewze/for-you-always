@@ -13,11 +13,15 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { order_id, tracking_number, courier, fulfillment_status, magic_link, customization_status } = body;
+        const { order_id, tracking_number, courier, fulfillment_status, magic_link, customization_status, shipping_details } = body;
 
         if (!order_id) {
             return NextResponse.json({ success: false, message: "Missing order_id" }, { status: 400 });
         }
+
+        const shipStr = shipping_details !== undefined
+            ? (typeof shipping_details === "object" ? JSON.stringify(shipping_details) : shipping_details)
+            : null;
 
         // Direct D1 query if credentials configured
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
@@ -35,7 +39,8 @@ export async function POST(req: NextRequest) {
                                 courier = COALESCE(?, courier),
                                 fulfillment_status = COALESCE(?, fulfillment_status),
                                 magic_link = COALESCE(?, magic_link),
-                                customization_status = COALESCE(?, customization_status)
+                                customization_status = COALESCE(?, customization_status),
+                                shipping_details = COALESCE(?, shipping_details)
                               WHERE order_id = ?`,
                         params: [
                             tracking_number !== undefined ? tracking_number : null,
@@ -43,6 +48,7 @@ export async function POST(req: NextRequest) {
                             fulfillment_status !== undefined ? fulfillment_status : null,
                             magic_link !== undefined ? magic_link : null,
                             customization_status !== undefined ? customization_status : null,
+                            shipStr,
                             order_id
                         ],
                     }),

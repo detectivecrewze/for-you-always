@@ -87,7 +87,8 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
         setIsLoading(true);
         try {
             const orderId = `ORDER-UNBOX-${Date.now()}`;
-            const res = await fetch("https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout", {
+            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway.aldoramadhan16.workers.dev";
+            const res = await fetch(`${gatewayUrl}/api/checkout`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

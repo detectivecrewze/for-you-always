@@ -349,8 +349,9 @@ export default function UnboxCheckoutWizardPage() {
             }
 
             const orderId = `ORDER-UNBOX-${Date.now()}`;
+            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway.aldoramadhan16.workers.dev";
             const res = await fetch(
-                "https://pakasir-gateway.aldoramadhan16.workers.dev/api/checkout",
+                `${gatewayUrl}/api/checkout`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
