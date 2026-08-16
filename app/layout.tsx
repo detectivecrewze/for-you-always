@@ -141,6 +141,25 @@ export default function RootLayout({
             }(window, document, 'ttq');`,
           }}
         />
+        {/* Disable image long-press download & drag globally */}
+        <Script
+          id="disable-image-contextmenu"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              document.addEventListener('contextmenu', function(e) {
+                if (e.target && (e.target.tagName === 'IMG' || e.target.tagName === 'PICTURE' || (e.target.closest && e.target.closest('img')))) {
+                  e.preventDefault();
+                }
+              }, false);
+              document.addEventListener('dragstart', function(e) {
+                if (e.target && (e.target.tagName === 'IMG' || e.target.tagName === 'PICTURE')) {
+                  e.preventDefault();
+                }
+              }, false);
+            `,
+          }}
+        />
       </body>
     </html>
   );
