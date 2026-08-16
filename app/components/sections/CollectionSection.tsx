@@ -85,7 +85,7 @@ export default function CollectionSection() {
                                 badgeText: "PHYSICAL GIFT",
                                 badgeColor: "#1d1816",
                                 badgeVariant: "solid",
-                                imageSrc: "/assets/unbox-the-memory/showcase1.webp",
+                                imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
                                 price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 130.000" size="sm" layout="inline" />,
                                 title: "Unbox the Memory",
                                 titleColor: "#382a24",

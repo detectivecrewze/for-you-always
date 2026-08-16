@@ -1667,7 +1667,7 @@ export default function UnboxCheckoutWizardPage() {
                                 }}
                             >
                                 <Image
-                                    src="/assets/unbox-the-memory/showcase1.webp"
+                                    src="https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg"
                                     alt="Unbox the Memory"
                                     fill
                                     style={{ objectFit: "cover" }}

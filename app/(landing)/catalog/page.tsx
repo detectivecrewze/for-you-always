@@ -13,7 +13,7 @@ const CATALOG_ITEMS = [
         badgeText: "PHYSICAL GIFT",
         badgeColor: "#1d1816",
         titleColor: "#382a24",
-        imageSrc: "/assets/unbox-the-memory/showcase1.webp",
+        imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         title: "Unbox the Memory",
         oldPrice: "Rp 180.000",
         newPrice: "Rp 130.000",

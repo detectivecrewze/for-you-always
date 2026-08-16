@@ -177,7 +177,7 @@ export default function UnboxTheMemoryPage() {
                             background: "#1d1816"
                         }}>
                             <Image
-                                src="/assets/unbox-the-memory/showcase1.webp"
+                                src="https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg"
                                 alt="Unbox the Memory Gift Box Hampers Showcase"
                                 fill
                                 style={{
@@ -451,19 +451,19 @@ export default function UnboxTheMemoryPage() {
                 }}>
                     {[
                         {
-                            img: "/assets/unbox-the-memory/box-luar.webp",
+                            img: "https://cdn.for-you-always.my.id/1786911999000-phln1y.jpg",
                             tag: "LUXURY PRESENTATION",
                             title: "Luxury Gift Box",
                             desc: "Hardbox eksklusif dengan balutan pita satin elegan, dilengkapi kartu ucapan personal untuk seseorang yang spesial."
                         },
                         {
-                            img: "/assets/unbox-the-memory/showcase1.webp",
+                            img: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
                             tag: "CURATED KEEPSAKES",
                             title: "Curated Keepsakes",
                             desc: "Koleksi kecil penuh perhatian, mulai dari teddy bear mini, dried flowers, hingga sweet treats pilihan yang melengkapi momen spesialmu."
                         },
                         {
-                            img: "/assets/unbox-the-memory/barcode.png",
+                            img: "https://cdn.for-you-always.my.id/1786911999752-m72b4i.png",
                             tag: "DIGITAL MEMORY CARD",
                             title: "Digital Memory Card",
                             desc: "Kartu QR personal berbentuk hati yang membuka sebuah digital gift berisi pesan, kenangan, dan momen spesial yang hanya untuknya."
