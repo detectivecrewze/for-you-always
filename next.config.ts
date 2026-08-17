@@ -10,6 +10,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/catalog/unbox-the-memory',
+        destination: '/catalog/the-gift-box',
+        permanent: true,
+      },
+      {
+        source: '/catalog/unbox-the-memory/checkout',
+        destination: '/catalog/the-gift-box/checkout',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

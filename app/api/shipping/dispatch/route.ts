@@ -18,9 +18,9 @@ const CF_API_KEY = process.env.CLOUDFLARE_D1_API_KEY;
 function parseCourier(rawCourier: string = ""): { company: string; type: string; displayName: string } {
     const lower = rawCourier.toLowerCase();
 
-    let company = "sicepat";
-    let type = "standard";
-    let displayName = "SiCepat Reguler";
+    let company = "jnt";
+    let type = "ez";
+    let displayName = "J&T — EZ Reguler";
 
     if (lower.includes("jne")) {
         company = "jne";
@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
             reference_id: order_id,
             items: [
                 {
-                    name: "Unbox the Memory Gift Box",
+                    name: "The Gift Box",
                     description: "Hampers Kado Fisik & Kartu QR Kenangan",
                     category: "others",
                     value: 139000,

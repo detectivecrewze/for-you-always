@@ -15,12 +15,12 @@ const CATALOG_ITEMS = [
         slotBadgeText: "Sisa 11 Box",
         titleColor: "#382a24",
         imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
-        title: "Unbox the Memory",
+        title: "The Gift Box",
         oldPrice: "Rp 180.000",
         newPrice: "Rp 139.000",
-        id: "unbox-the-memory",
+        id: "the-gift-box",
         numericPrice: 139000,
-        href: "/catalog/unbox-the-memory",
+        href: "/catalog/the-gift-box",
         occasions: ["Anniversary", "Birthday", "LDR"],
         features: ["Luxury Physical Gift Box", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
     },
@@ -190,8 +190,8 @@ export default function CatalogPage() {
     }, []);
 
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string; oldPrice?: string }) => {
-        if (item.id === "unbox-the-memory") {
-            window.location.href = "/catalog/unbox-the-memory";
+        if (item.id === "the-gift-box" || item.id === "unbox-the-memory") {
+            window.location.href = "/catalog/the-gift-box";
             return;
         }
 
@@ -278,7 +278,7 @@ export default function CatalogPage() {
                     gap: 32 
                 }}>
                 {CATALOG_ITEMS.map((item, idx) => {
-                    const slotText = item.id === "unbox-the-memory"
+                    const slotText = (item.id === "the-gift-box" || item.id === "unbox-the-memory")
                         ? (unboxStock !== null ? `Sisa ${unboxStock} Box` : (item.slotBadgeText || "Sisa 11 Box"))
                         : item.slotBadgeText;
 

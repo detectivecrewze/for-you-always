@@ -100,11 +100,11 @@ export default function CollectionSection() {
                                 slotBadgeText: unboxStock !== null ? `Sisa ${unboxStock} Box` : "Sisa 11 Box",
                                 imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
                                 price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 139.000" size="sm" layout="inline" />,
-                                title: "Unbox the Memory",
+                                title: "The Gift Box",
                                 titleColor: "#382a24",
                                 description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif pilihanmu.",
-                                href: "/catalog/unbox-the-memory",
-                                onAddToCart: () => window.location.href = "/catalog/unbox-the-memory/checkout"
+                                href: "/catalog/the-gift-box",
+                                onAddToCart: () => window.location.href = "/catalog/the-gift-box/checkout"
                             },
                             {
                                 badgeText: "#1 Exclusive",

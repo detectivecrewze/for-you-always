@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
 
     try {
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
-            // Fetch current stock record directly in a single fast query
             const queryRes = await fetch(
                 `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`,
                 {
@@ -22,7 +21,7 @@ export async function GET(req: NextRequest) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        sql: "SELECT * FROM inventory WHERE product_id = ?",
+                        sql: "SELECT * FROM inventory WHERE product_id = ? OR product_id = 'unbox-the-memory' OR product_id = 'the-gift-box' LIMIT 1",
                         params: [productId],
                     }),
                 }
@@ -36,7 +35,7 @@ export async function GET(req: NextRequest) {
                         {
                             success: true,
                             product_id: record.product_id,
-                            product_name: record.product_name,
+                            product_name: record.product_name || "The Gift Box",
                             stock: record.stock,
                             in_stock: record.stock > 0,
                             is_low_stock: record.stock <= (record.low_stock_threshold || 3) && record.stock > 0,
@@ -56,7 +55,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({
             success: true,
             product_id: productId,
-            product_name: "Unbox the Memory Gift Box",
+            product_name: "The Gift Box",
             stock: 12,
             in_stock: true,
             is_low_stock: false,

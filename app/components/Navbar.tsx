@@ -33,7 +33,7 @@ export default function Navbar() {
         { 
             label: (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                    <span>Unbox the Memory</span>
+                    <span>The Gift Box</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 12 20 22 4 22 4 12"></polyline>
                         <rect x="2" y="7" width="20" height="5"></rect>
@@ -43,7 +43,7 @@ export default function Navbar() {
                     </svg>
                 </span>
             ), 
-            href: "/catalog/unbox-the-memory" 
+            href: "/catalog/the-gift-box" 
         },
         { label: "Lacak Pesanan", href: "/order-status" },
         { label: "Cara Kerja", href: "/#cara-kerja" },

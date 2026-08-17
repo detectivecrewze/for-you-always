@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                         );
                         INSERT OR IGNORE INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active)
-                        VALUES ('inv_unbox', 'unbox-the-memory', 'Unbox the Memory Gift Box', 12, 3, 1);
+                        VALUES ('inv_unbox', 'the-gift-box', 'The Gift Box', 12, 3, 1);
                         SELECT * FROM inventory ORDER BY updated_at DESC;`,
                     }),
                 }
@@ -60,8 +60,8 @@ export async function GET(req: NextRequest) {
             inventory: [
                 {
                     id: "inv_unbox",
-                    product_id: "unbox-the-memory",
-                    product_name: "Unbox the Memory Gift Box",
+                    product_id: "the-gift-box",
+                    product_name: "The Gift Box",
                     stock: 12,
                     low_stock_threshold: 3,
                     is_active: 1,
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const { product_id, stock, low_stock_threshold, is_active } = body;
 
-        const targetProductId = product_id || "unbox-the-memory";
+        const targetProductId = product_id || "the-gift-box";
         const newStock = Math.max(0, parseInt(stock, 10) || 0);
         const threshold = low_stock_threshold !== undefined ? parseInt(low_stock_threshold, 10) : 3;
         const active = is_active !== undefined ? (is_active ? 1 : 0) : 1;
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
                     },
                     body: JSON.stringify({
                         sql: `INSERT INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active, updated_at)
-                              VALUES ('inv_unbox', ?, 'Unbox the Memory Gift Box', ?, ?, ?, CURRENT_TIMESTAMP)
+                              VALUES ('inv_unbox', ?, 'The Gift Box', ?, ?, ?, CURRENT_TIMESTAMP)
                               ON CONFLICT(product_id) DO UPDATE SET
                                 stock = excluded.stock,
                                 low_stock_threshold = excluded.low_stock_threshold,

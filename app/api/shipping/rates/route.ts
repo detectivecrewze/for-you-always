@@ -58,10 +58,10 @@ export async function POST(req: NextRequest) {
                         origin_latitude: parseFloat(DEFAULT_ORIGIN_LAT),
                         origin_longitude: parseFloat(DEFAULT_ORIGIN_LNG),
                         destination_postal_code: postalCode,
-                        couriers: "sicepat,jne,jnt,anteraja",
+                        couriers: "jne,jnt,anteraja",
                         items: [
                             {
-                                name: "Unbox the Memory Gift Box",
+                                name: "The Gift Box",
                                 description: "Hampers Kado Fisik & Kartu QR",
                                 value: items_value,
                                 length: 20,
@@ -78,9 +78,11 @@ export async function POST(req: NextRequest) {
                 if (biteshipRes.ok && biteshipData.success && Array.isArray(biteshipData.pricing)) {
                     const mappedOptions: CourierOption[] = biteshipData.pricing
                         .filter((p: any) => {
-                            const combined = `${p.type || ""} ${p.service_type || ""} ${p.courier_service_code || ""} ${p.courier_service_name || ""}`.toLowerCase();
-                            // Filter out cargo, heavy trucking, and same-day/instant
+                            const combined = `${p.type || ""} ${p.service_type || ""} ${p.courier_service_code || ""} ${p.courier_service_name || ""} ${p.courier_name || ""} ${p.courier_code || ""}`.toLowerCase();
+                            // Filter out SiCepat, cargo, heavy trucking, and same-day/instant
                             if (
+                                combined.includes("sicepat") ||
+                                p.courier_code?.toLowerCase() === "sicepat" ||
                                 combined.includes("jtr") ||
                                 combined.includes("trucking") ||
                                 combined.includes("cargo") ||
@@ -114,7 +116,7 @@ export async function POST(req: NextRequest) {
                             const courier = p.courier_name || p.courier_code?.toUpperCase() || "Ekspedisi";
                             const service = p.courier_service_name || p.type;
                             
-                            // Clean professional name: e.g. "SiCepat — Besok Sampai Tujuan (BEST)" or "JNE — Reguler"
+                            // Clean professional name: e.g. "JNE — Reguler" or "J&T — EZ"
                             const cleanDisplayName = service.toLowerCase().includes(courier.toLowerCase())
                                 ? service
                                 : `${courier} — ${service}`;
@@ -160,8 +162,8 @@ export async function POST(req: NextRequest) {
         const regularRate = getShippingRate(destination_province, destination_city);
         const fallbackOptions: CourierOption[] = [
             {
-                courier_name: "SiCepat / JNE",
-                courier_code: "sicepat",
+                courier_name: "J&T / JNE",
+                courier_code: "jnt",
                 service_type: "standard",
                 service_name: "Ekspedisi Reguler",
                 category: "regular",
@@ -184,8 +186,8 @@ export async function POST(req: NextRequest) {
                 error: String(error),
                 options: [
                     {
-                        courier_name: "SiCepat / JNE",
-                        courier_code: "sicepat",
+                        courier_name: "J&T / JNE",
+                        courier_code: "jnt",
                         service_type: "standard",
                         service_name: "Ekspedisi Reguler",
                         category: "regular",

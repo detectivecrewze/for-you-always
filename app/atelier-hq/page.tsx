@@ -82,7 +82,7 @@ export default function Dashboard() {
     // Resi Edit State
     const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
     const [trackingInput, setTrackingInput] = useState("");
-    const [courierInput, setCourierInput] = useState("SiCepat");
+    const [courierInput, setCourierInput] = useState("J&T");
     const [savingTracking, setSavingTracking] = useState(false);
 
     // Biteship Shipping Dispatch & Origin Selection States
@@ -128,7 +128,7 @@ export default function Dashboard() {
         city: "",
         province: "",
         postal_code: "",
-        courier: "SiCepat",
+        courier: "J&T",
     });
     const [savingAddress, setSavingAddress] = useState(false);
 
@@ -155,13 +155,13 @@ export default function Dashboard() {
         setLiveTrackingModal({
             order_id: order.order_id,
             tracking_number: order.tracking_number,
-            courier: order.courier || "SiCepat",
+            courier: order.courier || "J&T",
             loading: true,
             data: null,
             error: null,
         });
         try {
-            const res = await fetch(`/api/shipping/track?waybill_id=${encodeURIComponent(order.tracking_number)}&courier=${encodeURIComponent(order.courier || "sicepat")}`);
+            const res = await fetch(`/api/shipping/track?waybill_id=${encodeURIComponent(order.tracking_number)}&courier=${encodeURIComponent(order.courier || "jnt")}`);
             const data = await res.json();
             if (res.ok && data.success) {
                 setLiveTrackingModal(prev => prev ? { ...prev, loading: false, data, error: null } : null);
@@ -721,7 +721,7 @@ export default function Dashboard() {
 
     const getTabTitle = () => {
         if (activeTab === "overview") return "Ringkasan Penjualan";
-        if (activeTab === "physical") return "Pesanan Fisik (Unbox)";
+        if (activeTab === "physical") return "Pesanan Fisik (The Gift Box)";
         return "Semua Pesanan Digital";
     };
 
@@ -1063,7 +1063,7 @@ export default function Dashboard() {
                                 cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
                             }}
                         >
-                            <span>Pesanan Fisik (Unbox)</span>
+                            <span>Pesanan Fisik (The Gift Box)</span>
                             {pendingCustomizationCount > 0 && (
                                 <span style={{
                                     fontSize: 10, fontWeight: 700, background: activeTab === "physical" ? "#a67c52" : "#e65100",
@@ -1221,7 +1221,7 @@ export default function Dashboard() {
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                         <div style={{ fontSize: 10, fontWeight: 700, color: "#a67c52", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                            Pesanan Fisik Unbox
+                                            Pesanan The Gift Box
                                         </div>
                                         <span style={{ fontSize: 10, color: "#a67c52", fontWeight: 700, background: "#faf7f2", padding: "1px 6px", borderRadius: 4 }}>
                                             {TIME_RANGE_LABELS[timeRangeFilter]}
@@ -1304,13 +1304,13 @@ export default function Dashboard() {
                         </div>
                     )}
 
-                    {/* ── TAB 2: PESANAN FISIK (UNBOX THE MEMORY) ── */}
+                    {/* ── TAB 2: PESANAN FISIK (THE GIFT BOX) ── */}
                     {activeTab === "physical" && (
                         <div>
                             <header style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 18 }}>
                                 <div>
                                     <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(24px, 4vw, 30px)", fontWeight: 700, color: "#1d1816", margin: "0 0 2px" }}>
-                                        Pesanan Fisik (Unbox the Memory)
+                                        Pesanan Fisik (The Gift Box)
                                     </h1>
                                     <p style={{ fontSize: 12, color: "#7a685e", margin: 0 }}>
                                         Kelola alamat pengiriman, status pengisian studio, dan nomor resi kurir.
@@ -1359,7 +1359,7 @@ export default function Dashboard() {
                                         </div>
                                         <div>
                                             <div style={{ fontSize: 11, fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                                                Inventaris Gift Box Fisik (Unbox the Memory)
+                                                Inventaris Gift Box Fisik (The Gift Box)
                                             </div>
                                             <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 2 }}>
                                                 <span style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "#1d1816" }}>
@@ -1724,12 +1724,12 @@ export default function Dashboard() {
                                                                         onChange={(e) => setCourierInput(e.target.value)}
                                                                         style={{ padding: "4px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: 10.5 }}
                                                                     >
-                                                                        <option value="SiCepat">SiCepat</option>
+                                                                        <option value="J&T">J&T Express</option>
                                                                         <option value="JNE">JNE</option>
-                                                                        <option value="J&T">J&T</option>
                                                                         <option value="Anteraja">Anteraja</option>
                                                                         <option value="Paxel">Paxel</option>
                                                                         <option value="GoSend">GoSend</option>
+                                                                        <option value="SiCepat">SiCepat</option>
                                                                     </select>
                                                                     <input
                                                                         type="text"
@@ -1822,7 +1822,7 @@ export default function Dashboard() {
                                                                                     onClick={() => {
                                                                                         setEditingOrderId(order.order_id);
                                                                                         setTrackingInput(order.tracking_number || "");
-                                                                                        setCourierInput(order.courier || "SiCepat");
+                                                                                        setCourierInput(order.courier || "J&T");
                                                                                     }}
                                                                                     style={{ background: "none", border: "none", color: "#a67c52", fontSize: 9.5, fontWeight: 700, cursor: "pointer", padding: 0 }}
                                                                                 >
@@ -1833,7 +1833,7 @@ export default function Dashboard() {
                                                                     ) : (
                                                                         <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                                                                             <div style={{ fontSize: 9.5, color: "#6e5c53" }}>
-                                                                                Kurir: <strong>{ship.courier || "SiCepat"}</strong>
+                                                                                Kurir: <strong>{ship.courier || "J&T"}</strong>
                                                                             </div>
 
                                                                             <button
@@ -1862,7 +1862,7 @@ export default function Dashboard() {
                                                                                 onClick={() => {
                                                                                     setEditingOrderId(order.order_id);
                                                                                     setTrackingInput("");
-                                                                                    setCourierInput(ship.courier || "SiCepat");
+                                                                                    setCourierInput(ship.courier || "J&T");
                                                                                 }}
                                                                                 style={{
                                                                                     background: "none",
@@ -2401,10 +2401,10 @@ export default function Dashboard() {
                                     onChange={(e) => setAddressForm({ ...addressForm, courier: e.target.value })}
                                     style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #dcd1c6", fontSize: "0.85rem" }}
                                 >
-                                    <option value="SiCepat">SiCepat (Reguler)</option>
-                                    <option value="JNE">JNE (Reguler)</option>
                                     <option value="J&T">J&T (EZ)</option>
+                                    <option value="JNE">JNE (Reguler)</option>
                                     <option value="Anteraja">Anteraja (Reguler)</option>
+                                    <option value="SiCepat">SiCepat (Reguler)</option>
                                 </select>
                             </div>
                         </div>
@@ -2439,7 +2439,7 @@ export default function Dashboard() {
             {/* ── 6. MODAL: KONFIRMASI DISPATCH & PILIH ASAL PICK-UP ── */}
             {dispatchConfirmOrder && (() => {
                 const ship = parseMeta(dispatchConfirmOrder.shipping_details);
-                const courierName = ship.courier || dispatchConfirmOrder.courier || "SiCepat Reguler";
+                const courierName = ship.courier || dispatchConfirmOrder.courier || "J&T Express Reguler";
                 const recipientName = ship.recipient_name || dispatchConfirmOrder.customer_name || "-";
                 const fullAddr = [ship.address, ship.village, ship.district, ship.city, ship.province, ship.postal_code].filter(Boolean).join(", ");
 

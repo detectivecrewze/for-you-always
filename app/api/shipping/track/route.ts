@@ -4,16 +4,16 @@ const BITESHIP_API_KEY = process.env.BITESHIP_API_KEY;
 
 function parseCourierCode(courierStr: string): string {
     const lower = (courierStr || "").toLowerCase();
-    if (lower.includes("sicepat")) return "sicepat";
-    if (lower.includes("jne")) return "jne";
     if (lower.includes("j&t") || lower.includes("jnt")) return "jnt";
+    if (lower.includes("jne")) return "jne";
     if (lower.includes("anteraja")) return "anteraja";
+    if (lower.includes("sicepat")) return "sicepat";
     if (lower.includes("ninja")) return "ninja";
     if (lower.includes("pos")) return "pos";
     if (lower.includes("tiki")) return "tiki";
     if (lower.includes("gojek") || lower.includes("gosend")) return "gosend";
     if (lower.includes("grab")) return "grab";
-    return "sicepat";
+    return "jnt";
 }
 
 function mapTrackingStatus(status: string): { label: string; desc: string; color: string } {
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const waybillId = searchParams.get("waybill_id") || searchParams.get("tracking_number");
-        const courierParam = searchParams.get("courier") || "sicepat";
+        const courierParam = searchParams.get("courier") || "jnt";
 
         if (!waybillId) {
             return NextResponse.json({ success: false, message: "Nomor resi (waybill_id) diperlukan." }, { status: 400 });

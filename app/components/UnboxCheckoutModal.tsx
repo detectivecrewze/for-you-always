@@ -54,7 +54,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
 
     useEffect(() => {
         trackInitiateCheckout(
-            [{ id: `unbox_${selectedDigital}`, title: `Unbox the Memory (${selectedDigitalObj.title})`, numericPrice: totalAmount }],
+            [{ id: `unbox_${selectedDigital}`, title: `The Gift Box (${selectedDigitalObj.title})`, numericPrice: totalAmount }],
             totalAmount
         );
     }, []);
@@ -116,7 +116,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                             id: `unbox-box`,
                             price: boxPrice,
                             quantity: 1,
-                            name: `Unbox the Memory Gift Box + ${selectedDigitalObj.title} QR`,
+                            name: `The Gift Box + ${selectedDigitalObj.title} QR`,
                         },
                         {
                             id: `shipping-rate`,
@@ -142,7 +142,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                     (window as any).ttq.track('CompletePayment', {
                         content_type: 'product',
                         content_id: `unbox_${selectedDigital}`,
-                        content_name: `Unbox the Memory - ${selectedDigitalObj.title}`,
+                        content_name: `The Gift Box - ${selectedDigitalObj.title}`,
                         value: totalAmount,
                         currency: 'IDR'
                     });
@@ -350,7 +350,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                     letterSpacing: "-0.02em",
                                     lineHeight: 1.15,
                                 }}>
-                                    Pesan <span style={{ fontStyle: "italic", color: "#a67c52" }}>Unbox the Memory</span>
+                                    Pesan <span style={{ fontStyle: "italic", color: "#a67c52" }}>The Gift Box</span>
                                 </h3>
                                 <p style={{ fontSize: 12, color: "#7a685e", margin: 0, fontFamily: "var(--font-sans)", lineHeight: 1.45 }}>
                                     Lengkapi alamat pengiriman dan pilih kado digital yang ingin kamu tautkan ke kartu QR.
@@ -566,7 +566,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                             </div>
                                             <div>
                                                 <div style={{ fontSize: 12, fontWeight: 700, color: "#1d1816" }}>
-                                                    SiCepat / J&T / JNE Reguler
+                                                    J&T Express / JNE Reguler
                                                 </div>
                                                 <div style={{ fontSize: 10, color: "#7a685e" }}>
                                                     {shippingDetails.city} • Estimasi {shippingEstimate}
@@ -664,7 +664,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                         Produk yang Dipesan
                                     </div>
                                     <div style={{ fontSize: 13, fontWeight: 700, color: "#1d1816", marginTop: 2 }}>
-                                        Unbox the Memory Gift Box
+                                        The Gift Box
                                     </div>
                                     <div style={{ fontSize: 11.5, color: "#a67c52", fontWeight: 600 }}>
                                         Tautan Kartu QR: {selectedDigitalObj.title}
@@ -691,7 +691,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                         Layanan Pengiriman
                                     </div>
                                     <div style={{ fontSize: 12, fontWeight: 600, color: "#1d1816", marginTop: 2, display: "flex", justifyContent: "space-between" }}>
-                                        <span>SiCepat / J&T / JNE (1 kg)</span>
+                                        <span>J&T Express / JNE (1 kg)</span>
                                         <span style={{ fontWeight: 700 }}>Rp {shippingCost.toLocaleString("id-ID")}</span>
                                     </div>
                                     <div style={{ fontSize: 10.5, color: "#7a685e" }}>

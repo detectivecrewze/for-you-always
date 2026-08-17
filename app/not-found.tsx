@@ -17,10 +17,10 @@ export default function NotFound() {
             href: "/catalog/voices",
         },
         {
-            title: "Unbox the Memory",
+            title: "The Gift Box",
             category: "Hybrid Physical Gift",
             desc: "Handcrafted physical gift box paired with scannable QR reveals.",
-            href: "/catalog/unbox-the-memory",
+            href: "/catalog/the-gift-box",
         },
         {
             title: "Memoria Edition",
