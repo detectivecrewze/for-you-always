@@ -544,7 +544,7 @@ export default function TheGiftBoxPage() {
                         letterSpacing: "-0.02em",
                     }}>
                         Everything Inside<br />
-                        <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Your Special Moment</span>
+                        <span style={{ fontStyle: "italic", color: "#cdab8f" }}>For Your Special One</span>
                     </h2>
                 </div>
 
