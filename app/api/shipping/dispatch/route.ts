@@ -113,11 +113,14 @@ export async function POST(req: NextRequest) {
         const originAddress = origin_details?.address || "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
         const originNote = origin_details?.note || "Paket kado hampers siap pick up di depan rumah";
         const originPostalCode = parseInt(String(origin_details?.postal_code || DEFAULT_ORIGIN_POSTAL).replace(/\D/g, ""), 10) || 16820;
-        const originLat = parseFloat(String(origin_details?.latitude || DEFAULT_ORIGIN_LAT)) || -6.3593181;
-        const originLng = parseFloat(String(origin_details?.longitude || DEFAULT_ORIGIN_LNG)) || 106.9736382;
+        
+        // Only include GPS coordinate if explicitly provided (e.g. for Loc 1 / Cileungsi) so Biteship does not override custom address with Cileungsi geocode
+        const hasCustomCoords = Boolean(origin_details?.latitude && origin_details?.longitude);
+        const originLat = hasCustomCoords ? parseFloat(String(origin_details.latitude)) : null;
+        const originLng = hasCustomCoords ? parseFloat(String(origin_details.longitude)) : null;
 
         // 1. Construct Biteship Create Order payload
-        const biteshipPayload = {
+        const biteshipPayload: Record<string, any> = {
             shipper_contact_name: "For you, Always.",
             shipper_contact_phone: originContactPhone,
             shipper_contact_email: "support@for-you-always.my.id",
@@ -127,10 +130,6 @@ export async function POST(req: NextRequest) {
             origin_address: originAddress,
             origin_note: originNote,
             origin_postal_code: originPostalCode,
-            origin_coordinate: {
-                latitude: originLat,
-                longitude: originLng,
-            },
             origin_collection_method: "pickup",
             destination_contact_name: recipientName,
             destination_contact_phone: recipientPhone,
@@ -155,6 +154,13 @@ export async function POST(req: NextRequest) {
                 },
             ],
         };
+
+        if (originLat !== null && originLng !== null && !isNaN(originLat) && !isNaN(originLng)) {
+            biteshipPayload.origin_coordinate = {
+                latitude: originLat,
+                longitude: originLng,
+            };
+        }
 
         // 2. Call Biteship Orders API
         const biteshipRes = await fetch("https://api.biteship.com/v1/orders", {

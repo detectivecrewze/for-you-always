@@ -2142,6 +2142,8 @@ export default function Dashboard() {
                     contact_phone: "081381543981",
                     address: "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820",
                     postal_code: "16820",
+                    latitude: "-6.3593181",
+                    longitude: "106.9736382",
                     note: "Paket kado hampers siap pick up di depan rumah",
                 };
 

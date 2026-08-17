@@ -17,9 +17,110 @@ function SpringAnimatedSection({ children }: { children: React.ReactNode; delay?
     return <>{children}</>;
 }
 
+// 3-GRID SHOWCASE CARD WITH CLEAN HOVER & MOBILE TAP TRANSITION
+function ShowcaseGridCard({
+    img,
+    hoverImg,
+    title,
+    desc,
+    objectPosition = "center 48%"
+}: {
+    img: string;
+    hoverImg?: string;
+    title: string;
+    desc: string;
+    objectPosition?: string;
+}) {
+    const [activeIdx, setActiveIdx] = useState(0);
+
+    const isShowingSecond = hoverImg && activeIdx === 1;
+
+    return (
+        <div
+            onMouseEnter={() => {
+                if (hoverImg) setActiveIdx(1);
+            }}
+            onMouseLeave={() => {
+                if (hoverImg) setActiveIdx(0);
+            }}
+            onClick={() => {
+                if (hoverImg) setActiveIdx(prev => prev === 0 ? 1 : 0);
+            }}
+            style={{
+                backgroundColor: "#ffffff",
+                border: "1px solid rgba(205,171,143,0.25)",
+                borderRadius: "24px",
+                overflow: "hidden",
+                boxShadow: isShowingSecond ? "0 18px 40px -12px rgba(56,42,36,0.12)" : "0 10px 30px -10px rgba(56,42,36,0.06)",
+                transform: isShowingSecond ? "translateY(-4px)" : "translateY(0)",
+                transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                cursor: hoverImg ? "pointer" : "default"
+            }}
+        >
+            <div style={{ height: "230px", overflow: "hidden", position: "relative", backgroundColor: "#1d1816" }}>
+                <Image
+                    src={isShowingSecond && hoverImg ? hoverImg : img}
+                    alt={title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 360px"
+                    style={{
+                        objectFit: "cover",
+                        objectPosition: isShowingSecond && hoverImg ? "center 48%" : objectPosition,
+                        transform: isShowingSecond ? "scale(1.04)" : "scale(1)",
+                        transition: "transform 0.5s ease, opacity 0.3s ease"
+                    }}
+                />
+
+                {/* NUMBER & DOT INDICATOR FOR MULTI-PHOTO CARDS (MOBILE & DESKTOP) */}
+                {hoverImg && (
+                    <div style={{
+                        position: "absolute",
+                        bottom: "12px",
+                        right: "12px",
+                        backgroundColor: "rgba(29, 24, 22, 0.78)",
+                        backdropFilter: "blur(8px)",
+                        color: "#faf7f2",
+                        fontSize: "0.68rem",
+                        fontWeight: 700,
+                        padding: "3px 9px",
+                        borderRadius: "20px",
+                        letterSpacing: "0.06em",
+                        border: "1px solid rgba(205, 171, 143, 0.3)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        pointerEvents: "none",
+                        zIndex: 2
+                    }}>
+                        <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
+                            <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: activeIdx === 0 ? "#cdab8f" : "rgba(250,247,242,0.35)", transition: "all 0.3s ease" }} />
+                            <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: activeIdx === 1 ? "#cdab8f" : "rgba(250,247,242,0.35)", transition: "all 0.3s ease" }} />
+                        </div>
+                        <span>{activeIdx + 1} / 2</span>
+                    </div>
+                )}
+            </div>
+            <div style={{ padding: "24px" }}>
+                <h3 style={{
+                    fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                    fontSize: "1.45rem",
+                    fontWeight: 600,
+                    color: "#382a24",
+                    marginBottom: "8px"
+                }}>
+                    {title}
+                </h3>
+                <p style={{ fontSize: "0.88rem", color: "#6e5c53", lineHeight: 1.6, margin: 0 }}>
+                    {desc}
+                </p>
+            </div>
+        </div>
+    );
+}
+
 export default function UnboxTheMemoryPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("letter");
-    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [stockData, setStockData] = useState<{
         stock: number;
@@ -134,41 +235,31 @@ export default function UnboxTheMemoryPage() {
                 paddingLeft: "24px",
                 paddingRight: "24px"
             }}>
-                {/* BREADCRUMB BACK BUTTON */}
-                <div style={{ marginBottom: "28px" }}>
+                {/* MINIMALIST BREADCRUMB */}
+                <div style={{ marginBottom: "24px" }}>
                     <Link
                         href="/catalog"
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
-                            gap: "8px",
-                            color: "#6e5c53",
-                            fontSize: "0.82rem",
-                            fontWeight: 600,
+                            gap: "6px",
+                            color: "#8a7569",
+                            fontSize: "0.8rem",
+                            fontWeight: 500,
                             textDecoration: "none",
-                            padding: "6px 14px",
-                            borderRadius: "999px",
-                            backgroundColor: "rgba(255,255,255,0.65)",
-                            border: "1px solid rgba(205,171,143,0.25)",
-                            backdropFilter: "blur(8px)",
-                            transition: "all 0.2s ease"
+                            letterSpacing: "0.02em",
+                            transition: "color 0.2s ease"
                         }}
                         onMouseEnter={e => {
-                            e.currentTarget.style.color = "#a67c52";
-                            e.currentTarget.style.backgroundColor = "#ffffff";
-                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.5)";
+                            e.currentTarget.style.color = "#382a24";
                         }}
                         onMouseLeave={e => {
-                            e.currentTarget.style.color = "#6e5c53";
-                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.65)";
-                            e.currentTarget.style.borderColor = "rgba(205,171,143,0.25)";
+                            e.currentTarget.style.color = "#8a7569";
                         }}
                     >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                        <span>Kembali ke Katalog Produk</span>
+                        <span>Catalog</span>
+                        <span style={{ opacity: 0.4 }}>/</span>
+                        <span style={{ color: "#382a24", fontWeight: 600 }}>Unbox the Memory</span>
                     </Link>
                 </div>
 
@@ -234,25 +325,26 @@ export default function UnboxTheMemoryPage() {
                         {/* H1 HEADLINE */}
                         <h1 style={{
                             fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
-                            fontSize: "clamp(2.2rem, 4.2vw, 3.6rem)",
+                            fontSize: "clamp(2.4rem, 4.4vw, 3.8rem)",
                             fontWeight: 400,
-                            lineHeight: 1.12,
+                            lineHeight: 1.08,
                             color: "#382a24",
                             marginBottom: "16px",
-                            letterSpacing: "-0.025em",
+                            letterSpacing: "-0.03em",
                             textAlign: "left"
                         }}>
-                            A gift made to be <span style={{ fontStyle: "italic", color: "#cdab8f" }}>remembered.</span>
+                            Made To Be<br />
+                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Remembered.</span>
                         </h1>
 
                         {/* DESCRIPTION PARAGRAPH */}
                         <p style={{
-                            fontSize: "clamp(0.92rem, 1.6vw, 1.04rem)",
+                            fontSize: "clamp(0.92rem, 1.5vw, 1.02rem)",
                             color: "#6e5c53",
                             lineHeight: 1.65,
                             marginBottom: "24px",
                             fontWeight: 400,
-                            maxWidth: "480px",
+                            maxWidth: "460px",
                             textAlign: "left"
                         }}>
                             Gift box fisik dengan kejutan digital personal, dibuat untuk menyampaikan sesuatu yang sulit diucapkan langsung.
@@ -306,7 +398,7 @@ export default function UnboxTheMemoryPage() {
                         </div>
 
                         {/* CTA ACTION CONTAINER */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "380px", marginBottom: "28px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "340px", marginBottom: "26px" }}>
                             {stockData.stock > 0 ? (
                                 <Link
                                     href="/catalog/unbox-the-memory/checkout"
@@ -318,11 +410,11 @@ export default function UnboxTheMemoryPage() {
                                         backgroundColor: "#382a24",
                                         color: "#faf7f2",
                                         fontWeight: 700,
-                                        fontSize: "0.94rem",
-                                        padding: "15px 28px",
-                                        borderRadius: "14px",
+                                        fontSize: "0.92rem",
+                                        padding: "13px 24px",
+                                        borderRadius: "12px",
                                         textDecoration: "none",
-                                        boxShadow: "0 10px 25px -6px rgba(56,42,36,0.25)",
+                                        boxShadow: "0 8px 20px -6px rgba(56,42,36,0.22)",
                                         transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
@@ -335,7 +427,7 @@ export default function UnboxTheMemoryPage() {
                                         e.currentTarget.style.backgroundColor = "#382a24";
                                     }}
                                 >
-                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                         <line x1="3" y1="6" x2="21" y2="6"></line>
                                         <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -355,11 +447,11 @@ export default function UnboxTheMemoryPage() {
                                         backgroundColor: "#7a685e",
                                         color: "#faf7f2",
                                         fontWeight: 700,
-                                        fontSize: "0.94rem",
-                                        padding: "15px 28px",
-                                        borderRadius: "14px",
+                                        fontSize: "0.92rem",
+                                        padding: "13px 24px",
+                                        borderRadius: "12px",
                                         textDecoration: "none",
-                                        boxShadow: "0 10px 25px -6px rgba(56,42,36,0.25)",
+                                        boxShadow: "0 8px 20px -6px rgba(56,42,36,0.22)",
                                         transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
@@ -376,10 +468,10 @@ export default function UnboxTheMemoryPage() {
                                     justifyContent: "center",
                                     gap: "6px",
                                     color: "#8a7569",
-                                    fontSize: "0.84rem",
+                                    fontSize: "0.8rem",
                                     fontWeight: 500,
                                     textDecoration: "none",
-                                    padding: "6px 8px",
+                                    padding: "4px 8px",
                                     transition: "color 0.2s ease",
                                     textAlign: "center"
                                 }}
@@ -390,36 +482,29 @@ export default function UnboxTheMemoryPage() {
                                     e.currentTarget.style.color = "#8a7569";
                                 }}
                             >
-                                <span>Atau coba format kado digital instan</span>
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
+                                <span>Prefer a digital gift? →</span>
                             </Link>
                         </div>
 
-                        {/* TRUST BULLETS ROW */}
+                        {/* REASSURANCE BULLETS ROW (SUBTLE & CLEAN) */}
                         <div style={{
                             display: "flex",
                             flexWrap: "wrap",
-                            gap: "12px 20px",
-                            paddingTop: "20px",
-                            borderTop: "1px solid rgba(205,171,143,0.2)",
+                            alignItems: "center",
+                            gap: "8px 14px",
+                            paddingTop: "18px",
+                            borderTop: "1px solid rgba(205,171,143,0.18)",
                             width: "100%",
-                            maxWidth: "480px"
+                            maxWidth: "460px",
+                            fontSize: "0.78rem",
+                            color: "#8a7569",
+                            fontWeight: 500
                         }}>
-                            {[
-                                { title: "Box Hampers Eksklusif" },
-                                { title: "Kartu QR Code Custom" },
-                                { title: "Garansi Safepack" }
-                            ].map((item, idx) => (
-                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#7a685e", fontWeight: 500 }}>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <span>{item.title}</span>
-                                </div>
-                            ))}
+                            <span>Box Hampers Eksklusif</span>
+                            <span style={{ opacity: 0.35 }}>·</span>
+                            <span>Kartu QR Code Custom</span>
+                            <span style={{ opacity: 0.35 }}>·</span>
+                            <span>Garansi Safepack</span>
                         </div>
                     </div>
                 </div>
@@ -461,82 +546,23 @@ export default function UnboxTheMemoryPage() {
                     gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
                     gap: "24px"
                 }}>
-                    {[
-                        {
-                            img: "https://cdn.for-you-always.my.id/1786911999000-phln1y.jpg",
-                            tag: "LUXURY PRESENTATION",
-                            title: "Luxury Gift Box",
-                            desc: "Hardbox eksklusif dengan balutan pita satin elegan, dilengkapi kartu ucapan personal untuk seseorang yang spesial."
-                        },
-                        {
-                            img: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
-                            tag: "CURATED KEEPSAKES",
-                            title: "Curated Keepsakes",
-                            desc: "Koleksi kecil penuh perhatian, mulai dari teddy bear mini, dried flowers, hingga sweet treats pilihan yang melengkapi momen spesialmu."
-                        },
-                        {
-                            img: "https://cdn.for-you-always.my.id/1786911999752-m72b4i.png",
-                            tag: "DIGITAL MEMORY CARD",
-                            title: "Digital Memory Card",
-                            desc: "Kartu QR personal berbentuk hati yang membuka sebuah digital gift berisi pesan, kenangan, dan momen spesial yang hanya untuknya."
-                        }
-                    ].map((card, idx) => (
-                        <SpringAnimatedSection key={idx} delay={idx * 100}>
-                            <div style={{
-                                backgroundColor: "#ffffff",
-                                border: "1px solid rgba(205,171,143,0.25)",
-                                borderRadius: "24px",
-                                overflow: "hidden",
-                                boxShadow: "0 10px 30px -10px rgba(56,42,36,0.06)",
-                                transition: "all 0.3s ease"
-                            }}>
-                                <div style={{ height: "230px", overflow: "hidden", position: "relative" }}>
-                                    <Image
-                                        src={card.img}
-                                        alt={card.title}
-                                        width={400}
-                                        height={300}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                            objectPosition: idx === 2 ? "center center" : "center 48%",
-                                        }}
-                                    />
-                                    <span style={{
-                                        position: "absolute",
-                                        top: "14px",
-                                        left: "14px",
-                                        backgroundColor: "rgba(29,24,22,0.8)",
-                                        backdropFilter: "blur(10px)",
-                                        color: "#cdab8f",
-                                        fontSize: "0.72rem",
-                                        fontWeight: 700,
-                                        padding: "4px 12px",
-                                        borderRadius: "50px",
-                                        letterSpacing: "0.1em",
-                                        textTransform: "uppercase"
-                                    }}>
-                                        {card.tag}
-                                    </span>
-                                </div>
-                                <div style={{ padding: "24px" }}>
-                                    <h3 style={{
-                                        fontFamily: "var(--font-display, Cormorant Garamond, serif)",
-                                        fontSize: "1.45rem",
-                                        fontWeight: 600,
-                                        color: "#382a24",
-                                        marginBottom: "8px"
-                                    }}>
-                                        {card.title}
-                                    </h3>
-                                    <p style={{ fontSize: "0.88rem", color: "#6e5c53", lineHeight: 1.6, margin: 0 }}>
-                                        {card.desc}
-                                    </p>
-                                </div>
-                            </div>
-                        </SpringAnimatedSection>
-                    ))}
+                    <ShowcaseGridCard
+                        img="/unbox-the-memory/IMG_2214_hd.webp"
+                        hoverImg="https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png"
+                        title="Luxury Gift Box"
+                        desc="Hardbox eksklusif dengan balutan pita satin elegan, dilengkapi kartu ucapan personal untuk seseorang yang spesial."
+                    />
+                    <ShowcaseGridCard
+                        img="/unbox-the-memory/IMG_2217_hd.webp"
+                        title="Curated Keepsakes"
+                        desc="Koleksi kecil penuh perhatian, mulai dari teddy bear mini, dried flowers, hingga sweet treats pilihan yang melengkapi momen spesialmu."
+                    />
+                    <ShowcaseGridCard
+                        img="/unbox-the-memory/IMG_2215_hd.webp"
+                        title="Digital Memory Card"
+                        desc="Kartu QR personal berbentuk hati yang membuka sebuah digital gift berisi pesan, kenangan, dan momen spesial yang hanya untuknya."
+                        objectPosition="center center"
+                    />
                 </div>
             </section>
 
