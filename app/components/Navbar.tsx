@@ -81,7 +81,7 @@ export default function Navbar() {
                 }}>
                     {/* Logo */}
                     <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0, position: "relative", zIndex: 10 }}>
-                        <div style={{ position: "relative", width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)" }}>
+                        <div style={{ position: "relative", width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)", flexShrink: 0 }}>
                             <Image src="/logo.png" alt="Logo" fill unoptimized={true} style={{ objectFit: "cover" }} sizes="26px" />
                         </div>
                         <span style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "#382a24", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
@@ -95,7 +95,7 @@ export default function Navbar() {
                             const isActive = pathname === l.href;
                             return (
                                 <Link key={l.href} href={l.href} style={{
-                                    fontFamily: "var(--font-sans)", fontSize: 10, fontWeight: 700,
+                                    fontFamily: "var(--font-sans)", fontSize: 10.5, fontWeight: 700,
                                     letterSpacing: "0.1em", textTransform: "uppercase",
                                     color: isActive ? "#a67c52" : "#6e5c53", textDecoration: "none",
                                     transition: "color 0.2s ease",
@@ -109,48 +109,85 @@ export default function Navbar() {
                         })}
                     </div>
 
-                    {/* CTA + Hamburger */}
+                    {/* Action Buttons: Unified Minimalist Cluster */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                        {/* Quick Katalog Link (Mobile) */}
+                        <Link
+                            href="/catalog"
+                            className="nav-catalog-pill"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                padding: "4px 12px",
+                                height: 28,
+                                borderRadius: 999,
+                                border: "1px solid rgba(166,124,82,0.38)",
+                                background: "rgba(205,171,143,0.18)",
+                                color: "#a67c52",
+                                fontFamily: "var(--font-sans)",
+                                fontSize: 11,
+                                fontWeight: 600,
+                                letterSpacing: "0.02em",
+                                textDecoration: "none",
+                                transition: "all 0.2s ease",
+                                whiteSpace: "nowrap",
+                                flexShrink: 0
+                            }}
+                        >
+                            Katalog
+                        </Link>
+
                         {/* Cart Icon Button */}
                         <button
                             onClick={openDrawer}
                             aria-label="Keranjang"
                             style={{
                                 position: "relative",
-                                background: cartCount > 0 ? "rgba(205,171,143,0.15)" : "transparent",
-                                border: "1px solid rgba(205,171,143,0.25)",
-                                borderRadius: 999,
-                                width: 36, height: 36,
-                                display: "flex", alignItems: "center", justifyContent: "center",
+                                background: cartCount > 0 ? "rgba(205,171,143,0.18)" : "rgba(205,171,143,0.08)",
+                                border: "1px solid rgba(205,171,143,0.28)",
+                                borderRadius: "50%",
+                                width: 32,
+                                height: 32,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                                 cursor: "pointer",
-                                color: cartCount > 0 ? "#a67c52" : "#6e5c53",
+                                color: cartCount > 0 ? "#a67c52" : "#382a24",
                                 transition: "all 0.2s ease",
+                                flexShrink: 0,
                             }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.2)"; (e.currentTarget as HTMLElement).style.color = "#a67c52"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = cartCount > 0 ? "rgba(205,171,143,0.15)" : "transparent"; (e.currentTarget as HTMLElement).style.color = cartCount > 0 ? "#a67c52" : "#6e5c53"; }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.22)"; (e.currentTarget as HTMLElement).style.color = "#a67c52"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = cartCount > 0 ? "rgba(205,171,143,0.18)" : "rgba(205,171,143,0.08)"; (e.currentTarget as HTMLElement).style.color = cartCount > 0 ? "#a67c52" : "#382a24"; }}
                         >
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.9}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                             {cartCount > 0 && (
                                 <span style={{
-                                    position: "absolute", top: -4, right: -4,
+                                    position: "absolute",
+                                    top: -3,
+                                    right: -3,
                                     background: "#c9184a",
                                     color: "#fff",
-                                    fontSize: 9, fontWeight: 800,
-                                    width: 16, height: 16,
+                                    fontSize: 8.5,
+                                    fontWeight: 800,
+                                    width: 15,
+                                    height: 15,
                                     borderRadius: "50%",
-                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                     border: "2px solid #faf7f2",
                                     fontFamily: "var(--font-sans)",
                                     lineHeight: 1,
-                                    letterSpacing: 0,
                                 }}>
                                     {cartCount > 9 ? "9+" : cartCount}
                                 </span>
                             )}
                         </button>
 
+                        {/* Desktop Order Button */}
                         <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20order." target="_blank" rel="noopener noreferrer"
                             onClick={() => trackContact("WhatsApp Navbar")}
                             style={{
@@ -165,22 +202,31 @@ export default function Navbar() {
                         >
                             Order
                         </a>
-                        {/* Hamburger */}
+
+                        {/* Hamburger Button */}
                         <button
                             onClick={() => setMobileOpen(v => !v)}
                             className="nav-hamburger"
                             style={{
-                                background: "rgba(205,171,143,0.12)", border: "1px solid rgba(205,171,143,0.25)",
-                                borderRadius: 999, cursor: "pointer",
-                                width: 34, height: 34,
-                                display: "flex", flexDirection: "column", gap: 4, alignItems: "center", justifyContent: "center",
+                                background: "rgba(205,171,143,0.08)",
+                                border: "1px solid rgba(205,171,143,0.28)",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                                width: 32,
+                                height: 32,
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 3.5,
+                                alignItems: "center",
+                                justifyContent: "center",
                                 transition: "background 0.2s ease",
+                                flexShrink: 0,
                             }}
                             aria-label="Toggle menu"
                         >
-                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(5.5px) rotate(45deg)" : "none" }} />
-                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
-                            <span style={{ display: "block", width: 16, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(-5.5px) rotate(-45deg)" : "none" }} />
+                            <span style={{ display: "block", width: 14, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(5px) rotate(45deg)" : "none" }} />
+                            <span style={{ display: "block", width: 14, height: 1.5, background: "#382a24", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
+                            <span style={{ display: "block", width: 14, height: 1.5, background: "#382a24", transition: "all 0.3s ease", transform: mobileOpen ? "translateY(-5px) rotate(-45deg)" : "none" }} />
                         </button>
                     </div>
                 </nav>
@@ -235,9 +281,11 @@ export default function Navbar() {
                 @media (max-width: 768px) {
                     .nav-desktop-links { display: none !important; }
                     .nav-cta { display: none !important; }
+                    .nav-catalog-pill { display: inline-flex !important; }
                     .nav-hamburger { display: flex !important; }
                 }
                 @media (min-width: 769px) {
+                    .nav-catalog-pill { display: none !important; }
                     .nav-hamburger { display: none !important; }
                     .nav-mobile-dropdown { display: none !important; }
                 }
