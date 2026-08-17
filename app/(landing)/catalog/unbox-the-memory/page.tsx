@@ -43,10 +43,34 @@ export default function UnboxTheMemoryPage() {
             .catch(() => {});
     }, []);
 
+    const tabContainerRef = useRef<HTMLDivElement>(null);
+    const experienceKeys: Array<"memoria" | "letter" | "voices"> = ["memoria", "letter", "voices"];
+
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
         if (key === selectedDigitalExperience) return;
         setSelectedDigitalExperience(key);
     };
+
+    const handlePrevTab = () => {
+        const currentIndex = experienceKeys.indexOf(selectedDigitalExperience);
+        const nextIndex = (currentIndex - 1 + experienceKeys.length) % experienceKeys.length;
+        setSelectedDigitalExperience(experienceKeys[nextIndex]);
+    };
+
+    const handleNextTab = () => {
+        const currentIndex = experienceKeys.indexOf(selectedDigitalExperience);
+        const nextIndex = (currentIndex + 1) % experienceKeys.length;
+        setSelectedDigitalExperience(experienceKeys[nextIndex]);
+    };
+
+    useEffect(() => {
+        if (tabContainerRef.current) {
+            const activeBtn = tabContainerRef.current.querySelector(`[data-tab-key="${selectedDigitalExperience}"]`) as HTMLElement;
+            if (activeBtn) {
+                activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+            }
+        }
+    }, [selectedDigitalExperience]);
 
     const digitalExperiences = {
         memoria: {
@@ -635,44 +659,118 @@ export default function UnboxTheMemoryPage() {
                 </div>
 
                 {/* EXPERIENCE TABS CONTAINER WITH LEFT & RIGHT NAVIGATION ARROWS */}
-                {/* 3 DIGITAL EXPERIENCE TABS (CENTERED) */}
                 <div style={{
                     display: "flex",
-                    justifyContent: "center",
                     alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "12px",
-                    marginBottom: "36px",
+                    justifyContent: "center",
+                    gap: "8px",
+                    width: "100%",
+                    maxWidth: "760px",
+                    margin: "0 auto 32px",
+                    padding: "0 4px",
+                    boxSizing: "border-box",
                 }}>
-                    {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
-                        const exp = digitalExperiences[key];
-                        const isSelected = selectedDigitalExperience === key;
-                        return (
-                            <button
-                                key={key}
-                                onClick={() => handleTabChange(key)}
-                                style={{
-                                    padding: "12px 28px",
-                                    borderRadius: "999px",
-                                    border: isSelected ? `2px solid ${exp.color}` : "1.2px solid rgba(205,171,143,0.3)",
-                                    backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.6)",
-                                    color: isSelected ? exp.color : "#5a483e",
-                                    fontWeight: isSelected ? 700 : 600,
-                                    fontSize: "0.95rem",
-                                    cursor: "pointer",
-                                    whiteSpace: "nowrap",
-                                    boxShadow: isSelected ? "0 8px 24px rgba(0,0,0,0.08)" : "none",
-                                    transform: isSelected ? "scale(1.04)" : "scale(1)",
-                                    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
-                                }}
-                            >
-                                <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                                    <span>{exp.title}</span>
-                                    <span style={{ fontSize: "0.78rem", opacity: isSelected ? 1 : 0.7, fontWeight: 700 }}>• {exp.price}</span>
-                                </span>
-                            </button>
-                        );
-                    })}
+                    {/* Left Navigation Arrow */}
+                    <button
+                        type="button"
+                        onClick={handlePrevTab}
+                        aria-label="Pilihan Format Sebelumnya"
+                        style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            backgroundColor: "#ffffff",
+                            border: "1.2px solid rgba(205,171,143,0.35)",
+                            color: "#382a24",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                            boxShadow: "0 3px 10px rgba(56,42,36,0.06)",
+                            transition: "all 0.2s ease",
+                        }}
+                    >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    {/* 3 DIGITAL EXPERIENCE TABS (HORIZONTAL ROW / SIDE BY SIDE) */}
+                    <div 
+                        ref={tabContainerRef}
+                        className="no-scrollbar"
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            overflowX: "auto",
+                            WebkitOverflowScrolling: "touch",
+                            scrollbarWidth: "none",
+                            padding: "6px 2px",
+                            scrollBehavior: "smooth",
+                            flex: "1 1 auto",
+                            justifyContent: "flex-start",
+                        }}
+                    >
+                        {(Object.keys(digitalExperiences) as Array<keyof typeof digitalExperiences>).map((key) => {
+                            const exp = digitalExperiences[key];
+                            const isSelected = selectedDigitalExperience === key;
+                            return (
+                                <button
+                                    key={key}
+                                    data-tab-key={key}
+                                    onClick={() => handleTabChange(key)}
+                                    style={{
+                                        padding: "9px clamp(12px, 2.5vw, 20px)",
+                                        borderRadius: "999px",
+                                        border: isSelected ? `2px solid ${exp.color}` : "1.2px solid rgba(205,171,143,0.35)",
+                                        backgroundColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.65)",
+                                        color: isSelected ? exp.color : "#5a483e",
+                                        fontWeight: isSelected ? 700 : 600,
+                                        fontSize: "clamp(0.8rem, 2vw, 0.9rem)",
+                                        cursor: "pointer",
+                                        whiteSpace: "nowrap",
+                                        flexShrink: 0,
+                                        boxShadow: isSelected ? "0 4px 16px rgba(0,0,0,0.07)" : "none",
+                                        transform: isSelected ? "scale(1.02)" : "scale(1)",
+                                        transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+                                    }}
+                                >
+                                    <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                        <span>{exp.title}</span>
+                                        <span style={{ fontSize: "0.75rem", opacity: isSelected ? 1 : 0.75, fontWeight: 700 }}>• {exp.price}</span>
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Right Navigation Arrow */}
+                    <button
+                        type="button"
+                        onClick={handleNextTab}
+                        aria-label="Pilihan Format Berikutnya"
+                        style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            backgroundColor: "#ffffff",
+                            border: "1.2px solid rgba(205,171,143,0.35)",
+                            color: "#382a24",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                            boxShadow: "0 3px 10px rgba(56,42,36,0.06)",
+                            transition: "all 0.2s ease",
+                        }}
+                    >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                 </div>
 
                 {/* DISPLAY SELECTED PREVIEW CARD */}
