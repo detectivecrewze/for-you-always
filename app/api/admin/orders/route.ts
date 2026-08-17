@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        sql: "SELECT * FROM orders ORDER BY created_at DESC LIMIT 100",
+                        sql: "SELECT * FROM orders ORDER BY created_at DESC LIMIT 5000",
                     }),
                 }
             );

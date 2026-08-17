@@ -51,6 +51,7 @@ export default function Dashboard() {
 
     // Dashboard States
     const [activeTab, setActiveTab] = useState<"overview" | "physical" | "digital">("overview");
+    const [timeRangeFilter, setTimeRangeFilter] = useState<"today" | "yesterday" | "7days" | "30days" | "all">("all");
     const [orders, setOrders] = useState<OrderItem[]>([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -352,6 +353,65 @@ export default function Dashboard() {
         }
     };
 
+    const TIME_RANGE_LABELS: Record<string, string> = {
+        today: "Hari Ini",
+        yesterday: "Kemarin",
+        "7days": "7 Hari Terakhir",
+        "30days": "30 Hari Terakhir",
+        all: "Semua Waktu",
+    };
+
+    const isWithinRange = (dateStr: string | undefined, range: "today" | "yesterday" | "7days" | "30days" | "all"): boolean => {
+        if (range === "all") return true;
+        if (!dateStr) return false;
+
+        try {
+            const cleanStr = dateStr.includes("T") || dateStr.endsWith("Z") ? dateStr : dateStr.replace(" ", "T") + "Z";
+            const orderDate = new Date(cleanStr);
+            if (isNaN(orderDate.getTime())) return true;
+
+            const now = new Date();
+            const nowWIB = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+            const orderWIB = new Date(orderDate.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+
+            if (range === "today") {
+                return (
+                    orderWIB.getFullYear() === nowWIB.getFullYear() &&
+                    orderWIB.getMonth() === nowWIB.getMonth() &&
+                    orderWIB.getDate() === nowWIB.getDate()
+                );
+            }
+
+            if (range === "yesterday") {
+                const yesterdayWIB = new Date(nowWIB);
+                yesterdayWIB.setDate(yesterdayWIB.getDate() - 1);
+                return (
+                    orderWIB.getFullYear() === yesterdayWIB.getFullYear() &&
+                    orderWIB.getMonth() === yesterdayWIB.getMonth() &&
+                    orderWIB.getDate() === yesterdayWIB.getDate()
+                );
+            }
+
+            if (range === "7days") {
+                const sevenDaysAgo = new Date(nowWIB);
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                sevenDaysAgo.setHours(0, 0, 0, 0);
+                return orderWIB >= sevenDaysAgo;
+            }
+
+            if (range === "30days") {
+                const thirtyDaysAgo = new Date(nowWIB);
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                thirtyDaysAgo.setHours(0, 0, 0, 0);
+                return orderWIB >= thirtyDaysAgo;
+            }
+
+            return true;
+        } catch {
+            return true;
+        }
+    };
+
     const getCustomer = (order: any) => {
         const meta = parseMeta(order.customer_details);
         return {
@@ -576,13 +636,22 @@ export default function Dashboard() {
         return !pType.startsWith("unbox") && !o.order_id?.startsWith("ORDER-UNBOX") && !o.shipping_details;
     });
 
-    // Metrics
-    const totalRevenue = orders
+    // Filtered by time range for Overview Tab
+    const overviewOrders = orders.filter(o => isWithinRange(o.created_at, timeRangeFilter));
+
+    // Metrics (dynamically filtered for Overview tab)
+    const totalRevenue = overviewOrders
         .filter(o => o.status === "paid" || o.status === "success")
         .reduce((acc, curr) => acc + (curr.gross_amount || 0), 0);
 
-    const paidOrdersCount = orders.filter(o => o.status === "paid" || o.status === "success").length;
-    const pendingOrdersCount = orders.filter(o => o.status === "pending").length;
+    const paidOrdersCount = overviewOrders.filter(o => o.status === "paid" || o.status === "success").length;
+    const pendingOrdersCount = overviewOrders.filter(o => o.status === "pending").length;
+
+    const overviewPhysicalOrders = overviewOrders.filter(o => {
+        const pType = getProductType(o);
+        return pType.startsWith("unbox") || o.order_id?.startsWith("ORDER-UNBOX") || Boolean(o.shipping_details);
+    });
+    const overviewPhysicalCount = overviewPhysicalOrders.length;
 
     // Physical metrics (calculated from PAID orders)
     const paidPhysicalOrders = physicalOrders.filter(o => o.status === "paid" || o.status === "success");
@@ -1036,7 +1105,7 @@ export default function Dashboard() {
                     {/* ── TAB 1: OVERVIEW ── */}
                     {activeTab === "overview" && (
                         <div>
-                            <header style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+                            <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 14 }}>
                                 <div>
                                     <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(24px, 4vw, 30px)", fontWeight: 700, color: "#1d1816", margin: "0 0 2px" }}>
                                         Ringkasan Penjualan
@@ -1045,48 +1114,112 @@ export default function Dashboard() {
                                         Performa transaksi dan status fulfillment toko For You, Always.
                                     </p>
                                 </div>
-                                <button
-                                    onClick={handleRefreshAll}
-                                    style={{
-                                        padding: "8px 14px", borderRadius: 8, border: "1px solid #dcd1c6",
-                                        background: "#ffffff", color: "#1d1816", fontSize: 11.5, fontWeight: 700, cursor: "pointer",
-                                    }}
-                                >
-                                    Perbarui
-                                </button>
+
+                                {/* Time Filter Tabs & Refresh Button */}
+                                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                                    <div style={{
+                                        display: "inline-flex",
+                                        background: "#f0e9e2",
+                                        padding: "3px",
+                                        borderRadius: "10px",
+                                        border: "1px solid #e0d6cd"
+                                    }}>
+                                        {[
+                                            { id: "today", label: "Hari Ini" },
+                                            { id: "yesterday", label: "Kemarin" },
+                                            { id: "7days", label: "7 Hari" },
+                                            { id: "30days", label: "30 Hari" },
+                                            { id: "all", label: "Semua Waktu" },
+                                        ].map((tab) => {
+                                            const isActive = timeRangeFilter === tab.id;
+                                            return (
+                                                <button
+                                                    key={tab.id}
+                                                    type="button"
+                                                    onClick={() => setTimeRangeFilter(tab.id as any)}
+                                                    style={{
+                                                        padding: "6px 12px",
+                                                        borderRadius: "8px",
+                                                        border: "none",
+                                                        background: isActive ? "#1d1816" : "transparent",
+                                                        color: isActive ? "#faf7f2" : "#6e5c53",
+                                                        fontSize: "0.78rem",
+                                                        fontWeight: isActive ? 700 : 600,
+                                                        cursor: "pointer",
+                                                        transition: "all 0.18s ease",
+                                                        whiteSpace: "nowrap"
+                                                    }}
+                                                >
+                                                    {tab.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <button
+                                        onClick={handleRefreshAll}
+                                        style={{
+                                            padding: "8px 14px", borderRadius: 8, border: "1px solid #dcd1c6",
+                                            background: "#ffffff", color: "#1d1816", fontSize: 11.5, fontWeight: 700, cursor: "pointer",
+                                            display: "inline-flex", alignItems: "center", gap: 5
+                                        }}
+                                    >
+                                        <span>↻</span> Perbarui
+                                    </button>
+                                </div>
                             </header>
 
                             {/* Metrics Cards */}
                             <div className="dash-stats-grid">
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
-                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                        Total Omzet (Paid)
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div style={{ fontSize: 10, fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                            Total Omzet (Paid)
+                                        </div>
+                                        <span style={{ fontSize: 10, color: "#a67c52", fontWeight: 700, background: "#faf7f2", padding: "1px 6px", borderRadius: 4 }}>
+                                            {TIME_RANGE_LABELS[timeRangeFilter]}
+                                        </span>
                                     </div>
-                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#1d1816", marginTop: 2 }}>
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#1d1816", marginTop: 4 }}>
                                         Rp {totalRevenue.toLocaleString("id-ID")}
                                     </div>
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
-                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#2e7d32", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                        Pesanan Berhasil
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div style={{ fontSize: 10, fontWeight: 700, color: "#2e7d32", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                            Pesanan Berhasil
+                                        </div>
+                                        <span style={{ fontSize: 10, color: "#2e7d32", fontWeight: 700, background: "#e8f5e9", padding: "1px 6px", borderRadius: 4 }}>
+                                            {TIME_RANGE_LABELS[timeRangeFilter]}
+                                        </span>
                                     </div>
-                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#2e7d32", marginTop: 2 }}>
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#2e7d32", marginTop: 4 }}>
                                         {paidOrdersCount} Transaksi
                                     </div>
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
-                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#a67c52", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                        Pesanan Fisik Unbox
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div style={{ fontSize: 10, fontWeight: 700, color: "#a67c52", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                            Pesanan Fisik Unbox
+                                        </div>
+                                        <span style={{ fontSize: 10, color: "#a67c52", fontWeight: 700, background: "#faf7f2", padding: "1px 6px", borderRadius: 4 }}>
+                                            {TIME_RANGE_LABELS[timeRangeFilter]}
+                                        </span>
                                     </div>
-                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#a67c52", marginTop: 2 }}>
-                                        {physicalOrders.length} Box
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#a67c52", marginTop: 4 }}>
+                                        {overviewPhysicalCount} Box
                                     </div>
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
-                                    <div style={{ fontSize: 10, fontWeight: 700, color: "#e65100", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                        Menunggu Bayar
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div style={{ fontSize: 10, fontWeight: 700, color: "#e65100", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                            Menunggu Bayar
+                                        </div>
+                                        <span style={{ fontSize: 10, color: "#e65100", fontWeight: 700, background: "#fff3e0", padding: "1px 6px", borderRadius: 4 }}>
+                                            {TIME_RANGE_LABELS[timeRangeFilter]}
+                                        </span>
                                     </div>
-                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#e65100", marginTop: 2 }}>
+                                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#e65100", marginTop: 4 }}>
                                         {pendingOrdersCount} Order
                                     </div>
                                 </div>
@@ -1096,7 +1229,7 @@ export default function Dashboard() {
                             <div className="dash-table-wrap" style={{ padding: "18px" }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
                                     <h3 style={{ fontFamily: "var(--font-display)", fontSize: 18, color: "#1d1816", margin: 0 }}>
-                                        Aktivitas Transaksi Terbaru
+                                        Aktivitas Transaksi ({TIME_RANGE_LABELS[timeRangeFilter]})
                                     </h3>
                                     <button
                                         onClick={() => setActiveTab("digital")}
@@ -1108,8 +1241,10 @@ export default function Dashboard() {
 
                                 {loadingOrders ? (
                                     <div style={{ padding: "24px", textAlign: "center", color: "#7a685e", fontSize: 12 }}>Memuat data D1...</div>
-                                ) : orders.length === 0 ? (
-                                    <div style={{ padding: "24px", textAlign: "center", color: "#7a685e", fontSize: 12 }}>Belum ada transaksi di database.</div>
+                                ) : overviewOrders.length === 0 ? (
+                                    <div style={{ padding: "28px", textAlign: "center", color: "#7a685e", fontSize: 12 }}>
+                                        Belum ada transaksi pada periode <strong>{TIME_RANGE_LABELS[timeRangeFilter].toLowerCase()}</strong>.
+                                    </div>
                                 ) : (
                                     <div style={{ overflowX: "auto" }}>
                                         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 12, minWidth: 500 }}>
@@ -1123,7 +1258,7 @@ export default function Dashboard() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {orders.slice(0, 8).map((o) => (
+                                                {overviewOrders.slice(0, 10).map((o) => (
                                                     <tr key={o.order_id} style={{ borderBottom: "1px solid #f0e9e2" }}>
                                                         <td style={{ padding: "10px 12px", fontWeight: 700, color: "#1d1816" }}>{o.order_id}</td>
                                                         <td style={{ padding: "10px 12px", textTransform: "capitalize", color: "#59483f" }}>{o.product_type || "Digital Gift"}</td>
