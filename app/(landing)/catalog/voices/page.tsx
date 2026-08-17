@@ -30,11 +30,7 @@ export default function ProductCatalogPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
-                            label={
-                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Voices Gift <span style={{ opacity: 0.5 }}>•</span> Best Seller
-                                </div>
-                            }
+                            label="Voices Gift"
                             title="Kado Suara & Foto"
                             description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik. Ungkapkan perasaanmu secara langsung."
                             features={[

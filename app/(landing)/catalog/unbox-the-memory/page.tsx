@@ -145,6 +145,7 @@ export default function UnboxTheMemoryPage() {
     }, []);
 
     const tabContainerRef = useRef<HTMLDivElement>(null);
+    const isFirstRender = useRef(true);
     const experienceKeys: Array<"memoria" | "letter" | "voices"> = ["memoria", "letter", "voices"];
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
@@ -165,10 +166,16 @@ export default function UnboxTheMemoryPage() {
     };
 
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
         if (tabContainerRef.current) {
             const activeBtn = tabContainerRef.current.querySelector(`[data-tab-key="${selectedDigitalExperience}"]`) as HTMLElement;
             if (activeBtn) {
-                activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                const container = tabContainerRef.current;
+                const scrollLeft = activeBtn.offsetLeft - (container.clientWidth / 2) + (activeBtn.clientWidth / 2);
+                container.scrollTo({ left: scrollLeft, behavior: "smooth" });
             }
         }
     }, [selectedDigitalExperience]);
@@ -190,7 +197,7 @@ export default function UnboxTheMemoryPage() {
             title: "Letter Edition",
             subtitle: "Surat Digital & Amplop Interaktif",
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
-            badge: "Favorit",
+            badge: "Best Seller",
             color: "#a67c52",
             price: "Rp 149.000",
             oldPrice: "Rp 180.000",
@@ -202,7 +209,7 @@ export default function UnboxTheMemoryPage() {
             title: "Voices Gift",
             subtitle: "Rekaman Suara Pribadi & Galeri Foto",
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
-            badge: "Best Seller",
+            badge: "",
             color: "#a67c52",
             price: "Rp 139.000",
             oldPrice: "Rp 180.000",
@@ -364,8 +371,8 @@ export default function UnboxTheMemoryPage() {
                             flexWrap: "wrap",
                         }}>
                             <DiscountPrice
-                                oldPrice={digitalExperiences[selectedDigitalExperience].oldPrice}
-                                newPrice={digitalExperiences[selectedDigitalExperience].price}
+                                oldPrice="Rp 180.000"
+                                newPrice="Rp 139.000"
                                 size="md"
                                 layout="inline"
                             />
@@ -805,18 +812,20 @@ export default function UnboxTheMemoryPage() {
                         }}>
                             <div>
                                 <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "18px" }}>
-                                    <span style={{
-                                        backgroundColor: `${currentExp.color}15`,
-                                        color: currentExp.color,
-                                        fontSize: "0.78rem",
-                                        fontWeight: 700,
-                                        padding: "6px 14px",
-                                        borderRadius: "20px",
-                                        display: "inline-block",
-                                        letterSpacing: "0.05em"
-                                    }}>
-                                        {currentExp.badge}
-                                    </span>
+                                    {currentExp.badge ? (
+                                        <span style={{
+                                            backgroundColor: `${currentExp.color}15`,
+                                            color: currentExp.color,
+                                            fontSize: "0.78rem",
+                                            fontWeight: 700,
+                                            padding: "6px 14px",
+                                            borderRadius: "20px",
+                                            display: "inline-block",
+                                            letterSpacing: "0.05em"
+                                        }}>
+                                            {currentExp.badge}
+                                        </span>
+                                    ) : null}
                                     <span style={{
                                         fontSize: "0.82rem",
                                         fontWeight: 700,

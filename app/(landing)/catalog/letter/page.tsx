@@ -45,7 +45,11 @@ export default function LetterCatalogPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
-                            label="Letter Edition"
+                            label={
+                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                    Letter Edition <span style={{ opacity: 0.5 }}>•</span> Best Seller
+                                </div>
+                            }
                             title="Surat Digital Aesthetic"
                             description="Sampaikan pesan bermakna melalui surat digital bernuansa sinematik. Hadir dengan amplop interaktif, efek typewriter klasik, dan kustomisasi tema eksklusif."
                             features={[

@@ -38,8 +38,8 @@ const CATALOG_ITEMS = [
         features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
     },
     {
-        badgeText: "Popular",
-        badgeColor: "#7a5438",
+        badgeText: "Best Seller",
+        badgeColor: "#a67c52",
         titleColor: "#7a5438",
         imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         title: "Letter Edition",
@@ -47,15 +47,15 @@ const CATALOG_ITEMS = [
         newPrice: "Rp 20.000",
         id: "letter",
         numericPrice: 20000,
-        hashtag: "#AESTHETIC",
+        hashtag: "#BESTSELLER",
         soldCount: "2.1k+ terjual",
         href: "/catalog/letter",
         occasions: ["Graduation", "Apology", "Anniversary", "LDR"],
         features: ["3 Kuota Letter Sekaligus", "Efek Typewriter Sinematik", "Kejutan Amplop & Foto/Video"]
     },
     {
-        badgeText: "#1 Terlaris",
-        badgeColor: "#e91e63",
+        badgeText: "Popular",
+        badgeColor: "#a67c52",
         titleColor: "#a67c52",
         imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
         title: "Voices Gift",
@@ -63,7 +63,7 @@ const CATALOG_ITEMS = [
         oldPrice: "Rp 30.000",
         id: "voices",
         numericPrice: 20000,
-        hashtag: "#BESTSELLER",
+        hashtag: "#AESTHETIC",
         soldCount: "1.2k+ terjual",
         href: "/catalog/voices",
         occasions: ["LDR", "Any Occasion", "Birthday", "Apology"],

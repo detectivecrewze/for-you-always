@@ -38,7 +38,7 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         id: "letter",
         title: "Letter Edition",
         tagline: "Surat Digital Klasik & Typewriter",
-        badge: "Favorit",
+        badge: "Best Seller",
         badgeColor: "#a67c52",
         image: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         demoUrl: "https://letter.for-you-always.my.id/",
@@ -50,7 +50,7 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         id: "voices",
         title: "Voices Gift",
         tagline: "Pesan Suara / Voice Note & Foto Kenangan",
-        badge: "Best Seller",
+        badge: "",
         badgeColor: "#994d5d",
         image: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
         demoUrl: "https://voices.for-you-always.my.id/",
@@ -695,20 +695,22 @@ export default function UnboxCheckoutWizardPage() {
                                                         >
                                                             {opt.title}
                                                         </span>
-                                                        <span
-                                                            style={{
-                                                                fontSize: "0.68rem",
-                                                                fontWeight: 700,
-                                                                color: opt.badgeColor,
-                                                                backgroundColor: `${opt.badgeColor}15`,
-                                                                padding: "2px 8px",
-                                                                borderRadius: "999px",
-                                                                letterSpacing: "0.04em",
-                                                                textTransform: "uppercase",
-                                                            }}
-                                                        >
-                                                            {opt.badge}
-                                                        </span>
+                                                        {opt.badge ? (
+                                                            <span
+                                                                style={{
+                                                                    fontSize: "0.68rem",
+                                                                    fontWeight: 700,
+                                                                    color: opt.badgeColor,
+                                                                    backgroundColor: `${opt.badgeColor}15`,
+                                                                    padding: "2px 8px",
+                                                                    borderRadius: "999px",
+                                                                    letterSpacing: "0.04em",
+                                                                    textTransform: "uppercase",
+                                                                }}
+                                                            >
+                                                                {opt.badge}
+                                                            </span>
+                                                        ) : null}
                                                         <span
                                                             style={{
                                                                 fontSize: "0.82rem",

@@ -68,7 +68,7 @@ export default function CollectionSection() {
                         speed={55}
                         cards={[
                             {
-                                badgeText: "Popular",
+                                badgeText: "#1 Terlaris",
                                 badgeColor: "#7a5438",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
@@ -106,8 +106,8 @@ export default function CollectionSection() {
                                 onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })
                             },
                             {
-                                badgeText: "#1 Terlaris",
-                                badgeColor: "#e91e63",
+                                badgeText: "Popular",
+                                badgeColor: "#a67c52",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
                                 price: "Mulai Rp 20.000",
