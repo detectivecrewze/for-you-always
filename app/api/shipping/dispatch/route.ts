@@ -110,7 +110,15 @@ export async function POST(req: NextRequest) {
 
         const originContactName = origin_details?.contact_name || "For you, Always.";
         const originContactPhone = origin_details?.contact_phone || "081381543981";
-        const originAddress = origin_details?.address || "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
+        const fullOriginAddress = [
+            origin_details?.address,
+            origin_details?.village ? `Kel. ${origin_details.village}` : "",
+            origin_details?.district ? `Kec. ${origin_details.district}` : "",
+            origin_details?.city,
+            origin_details?.province,
+        ]
+            .filter(Boolean)
+            .join(", ") || origin_details?.address || "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
         const originNote = origin_details?.note || "Paket kado hampers siap pick up di depan rumah";
         const originPostalCode = parseInt(String(origin_details?.postal_code || DEFAULT_ORIGIN_POSTAL).replace(/\D/g, ""), 10) || 16820;
         
@@ -127,7 +135,7 @@ export async function POST(req: NextRequest) {
             shipper_organization: "For you, Always. Atelier",
             origin_contact_name: originContactName,
             origin_contact_phone: originContactPhone,
-            origin_address: originAddress,
+            origin_address: fullOriginAddress,
             origin_note: originNote,
             origin_postal_code: originPostalCode,
             origin_collection_method: "pickup",

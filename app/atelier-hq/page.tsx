@@ -72,8 +72,12 @@ export default function Dashboard() {
     const [loc2Origin, setLoc2Origin] = useState({
         contact_name: "For you, Always. (Studio 2)",
         contact_phone: "081381543981",
-        address: "",
-        postal_code: "",
+        address: "Villa Nusa Indah 2 Blok U 21/6",
+        village: "Bojong Kulur",
+        district: "Gunung Putri",
+        city: "Kabupaten Bogor",
+        province: "Jawa Barat",
+        postal_code: "16969",
         note: "Paket kado hampers siap pick up",
     });
 
@@ -2274,51 +2278,115 @@ export default function Dashboard() {
                                         {selectedOriginPreset === "loc2" ? (
                                             <div style={{ marginTop: 10, marginLeft: 22, display: "flex", flexDirection: "column", gap: 8 }} onClick={e => e.stopPropagation()}>
                                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Nama Pengirim / PIC"
-                                                        value={loc2Origin.contact_name}
-                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, contact_name: e.target.value })}
-                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        placeholder="No. HP Pengirim"
-                                                        value={loc2Origin.contact_phone}
-                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, contact_phone: e.target.value })}
-                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Nama PIC / Pengirim</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Nama Pengirim / PIC"
+                                                            value={loc2Origin.contact_name}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, contact_name: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>No. HP Pengirim</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="No. HP Pengirim"
+                                                            value={loc2Origin.contact_phone}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, contact_phone: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Alamat Jalan / Komplek / No. Rumah</label>
+                                                    <textarea
+                                                        rows={2}
+                                                        placeholder="Contoh: Villa Nusa Indah 2 Blok U 21/6..."
+                                                        value={loc2Origin.address}
+                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, address: e.target.value })}
+                                                        style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", resize: "vertical", boxSizing: "border-box" }}
                                                     />
                                                 </div>
-                                                <textarea
-                                                    rows={2}
-                                                    placeholder="Alamat Lengkap Penjemputan..."
-                                                    value={loc2Origin.address}
-                                                    onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, address: e.target.value })}
-                                                    style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", resize: "vertical" }}
-                                                />
+
                                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Kode Pos (misal: 12190)"
-                                                        value={loc2Origin.postal_code}
-                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, postal_code: e.target.value })}
-                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Catatan untuk Kurir"
-                                                        value={loc2Origin.note}
-                                                        onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, note: e.target.value })}
-                                                        style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem" }}
-                                                    />
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Kelurahan / Desa</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Kelurahan / Desa"
+                                                            value={loc2Origin.village || ""}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, village: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Kecamatan</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Kecamatan"
+                                                            value={loc2Origin.district || ""}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, district: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
                                                 </div>
+
+                                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Kota / Kabupaten</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Kota / Kabupaten"
+                                                            value={loc2Origin.city || ""}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, city: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Provinsi</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Provinsi (Jawa Barat / DKI Jakarta)"
+                                                            value={loc2Origin.province || ""}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, province: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Kode Pos</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Kode Pos (misal: 16969)"
+                                                            value={loc2Origin.postal_code}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, postal_code: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label style={{ fontSize: "0.72rem", color: "#59483f", fontWeight: 700, display: "block", marginBottom: 2 }}>Catatan untuk Kurir</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Catatan Kurir"
+                                                            value={loc2Origin.note}
+                                                            onChange={(e) => handleSaveLoc2ToStorage({ ...loc2Origin, note: e.target.value })}
+                                                            style={{ width: "100%", padding: "6px 8px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: "0.8rem", boxSizing: "border-box" }}
+                                                        />
+                                                    </div>
+                                                </div>
+
                                                 <span style={{ fontSize: "0.72rem", color: "#8d7971" }}>
                                                     💡 Alamat Lokasi 2 otomatis tersimpan di browser untuk order berikutnya.
                                                 </span>
                                             </div>
                                         ) : (
                                             <div style={{ fontSize: "0.82rem", color: "#59483f", marginLeft: 22, lineHeight: 1.35 }}>
-                                                {loc2Origin.address ? `${loc2Origin.contact_name} — ${loc2Origin.address}` : "(Klik untuk mengisi alamat kedua)"}
+                                                {loc2Origin.address ? `${loc2Origin.contact_name} — ${[loc2Origin.address, loc2Origin.village, loc2Origin.district, loc2Origin.city, loc2Origin.province, loc2Origin.postal_code].filter(Boolean).join(", ")}` : "(Klik untuk mengisi alamat kedua)"}
                                             </div>
                                         )}
                                     </div>
