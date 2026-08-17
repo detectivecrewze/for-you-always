@@ -68,6 +68,22 @@ export default function Dashboard() {
     // Biteship Shipping Dispatch & Origin Selection States
     const [dispatchingOrderId, setDispatchingOrderId] = useState<string | null>(null);
     const [dispatchConfirmOrder, setDispatchConfirmOrder] = useState<OrderItem | null>(null);
+    const [dispatchSuccessResult, setDispatchSuccessResult] = useState<{
+        orderId: string;
+        trackingNumber: string;
+        courier: string;
+        message: string;
+        trackingLink?: string;
+    } | null>(null);
+    const [dispatchErrorResult, setDispatchErrorResult] = useState<string | null>(null);
+    const [copiedResi, setCopiedResi] = useState(false);
+    const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
+
+    const showToast = (text: string, type: "success" | "error" = "success") => {
+        setToastMessage({ text, type });
+        setTimeout(() => setToastMessage(null), 3500);
+    };
+
     const [selectedOriginPreset, setSelectedOriginPreset] = useState<"loc1" | "loc2">("loc1");
     const [loc2Origin, setLoc2Origin] = useState({
         contact_name: "For you, Always. (Studio 2)",
@@ -162,12 +178,13 @@ export default function Dashboard() {
             const data = await res.json();
             if (res.ok && data.success) {
                 setOrders((prev) => prev.filter((o) => o.order_id !== orderId));
+                showToast("Pesanan berhasil dihapus.", "success");
             } else {
-                alert(data.message || "Gagal menghapus pesanan.");
+                showToast(data.message || "Gagal menghapus pesanan.", "error");
             }
         } catch (e) {
             console.error("Failed to delete order:", e);
-            alert("Terjadi kesalahan jaringan.");
+            showToast("Terjadi kesalahan jaringan.", "error");
         } finally {
             setDeletingOrderId(null);
         }
@@ -402,11 +419,12 @@ export default function Dashboard() {
                     fulfillment_status: "shipped"
                 } : o));
                 setEditingOrderId(null);
+                showToast("Nomor resi berhasil diperbarui.", "success");
             } else {
-                alert("Gagal memperbarui nomor resi.");
+                showToast("Gagal memperbarui nomor resi.", "error");
             }
         } catch {
-            alert("Terjadi kesalahan sistem saat menyimpan resi.");
+            showToast("Terjadi kesalahan sistem saat menyimpan resi.", "error");
         } finally {
             setSavingTracking(false);
         }
@@ -448,11 +466,12 @@ export default function Dashboard() {
                     courier: addressForm.courier,
                 } : o));
                 setEditingAddressOrder(null);
+                showToast("Alamat penerima berhasil diperbarui.", "success");
             } else {
-                alert("Gagal memperbarui alamat penerima.");
+                showToast("Gagal memperbarui alamat penerima.", "error");
             }
         } catch {
-            alert("Terjadi kesalahan sistem saat menyimpan alamat.");
+            showToast("Terjadi kesalahan sistem saat menyimpan alamat.", "error");
         } finally {
             setSavingAddress(false);
         }
@@ -477,7 +496,6 @@ export default function Dashboard() {
             const data = await res.json();
 
             if (res.ok && data.success) {
-                alert(`🎉 ${data.message}\n\nNomor Resi: ${data.tracking_number}\nKurir: ${data.courier}`);
                 const updatedOrder: OrderItem = {
                     ...order,
                     tracking_number: data.tracking_number,
@@ -491,12 +509,19 @@ export default function Dashboard() {
                     prev.map((o) => (o.order_id === order.order_id ? updatedOrder : o))
                 );
                 setDispatchConfirmOrder(null);
+                setDispatchSuccessResult({
+                    orderId: order.order_id,
+                    trackingNumber: data.tracking_number,
+                    courier: data.courier,
+                    message: data.message,
+                    trackingLink: data.tracking_link,
+                });
             } else {
-                alert(`⚠️ Gagal dispatch Biteship: ${data.message || "Terjadi kesalahan."}`);
+                setDispatchErrorResult(data.message || "Gagal membuat pesanan penjemputan kurir ke Biteship.");
             }
         } catch (err) {
             console.error("Failed to dispatch order to Biteship:", err);
-            alert("Terjadi kesalahan jaringan saat memproses ke Biteship.");
+            setDispatchErrorResult("Terjadi kesalahan jaringan saat memproses ke Biteship.");
         } finally {
             setDispatchingOrderId(null);
         }
@@ -530,11 +555,12 @@ export default function Dashboard() {
                     fulfillment_status: targetFulfillment,
                 } : o));
                 setEditingGiftOrderId(null);
+                showToast("Status & link kado digital berhasil diperbarui.", "success");
             } else {
-                alert("Gagal memperbarui status kado.");
+                showToast("Gagal memperbarui status kado.", "error");
             }
         } catch {
-            alert("Terjadi kesalahan sistem saat memperbarui status kado.");
+            showToast("Terjadi kesalahan sistem saat memperbarui status kado.", "error");
         } finally {
             setSavingGiftStatus(false);
         }
@@ -2567,6 +2593,314 @@ export default function Dashboard() {
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+
+            {/* ── 8. MODAL: AESTHETIC DISPATCH SUCCESS POPUP ── */}
+            {dispatchSuccessResult && (
+                <div style={{
+                    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: "rgba(29, 24, 22, 0.68)",
+                    backdropFilter: "blur(8px)",
+                    WebkitBackdropFilter: "blur(8px)",
+                    zIndex: 100001,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "16px",
+                    fontFamily: "var(--font-sans)",
+                }}>
+                    <div style={{
+                        background: "#ffffff",
+                        width: "100%", maxWidth: "460px",
+                        borderRadius: "24px",
+                        padding: "32px 28px",
+                        boxShadow: "0 25px 70px -10px rgba(29, 24, 22, 0.25)",
+                        border: "1px solid rgba(205, 171, 143, 0.35)",
+                        textAlign: "center",
+                        position: "relative",
+                        overflow: "hidden",
+                    }}>
+                        {/* Soft Gold Background Glow */}
+                        <div style={{
+                            position: "absolute",
+                            top: "-60px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: "200px",
+                            height: "200px",
+                            background: "radial-gradient(circle, rgba(205, 171, 143, 0.25) 0%, rgba(255,255,255,0) 70%)",
+                            pointerEvents: "none"
+                        }} />
+
+                        {/* Top Success Icon Badge */}
+                        <div style={{
+                            width: "64px",
+                            height: "64px",
+                            borderRadius: "50%",
+                            background: "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)",
+                            border: "2px solid #a5d6a7",
+                            color: "#2e7d32",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            margin: "0 auto 18px",
+                            boxShadow: "0 8px 20px rgba(46, 125, 50, 0.15)"
+                        }}>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+
+                        <span style={{
+                            fontSize: "0.72rem",
+                            fontWeight: 800,
+                            letterSpacing: "0.16em",
+                            textTransform: "uppercase",
+                            color: "#2e7d32",
+                            background: "rgba(46, 125, 50, 0.08)",
+                            padding: "4px 12px",
+                            borderRadius: "999px",
+                            display: "inline-block",
+                            marginBottom: "10px",
+                            border: "1px solid rgba(46, 125, 50, 0.15)"
+                        }}>
+                            Pick-up Scheduled
+                        </span>
+
+                        <h3 style={{
+                            fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                            fontSize: "1.75rem",
+                            fontWeight: 600,
+                            color: "#1d1816",
+                            margin: "0 0 8px",
+                            lineHeight: 1.15
+                        }}>
+                            Pesanan Siap Dijemput
+                        </h3>
+
+                        <p style={{
+                            fontSize: "0.86rem",
+                            color: "#6e5c53",
+                            margin: "0 0 22px",
+                            lineHeight: 1.5
+                        }}>
+                            Tiket penjemputan kurir berhasil dibuat ke sistem Biteship.
+                        </p>
+
+                        {/* WAYBILL / RESI CARD */}
+                        <div style={{
+                            background: "#faf7f2",
+                            border: "1px solid #e8dfd8",
+                            borderRadius: "16px",
+                            padding: "16px",
+                            marginBottom: "24px",
+                            textAlign: "left"
+                        }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#8d7971", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                    Nomor Resi / AWB
+                                </span>
+                                <span style={{ fontSize: "0.75rem", color: "#6e5c53", fontWeight: 600 }}>
+                                    {dispatchSuccessResult.orderId}
+                                </span>
+                            </div>
+
+                            <div style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                background: "#ffffff",
+                                border: "1px solid rgba(205, 171, 143, 0.3)",
+                                borderRadius: "10px",
+                                padding: "8px 12px",
+                                marginBottom: "10px"
+                            }}>
+                                <span style={{
+                                    fontFamily: "monospace",
+                                    fontSize: "1.05rem",
+                                    fontWeight: 700,
+                                    color: "#1d1816",
+                                    letterSpacing: "0.04em"
+                                }}>
+                                    {dispatchSuccessResult.trackingNumber}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(dispatchSuccessResult.trackingNumber);
+                                        setCopiedResi(true);
+                                        setTimeout(() => setCopiedResi(false), 2000);
+                                    }}
+                                    style={{
+                                        background: copiedResi ? "#2e7d32" : "#1d1816",
+                                        color: "#ffffff",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        padding: "5px 10px",
+                                        fontSize: "0.72rem",
+                                        fontWeight: 700,
+                                        cursor: "pointer",
+                                        transition: "all 0.2s ease"
+                                    }}
+                                >
+                                    {copiedResi ? "✓ Tersalin!" : "Salin Resi"}
+                                </button>
+                            </div>
+
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.82rem", color: "#382a24", fontWeight: 600 }}>
+                                <span style={{ color: "#a67c52" }}>Ekspedisi:</span>
+                                <span>{dispatchSuccessResult.courier}</span>
+                            </div>
+                        </div>
+
+                        {/* ACTIONS */}
+                        <div style={{ display: "flex", gap: "10px" }}>
+                            {dispatchSuccessResult.trackingLink && (
+                                <a
+                                    href={dispatchSuccessResult.trackingLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        flex: 1,
+                                        padding: "12px",
+                                        borderRadius: "12px",
+                                        background: "#1d1816",
+                                        color: "#faf7f2",
+                                        fontSize: "0.86rem",
+                                        fontWeight: 700,
+                                        textDecoration: "none",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "6px",
+                                        boxShadow: "0 4px 14px rgba(29,24,22,0.15)"
+                                    }}
+                                >
+                                    Lacak di Biteship ↗
+                                </a>
+                            )}
+                            <button
+                                type="button"
+                                onClick={() => setDispatchSuccessResult(null)}
+                                style={{
+                                    flex: dispatchSuccessResult.trackingLink ? "initial" : 1,
+                                    padding: "12px 20px",
+                                    borderRadius: "12px",
+                                    background: "#faf7f2",
+                                    color: "#382a24",
+                                    border: "1px solid #dcd1c6",
+                                    fontSize: "0.86rem",
+                                    fontWeight: 700,
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Selesai & Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── 9. MODAL: AESTHETIC ERROR POPUP ── */}
+            {dispatchErrorResult && (
+                <div style={{
+                    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: "rgba(29, 24, 22, 0.68)",
+                    backdropFilter: "blur(8px)",
+                    zIndex: 100001,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "16px",
+                    fontFamily: "var(--font-sans)",
+                }}>
+                    <div style={{
+                        background: "#ffffff",
+                        width: "100%", maxWidth: "420px",
+                        borderRadius: "20px",
+                        padding: "28px 24px",
+                        boxShadow: "0 25px 60px rgba(0,0,0,0.2)",
+                        border: "1px solid #ffcdd2",
+                        textAlign: "center",
+                    }}>
+                        <div style={{
+                            width: "56px",
+                            height: "56px",
+                            borderRadius: "50%",
+                            background: "#ffebee",
+                            color: "#c62828",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            margin: "0 auto 16px",
+                            border: "1.5px solid #ffcdd2"
+                        }}>
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        </div>
+
+                        <h3 style={{
+                            fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                            fontSize: "1.5rem",
+                            fontWeight: 600,
+                            color: "#1d1816",
+                            margin: "0 0 8px"
+                        }}>
+                            Gagal Memproses
+                        </h3>
+
+                        <p style={{
+                            fontSize: "0.85rem",
+                            color: "#6e5c53",
+                            lineHeight: 1.5,
+                            margin: "0 0 20px"
+                        }}>
+                            {dispatchErrorResult}
+                        </p>
+
+                        <button
+                            type="button"
+                            onClick={() => setDispatchErrorResult(null)}
+                            style={{
+                                width: "100%",
+                                padding: "12px",
+                                borderRadius: "10px",
+                                background: "#1d1816",
+                                color: "#faf7f2",
+                                fontSize: "0.85rem",
+                                fontWeight: 700,
+                                border: "none",
+                                cursor: "pointer"
+                            }}
+                        >
+                            Mengerti & Tutup
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ── 10. ATELIER FLOATING TOAST NOTIFICATION ── */}
+            {toastMessage && (
+                <div style={{
+                    position: "fixed",
+                    top: "24px",
+                    right: "24px",
+                    zIndex: 999999,
+                    background: toastMessage.type === "success" ? "#1d1816" : "#7f1d1d",
+                    color: "#faf7f2",
+                    padding: "12px 18px",
+                    borderRadius: "14px",
+                    boxShadow: "0 12px 36px rgba(0,0,0,0.22)",
+                    border: `1px solid ${toastMessage.type === "success" ? "rgba(205,171,143,0.4)" : "#f87171"}`,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    fontFamily: "var(--font-sans)",
+                }}>
+                    <span style={{ fontSize: "1rem" }}>{toastMessage.type === "success" ? "✓" : "⚠️"}</span>
+                    <span>{toastMessage.text}</span>
                 </div>
             )}
         </>
