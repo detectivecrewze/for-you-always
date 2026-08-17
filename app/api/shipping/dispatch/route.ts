@@ -130,6 +130,8 @@ export async function POST(req: NextRequest) {
         const originLat = hasCustomCoords ? parseFloat(String(origin_details.latitude)) : null;
         const originLng = hasCustomCoords ? parseFloat(String(origin_details.longitude)) : null;
 
+        const collectionMethod = (body.collection_method === "drop_off" || body.origin_collection_method === "drop_off") ? "drop_off" : "pickup";
+
         // 1. Construct Biteship Create Order payload
         const biteshipPayload: Record<string, any> = {
             shipper_contact_name: "For you, Always.",
@@ -141,7 +143,7 @@ export async function POST(req: NextRequest) {
             origin_address: fullOriginAddress,
             origin_note: originNote,
             origin_postal_code: originPostalCode,
-            origin_collection_method: "pickup",
+            origin_collection_method: collectionMethod,
             destination_contact_name: recipientName,
             destination_contact_phone: recipientPhone,
             destination_address: fullDestinationAddress,
@@ -174,7 +176,7 @@ export async function POST(req: NextRequest) {
         }
 
         // 2. Call Biteship Orders API
-        const biteshipRes = await fetch("https://api.biteship.com/v1/orders", {
+        let biteshipRes = await fetch("https://api.biteship.com/v1/orders", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${BITESHIP_API_KEY}`,
@@ -183,7 +185,23 @@ export async function POST(req: NextRequest) {
             body: JSON.stringify(biteshipPayload),
         });
 
-        const biteshipData = await biteshipRes.json();
+        let biteshipData = await biteshipRes.json();
+
+        // Smart Fallback: if courier doesn't support 'drop_off' in Biteship API (e.g. J&T/JNE API restrictions),
+        // fallback to standard pickup dispatch so the Waybill Resi is still generated successfully.
+        if (!biteshipRes.ok && collectionMethod === "drop_off" && (biteshipData.error?.includes("cannot provide dropping off") || biteshipData.code === 40002031)) {
+            console.log(`[Biteship Dispatch] Courier ${courierChoice.company} requires standard collection method. Falling back to generate waybill...`);
+            biteshipPayload.origin_collection_method = "pickup";
+            biteshipRes = await fetch("https://api.biteship.com/v1/orders", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${BITESHIP_API_KEY}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(biteshipPayload),
+            });
+            biteshipData = await biteshipRes.json();
+        }
 
         if (!biteshipRes.ok || !biteshipData.success) {
             console.error("Biteship dispatch error:", biteshipData);
@@ -237,9 +255,14 @@ export async function POST(req: NextRequest) {
             console.warn("Failed to update database after dispatch:", dbErr);
         }
 
+        const actionMessage = collectionMethod === "drop_off"
+            ? `Nomor resi ${waybillId} telah terbit! Silakan drop/serahkan paket ke counter atau gerai ${courierChoice.displayName} terdekat (ongkir sudah lunas).`
+            : `Pesanan berhasil di-dispatch! Kurir ${courierChoice.displayName} telah dijadwalkan untuk penjemputan ke alamat asal.`;
+
         return NextResponse.json({
             success: true,
-            message: `Pesanan berhasil di-dispatch! Kurir ${courierChoice.displayName} telah dijadwalkan untuk penjemputan.`,
+            message: actionMessage,
+            collection_method: collectionMethod,
             biteship_order_id: biteshipOrderId,
             tracking_number: waybillId,
             courier: courierName,

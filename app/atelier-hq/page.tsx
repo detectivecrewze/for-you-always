@@ -94,8 +94,10 @@ export default function Dashboard() {
         courier: string;
         message: string;
         trackingLink?: string;
+        collectionMethod?: "drop_off" | "pickup";
     } | null>(null);
     const [dispatchErrorResult, setDispatchErrorResult] = useState<string | null>(null);
+    const [dispatchCollectionMethod, setDispatchCollectionMethod] = useState<"drop_off" | "pickup">("drop_off");
     const [copiedResi, setCopiedResi] = useState(false);
     const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
 
@@ -628,7 +630,7 @@ export default function Dashboard() {
         setDispatchConfirmOrder(order);
     };
 
-    const handleExecuteDispatch = async (order: OrderItem, originDetails: any) => {
+    const handleExecuteDispatch = async (order: OrderItem, originDetails: any, collectionMethod: "drop_off" | "pickup" = dispatchCollectionMethod) => {
         setDispatchingOrderId(order.order_id);
         try {
             const res = await fetch("/api/shipping/dispatch", {
@@ -638,6 +640,7 @@ export default function Dashboard() {
                     order_id: order.order_id,
                     order_data: order,
                     origin_details: originDetails,
+                    collection_method: collectionMethod,
                 }),
             });
             const data = await res.json();
@@ -662,9 +665,10 @@ export default function Dashboard() {
                     courier: data.courier,
                     message: data.message,
                     trackingLink: data.tracking_link,
+                    collectionMethod: data.collection_method || collectionMethod,
                 });
             } else {
-                setDispatchErrorResult(data.message || "Gagal membuat pesanan penjemputan kurir ke Biteship.");
+                setDispatchErrorResult(data.message || "Gagal membuat pesanan pengiriman ke Biteship.");
             }
         } catch (err) {
             console.error("Failed to dispatch order to Biteship:", err);
@@ -2484,7 +2488,7 @@ export default function Dashboard() {
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800, color: "#1d1816" }}>
-                                        📦 Request Pick-up Kurir (Biteship)
+                                        Proses Pengiriman & Resi (Biteship)
                                     </h3>
                                     <div style={{ fontSize: "0.8rem", color: "#8d7971", marginTop: 2 }}>
                                         Order: {dispatchConfirmOrder.order_id}
@@ -2507,17 +2511,84 @@ export default function Dashboard() {
                                     {recipientName} ({ship.recipient_phone || "-"})
                                 </div>
                                 <div style={{ fontSize: "0.85rem", color: "#59483f", marginTop: 2, lineHeight: 1.35 }}>
-                                    {fullAddr || <span style={{ color: "#d32f2f", fontWeight: 700 }}>⚠️ Alamat penerima masih kosong! Klik tombol Edit Alamat dulu di tabel.</span>}
+                                    {fullAddr || <span style={{ color: "#d32f2f", fontWeight: 700 }}>Alamat penerima masih kosong! Klik tombol Edit Alamat dulu di tabel.</span>}
                                 </div>
                                 <div style={{ marginTop: 6, fontSize: "0.82rem", fontWeight: 700, color: "#2e7d32" }}>
                                     Kurir: {courierName}
                                 </div>
                             </div>
 
+                            {/* Collection Method Selection (Drop-off vs Pick-up) */}
+                            <div style={{ marginBottom: 18 }}>
+                                <label style={{ fontSize: "0.82rem", fontWeight: 800, color: "#1d1816", display: "block", marginBottom: 8 }}>
+                                    Pilih Metode Serah Paket:
+                                </label>
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                                    {/* Drop-off Card */}
+                                    <div
+                                        onClick={() => setDispatchCollectionMethod("drop_off")}
+                                        style={{
+                                            border: dispatchCollectionMethod === "drop_off" ? "2px solid #2e7d32" : "1.5px solid #dcd1c6",
+                                            borderRadius: 12,
+                                            padding: "12px 14px",
+                                            background: dispatchCollectionMethod === "drop_off" ? "#f1f8e9" : "#fff",
+                                            cursor: "pointer",
+                                            transition: "all 0.2s ease",
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                            <input
+                                                type="radio"
+                                                name="collectionMethod"
+                                                checked={dispatchCollectionMethod === "drop_off"}
+                                                onChange={() => setDispatchCollectionMethod("drop_off")}
+                                            />
+                                            <strong style={{ fontSize: "0.88rem", color: "#1d1816" }}>
+                                                Drop-off
+                                            </strong>
+                                            <span style={{ fontSize: "0.7rem", background: "#e8f5e9", color: "#2e7d32", padding: "1px 5px", borderRadius: 4, fontWeight: 700 }}>
+                                                Rekomendasi
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: "0.78rem", color: "#59483f", marginLeft: 22, lineHeight: 1.35 }}>
+                                            Resi terbit instan. Kamu serahkan paket langsung ke gerai/counter <strong>{courierName}</strong> terdekat tanpa bayar lagi.
+                                        </div>
+                                    </div>
+
+                                    {/* Pick-up Card */}
+                                    <div
+                                        onClick={() => setDispatchCollectionMethod("pickup")}
+                                        style={{
+                                            border: dispatchCollectionMethod === "pickup" ? "2px solid #2e7d32" : "1.5px solid #dcd1c6",
+                                            borderRadius: 12,
+                                            padding: "12px 14px",
+                                            background: dispatchCollectionMethod === "pickup" ? "#f1f8e9" : "#fff",
+                                            cursor: "pointer",
+                                            transition: "all 0.2s ease",
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                            <input
+                                                type="radio"
+                                                name="collectionMethod"
+                                                checked={dispatchCollectionMethod === "pickup"}
+                                                onChange={() => setDispatchCollectionMethod("pickup")}
+                                            />
+                                            <strong style={{ fontSize: "0.88rem", color: "#1d1816" }}>
+                                                Pick-up Kurir
+                                            </strong>
+                                        </div>
+                                        <div style={{ fontSize: "0.78rem", color: "#59483f", marginLeft: 22, lineHeight: 1.35 }}>
+                                            Kurir <strong>{courierName}</strong> akan datang menjemput paket ke alamat asal yang kamu pilih di bawah.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Warehouse Origin Selection */}
                             <div style={{ marginBottom: 20 }}>
                                 <label style={{ fontSize: "0.82rem", fontWeight: 800, color: "#1d1816", display: "block", marginBottom: 8 }}>
-                                    📍 Pilih Lokasi Penjemputan Paket (Alamat Pengirim):
+                                    Alamat Asal Pengirim (Untuk Cetak Resi & Titik Jemput):
                                 </label>
 
                                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -2683,7 +2754,7 @@ export default function Dashboard() {
                                                 </div>
 
                                                 <span style={{ fontSize: "0.72rem", color: "#8d7971" }}>
-                                                    💡 Alamat Lokasi 2 otomatis tersimpan di browser untuk order berikutnya.
+                                                    Alamat Lokasi 2 otomatis tersimpan di browser untuk order berikutnya.
                                                 </span>
                                             </div>
                                         ) : (
@@ -2697,17 +2768,21 @@ export default function Dashboard() {
 
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <button
-                                    onClick={() => handleExecuteDispatch(dispatchConfirmOrder, currentOrigin)}
+                                    onClick={() => handleExecuteDispatch(dispatchConfirmOrder, currentOrigin, dispatchCollectionMethod)}
                                     disabled={dispatchingOrderId === dispatchConfirmOrder.order_id || !ship.address}
                                     style={{
                                         flex: 1, padding: "12px", borderRadius: "10px",
-                                        background: !ship.address ? "#9e9e9e" : "#2e7d32",
+                                        background: !ship.address ? "#9e9e9e" : (dispatchCollectionMethod === "drop_off" ? "#1d1816" : "#2e7d32"),
                                         color: "#fff",
                                         fontSize: "0.88rem", fontWeight: 800, border: "none",
                                         cursor: !ship.address ? "not-allowed" : "pointer"
                                     }}
                                 >
-                                    {dispatchingOrderId === dispatchConfirmOrder.order_id ? "Memproses..." : "Panggil Kurir Sekarang (Biteship)"}
+                                    {dispatchingOrderId === dispatchConfirmOrder.order_id
+                                        ? "Memproses ke Biteship..."
+                                        : (dispatchCollectionMethod === "drop_off"
+                                            ? `Terbitkan Resi & Kirim (Drop-off ke ${courierName})`
+                                            : `Panggil Kurir Jemput (Pick-up ${courierName})`)}
                                 </button>
                                 <button
                                     onClick={() => setDispatchConfirmOrder(null)}
@@ -2751,7 +2826,7 @@ export default function Dashboard() {
                                     Biteship Live Tracking
                                 </div>
                                 <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800, color: "#1d1816" }}>
-                                    📍 Status Pengiriman Paket
+                                    Status Pengiriman Paket
                                 </h3>
                                 <div style={{ fontSize: "0.8rem", color: "#8d7971", marginTop: 2 }}>
                                     Order: <strong>{liveTrackingModal.order_id}</strong> • Resi: <span style={{ fontFamily: "monospace", fontWeight: 700 }}>{liveTrackingModal.tracking_number}</span>
@@ -2774,7 +2849,7 @@ export default function Dashboard() {
 
                         {liveTrackingModal.error && (
                             <div style={{ padding: "16px", background: "#fde8e8", borderRadius: "10px", color: "#9b1c1c", fontSize: "0.85rem", marginBottom: 16 }}>
-                                ⚠️ {liveTrackingModal.error}
+                                {liveTrackingModal.error}
                             </div>
                         )}
 
@@ -2852,7 +2927,7 @@ export default function Dashboard() {
                                                 display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6
                                             }}
                                         >
-                                            🌐 Buka di Portal Biteship ↗
+                                            Buka di Portal Biteship ↗
                                         </a>
                                     )}
                                     <button
@@ -2939,7 +3014,7 @@ export default function Dashboard() {
                             marginBottom: "10px",
                             border: "1px solid rgba(46, 125, 50, 0.15)"
                         }}>
-                            Pick-up Scheduled
+                            {dispatchSuccessResult.collectionMethod === "drop_off" ? "Drop-off Ready" : "Pick-up Scheduled"}
                         </span>
 
                         <h3 style={{
@@ -2950,7 +3025,7 @@ export default function Dashboard() {
                             margin: "0 0 8px",
                             lineHeight: 1.15
                         }}>
-                            Pesanan Siap Dijemput
+                            {dispatchSuccessResult.collectionMethod === "drop_off" ? "Resi Berhasil Diterbitkan" : "Pesanan Siap Dijemput"}
                         </h3>
 
                         <p style={{
@@ -2959,7 +3034,9 @@ export default function Dashboard() {
                             margin: "0 0 22px",
                             lineHeight: 1.5
                         }}>
-                            Tiket penjemputan kurir berhasil dibuat ke sistem Biteship.
+                            {dispatchSuccessResult.collectionMethod === "drop_off"
+                                ? `Nomor resi resmi sudah aktif. Silakan serahkan paket ke gerai/agen ${dispatchSuccessResult.courier} terdekat (ongkir otomatis lunas).`
+                                : `Tiket penjemputan kurir ${dispatchSuccessResult.courier} berhasil dibuat ke sistem Biteship.`}
                         </p>
 
                         {/* WAYBILL / RESI CARD */}
