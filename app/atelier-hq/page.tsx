@@ -2448,8 +2448,8 @@ export default function Dashboard() {
                     contact_phone: "081936109076",
                     address: "Limus Pratama Regency Jl Kediri 7 Blok E16/22, Cileungsi Kab.Bogor",
                     postal_code: "16820",
-                    latitude: "-6.3593181",
-                    longitude: "106.9736382",
+                    latitude: "-6.364016",
+                    longitude: "106.970905",
                     note: "Paket kado hampers siap pick up di depan rumah",
                 };
 

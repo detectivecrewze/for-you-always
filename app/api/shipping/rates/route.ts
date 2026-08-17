@@ -5,8 +5,8 @@ export const dynamic = "force-dynamic";
 
 const BITESHIP_API_KEY = process.env.BITESHIP_API_KEY;
 const DEFAULT_ORIGIN_POSTAL = process.env.BITESHIP_ORIGIN_POSTAL_CODE || "16820";
-const DEFAULT_ORIGIN_LAT = process.env.BITESHIP_ORIGIN_LATITUDE || "-6.3593181";
-const DEFAULT_ORIGIN_LNG = process.env.BITESHIP_ORIGIN_LONGITUDE || "106.9736382";
+const DEFAULT_ORIGIN_LAT = process.env.BITESHIP_ORIGIN_LATITUDE || "-6.364016";
+const DEFAULT_ORIGIN_LNG = process.env.BITESHIP_ORIGIN_LONGITUDE || "106.970905";
 
 export interface CourierOption {
     courier_name: string;
