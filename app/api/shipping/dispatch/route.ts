@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
                     name: "Unbox the Memory Gift Box",
                     description: "Hampers Kado Fisik & Kartu QR Kenangan",
                     category: "others",
-                    value: 129000,
+                    value: 139000,
                     quantity: 1,
                     weight: 1000,
                     length: 20,

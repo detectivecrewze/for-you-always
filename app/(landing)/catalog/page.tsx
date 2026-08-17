@@ -16,9 +16,9 @@ const CATALOG_ITEMS = [
         imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         title: "Unbox the Memory",
         oldPrice: "Rp 180.000",
-        newPrice: "Rp 129.000",
+        newPrice: "Rp 139.000",
         id: "unbox-the-memory",
-        numericPrice: 129000,
+        numericPrice: 139000,
         href: "/catalog/unbox-the-memory",
         occasions: ["Anniversary", "Birthday", "LDR"],
         features: ["Luxury Physical Gift Box", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]

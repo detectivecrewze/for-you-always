@@ -180,9 +180,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#a67c52",
-            price: "Rp 149.000",
+            price: "Rp 159.000",
             oldPrice: "Rp 200.000",
-            numericPrice: 149000,
+            numericPrice: 159000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
@@ -192,9 +192,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Favorit",
             color: "#a67c52",
-            price: "Rp 129.000",
+            price: "Rp 149.000",
             oldPrice: "Rp 180.000",
-            numericPrice: 129000,
+            numericPrice: 149000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -204,9 +204,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "Best Seller",
             color: "#a67c52",
-            price: "Rp 129.000",
+            price: "Rp 139.000",
             oldPrice: "Rp 180.000",
-            numericPrice: 129000,
+            numericPrice: 139000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
@@ -1102,7 +1102,7 @@ export default function UnboxTheMemoryPage() {
                         whiteSpace: "nowrap",
                     }}>
                         <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
-                            Mulai Rp 129.000
+                            Mulai Rp 139.000
                         </span>
                         <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
                             Rp 180.000

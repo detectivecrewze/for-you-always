@@ -30,9 +30,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#b38742",
         image: "/assets/opening_gate.png",
         demoUrl: "https://anniv.for-you-always.my.id/",
-        price: "Rp 149.000",
+        price: "Rp 159.000",
         oldPrice: "Rp 200.000",
-        numericPrice: 149000,
+        numericPrice: 159000,
     },
     {
         id: "letter",
@@ -42,9 +42,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#a67c52",
         image: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         demoUrl: "https://letter.for-you-always.my.id/",
-        price: "Rp 129.000",
+        price: "Rp 149.000",
         oldPrice: "Rp 180.000",
-        numericPrice: 129000,
+        numericPrice: 149000,
     },
     {
         id: "voices",
@@ -54,9 +54,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#994d5d",
         image: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
         demoUrl: "https://voices.for-you-always.my.id/",
-        price: "Rp 129.000",
+        price: "Rp 139.000",
         oldPrice: "Rp 180.000",
-        numericPrice: 129000,
+        numericPrice: 139000,
     },
 ];
 
