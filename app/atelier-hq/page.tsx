@@ -2168,9 +2168,9 @@ export default function Dashboard() {
                 const fullAddr = [ship.address, ship.village, ship.district, ship.city, ship.province, ship.postal_code].filter(Boolean).join(", ");
 
                 const loc1 = {
-                    contact_name: "For you, Always.",
-                    contact_phone: "081381543981",
-                    address: "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820",
+                    contact_name: "Khalisha ( For You, Always )",
+                    contact_phone: "081936109076",
+                    address: "Limus Pratama Regency Jl Kediri 7 Blok E16/22, Cileungsi Kab.Bogor",
                     postal_code: "16820",
                     latitude: "-6.3593181",
                     longitude: "106.9736382",
@@ -2265,7 +2265,7 @@ export default function Dashboard() {
                                                 onChange={() => setSelectedOriginPreset("loc1")}
                                             />
                                             <strong style={{ fontSize: "0.9rem", color: "#1d1816" }}>
-                                                Lokasi 1 (Cileungsi - Rumah)
+                                                Lokasi 1 (Gudang Utama - Cileungsi)
                                             </strong>
                                             <span style={{ fontSize: "0.72rem", background: "#e8f5e9", color: "#2e7d32", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>
                                                 Default

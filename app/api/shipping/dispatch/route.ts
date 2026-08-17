@@ -4,6 +4,9 @@ export const dynamic = "force-dynamic";
 
 const COOKIE_NAME = "fya_admin_session";
 const BITESHIP_API_KEY = process.env.BITESHIP_API_KEY;
+const DEFAULT_ORIGIN_CONTACT_NAME = process.env.BITESHIP_ORIGIN_CONTACT_NAME || "Khalisha ( For You, Always )";
+const DEFAULT_ORIGIN_CONTACT_PHONE = process.env.BITESHIP_ORIGIN_CONTACT_PHONE || "081936109076";
+const DEFAULT_ORIGIN_ADDRESS = process.env.BITESHIP_ORIGIN_ADDRESS || "Limus Pratama Regency Jl Kediri 7 Blok E16/22, Cileungsi Kab.Bogor";
 const DEFAULT_ORIGIN_POSTAL = process.env.BITESHIP_ORIGIN_POSTAL_CODE || "16820";
 const DEFAULT_ORIGIN_LAT = process.env.BITESHIP_ORIGIN_LATITUDE || "-6.3593181";
 const DEFAULT_ORIGIN_LNG = process.env.BITESHIP_ORIGIN_LONGITUDE || "106.9736382";
@@ -108,8 +111,8 @@ export async function POST(req: NextRequest) {
 
         const courierChoice = parseCourier(shipDetails.courier || order_data.courier || "");
 
-        const originContactName = origin_details?.contact_name || "For you, Always.";
-        const originContactPhone = origin_details?.contact_phone || "081381543981";
+        const originContactName = origin_details?.contact_name || DEFAULT_ORIGIN_CONTACT_NAME;
+        const originContactPhone = origin_details?.contact_phone || DEFAULT_ORIGIN_CONTACT_PHONE;
         const fullOriginAddress = [
             origin_details?.address,
             origin_details?.village ? `Kel. ${origin_details.village}` : "",
@@ -118,7 +121,7 @@ export async function POST(req: NextRequest) {
             origin_details?.province,
         ]
             .filter(Boolean)
-            .join(", ") || origin_details?.address || "Limus Pratama Regency, Limus Nunggal, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
+            .join(", ") || origin_details?.address || DEFAULT_ORIGIN_ADDRESS;
         const originNote = origin_details?.note || "Paket kado hampers siap pick up di depan rumah";
         const originPostalCode = parseInt(String(origin_details?.postal_code || DEFAULT_ORIGIN_POSTAL).replace(/\D/g, ""), 10) || 16820;
         
