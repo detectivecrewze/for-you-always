@@ -11,13 +11,10 @@ interface UnboxCheckoutModalProps {
 }
 
 const DIGITAL_OPTIONS = [
-    { id: "loves", title: "Memoria", subtitle: "Kisah Sinematik & Galeri", color: "#d4af37", badge: "Signature" },
-    { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Favorit" },
-    { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "Best Seller" },
+    { id: "loves", title: "Memoria", subtitle: "Kisah Sinematik & Galeri", color: "#d4af37", badge: "Signature", price: 149000, oldPrice: 200000 },
+    { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Favorit", price: 129000, oldPrice: 180000 },
+    { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "Best Seller", price: 129000, oldPrice: 180000 },
 ];
-
-const BOX_PRICE = 150000;
-const BOX_OLD_PRICE = 200000;
 
 export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "loves" }: UnboxCheckoutModalProps) {
     const [step, setStep] = useState<"details" | "review">("details");
@@ -50,8 +47,10 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
         shippingDetails.city
     );
 
-    const totalAmount = BOX_PRICE + shippingCost;
     const selectedDigitalObj = DIGITAL_OPTIONS.find(d => d.id === selectedDigital) || DIGITAL_OPTIONS[0];
+    const boxPrice = selectedDigitalObj.price;
+    const boxOldPrice = selectedDigitalObj.oldPrice;
+    const totalAmount = boxPrice + shippingCost;
 
     useEffect(() => {
         trackInitiateCheckout(
@@ -115,7 +114,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                     item_details: [
                         {
                             id: `unbox-box`,
-                            price: BOX_PRICE,
+                            price: boxPrice,
                             quantity: 1,
                             name: `Unbox the Memory Gift Box + ${selectedDigitalObj.title} QR`,
                         },
@@ -595,7 +594,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             <span style={{ fontSize: 10.5, color: "#a6968c", textDecoration: "line-through", marginRight: 6 }}>
-                                                Rp {(BOX_OLD_PRICE + shippingCost).toLocaleString("id-ID")}
+                                                Rp {(boxOldPrice + shippingCost).toLocaleString("id-ID")}
                                             </span>
                                             <span style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#1d1816" }}>
                                                 Rp {totalAmount.toLocaleString("id-ID")}

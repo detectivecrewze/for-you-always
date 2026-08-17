@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC001",
+    "title": "get_inventory_api_should_return_filtered_product_list",
+    "description": "Test the GET /api/inventory endpoint to verify it returns the correct list of products filtered by occasion and includes all necessary product details such as features, pricing, and preview media."
+  },
+  {
+    "id": "TC002",
+    "title": "post_shipping_rates_api_should_return_correct_courier_rates",
+    "description": "Test the POST /api/shipping/rates endpoint to ensure it calculates and returns accurate shipping rates based on the selected province and city in Indonesia."
+  },
+  {
+    "id": "TC003",
+    "title": "post_checkout_api_should_process_order_and_payment",
+    "description": "Test the POST /api/checkout endpoint to verify it processes the complete checkout flow including digital experience selection, sender and recipient information, shipping details, and payment completion."
+  },
+  {
+    "id": "TC004",
+    "title": "get_order_status_api_should_return_order_and_courier_tracking_info",
+    "description": "Test the GET /api/order-status endpoint to confirm it returns real-time order status including payment confirmation, digital gift studio access, and courier delivery tracking information."
+  },
+  {
+    "id": "TC005",
+    "title": "get_admin_orders_api_should_return_paginated_order_list_for_authorized_admin",
+    "description": "Test the GET /api/admin/orders endpoint to ensure authorized admins can retrieve a paginated, searchable, and filterable list of digital and physical orders."
+  },
+  {
+    "id": "TC006",
+    "title": "post_shipping_dispatch_api_should_trigger_courier_dispatch",
+    "description": "Test the POST /api/shipping/dispatch endpoint to verify that authorized admins can trigger courier dispatch for shipments successfully."
+  },
+  {
+    "id": "TC007",
+    "title": "post_admin_update_resi_api_should_update_tracking_number",
+    "description": "Test the POST /api/admin/update-resi endpoint to confirm authorized admins can update the resi tracking number for orders and that the update is reflected correctly."
+  }
+]

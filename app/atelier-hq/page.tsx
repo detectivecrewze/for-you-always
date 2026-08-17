@@ -51,12 +51,31 @@ export default function Dashboard() {
 
     // Dashboard States
     const [activeTab, setActiveTab] = useState<"overview" | "physical" | "digital">("overview");
-    const [timeRangeFilter, setTimeRangeFilter] = useState<"today" | "yesterday" | "7days" | "30days" | "all">("all");
+    const [timeRangeFilter, setTimeRangeFilter] = useState<"today" | "yesterday" | "7days" | "30days" | "all">("today");
+    const [overviewStats, setOverviewStats] = useState<{
+        totalRevenue: number;
+        paidCount: number;
+        pendingCount: number;
+        physicalCount: number;
+    }>({ totalRevenue: 0, paidCount: 0, pendingCount: 0, physicalCount: 0 });
+    const [recentOrders, setRecentOrders] = useState<any[]>([]);
+    const [loadingStats, setLoadingStats] = useState(false);
     const [orders, setOrders] = useState<OrderItem[]>([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
     const [productFilter, setProductFilter] = useState("all");
     const [statusFilter, setStatusFilter] = useState("paid_only");
+    const [digitalPage, setDigitalPage] = useState(1);
+    const [physicalPage, setPhysicalPage] = useState(1);
+    const [totalOrders, setTotalOrders] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
+    const [physicalCounters, setPhysicalCounters] = useState({
+        unpaidCount: 0,
+        pendingCustomizationCount: 0,
+        readyToPackCount: 0,
+        shippedCount: 0,
+    });
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -296,13 +315,63 @@ export default function Dashboard() {
         setMobileMenuOpen(false);
     };
 
-    const fetchOrders = async () => {
+    const fetchStats = async (range: string = timeRangeFilter) => {
+        setLoadingStats(true);
+        try {
+            const res = await fetch(`/api/admin/stats?range=${range}&t=${Date.now()}`, {
+                cache: "no-store",
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) {
+                    setOverviewStats(data.stats || { totalRevenue: 0, paidCount: 0, pendingCount: 0, physicalCount: 0 });
+                    setRecentOrders(data.recentOrders || []);
+                }
+            }
+        } catch (err) {
+            console.error("Failed to fetch stats:", err);
+        } finally {
+            setLoadingStats(false);
+        }
+    };
+
+    // Debounce search query
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 250);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    const fetchOrders = async (
+        targetTab: "physical" | "digital" = activeTab === "physical" ? "physical" : "digital",
+        page: number = activeTab === "physical" ? physicalPage : digitalPage,
+        search: string = debouncedSearch,
+        prod: string = productFilter,
+        st: string = statusFilter
+    ) => {
         setLoadingOrders(true);
         try {
-            const res = await fetch("/api/admin/orders");
+            const params = new URLSearchParams({
+                tab: targetTab,
+                page: String(page),
+                limit: "25",
+                q: search,
+                product: prod,
+                status: st,
+                t: String(Date.now()),
+            });
+            const res = await fetch(`/api/admin/orders?${params.toString()}`, {
+                cache: "no-store",
+            });
             if (res.ok) {
                 const data = await res.json();
                 setOrders(data.orders || []);
+                setTotalOrders(data.total || 0);
+                setTotalPages(data.totalPages || 1);
+                if (data.counters) {
+                    setPhysicalCounters(data.counters);
+                }
             }
         } catch (err) {
             console.error("Failed to fetch orders:", err);
@@ -312,15 +381,33 @@ export default function Dashboard() {
     };
 
     const handleRefreshAll = () => {
-        fetchOrders();
+        if (activeTab === "overview") {
+            fetchStats(timeRangeFilter);
+        } else {
+            const page = activeTab === "physical" ? physicalPage : digitalPage;
+            fetchOrders(activeTab, page, debouncedSearch, productFilter, statusFilter);
+        }
         fetchInventory();
     };
 
     useEffect(() => {
-        if (isAuthenticated && (activeTab === "physical" || activeTab === "overview")) {
-            fetchInventory();
+        if (isAuthenticated) {
+            if (activeTab === "overview") {
+                fetchStats(timeRangeFilter);
+            } else {
+                const page = activeTab === "physical" ? physicalPage : digitalPage;
+                fetchOrders(activeTab, page, debouncedSearch, productFilter, statusFilter);
+            }
+            if (activeTab === "physical" || activeTab === "overview") {
+                fetchInventory();
+            }
         }
-    }, [activeTab, isAuthenticated]);
+    }, [activeTab, isAuthenticated, timeRangeFilter, physicalPage, digitalPage, debouncedSearch, productFilter, statusFilter]);
+
+    useEffect(() => {
+        setDigitalPage(1);
+        setPhysicalPage(1);
+    }, [debouncedSearch, productFilter, statusFilter]);
 
     // Helpers
     const parseMeta = (val: any) => {
@@ -626,77 +713,11 @@ export default function Dashboard() {
         }
     };
 
-    // Filtered lists
-    const physicalOrders = orders.filter(o => {
-        const pType = getProductType(o);
-        return pType.startsWith("unbox") || o.order_id?.startsWith("ORDER-UNBOX") || Boolean(o.shipping_details);
-    });
-    const digitalOrders = orders.filter(o => {
-        const pType = getProductType(o);
-        return !pType.startsWith("unbox") && !o.order_id?.startsWith("ORDER-UNBOX") && !o.shipping_details;
-    });
-
-    // Filtered by time range for Overview Tab
-    const overviewOrders = orders.filter(o => isWithinRange(o.created_at, timeRangeFilter));
-
-    // Metrics (dynamically filtered for Overview tab)
-    const totalRevenue = overviewOrders
-        .filter(o => o.status === "paid" || o.status === "success")
-        .reduce((acc, curr) => acc + (curr.gross_amount || 0), 0);
-
-    const paidOrdersCount = overviewOrders.filter(o => o.status === "paid" || o.status === "success").length;
-    const pendingOrdersCount = overviewOrders.filter(o => o.status === "pending").length;
-
-    const overviewPhysicalOrders = overviewOrders.filter(o => {
-        const pType = getProductType(o);
-        return pType.startsWith("unbox") || o.order_id?.startsWith("ORDER-UNBOX") || Boolean(o.shipping_details);
-    });
-    const overviewPhysicalCount = overviewPhysicalOrders.length;
-
-    // Physical metrics (calculated from PAID orders)
-    const paidPhysicalOrders = physicalOrders.filter(o => o.status === "paid" || o.status === "success");
-    const pendingCustomizationCount = paidPhysicalOrders.filter(o => o.customization_status !== "published" && o.fulfillment_status !== "shipped").length;
-    const readyToPackCount = paidPhysicalOrders.filter(o => o.customization_status === "published" && o.fulfillment_status !== "shipped").length;
-    const shippedPhysicalCount = paidPhysicalOrders.filter(o => o.fulfillment_status === "shipped").length;
-    const unpaidPhysicalCount = physicalOrders.filter(o => o.status === "pending").length;
-
-    // Filtered physical view
-    const filteredPhysical = physicalOrders.filter(o => {
-        const cust = getCustomer(o);
-        const ship = parseMeta(o.shipping_details);
-        const matchesSearch =
-            o.order_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            cust.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (ship.recipient_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-            cust.phone.includes(searchQuery);
-
-        if (!matchesSearch) return false;
-
-        const isPaid = o.status === "paid" || o.status === "success";
-        if (statusFilter === "paid_only") return isPaid;
-        if (statusFilter === "all") return true;
-        if (statusFilter === "pending_payment") return o.status === "pending";
-        if (statusFilter === "pending_customization") return isPaid && (o.customization_status !== "published" && o.fulfillment_status !== "shipped");
-        if (statusFilter === "ready_to_pack") return isPaid && (o.customization_status === "published" && o.fulfillment_status !== "shipped");
-        if (statusFilter === "shipped") return isPaid && o.fulfillment_status === "shipped";
-        return true;
-    });
-
-    // Filtered digital view
-    const filteredDigital = digitalOrders.filter(o => {
-        const cust = getCustomer(o);
-        const pType = getProductType(o);
-        const matchesSearch =
-            o.order_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            cust.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            cust.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            cust.phone.includes(searchQuery);
-
-        const matchesProduct = productFilter === "all" || pType.includes(productFilter);
-        const matchesStatus = statusFilter === "all" || o.status === statusFilter;
-
-        return matchesSearch && matchesProduct && matchesStatus;
-    });
+    // Physical metrics (from server counters)
+    const pendingCustomizationCount = physicalCounters.pendingCustomizationCount;
+    const readyToPackCount = physicalCounters.readyToPackCount;
+    const shippedPhysicalCount = physicalCounters.shippedCount;
+    const unpaidPhysicalCount = physicalCounters.unpaidCount;
 
     const getTabTitle = () => {
         if (activeTab === "overview") return "Ringkasan Penjualan";
@@ -1181,7 +1202,7 @@ export default function Dashboard() {
                                         </span>
                                     </div>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#1d1816", marginTop: 4 }}>
-                                        Rp {totalRevenue.toLocaleString("id-ID")}
+                                        {loadingStats ? "..." : `Rp ${overviewStats.totalRevenue.toLocaleString("id-ID")}`}
                                     </div>
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
@@ -1194,7 +1215,7 @@ export default function Dashboard() {
                                         </span>
                                     </div>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#2e7d32", marginTop: 4 }}>
-                                        {paidOrdersCount} Transaksi
+                                        {loadingStats ? "..." : `${overviewStats.paidCount} Transaksi`}
                                     </div>
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
@@ -1207,7 +1228,7 @@ export default function Dashboard() {
                                         </span>
                                     </div>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#a67c52", marginTop: 4 }}>
-                                        {overviewPhysicalCount} Box
+                                        {loadingStats ? "..." : `${overviewStats.physicalCount} Box`}
                                     </div>
                                 </div>
                                 <div style={{ background: "#ffffff", padding: "16px 18px", borderRadius: 14, border: "1px solid #e8dfd8" }}>
@@ -1220,7 +1241,7 @@ export default function Dashboard() {
                                         </span>
                                     </div>
                                     <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "#e65100", marginTop: 4 }}>
-                                        {pendingOrdersCount} Order
+                                        {loadingStats ? "..." : `${overviewStats.pendingCount} Order`}
                                     </div>
                                 </div>
                             </div>
@@ -1232,16 +1253,16 @@ export default function Dashboard() {
                                         Aktivitas Transaksi ({TIME_RANGE_LABELS[timeRangeFilter]})
                                     </h3>
                                     <button
-                                        onClick={() => setActiveTab("digital")}
+                                        onClick={() => { setActiveTab("digital"); setStatusFilter("all"); }}
                                         style={{ background: "none", border: "none", color: "#a67c52", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}
                                     >
                                         Semua Pesanan →
                                     </button>
                                 </div>
 
-                                {loadingOrders ? (
-                                    <div style={{ padding: "24px", textAlign: "center", color: "#7a685e", fontSize: 12 }}>Memuat data D1...</div>
-                                ) : overviewOrders.length === 0 ? (
+                                {loadingStats ? (
+                                    <div style={{ padding: "24px", textAlign: "center", color: "#7a685e", fontSize: 12 }}>Menghitung ringkasan D1...</div>
+                                ) : recentOrders.length === 0 ? (
                                     <div style={{ padding: "28px", textAlign: "center", color: "#7a685e", fontSize: 12 }}>
                                         Belum ada transaksi pada periode <strong>{TIME_RANGE_LABELS[timeRangeFilter].toLowerCase()}</strong>.
                                     </div>
@@ -1258,10 +1279,10 @@ export default function Dashboard() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {overviewOrders.slice(0, 10).map((o) => (
+                                                {recentOrders.map((o) => (
                                                     <tr key={o.order_id} style={{ borderBottom: "1px solid #f0e9e2" }}>
                                                         <td style={{ padding: "10px 12px", fontWeight: 700, color: "#1d1816" }}>{o.order_id}</td>
-                                                        <td style={{ padding: "10px 12px", textTransform: "capitalize", color: "#59483f" }}>{o.product_type || "Digital Gift"}</td>
+                                                        <td style={{ padding: "10px 12px", textTransform: "capitalize", color: "#59483f" }}>{o.product_type || o.product_id || "Digital Gift"}</td>
                                                         <td style={{ padding: "10px 12px", fontWeight: 700, color: "#1d1816" }}>Rp {o.gross_amount?.toLocaleString("id-ID")}</td>
                                                         <td style={{ padding: "10px 12px" }}>
                                                             <span style={{
@@ -1493,10 +1514,11 @@ export default function Dashboard() {
                             <div className="dash-table-wrap">
                                 {loadingOrders ? (
                                     <div style={{ padding: "30px", textAlign: "center", color: "#7a685e", fontSize: 12.5 }}>Memuat pesanan fisik...</div>
-                                ) : filteredPhysical.length === 0 ? (
+                                ) : orders.length === 0 ? (
                                     <div style={{ padding: "30px", textAlign: "center", color: "#7a685e", fontSize: 12.5 }}>Tidak ada pesanan fisik yang cocok.</div>
                                 ) : (
-                                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 11.5, minWidth: 720 }}>
+                                    <>
+                                        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 11.5, minWidth: 720 }}>
                                         <thead>
                                             <tr style={{ background: "#faf7f2", borderBottom: "1px solid #e8dfd8" }}>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>ID & Waktu</th>
@@ -1509,7 +1531,7 @@ export default function Dashboard() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filteredPhysical.map((order) => {
+                                            {orders.map((order) => {
                                                 const cust = getCustomer(order);
                                                 const ship = parseMeta(order.shipping_details);
                                                 const isPaid = order.status === "paid" || order.status === "success";
@@ -1865,7 +1887,66 @@ export default function Dashboard() {
                                             })}
                                         </tbody>
                                     </table>
-                                )}
+
+                                    {totalOrders > 25 && (
+                                        <div style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            padding: "12px 18px",
+                                            borderTop: "1px solid #f0e9e2",
+                                            background: "#faf7f2",
+                                            fontSize: 12,
+                                            color: "#6e5c53",
+                                            flexWrap: "wrap",
+                                            gap: 10
+                                        }}>
+                                            <div>
+                                                Menampilkan <strong>{Math.min((physicalPage - 1) * 25 + 1, totalOrders)}</strong> - <strong>{Math.min(physicalPage * 25, totalOrders)}</strong> dari <strong>{totalOrders}</strong> pesanan
+                                            </div>
+                                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPhysicalPage(p => Math.max(1, p - 1))}
+                                                    disabled={physicalPage === 1}
+                                                    style={{
+                                                        padding: "5px 10px",
+                                                        borderRadius: 6,
+                                                        border: "1px solid #dcd1c6",
+                                                        background: physicalPage === 1 ? "#f5efe9" : "#ffffff",
+                                                        color: physicalPage === 1 ? "#b3a59c" : "#1d1816",
+                                                        cursor: physicalPage === 1 ? "not-allowed" : "pointer",
+                                                        fontWeight: 600,
+                                                        fontSize: 11
+                                                    }}
+                                                >
+                                                    ← Sebelumnya
+                                                </button>
+                                                <span style={{ fontWeight: 700, padding: "0 6px" }}>
+                                                    Halaman {physicalPage} / {totalPages}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPhysicalPage(p => Math.min(totalPages, p + 1))}
+                                                    disabled={physicalPage >= totalPages}
+                                                    style={{
+                                                        padding: "5px 10px",
+                                                        borderRadius: 6,
+                                                        border: "1px solid #dcd1c6",
+                                                        background: physicalPage >= totalPages ? "#f5efe9" : "#ffffff",
+                                                        color: physicalPage >= totalPages ? "#b3a59c" : "#1d1816",
+                                                        cursor: physicalPage >= totalPages ? "not-allowed" : "pointer",
+                                                        fontWeight: 600,
+                                                        fontSize: 11
+                                                    }}
+                                                >
+                                                    Selanjutnya →
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
                             </div>
                         </div>
                     )}
@@ -1934,10 +2015,11 @@ export default function Dashboard() {
                             <div className="dash-table-wrap">
                                 {loadingOrders ? (
                                     <div style={{ padding: "30px", textAlign: "center", color: "#7a685e", fontSize: 12.5 }}>Memuat pesanan digital...</div>
-                                ) : filteredDigital.length === 0 ? (
+                                ) : orders.length === 0 ? (
                                     <div style={{ padding: "30px", textAlign: "center", color: "#7a685e", fontSize: 12.5 }}>Tidak ada pesanan digital yang cocok.</div>
                                 ) : (
-                                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 11.5, minWidth: 600 }}>
+                                    <>
+                                        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 11.5, minWidth: 600 }}>
                                         <thead>
                                             <tr style={{ background: "#faf7f2", borderBottom: "1px solid #e8dfd8" }}>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Order ID & Waktu</th>
@@ -1948,7 +2030,7 @@ export default function Dashboard() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filteredDigital.map((order) => {
+                                            {orders.map((order) => {
                                                 const cust = getCustomer(order);
                                                 const pType = getProductType(order);
                                                 const hasLink = Boolean(order.studio_link || order.magic_link);
@@ -2026,7 +2108,66 @@ export default function Dashboard() {
                                             })}
                                         </tbody>
                                     </table>
-                                )}
+
+                                    {totalOrders > 25 && (
+                                        <div style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            padding: "12px 18px",
+                                            borderTop: "1px solid #f0e9e2",
+                                            background: "#faf7f2",
+                                            fontSize: 12,
+                                            color: "#6e5c53",
+                                            flexWrap: "wrap",
+                                            gap: 10
+                                        }}>
+                                            <div>
+                                                Menampilkan <strong>{Math.min((digitalPage - 1) * 25 + 1, totalOrders)}</strong> - <strong>{Math.min(digitalPage * 25, totalOrders)}</strong> dari <strong>{totalOrders}</strong> pesanan
+                                            </div>
+                                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDigitalPage(p => Math.max(1, p - 1))}
+                                                    disabled={digitalPage === 1}
+                                                    style={{
+                                                        padding: "5px 10px",
+                                                        borderRadius: 6,
+                                                        border: "1px solid #dcd1c6",
+                                                        background: digitalPage === 1 ? "#f5efe9" : "#ffffff",
+                                                        color: digitalPage === 1 ? "#b3a59c" : "#1d1816",
+                                                        cursor: digitalPage === 1 ? "not-allowed" : "pointer",
+                                                        fontWeight: 600,
+                                                        fontSize: 11
+                                                    }}
+                                                >
+                                                    ← Sebelumnya
+                                                </button>
+                                                <span style={{ fontWeight: 700, padding: "0 6px" }}>
+                                                    Halaman {digitalPage} / {totalPages}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDigitalPage(p => Math.min(totalPages, p + 1))}
+                                                    disabled={digitalPage >= totalPages}
+                                                    style={{
+                                                        padding: "5px 10px",
+                                                        borderRadius: 6,
+                                                        border: "1px solid #dcd1c6",
+                                                        background: digitalPage >= totalPages ? "#f5efe9" : "#ffffff",
+                                                        color: digitalPage >= totalPages ? "#b3a59c" : "#1d1816",
+                                                        cursor: digitalPage >= totalPages ? "not-allowed" : "pointer",
+                                                        fontWeight: 600,
+                                                        fontSize: 11
+                                                    }}
+                                                >
+                                                    Selanjutnya →
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
                             </div>
                         </div>
                     )}

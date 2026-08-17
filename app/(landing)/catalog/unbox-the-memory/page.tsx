@@ -179,10 +179,10 @@ export default function UnboxTheMemoryPage() {
             subtitle: "Kisah Cinta Sinematik Eksklusif",
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
-            color: "#d4af37",
-            price: "Rp 150.000",
+            color: "#a67c52",
+            price: "Rp 149.000",
             oldPrice: "Rp 200.000",
-            numericPrice: 150000,
+            numericPrice: 149000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
@@ -192,9 +192,9 @@ export default function UnboxTheMemoryPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Favorit",
             color: "#a67c52",
-            price: "Rp 130.000",
+            price: "Rp 129.000",
             oldPrice: "Rp 180.000",
-            numericPrice: 130000,
+            numericPrice: 129000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -203,10 +203,10 @@ export default function UnboxTheMemoryPage() {
             subtitle: "Rekaman Suara Pribadi & Galeri Foto",
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "Best Seller",
-            color: "#e91e63",
-            price: "Rp 130.000",
+            color: "#a67c52",
+            price: "Rp 129.000",
             oldPrice: "Rp 180.000",
-            numericPrice: 130000,
+            numericPrice: 129000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
@@ -550,17 +550,17 @@ export default function UnboxTheMemoryPage() {
                         img="/unbox-the-memory/IMG_2214_hd.webp"
                         hoverImg="https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png"
                         title="Luxury Gift Box"
-                        desc="Hardbox eksklusif dengan balutan pita satin elegan, dilengkapi kartu ucapan personal untuk seseorang yang spesial."
+                        desc="Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
                     />
                     <ShowcaseGridCard
                         img="/unbox-the-memory/IMG_2217_hd.webp"
                         title="Curated Keepsakes"
-                        desc="Koleksi kecil penuh perhatian, mulai dari teddy bear mini, dried flowers, hingga sweet treats pilihan yang melengkapi momen spesialmu."
+                        desc="Koleksi kecil penuh perhatian, mulai dari teddy bear mini, dried flowers, hingga sweet treats pilihan yang melengkapi momen hangatmu."
                     />
                     <ShowcaseGridCard
                         img="/unbox-the-memory/IMG_2215_hd.webp"
-                        title="Digital Memory Card"
-                        desc="Kartu QR personal berbentuk hati yang membuka sebuah digital gift berisi pesan, kenangan, dan momen spesial yang hanya untuknya."
+                        title="Personal QR Experience"
+                        desc="Kartu akses ber-QR eksklusif yang menjadi gerbang pembuka menuju pengalaman kado digital interaktif — penuh dengan musik, foto, dan pesan yang dibuat khusus untuknya."
                         objectPosition="center center"
                     />
                 </div>
@@ -856,7 +856,7 @@ export default function UnboxTheMemoryPage() {
                                         fontSize: "0.95rem"
                                     }}
                                 >
-                                    <span>Prinjau Detail Emas Digital Ini</span>
+                                    <span>Pratinjau Kado Digital Ini</span>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                         <line x1="5" y1="12" x2="19" y2="12"></line>
                                         <polyline points="12 5 19 12 12 19"></polyline>
@@ -1102,7 +1102,7 @@ export default function UnboxTheMemoryPage() {
                         whiteSpace: "nowrap",
                     }}>
                         <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
-                            Mulai Rp 130.000
+                            Mulai Rp 129.000
                         </span>
                         <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
                             Rp 180.000

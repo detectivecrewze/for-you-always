@@ -215,7 +215,7 @@ export default function GlobalError({
                     </Link>
 
                     <a
-                        href="https://wa.me/6281381543981?text=Hi%20For%20you,%20Always.%20I%20encountered%20an%20error%20on%20the%20website"
+                        href="https://wa.me/6281936109076?text=Hi%20For%20you,%20Always.%20I%20encountered%20an%20error%20on%20the%20website"
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{

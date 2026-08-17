@@ -86,7 +86,7 @@ export default function CollectionSection() {
                                 badgeColor: "#1d1816",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
-                                price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 130.000" size="sm" layout="inline" />,
+                                price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 129.000" size="sm" layout="inline" />,
                                 title: "Unbox the Memory",
                                 titleColor: "#382a24",
                                 description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif pilihanmu.",

@@ -1,0 +1,621 @@
+[
+  {
+    "id": "TC001",
+    "title": "Complete Unbox the Memory checkout with shipping and payment",
+    "description": "This verifies that a shopper can select a digital experience, enter recipient details, calculate shipping, review the order, and reach payment submission.",
+    "category": "Unbox the Memory Physical Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog/unbox-the-memory/checkout"
+      },
+      {
+        "type": "action",
+        "description": "Select the Memoria digital experience"
+      },
+      {
+        "type": "action",
+        "description": "Enter sender and recipient contact information"
+      },
+      {
+        "type": "action",
+        "description": "Enter the shipping address details"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid province"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid city"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify shipping rates are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Proceed to payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order summary is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Access the admin dashboard with a valid password",
+    "description": "An authorized admin can sign in to Atelier HQ and reach the dashboard with sales analytics and order management tools.",
+    "category": "Atelier HQ Admin Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "action",
+        "description": "Enter the admin password using {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin sign-in form using {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify sales analytics are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify order management controls are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Check payment status and open digital studio access",
+    "description": "A buyer can load an order reference, confirm payment status, open the digital gift studio, and see the fulfillment timeline.",
+    "category": "Order Status & Courier Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /order-status"
+      },
+      {
+        "type": "action",
+        "description": "Enter a valid order reference into the order reference field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order lookup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify payment confirmation status is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Open the digital gift studio access"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify digital gift studio access is available"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order fulfillment timeline is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Sign in to Atelier HQ and review dashboard analytics",
+    "description": "This verifies that an admin can access the internal dashboard after signing in and see revenue analytics.",
+    "category": "Atelier HQ",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify revenue analytics are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Track courier progress for a physical box order",
+    "description": "A buyer can load an order reference and review the latest courier checkpoints and delivery progress for a physical box order.",
+    "category": "Order Status & Courier Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /order-status"
+      },
+      {
+        "type": "action",
+        "description": "Enter a valid order reference into the order reference field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order lookup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the physical box status is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify courier tracking checkpoints are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the delivery timeline is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Show saved order status with digital access and courier tracking",
+    "description": "This verifies that a shopper can load an existing order reference on the status page and see payment, digital studio access, and courier progress.",
+    "category": "Order Status",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /order-status"
+      },
+      {
+        "type": "action",
+        "description": "Load a previously saved order reference"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify payment confirmation is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify digital gift studio access and courier tracking are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Open a product from the catalog",
+    "description": "This verifies that a shopper can open a product card from the catalog and reach the selected product detail page.",
+    "category": "Catalog Browsing & Filtering",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog"
+      },
+      {
+        "type": "action",
+        "description": "Open a product card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected product detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product features and pricing are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Update courier tracking and dispatch an order in Atelier HQ",
+    "description": "This verifies that an admin can update a tracking number and trigger courier dispatch from the order management view.",
+    "category": "Atelier HQ",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "action",
+        "description": "Open an order for fulfillment"
+      },
+      {
+        "type": "action",
+        "description": "Update the courier tracking number"
+      },
+      {
+        "type": "action",
+        "description": "Dispatch the shipment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated tracking information is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the shipment dispatch status is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Search, filter, and move through admin orders",
+    "description": "An authorized admin can search and filter orders and navigate between pages of the order list.",
+    "category": "Atelier HQ Admin Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "action",
+        "description": "Enter the admin password using {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin sign-in form using {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Search for an order using a valid query"
+      },
+      {
+        "type": "action",
+        "description": "Apply an order filter"
+      },
+      {
+        "type": "action",
+        "description": "Go to the next page of orders"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify filtered order results are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pagination updates the order list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Browse and filter products by occasion",
+    "description": "This verifies that a shopper can filter the catalog by occasion and see matching products in the catalog grid.",
+    "category": "Catalog Browsing & Filtering",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog"
+      },
+      {
+        "type": "action",
+        "description": "Filter products by occasion for an anniversary"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching products are displayed in the catalog grid"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Update a resi number and dispatch courier shipment",
+    "description": "An authorized admin can update a shipment tracking number and trigger courier dispatch from the dashboard.",
+    "category": "Atelier HQ Admin Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "action",
+        "description": "Enter the admin password using {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin sign-in form using {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Open an order ready for fulfillment"
+      },
+      {
+        "type": "action",
+        "description": "Update the resi tracking number with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Dispatch the courier shipment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated tracking number is saved"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify courier dispatch is recorded"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Search, filter, and paginate orders in Atelier HQ",
+    "description": "This verifies that an admin can find orders using search and filters and move through paginated results.",
+    "category": "Atelier HQ",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "action",
+        "description": "Search for an order"
+      },
+      {
+        "type": "action",
+        "description": "Apply an order filter"
+      },
+      {
+        "type": "action",
+        "description": "Go to the next page of orders"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching orders are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify paginated order results are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Start Unbox the Memory checkout from the product page",
+    "description": "This verifies that a shopper can move from the Unbox the Memory product page into the checkout flow.",
+    "category": "Unbox the Memory Product Discovery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog/unbox-the-memory"
+      },
+      {
+        "type": "action",
+        "description": "Open the purchase path"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the checkout entry point is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Load a saved order reference from order status",
+    "description": "A buyer can return to order status and load a previously saved order reference to view their order details.",
+    "category": "Order Status & Courier Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /order-status"
+      },
+      {
+        "type": "action",
+        "description": "Load the saved order reference"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order lookup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify order details are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify payment confirmation status is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC015",
+    "title": "Compare Unbox the Memory variants and stock",
+    "description": "This verifies that a shopper can review Unbox the Memory variants and stock availability before starting checkout.",
+    "category": "Unbox the Memory Product Discovery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog/unbox-the-memory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify available box variants are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify stock availability is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC016",
+    "title": "Review preview media on product detail pages",
+    "description": "This verifies that a shopper can view preview media when opening supported product detail pages.",
+    "category": "Catalog Browsing & Filtering",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog/letter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify preview media is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /catalog/voices"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify preview media is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC017",
+    "title": "Prevent checkout progress with incomplete required details",
+    "description": "This verifies that the checkout flow blocks continuation until required sender, recipient, and shipping fields are completed.",
+    "category": "Unbox the Memory Physical Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /catalog/unbox-the-memory/checkout"
+      },
+      {
+        "type": "action",
+        "description": "Select a digital experience"
+      },
+      {
+        "type": "action",
+        "description": "Enter incomplete sender and recipient contact information"
+      },
+      {
+        "type": "action",
+        "description": "Enter incomplete shipping address details"
+      },
+      {
+        "type": "action",
+        "description": "Proceed to payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify form validation errors are visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC018",
+    "title": "Reject an incorrect admin password",
+    "description": "A user who enters the wrong admin password remains outside the dashboard and sees access denied.",
+    "category": "Atelier HQ Admin Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /atelier-hq"
+      },
+      {
+        "type": "action",
+        "description": "Enter an incorrect admin password using fake credentials"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin sign-in form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an access denied message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is not displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC019",
+    "title": "Handle missing order reference in order status lookup",
+    "description": "A buyer sees a validation state when trying to look up order status without providing a reference.",
+    "category": "Order Status & Courier Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /order-status"
+      },
+      {
+        "type": "action",
+        "description": "Submit the order lookup without entering a reference"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an order reference validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify order details are not displayed"
+      }
+    ],
+    "priority": "Low"
+  }
+]
