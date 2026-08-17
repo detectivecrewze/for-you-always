@@ -11,7 +11,7 @@ export default function CollectionSection() {
     const [unboxStock, setUnboxStock] = useState<number | null>(null);
 
     useEffect(() => {
-        fetch("/api/inventory?product_id=unbox-the-memory")
+        fetch("/api/inventory?product_id=the-gift-box")
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
