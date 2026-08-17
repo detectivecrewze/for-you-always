@@ -127,15 +127,15 @@ export default function UnboxTheMemoryPage() {
             <section style={{
                 position: "relative",
                 zIndex: 1,
-                paddingTop: "clamp(110px, 14vh, 150px)",
-                paddingBottom: "clamp(60px, 8vh, 90px)",
+                paddingTop: "clamp(120px, 15vh, 150px)",
+                paddingBottom: "clamp(50px, 7vh, 80px)",
                 maxWidth: "1160px",
                 margin: "0 auto",
                 paddingLeft: "24px",
                 paddingRight: "24px"
             }}>
                 {/* BREADCRUMB BACK BUTTON */}
-                <div style={{ marginBottom: "24px" }}>
+                <div style={{ marginBottom: "28px" }}>
                     <Link
                         href="/catalog"
                         style={{
@@ -143,12 +143,12 @@ export default function UnboxTheMemoryPage() {
                             alignItems: "center",
                             gap: "8px",
                             color: "#6e5c53",
-                            fontSize: "0.85rem",
+                            fontSize: "0.82rem",
                             fontWeight: 600,
                             textDecoration: "none",
                             padding: "6px 14px",
                             borderRadius: "999px",
-                            backgroundColor: "rgba(255,255,255,0.6)",
+                            backgroundColor: "rgba(255,255,255,0.65)",
                             border: "1px solid rgba(205,171,143,0.25)",
                             backdropFilter: "blur(8px)",
                             transition: "all 0.2s ease"
@@ -160,7 +160,7 @@ export default function UnboxTheMemoryPage() {
                         }}
                         onMouseLeave={e => {
                             e.currentTarget.style.color = "#6e5c53";
-                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.6)";
+                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.65)";
                             e.currentTarget.style.borderColor = "rgba(205,171,143,0.25)";
                         }}
                     >
@@ -178,15 +178,16 @@ export default function UnboxTheMemoryPage() {
                     flexWrap: "wrap",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    gap: "56px"
+                    gap: "clamp(36px, 5vw, 56px)"
                 }}>
                     {/* LEFT COLUMN: HERO HAMPERS SHOWCASE IMAGE CARD */}
                     <div
                         style={{
-                            flex: "1 1 400px",
+                            flex: "1 1 380px",
                             position: "relative",
                             display: "flex",
-                            justifyContent: "center"
+                            justifyContent: "center",
+                            width: "100%",
                         }}
                     >
                         <div style={{
@@ -194,10 +195,10 @@ export default function UnboxTheMemoryPage() {
                             width: "100%",
                             maxWidth: "480px",
                             aspectRatio: "4 / 3",
-                            borderRadius: "28px",
+                            borderRadius: "24px",
                             overflow: "hidden",
                             border: "1px solid rgba(205,171,143,0.3)",
-                            boxShadow: "0 20px 50px -15px rgba(56,42,36,0.15)",
+                            boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
                             background: "#1d1816"
                         }}>
                             <Image
@@ -207,135 +208,123 @@ export default function UnboxTheMemoryPage() {
                                 style={{
                                     objectFit: "cover",
                                     objectPosition: "center 48%",
-                                    borderRadius: "28px",
+                                    borderRadius: "24px",
                                 }}
                                 priority
                             />
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: HEADLINE, SUBTITLE, PRICE & CTAS */}
-                    <div style={{ flex: "1 1 480px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                    {/* RIGHT COLUMN: EYEBROW, H1, DESC, PRICE & CTAS */}
+                    <div style={{ flex: "1 1 440px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                        
+                        {/* EYEBROW */}
+                        <span style={{
+                            fontSize: "0.76rem",
+                            fontWeight: 700,
+                            letterSpacing: "0.22em",
+                            textTransform: "uppercase",
+                            color: "#a88365",
+                            display: "block",
+                            marginBottom: "12px"
+                        }}>
+                            UNBOX THE MEMORY
+                        </span>
 
-                        {/* 1. HEADLINE */}
+                        {/* H1 HEADLINE */}
                         <h1 style={{
                             fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
-                            fontSize: "clamp(2.5rem, 5vw, 4.2rem)",
+                            fontSize: "clamp(2.2rem, 4.2vw, 3.6rem)",
                             fontWeight: 400,
-                            lineHeight: 1.08,
+                            lineHeight: 1.12,
                             color: "#382a24",
-                            marginBottom: "20px",
-                            letterSpacing: "-0.03em",
+                            marginBottom: "16px",
+                            letterSpacing: "-0.025em",
                             textAlign: "left"
                         }}>
-                            Dibuka dengan Tangan,<br />
-                            <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Dirasakan dengan Hati.</span>
+                            A gift made to be <span style={{ fontStyle: "italic", color: "#cdab8f" }}>remembered.</span>
                         </h1>
 
-                        {/* 2. SUBTITLE PARAGRAPH */}
+                        {/* DESCRIPTION PARAGRAPH */}
                         <p style={{
-                            fontSize: "clamp(1rem, 1.8vw, 1.12rem)",
+                            fontSize: "clamp(0.92rem, 1.6vw, 1.04rem)",
                             color: "#6e5c53",
-                            lineHeight: 1.7,
-                            marginBottom: "20px",
+                            lineHeight: 1.65,
+                            marginBottom: "24px",
                             fontWeight: 400,
-                            maxWidth: "520px",
+                            maxWidth: "480px",
                             textAlign: "left"
                         }}>
-                            Sebuah gift box eksklusif dengan kejutan digital personal yang dibuat untuk menyampaikan hal-hal yang mungkin sulit diucapkan langsung.
+                            Gift box fisik dengan kejutan digital personal, dibuat untuk menyampaikan sesuatu yang sulit diucapkan langsung.
                         </p>
 
-                        {/* 3. ATELIER SIGNATURE PRICE PILL */}
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "12px",
-                            marginBottom: "28px",
-                            flexWrap: "wrap",
-                        }}>
-                            <div style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "8px",
-                                padding: "8px 18px",
-                                borderRadius: "999px",
-                                backgroundColor: "#ffffff",
-                                border: "1px solid rgba(205, 171, 143, 0.35)",
-                                boxShadow: "0 2px 10px rgba(56, 42, 36, 0.04)",
-                                whiteSpace: "nowrap",
-                            }}>
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                    <line x1="7" y1="7" x2="7.01" y2="7" />
-                                </svg>
-                                <DiscountPrice
-                                    oldPrice={digitalExperiences[selectedDigitalExperience].oldPrice}
-                                    newPrice={digitalExperiences[selectedDigitalExperience].price}
-                                    size="md"
-                                    layout="inline"
-                                />
-                            </div>
-
-                            <span style={{
-                                fontSize: "0.8rem",
-                                color: "#8a7569",
-                                letterSpacing: "0.02em",
-                                fontWeight: 500,
-                                fontFamily: "var(--font-sans)",
-                                whiteSpace: "nowrap",
-                            }}>
-                                Termasuk Kartu QR Digital
-                            </span>
-                        </div>
-
-                        {/* 4. LIVE STOCK SCARCITY BADGE */}
+                        {/* UNIFIED LUXURY PRICE & LIVE STOCK BAR */}
                         <div style={{
                             display: "inline-flex",
                             alignItems: "center",
-                            gap: "8px",
-                            padding: "6px 14px",
+                            gap: "12px",
+                            padding: "8px 16px",
                             borderRadius: "999px",
-                            fontSize: "0.8rem",
-                            fontWeight: 700,
-                            backgroundColor: stockData.stock === 0 ? "#ffebee" : stockData.is_low_stock ? "#fff3e0" : "#f5eee6",
-                            color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#59483f",
-                            border: `1px solid ${stockData.stock === 0 ? "#ffcdd2" : stockData.is_low_stock ? "#ffe0b2" : "#e8dfd8"}`,
-                            marginBottom: "20px"
+                            backgroundColor: "#ffffff",
+                            border: "1px solid rgba(205, 171, 143, 0.35)",
+                            boxShadow: "0 2px 10px rgba(56, 42, 36, 0.04)",
+                            marginBottom: "28px",
+                            flexWrap: "wrap",
                         }}>
-                            <span style={{
-                                width: 6,
-                                height: 6,
-                                borderRadius: "50%",
-                                backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#a67c52",
-                                display: "inline-block",
-                            }} />
-                            <span>
-                                {stockData.stock === 0
-                                    ? "Slot Batch Ini Habis (Sold Out)"
-                                    : stockData.is_low_stock
-                                    ? `Slot Terbatas: Sisa ${stockData.stock} Box Saja`
-                                    : `Tersedia ${stockData.stock} Box untuk Batch Ini`}
-                            </span>
+                            <DiscountPrice
+                                oldPrice={digitalExperiences[selectedDigitalExperience].oldPrice}
+                                newPrice={digitalExperiences[selectedDigitalExperience].price}
+                                size="md"
+                                layout="inline"
+                            />
+                            
+                            <span style={{ color: "rgba(205,171,143,0.5)", fontSize: "0.85rem" }}>|</span>
+
+                            <div style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                fontSize: "0.78rem",
+                                fontWeight: 600,
+                                color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#6e5c53"
+                            }}>
+                                <span style={{
+                                    width: 6,
+                                    height: 6,
+                                    borderRadius: "50%",
+                                    backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                    display: "inline-block",
+                                }} />
+                                <span>
+                                    {stockData.stock === 0
+                                        ? "Slot Habis"
+                                        : stockData.is_low_stock
+                                        ? `Sisa ${stockData.stock} Box Saja`
+                                        : `Tersedia ${stockData.stock} Box`}
+                                </span>
+                            </div>
                         </div>
 
-                        {/* 5. CTA BUTTONS: GO TO WIZARD CHECKOUT */}
-                        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
+                        {/* CTA ACTION CONTAINER */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "380px", marginBottom: "28px" }}>
                             {stockData.stock > 0 ? (
                                 <Link
                                     href="/catalog/unbox-the-memory/checkout"
                                     style={{
-                                        display: "inline-flex",
+                                        display: "flex",
                                         alignItems: "center",
+                                        justifyContent: "center",
                                         gap: "10px",
                                         backgroundColor: "#382a24",
                                         color: "#faf7f2",
                                         fontWeight: 700,
-                                        fontSize: "0.92rem",
-                                        padding: "16px 32px",
+                                        fontSize: "0.94rem",
+                                        padding: "15px 28px",
                                         borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
-                                        transition: "all 0.3s ease"
+                                        boxShadow: "0 10px 25px -6px rgba(56,42,36,0.25)",
+                                        transition: "all 0.25s ease",
+                                        textAlign: "center"
                                     }}
                                     onMouseOver={(e) => {
                                         e.currentTarget.style.transform = "translateY(-2px)";
@@ -346,7 +335,7 @@ export default function UnboxTheMemoryPage() {
                                         e.currentTarget.style.backgroundColor = "#382a24";
                                     }}
                                 >
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                         <line x1="3" y1="6" x2="21" y2="6"></line>
                                         <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -359,18 +348,20 @@ export default function UnboxTheMemoryPage() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     style={{
-                                        display: "inline-flex",
+                                        display: "flex",
                                         alignItems: "center",
+                                        justifyContent: "center",
                                         gap: "10px",
                                         backgroundColor: "#7a685e",
                                         color: "#faf7f2",
                                         fontWeight: 700,
-                                        fontSize: "0.92rem",
-                                        padding: "16px 32px",
+                                        fontSize: "0.94rem",
+                                        padding: "15px 28px",
                                         borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 10px 30px -8px rgba(56,42,36,0.3)",
-                                        transition: "all 0.3s ease"
+                                        boxShadow: "0 10px 25px -6px rgba(56,42,36,0.25)",
+                                        transition: "all 0.25s ease",
+                                        textAlign: "center"
                                     }}
                                 >
                                     <span>Pre-Order Batch Berikutnya (WA) ↗</span>
@@ -382,51 +373,48 @@ export default function UnboxTheMemoryPage() {
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
-                                    gap: "8px",
-                                    color: "#6e5c53",
-                                    fontWeight: 600,
-                                    fontSize: "0.92rem",
-                                    padding: "16px 26px",
-                                    borderRadius: "14px",
+                                    justifyContent: "center",
+                                    gap: "6px",
+                                    color: "#8a7569",
+                                    fontSize: "0.84rem",
+                                    fontWeight: 500,
                                     textDecoration: "none",
-                                    backgroundColor: "#ffffff",
-                                    border: "1px solid rgba(205,171,143,0.3)",
-                                    transition: "all 0.3s ease"
+                                    padding: "6px 8px",
+                                    transition: "color 0.2s ease",
+                                    textAlign: "center"
                                 }}
                                 onMouseOver={(e) => {
                                     e.currentTarget.style.color = "#382a24";
-                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.6)";
                                 }}
                                 onMouseOut={(e) => {
-                                    e.currentTarget.style.color = "#6e5c53";
-                                    e.currentTarget.style.borderColor = "rgba(205,171,143,0.3)";
+                                    e.currentTarget.style.color = "#8a7569";
                                 }}
                             >
-                                <span>Coba Kado Digital Instan</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <span>Atau coba format kado digital instan</span>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
                             </Link>
                         </div>
 
-                        {/* 5. TRUST BADGES ROW */}
+                        {/* TRUST BULLETS ROW */}
                         <div style={{
                             display: "flex",
                             flexWrap: "wrap",
-                            gap: "20px",
-                            paddingTop: "24px",
-                            borderTop: "1px solid rgba(205,171,143,0.18)",
-                            width: "100%"
+                            gap: "12px 20px",
+                            paddingTop: "20px",
+                            borderTop: "1px solid rgba(205,171,143,0.2)",
+                            width: "100%",
+                            maxWidth: "480px"
                         }}>
                             {[
-                                { title: "Gift Box Hampers Eksklusif" },
+                                { title: "Box Hampers Eksklusif" },
                                 { title: "Kartu QR Code Custom" },
-                                { title: "Akses Web Tanpa App" },
-                                { title: "Pengiriman Garansi Safepack" }
+                                { title: "Garansi Safepack" }
                             ].map((item, idx) => (
-                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "#6e5c53", fontWeight: 500 }}>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#7a685e", fontWeight: 500 }}>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                     <span>{item.title}</span>
