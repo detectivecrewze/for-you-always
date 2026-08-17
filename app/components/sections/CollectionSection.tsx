@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import AutoScrollCarousel from "../ProductCarousel";
 import { useCart } from "../../context/CartContext";
@@ -8,6 +8,18 @@ import DiscountPrice from "../DiscountPrice";
 
 export default function CollectionSection() {
     const { addToCart } = useCart();
+    const [unboxStock, setUnboxStock] = useState<number | null>(null);
+
+    useEffect(() => {
+        fetch("/api/inventory?product_id=unbox-the-memory")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && typeof data.stock === "number") {
+                    setUnboxStock(data.stock);
+                }
+            })
+            .catch(() => {});
+    }, []);
 
     return (
         <section id="collection" style={{ position: "relative", zIndex: 1, padding: "40px 0 40px" }}>
@@ -85,6 +97,7 @@ export default function CollectionSection() {
                                 badgeText: "PHYSICAL GIFT",
                                 badgeColor: "#1d1816",
                                 badgeVariant: "solid",
+                                slotBadgeText: unboxStock !== null ? `Sisa ${unboxStock} Box` : "Sisa 11 Box",
                                 imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
                                 price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 139.000" size="sm" layout="inline" />,
                                 title: "Unbox the Memory",

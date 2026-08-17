@@ -9,6 +9,7 @@ interface LoopCard {
     badgeText?: string;
     badgeColor?: string;
     badgeVariant?: "solid" | "soft";
+    slotBadgeText?: string;
     imageSrc: string;
     title: string;
     titleColor?: string;
@@ -144,6 +145,40 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         textTransform: "uppercase",
                     }}>
                         {card.badgeText}
+                    </span>
+                )}
+
+                {/* Top Right Slot / Scarcity Badge */}
+                {card.slotBadgeText && (
+                    <span style={{
+                        position: "absolute",
+                        top: 12,
+                        right: 12,
+                        borderRadius: 999,
+                        background: "rgba(29, 24, 22, 0.82)",
+                        backdropFilter: "blur(6px)",
+                        WebkitBackdropFilter: "blur(6px)",
+                        border: "1px solid rgba(205, 171, 143, 0.35)",
+                        color: "#ffffff",
+                        fontSize: 9,
+                        fontWeight: 700,
+                        padding: "4px 10px",
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        zIndex: 2,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                    }}>
+                        <span style={{
+                            width: 5,
+                            height: 5,
+                            borderRadius: "50%",
+                            backgroundColor: "#2e7d32",
+                            display: "inline-block"
+                        }} />
+                        <span>{card.slotBadgeText}</span>
                     </span>
                 )}
 

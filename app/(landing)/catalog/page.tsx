@@ -12,6 +12,7 @@ const CATALOG_ITEMS = [
     {
         badgeText: "PHYSICAL GIFT",
         badgeColor: "#1d1816",
+        slotBadgeText: "Sisa 11 Box",
         titleColor: "#382a24",
         imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         title: "Unbox the Memory",
@@ -164,6 +165,7 @@ const CATALOG_ITEMS = [
     oldPrice?: string;
     hashtag?: string;
     soldCount?: string;
+    slotBadgeText?: string;
 }>;
 
 const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
@@ -173,9 +175,18 @@ const SHOPEE_URL = "https://shopee.co.id";
 export default function CatalogPage() {
     const { addToCart } = useCart();
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const [unboxStock, setUnboxStock] = useState<number | null>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetch("/api/inventory?product_id=unbox-the-memory")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && typeof data.stock === "number") {
+                    setUnboxStock(data.stock);
+                }
+            })
+            .catch(() => {});
     }, []);
 
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string; oldPrice?: string }) => {
@@ -266,14 +277,21 @@ export default function CatalogPage() {
                     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", 
                     gap: 32 
                 }}>
-                {CATALOG_ITEMS.map((item, idx) => (
-                    <AnimatedSection key={item.id} delay={0} priority={true} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                        <CompactProductCard
-                            {...item}
-                            onAddToCart={() => handlePesan(item)}
-                        />
-                    </AnimatedSection>
-                ))}
+                {CATALOG_ITEMS.map((item, idx) => {
+                    const slotText = item.id === "unbox-the-memory"
+                        ? (unboxStock !== null ? `Sisa ${unboxStock} Box` : (item.slotBadgeText || "Sisa 11 Box"))
+                        : item.slotBadgeText;
+
+                    return (
+                        <AnimatedSection key={item.id} delay={0} priority={true} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                            <CompactProductCard
+                                {...item}
+                                slotBadgeText={slotText}
+                                onAddToCart={() => handlePesan(item)}
+                            />
+                        </AnimatedSection>
+                    );
+                })}
                 </div>
             </div>
 
