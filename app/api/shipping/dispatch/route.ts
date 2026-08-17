@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 const COOKIE_NAME = "fya_admin_session";
 const BITESHIP_API_KEY = process.env.BITESHIP_API_KEY;
-const DEFAULT_ORIGIN_CONTACT_NAME = process.env.BITESHIP_ORIGIN_CONTACT_NAME || "Khalisha ( For You, Always )";
+const DEFAULT_ORIGIN_CONTACT_NAME = process.env.BITESHIP_ORIGIN_CONTACT_NAME || "For you, Always.";
 const DEFAULT_ORIGIN_CONTACT_PHONE = process.env.BITESHIP_ORIGIN_CONTACT_PHONE || "081936109076";
 const DEFAULT_ORIGIN_ADDRESS = process.env.BITESHIP_ORIGIN_ADDRESS || "Limus Pratama Regency Jl Kediri 7 Blok E16/22, Cileungsi Kab.Bogor";
 const DEFAULT_ORIGIN_POSTAL = process.env.BITESHIP_ORIGIN_POSTAL_CODE || "16820";

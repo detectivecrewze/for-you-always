@@ -2168,7 +2168,7 @@ export default function Dashboard() {
                 const fullAddr = [ship.address, ship.village, ship.district, ship.city, ship.province, ship.postal_code].filter(Boolean).join(", ");
 
                 const loc1 = {
-                    contact_name: "Khalisha ( For You, Always )",
+                    contact_name: "For you, Always.",
                     contact_phone: "081936109076",
                     address: "Limus Pratama Regency Jl Kediri 7 Blok E16/22, Cileungsi Kab.Bogor",
                     postal_code: "16820",
