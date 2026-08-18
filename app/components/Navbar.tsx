@@ -24,7 +24,7 @@ export default function Navbar() {
         { label: "Catalog", href: "/catalog" },
         { label: "Lacak Pesanan", href: "/order-status" },
         { label: "Cara Kerja", href: "/#cara-kerja" },
-        { label: "Testimoni", href: "/#testimoni" },
+        { label: "Testimoni", href: "/stories" },
     ];
 
     const mobileLinks = [
@@ -47,7 +47,7 @@ export default function Navbar() {
         },
         { label: "Lacak Pesanan", href: "/order-status" },
         { label: "Cara Kerja", href: "/#cara-kerja" },
-        { label: "Testimoni", href: "/#testimoni" },
+        { label: "Testimoni", href: "/stories" },
         { label: "FAQ", href: "/#faq" },
     ];
 
