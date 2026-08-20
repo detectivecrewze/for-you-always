@@ -40,16 +40,16 @@ const CATALOG_ITEMS = [
     },
     {
         badgeText: "New",
-        badgeColor: "#e88c8c",
-        titleColor: "#c06464",
-        imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+        badgeColor: "#d94238",
+        titleColor: "#d94238",
+        imageSrc: "/assets/birthday/snoopy/welcome.webp",
         title: "Birthday Scrapbook",
         newPrice: "Rp 25.000",
         id: "birthday",
         numericPrice: 25000,
         href: "/catalog/birthday",
         occasions: ["Birthday"],
-        features: ["2 Tema Visual: Snoopy & Dubu", "15 Foto / Video + Musik", "Surat + Wish Inbox"]
+        features: ["2 Tema Visual: Snoopy & Dubu", "15 Foto & Video + Musik", "Surat + Wish Inbox"]
     },
     {
         badgeText: "Best Seller",

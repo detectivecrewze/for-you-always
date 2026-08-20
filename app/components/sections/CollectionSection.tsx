@@ -120,15 +120,15 @@ export default function CollectionSection() {
                             },
                             {
                                 badgeText: "New",
-                                badgeColor: "#e88c8c",
+                                badgeColor: "#d94238",
                                 badgeVariant: "solid",
-                                imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+                                imageSrc: "/assets/birthday/snoopy/welcome.webp",
                                 price: "Rp 25.000",
                                 title: "Birthday Scrapbook",
-                                titleColor: "#c06464",
-                                description: "Scrapbook digital ulang tahun — foto, video, surat, musik, dan wish inbox dalam satu halaman interaktif.",
+                                titleColor: "#d94238",
+                                description: "Scrapbook digital ulang tahun — 15 galeri foto/video, musik, surat, dan wish inbox dalam satu halaman interaktif.",
                                 href: "/catalog/birthday",
-                                onAddToCart: () => addToCart({ id: "birthday", title: "Birthday Scrapbook", numericPrice: 25000, themeColor: "#e88c8c" })
+                                onAddToCart: () => addToCart({ id: "birthday", title: "Birthday Scrapbook", numericPrice: 25000, themeColor: "#d94238" })
                             },
                             {
                                 badgeText: "Popular",

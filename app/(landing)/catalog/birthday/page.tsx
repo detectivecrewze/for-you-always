@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
@@ -47,68 +47,61 @@ export default function BirthdayCatalogPage() {
                         <LandscapeProductCard
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Birthday Scrapbook <span style={{ opacity: 0.5 }}>•</span> New
+                                    Birthday Scrapbook <span style={{ opacity: 0.5 }}>•</span> New Release 🎂
                                 </div>
                             }
                             title="Kado Ulang Tahun Interaktif"
-                            description="Rayakan hari spesial mereka dengan scrapbook digital penuh kenangan — foto, video, surat, musik, dan wish inbox dalam satu halaman yang bisa dibuat sendiri."
+                            description="Rayakan momen ulang tahun spesial dengan scrapbook digital interaktif. Lengkap dengan 15 galeri foto/video kenangan, 3 playlist musik personal, surat hangat, dan wish inbox untuk kado yang tak terlupakan."
                             features={[
-                                "2 Tema Visual: Snoopy & Dubu",
-                                "Hingga 15 Foto / Video",
-                                "3 Lagu Favorit di Playlist",
-                                "Surat Personal + Wish Inbox",
-                                "QR Code & Link Bisa Di-share"
+                                "2 Pilihan Tema: Snoopy & Dubu",
+                                "Hingga 15 Foto & Video Galeri",
+                                "3 Playlist Musik Favorit",
+                                "Surat Digital + Wish Inbox Interaktif",
+                                "QR Code & Link Akses Instan"
                             ]}
                             price="Rp 25.000"
                             demoLink="https://snoopy.for-you-always.my.id/"
-                            fallbackImgSrc="https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
+                            demoLabel="Buka Demo Scrapbook"
+                            fallbackImgSrc="/assets/birthday/snoopy/welcome.webp"
                             mediaType="image"
-                            accentColor="#e88c8c"
-                            accentGlow="rgba(232,140,140,0.2)"
+                            accentColor="#d94238"
+                            accentGlow="rgba(217, 66, 56, 0.25)"
                             onAddToCart={() => addToCart({
                                 id: "birthday",
                                 title: "Birthday Scrapbook",
                                 numericPrice: 25000,
-                                themeColor: "#e88c8c"
+                                themeColor: "#d94238"
                             })}
-                            themesLabel="Pilihan Tema"
+                            themesLabel="Pilihan Tema Scrapbook"
                             themes={[
                                 {
-                                    name: "Snoopy",
-                                    desc: "Tema Snoopy & Charlie Brown yang hangat dan ikonik",
+                                    name: "Snoopy Comic",
+                                    desc: "Tema scrapbook comic yang cerah, hangat, dan playful bersama Snoopy & Woodstock",
                                     demoLink: "https://snoopy.for-you-always.my.id/",
                                     demoLabel: "Lihat Demo Snoopy",
+                                    fallbackImgSrc: "/assets/birthday/snoopy/welcome.webp",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
-                                        {
-                                            name: "Classic",
-                                            color: "#f5e6c8",
-                                            fallbackImgSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
-                                        },
-                                        {
-                                            name: "Pastel",
-                                            color: "#f0d6d6",
-                                            fallbackImgSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp"
-                                        }
+                                        { name: "Welcome", fallbackImgSrc: "/assets/birthday/snoopy/welcome.webp" },
+                                        { name: "Memories", fallbackImgSrc: "/assets/birthday/snoopy/cozy.webp" },
+                                        { name: "Music", fallbackImgSrc: "/assets/birthday/snoopy/dance.webp" },
+                                        { name: "Letter", fallbackImgSrc: "/assets/birthday/snoopy/letter.webp" },
+                                        { name: "Celebrate", fallbackImgSrc: "/assets/birthday/snoopy/finale.webp" },
                                     ]
                                 },
                                 {
                                     name: "Dubu & Dudu",
-                                    desc: "Tema Dubu & Dudu yang lucu dan pastel",
+                                    desc: "Tema warm pastel yang manis, menggemaskan, dan penuh kehangatan",
                                     demoLink: "https://snoopy.for-you-always.my.id/",
                                     demoLabel: "Lihat Demo Dubu",
+                                    fallbackImgSrc: "/assets/birthday/dubu/welcome.webp",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
-                                        {
-                                            name: "Cream",
-                                            color: "#f0e6d3",
-                                            fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
-                                        },
-                                        {
-                                            name: "Lilac",
-                                            color: "#d4cadd",
-                                            fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
-                                        }
+                                        { name: "Welcome", fallbackImgSrc: "/assets/birthday/dubu/welcome.webp" },
+                                        { name: "Affection", fallbackImgSrc: "/assets/birthday/dubu/affection.webp" },
+                                        { name: "Together", fallbackImgSrc: "/assets/birthday/dubu/together.webp" },
+                                        { name: "Music", fallbackImgSrc: "/assets/birthday/dubu/dance.webp" },
+                                        { name: "Celebrate", fallbackImgSrc: "/assets/birthday/dubu/celebrate.webp" },
                                     ]
                                 }
                             ]}
@@ -123,3 +116,4 @@ export default function BirthdayCatalogPage() {
         </div>
     );
 }
+
