@@ -39,6 +39,19 @@ const CATALOG_ITEMS = [
         features: ["Custom Desain Eksklusif", "Galeri Foto Sinematik", "Terima Beres (Done For You)"]
     },
     {
+        badgeText: "New",
+        badgeColor: "#e88c8c",
+        titleColor: "#c06464",
+        imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+        title: "Birthday Scrapbook",
+        newPrice: "Rp 25.000",
+        id: "birthday",
+        numericPrice: 25000,
+        href: "/catalog/birthday",
+        occasions: ["Birthday"],
+        features: ["2 Tema Visual: Snoopy & Dubu", "15 Foto / Video + Musik", "Surat + Wish Inbox"]
+    },
+    {
         badgeText: "Best Seller",
         badgeColor: "#a67c52",
         titleColor: "#7a5438",

@@ -75,6 +75,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             letter: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp",
             invitation: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
             loves: "/assets/opening_gate.png",
+            birthday: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
         };
 
         const itemWithUniqueId = { 
@@ -82,7 +83,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             cartItemId: item.cartItemId || Math.random().toString(36).substring(2, 9),
             themeImgSrc: item.themeImgSrc || DEFAULT_IMAGES[item.id]
         };
-        setItems(prev => [...prev, itemWithUniqueId]);
+        setItems(prev => {
+            // Guard: birthday hanya boleh 1 per cart
+            if (item.id === 'birthday' && prev.some(i => i.id === 'birthday')) {
+                return prev;
+            }
+            return [...prev, itemWithUniqueId];
+        });
         setLastAdded(itemWithUniqueId);
         
         if (typeof window !== 'undefined' && (window as any).ttq) {

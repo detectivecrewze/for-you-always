@@ -119,7 +119,20 @@ export default function CollectionSection() {
                                 onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })
                             },
                             {
+                                badgeText: "New",
+                                badgeColor: "#e88c8c",
+                                badgeVariant: "solid",
+                                imageSrc: "https://cdn.for-you-always.my.id/1777884639353-xogjtd.webp",
+                                price: "Rp 25.000",
+                                title: "Birthday Scrapbook",
+                                titleColor: "#c06464",
+                                description: "Scrapbook digital ulang tahun — foto, video, surat, musik, dan wish inbox dalam satu halaman interaktif.",
+                                href: "/catalog/birthday",
+                                onAddToCart: () => addToCart({ id: "birthday", title: "Birthday Scrapbook", numericPrice: 25000, themeColor: "#e88c8c" })
+                            },
+                            {
                                 badgeText: "Popular",
+
                                 badgeColor: "#a67c52",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
