@@ -119,17 +119,18 @@ export default function CollectionSection() {
                                 onAddToCart: () => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })
                             },
                             {
-                                badgeText: "New",
-                                badgeColor: "#d94238",
+                                badgeText: "New Release",
+                                badgeColor: "#bf7b19",
                                 badgeVariant: "solid",
-                                imageSrc: "/assets/birthday/snoopy/welcome.webp",
-                                price: "Rp 25.000",
+                                imageSrc: "/assets/snoopy-features/main-card-3.webp",
+                                price: <DiscountPrice oldPrice="Rp 35.000" newPrice="Rp 25.000" size="sm" layout="inline" />,
                                 title: "Birthday Scrapbook",
-                                titleColor: "#d94238",
-                                description: "Scrapbook digital ulang tahun — 15 galeri foto/video, musik, surat, dan wish inbox dalam satu halaman interaktif.",
+                                titleColor: "#bf7b19",
+                                description: "Kado ulang tahun interaktif bergaya komik retro dengan 4 ruangan kenangan, musik & galeri.",
                                 href: "/catalog/birthday",
-                                onAddToCart: () => addToCart({ id: "birthday", title: "Birthday Scrapbook", numericPrice: 25000, themeColor: "#d94238" })
+                                onAddToCart: () => addToCart({ id: "birthday", title: "Birthday Scrapbook", numericPrice: 25000, oldNumericPrice: 35000, themeColor: "#bf7b19" })
                             },
+
                             {
                                 badgeText: "Popular",
 

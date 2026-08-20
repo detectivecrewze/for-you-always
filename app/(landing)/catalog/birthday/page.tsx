@@ -47,61 +47,87 @@ export default function BirthdayCatalogPage() {
                         <LandscapeProductCard
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Birthday Scrapbook <span style={{ opacity: 0.5 }}>•</span> New Release 🎂
+                                    Birthday Scrapbook <span style={{ opacity: 0.5 }}>•</span> New Release
                                 </div>
                             }
-                            title="Kado Ulang Tahun Interaktif"
-                            description="Rayakan momen ulang tahun spesial dengan scrapbook digital interaktif. Lengkap dengan 15 galeri foto/video kenangan, 3 playlist musik personal, surat hangat, dan wish inbox untuk kado yang tak terlupakan."
+                            title="Birthday Scrapbook"
+                            description="Rayakan momen ulang tahun spesial dengan scrapbook digital interaktif. Tersedia pilihan tema Snoopy Comic dan Dubu & Dudu, lengkap dengan 15 galeri foto/video polaroid, 3 playlist soundtrack musik, surat personal, dan wish inbox interaktif."
                             features={[
-                                "2 Pilihan Tema: Snoopy & Dubu",
-                                "Hingga 15 Foto & Video Galeri",
-                                "3 Playlist Musik Favorit",
-                                "Surat Digital + Wish Inbox Interaktif",
-                                "QR Code & Link Akses Instan"
+                                "Pilihan Tema: Snoopy & Dubu",
+                                "4 Ruangan Interaktif",
+                                "3 Playlist Soundtrack Musik",
+                                "Surat Digital & Wish Inbox",
+                                "Akses Instan & Custom Studio"
                             ]}
                             price="Rp 25.000"
-                            demoLink="https://snoopy.for-you-always.my.id/"
-                            demoLabel="Buka Demo Scrapbook"
-                            fallbackImgSrc="/assets/birthday/snoopy/welcome.webp"
+                            oldPrice="Rp 35.000"
+                            demoLink="https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62"
+                            demoLabel="Lihat"
+                            fallbackImgSrc="/assets/snoopy-features/main-card-3.webp"
                             mediaType="image"
-                            accentColor="#d94238"
-                            accentGlow="rgba(217, 66, 56, 0.25)"
+                            accentColor="#bf7b19"
+                            accentGlow="rgba(191, 123, 25, 0.2)"
                             onAddToCart={() => addToCart({
                                 id: "birthday",
                                 title: "Birthday Scrapbook",
                                 numericPrice: 25000,
-                                themeColor: "#d94238"
+                                oldNumericPrice: 35000,
+                                themeColor: "#bf7b19"
                             })}
-                            themesLabel="Pilihan Tema Scrapbook"
+                            themesLabel="Pilih Tema Scrapbook"
                             themes={[
                                 {
                                     name: "Snoopy Comic",
-                                    desc: "Tema scrapbook comic yang cerah, hangat, dan playful bersama Snoopy & Woodstock",
-                                    demoLink: "https://snoopy.for-you-always.my.id/",
-                                    demoLabel: "Lihat Demo Snoopy",
-                                    fallbackImgSrc: "/assets/birthday/snoopy/welcome.webp",
+                                    desc: "Tema scrapbook komik retro yang hangat & ceria bersama Snoopy & Woodstock",
+                                    title: "Snoopy Birthday Scrapbook",
+                                    description: "Kado ulang tahun digital interaktif bergaya komik retro Snoopy. Hadir dengan 4 ruangan kejutan lengkap: amplop interaktif, galeri hingga 15 foto/video polaroid, 3 playlist musik, surat personal, dan wish inbox.",
+                                    color: "#bf7b19",
+                                    features: [
+                                        "4 Ruangan Interaktif",
+                                        "Hingga 15 Foto & Video Polaroid",
+                                        "3 Playlist Soundtrack Musik",
+                                        "Surat Digital & Wish Inbox",
+                                        "Akses Instan & Custom Studio"
+                                    ],
+                                    demoLink: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62",
+                                    demoLabel: "Lihat",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
-                                        { name: "Welcome", fallbackImgSrc: "/assets/birthday/snoopy/welcome.webp" },
-                                        { name: "Memories", fallbackImgSrc: "/assets/birthday/snoopy/cozy.webp" },
-                                        { name: "Music", fallbackImgSrc: "/assets/birthday/snoopy/dance.webp" },
-                                        { name: "Letter", fallbackImgSrc: "/assets/birthday/snoopy/letter.webp" },
-                                        { name: "Celebrate", fallbackImgSrc: "/assets/birthday/snoopy/finale.webp" },
+                                        { name: "Opening", fallbackImgSrc: "/assets/snoopy-features/opening-1.webp" },
+                                        { name: "Wishes", fallbackImgSrc: "/assets/snoopy-features/wishes-2.webp" },
+                                        { name: "Scrapbook", fallbackImgSrc: "/assets/snoopy-features/main-card-3.webp" },
+                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/snoopy-features/room-wishes-4.webp" },
+                                        { name: "Galeri", fallbackImgSrc: "/assets/snoopy-features/room-galleries-5.webp" },
+                                        { name: "Musik", fallbackImgSrc: "/assets/snoopy-features/room-music-6.webp" },
+                                        { name: "Surat", fallbackImgSrc: "/assets/snoopy-features/letter-7.webp" },
+                                        { name: "Perayaan", fallbackImgSrc: "/assets/snoopy-features/ending-8.webp" }
                                     ]
                                 },
                                 {
                                     name: "Dubu & Dudu",
                                     desc: "Tema warm pastel yang manis, menggemaskan, dan penuh kehangatan",
-                                    demoLink: "https://snoopy.for-you-always.my.id/",
-                                    demoLabel: "Lihat Demo Dubu",
-                                    fallbackImgSrc: "/assets/birthday/dubu/welcome.webp",
+                                    title: "Dubu & Dudu Scrapbook",
+                                    description: "Rayakan hari ulang tahun orang tersayang bersama karakter menggemaskan Dubu & Dudu. Penuh nuansa lembut pastel dengan 4 ruangan kenangan, pemutar musik, surat cinta, dan perayaan meriah.",
+                                    color: "#bf7b19",
+                                    features: [
+                                        "Nuansa Visual Warm Pastel",
+                                        "4 Ruangan Interaktif",
+                                        "3 Playlist Soundtrack Musik",
+                                        "Surat Digital & Wish Inbox",
+                                        "Akses Instan & Custom Studio"
+                                    ],
+                                    demoLink: "https://snoopy.for-you-always.my.id/gift/index.html?project=gift-ab79b22216982751",
+                                    demoLabel: "Lihat",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
-                                        { name: "Welcome", fallbackImgSrc: "/assets/birthday/dubu/welcome.webp" },
-                                        { name: "Affection", fallbackImgSrc: "/assets/birthday/dubu/affection.webp" },
-                                        { name: "Together", fallbackImgSrc: "/assets/birthday/dubu/together.webp" },
-                                        { name: "Music", fallbackImgSrc: "/assets/birthday/dubu/dance.webp" },
-                                        { name: "Celebrate", fallbackImgSrc: "/assets/birthday/dubu/celebrate.webp" },
+                                        { name: "Opening", fallbackImgSrc: "/assets/dubu-features/opening-dubu-1.webp" },
+                                        { name: "Wishes", fallbackImgSrc: "/assets/dubu-features/opening-dubu-2.webp" },
+                                        { name: "Scrapbook", fallbackImgSrc: "/assets/dubu-features/main-carddubu-3.webp" },
+                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/dubu-features/room-wishdubu-4.webp" },
+                                        { name: "Galeri", fallbackImgSrc: "/assets/dubu-features/room-galleriesdubu-5.jpg" },
+                                        { name: "Musik", fallbackImgSrc: "/assets/dubu-features/room-musicdubu-6.webp" },
+                                        { name: "Surat", fallbackImgSrc: "/assets/dubu-features/room-letterdubu-7.webp" },
+                                        { name: "Perayaan", fallbackImgSrc: "/assets/dubu-features/room-endingdubu-8.webp" }
                                     ]
                                 }
                             ]}

@@ -14,7 +14,7 @@ const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color:
     mixtape:    { name: "Mixtape Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>, color: "#6a8a9a", desc: "Kaset retro dengan playlist personal" },
     invitation: { name: "Invitation Edition",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>, color: "#9a8a6a", desc: "Tiket undangan kencan digital" },
     loves:      { name: "Memoria Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>, color: "#8b2252", desc: "Kado premium penuh kenangan" },
-    birthday:   { name: "Birthday Scrapbook",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2"/><path d="M12 8v2"/><path d="M17 8v2"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>, color: "#e88c8c", desc: "Scrapbook ulang tahun interaktif" },
+    birthday:   { name: "Birthday Scrapbook",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2"/><path d="M12 8v2"/><path d="M17 8v2"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>, color: "#bf7b19", desc: "Scrapbook ulang tahun interaktif" },
 };
 
 
@@ -53,63 +53,72 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
 
     const isLoves = baseKey === "loves";
     const isBirthday = baseKey === "birthday";
+    if (isBirthday) {
+        token = "";
+    }
     const label = isLoves ? "Isi Form Kreasi" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
     const [copied, setCopied] = useState(false);
 
     return (
-        <div style={{
-            border: "1.5px solid rgba(205,171,143,0.25)",
-            borderRadius: 16,
-            padding: "20px 24px",
-            background: "#fff",
-            display: "flex",
-            alignItems: "center",
-            gap: 18,
-            transition: "box-shadow 0.25s, transform 0.25s",
-            boxShadow: hovered ? "0 8px 32px -8px rgba(56,42,36,0.12)" : "0 2px 12px -4px rgba(56,42,36,0.06)",
-            transform: hovered ? "translateY(-2px)" : "none",
-        }}
+        <div 
+            className="order-status-card"
+            style={{
+                border: "1.5px solid rgba(205,171,143,0.25)",
+                borderRadius: 16,
+                padding: "20px 24px",
+                background: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 18,
+                transition: "box-shadow 0.25s, transform 0.25s",
+                boxShadow: hovered ? "0 8px 32px -8px rgba(56,42,36,0.12)" : "0 2px 12px -4px rgba(56,42,36,0.06)",
+                transform: hovered ? "translateY(-2px)" : "none",
+            }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
-            {/* Icon */}
-            <div style={{
-                width: 52, height: 52, borderRadius: 12,
-                background: `${meta.color}18`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 24, flexShrink: 0,
-            }}>
-                {meta.icon}
-            </div>
+            <div className="order-status-info" style={{ display: "flex", alignItems: "center", gap: 16, flex: 1, minWidth: 0 }}>
+                {/* Icon */}
+                <div className="order-status-icon" style={{
+                    width: 52, height: 52, borderRadius: 12,
+                    background: `${meta.color}18`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 24, flexShrink: 0,
+                    color: meta.color,
+                }}>
+                    {meta.icon}
+                </div>
 
-            {/* Text */}
-            <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
-                <p style={{ margin: "0 0 2px", fontFamily: "var(--font-display)", fontSize: 17, fontWeight: 600, color: "#382a24" }}>
-                    {meta.name}
-                </p>
-                <p style={{ margin: 0, fontSize: 12, color: "#9a8a80", fontFamily: "var(--font-sans)" }}>
-                    {meta.desc}
-                </p>
-                {token && (
-                    <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 11, fontFamily: "monospace", fontWeight: 700, padding: "3px 8px", background: "rgba(56,42,36,0.06)", borderRadius: 6, color: "#382a24", letterSpacing: "0.05em" }}>
-                            Token: {token}
-                        </span>
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigator.clipboard.writeText(token);
-                                setCopied(true);
-                                setTimeout(() => setCopied(false), 2000);
-                            }}
-                            style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6, border: "1px solid rgba(56,42,36,0.15)", background: "#fff", cursor: "pointer", color: "#5a483e" }}
-                        >
-                            {copied ? "✓ Tersalin" : "Salin"}
-                        </button>
-                    </div>
-                )}
+                {/* Text */}
+                <div className="order-status-text" style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
+                    <p style={{ margin: "0 0 2px", fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, color: "#382a24", whiteSpace: "normal", wordBreak: "normal", overflowWrap: "break-word" }}>
+                        {meta.name}
+                    </p>
+                    <p style={{ margin: 0, fontSize: 12, color: "#9a8a80", fontFamily: "var(--font-sans)", whiteSpace: "normal", overflowWrap: "break-word" }}>
+                        {meta.desc}
+                    </p>
+                    {token && (
+                        <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                            <span style={{ fontSize: 11, fontFamily: "monospace", fontWeight: 700, padding: "3px 8px", background: "rgba(56,42,36,0.06)", borderRadius: 6, color: "#382a24", letterSpacing: "0.05em", wordBreak: "break-all" }}>
+                                Token: {token}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigator.clipboard.writeText(token);
+                                    setCopied(true);
+                                    setTimeout(() => setCopied(false), 2000);
+                                }}
+                                style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6, border: "1px solid rgba(56,42,36,0.15)", background: "#fff", cursor: "pointer", color: "#5a483e" }}
+                            >
+                                {copied ? "✓ Tersalin" : "Salin"}
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* CTA */}
@@ -118,9 +127,10 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
                 target="_blank"
                 rel="noopener noreferrer"
                 role="button"
+                className="order-status-cta"
                 aria-label={`Buka ${meta.name}`}
                 style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     padding: "10px 18px", borderRadius: 999,
                     background: meta.color, color: "#fff",
                     fontSize: 12, fontWeight: 700, letterSpacing: "0.06em",
@@ -182,7 +192,7 @@ export default function OrderStatusPage() {
         setStatus("loading");
         setOrderId(id);
         try {
-            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway-sandbox.aldoramadhan16.workers.dev";
+            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway.aldoramadhan16.workers.dev";
             const res = await fetch(`${gatewayUrl}/api/status?order_id=${id}`);
             const data = await res.json();
 
@@ -962,6 +972,35 @@ export default function OrderStatusPage() {
 
                     <style>{`
                         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+                        @media (max-width: 600px) {
+                            .order-status-card {
+                                flex-direction: column !important;
+                                align-items: stretch !important;
+                                padding: 16px !important;
+                                gap: 14px !important;
+                            }
+                            .order-status-info {
+                                width: 100% !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                gap: 12px !important;
+                            }
+                            .order-status-icon {
+                                width: 44px !important;
+                                height: 44px !important;
+                                font-size: 20px !important;
+                            }
+                            .order-status-text p {
+                                word-break: normal !important;
+                                overflow-wrap: break-word !important;
+                            }
+                            .order-status-cta {
+                                width: 100% !important;
+                                padding: 12px 18px !important;
+                                font-size: 13px !important;
+                            }
+                        }
                     `}</style>
                 </div>
             </main>

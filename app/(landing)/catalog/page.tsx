@@ -40,16 +40,17 @@ const CATALOG_ITEMS = [
     },
     {
         badgeText: "New",
-        badgeColor: "#d94238",
-        titleColor: "#d94238",
-        imageSrc: "/assets/birthday/snoopy/welcome.webp",
+        badgeColor: "#bf7b19",
+        titleColor: "#bf7b19",
+        imageSrc: "/assets/snoopy-features/main-card-3.webp",
         title: "Birthday Scrapbook",
+        oldPrice: "Rp 35.000",
         newPrice: "Rp 25.000",
         id: "birthday",
         numericPrice: 25000,
         href: "/catalog/birthday",
         occasions: ["Birthday"],
-        features: ["2 Tema Visual: Snoopy & Dubu", "15 Foto & Video + Musik", "Surat + Wish Inbox"]
+        features: ["4 Ruangan Interaktif", "15 Foto/Video + 3 Soundtrack", "Surat & Wish Inbox Interaktif"]
     },
     {
         badgeText: "Best Seller",
