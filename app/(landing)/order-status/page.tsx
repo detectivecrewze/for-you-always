@@ -40,10 +40,22 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
         name: isUnbox ? `${baseMeta.name} (The Gift Box)` : isThreeSlot ? `${baseMeta.name} (3 Gift)` : baseMeta.name,
     };
 
+    let token = "";
+    if (link) {
+        if (link.includes("token=")) {
+            token = link.split("token=")[1]?.split("&")[0] || "";
+        } else if (link.includes("/bundle/")) {
+            token = link.split("/bundle/")[1]?.split("?")[0] || "";
+        } else if (link.includes("/dashboard/")) {
+            token = link.split("/dashboard/")[1]?.split("?")[0] || "";
+        }
+    }
+
     const isLoves = baseKey === "loves";
     const isBirthday = baseKey === "birthday";
-    const label = isLoves ? "Isi Form Kreasi" : isBirthday ? "Buka Studio Birthday" : "Buka Studio";
+    const label = isLoves ? "Isi Form Kreasi" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     return (
         <div style={{
@@ -79,6 +91,25 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
                 <p style={{ margin: 0, fontSize: 12, color: "#9a8a80", fontFamily: "var(--font-sans)" }}>
                     {meta.desc}
                 </p>
+                {token && (
+                    <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: 11, fontFamily: "monospace", fontWeight: 700, padding: "3px 8px", background: "rgba(56,42,36,0.06)", borderRadius: 6, color: "#382a24", letterSpacing: "0.05em" }}>
+                            Token: {token}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigator.clipboard.writeText(token);
+                                setCopied(true);
+                                setTimeout(() => setCopied(false), 2000);
+                            }}
+                            style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6, border: "1px solid rgba(56,42,36,0.15)", background: "#fff", cursor: "pointer", color: "#5a483e" }}
+                        >
+                            {copied ? "✓ Tersalin" : "Salin"}
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* CTA */}
@@ -151,7 +182,7 @@ export default function OrderStatusPage() {
         setStatus("loading");
         setOrderId(id);
         try {
-            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway.aldoramadhan16.workers.dev";
+            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway-sandbox.aldoramadhan16.workers.dev";
             const res = await fetch(`${gatewayUrl}/api/status?order_id=${id}`);
             const data = await res.json();
 
