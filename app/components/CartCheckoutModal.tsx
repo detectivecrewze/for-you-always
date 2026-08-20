@@ -41,7 +41,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
             const orderId = items.length === 1
                 ? `ORDER-${items[0].id.toUpperCase()}-${Date.now()}`
                 : `ORDER-BUNDLE-${Date.now()}`;
-            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway-sandbox.detectivecrewze.workers.dev";
+            const gatewayUrl = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL || "https://pakasir-gateway-sandbox.aldoramadhan16.workers.dev";
             const res = await fetch(`${gatewayUrl}/api/checkout`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
