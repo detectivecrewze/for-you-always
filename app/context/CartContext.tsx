@@ -75,7 +75,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             letter: "https://cdn.for-you-always.my.id/1777883950201-eede1i.webp",
             invitation: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
             loves: "/assets/opening_gate.png",
-            birthday: "/assets/snoopy-features/main-card-3.webp",
+            birthday: "/assets/snoopy-features/main-card-updatesnoopy.webp",
         };
 
         const itemWithUniqueId = { 

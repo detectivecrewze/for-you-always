@@ -63,7 +63,7 @@ export default function BirthdayCatalogPage() {
                             oldPrice="Rp 35.000"
                             demoLink="https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62"
                             demoLabel="Lihat"
-                            fallbackImgSrc="/assets/snoopy-features/main-card-3.webp"
+                            fallbackImgSrc="/assets/snoopy-features/main-card-updatesnoopy.webp"
                             mediaType="image"
                             accentColor="#bf7b19"
                             accentGlow="rgba(191, 123, 25, 0.2)"
@@ -95,8 +95,8 @@ export default function BirthdayCatalogPage() {
                                     subThemes: [
                                         { name: "Opening", fallbackImgSrc: "/assets/snoopy-features/opening-1.webp" },
                                         { name: "Wishes", fallbackImgSrc: "/assets/snoopy-features/wishes-2.webp" },
-                                        { name: "Scrapbook", fallbackImgSrc: "/assets/snoopy-features/main-card-3.webp" },
-                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/snoopy-features/room-wishes-4.webp" },
+                                        { name: "Scrapbook", fallbackImgSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp" },
+                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/snoopy-features/wish-card-update-snoopy.webp" },
                                         { name: "Galeri", fallbackImgSrc: "/assets/snoopy-features/room-galleries-5.webp" },
                                         { name: "Musik", fallbackImgSrc: "/assets/snoopy-features/room-music-6.webp" },
                                         { name: "Surat", fallbackImgSrc: "/assets/snoopy-features/letter-7.webp" },

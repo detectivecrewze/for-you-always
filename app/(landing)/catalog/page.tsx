@@ -42,7 +42,7 @@ const CATALOG_ITEMS = [
         badgeText: "New",
         badgeColor: "#bf7b19",
         titleColor: "#bf7b19",
-        imageSrc: "/assets/snoopy-features/main-card-3.webp",
+        imageSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp",
         title: "Birthday Scrapbook",
         oldPrice: "Rp 35.000",
         newPrice: "Rp 25.000",

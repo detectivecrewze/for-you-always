@@ -122,7 +122,7 @@ export default function CollectionSection() {
                                 badgeText: "New Release",
                                 badgeColor: "#bf7b19",
                                 badgeVariant: "solid",
-                                imageSrc: "/assets/snoopy-features/main-card-3.webp",
+                                imageSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp",
                                 price: <DiscountPrice oldPrice="Rp 35.000" newPrice="Rp 25.000" size="sm" layout="inline" />,
                                 title: "Birthday Scrapbook",
                                 titleColor: "#bf7b19",
