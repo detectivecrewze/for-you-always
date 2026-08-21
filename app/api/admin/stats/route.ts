@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         } else if (range === "7days") {
             whereClause = "WHERE datetime(created_at, '+7 hours') >= datetime('now', '+7 hours', '-7 days')";
         } else if (range === "30days") {
-            whereClause = "WHERE datetime(created_at, '+7 hours') >= datetime('now', '+7 hours', '-30 days')";
+            whereClause = "WHERE strftime('%Y-%m', datetime(created_at, '+7 hours')) = strftime('%Y-%m', datetime('now', '+7 hours'))";
         }
 
         const statsSql = `

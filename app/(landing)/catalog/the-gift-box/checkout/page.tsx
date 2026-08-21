@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../../../../components/Navbar";
-import { INDONESIA_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
+import { JABODETABEK_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
 import posthog from "posthog-js";
 import { trackInitiateCheckout } from "@/lib/pixel";
 
@@ -87,8 +87,8 @@ export default function GiftBoxCheckoutWizardPage() {
         postalCode: "",
     });
 
-    // Dynamic Shipping Rate Calculation
-    const currentProvinceObj = INDONESIA_SHIPPING_DATA.find((p) => p.name === shippingDetails.province);
+    // Dynamic Shipping Rate Calculation (Jabodetabek Dedicated)
+    const currentProvinceObj = JABODETABEK_SHIPPING_DATA.find((p) => p.name === shippingDetails.province);
     const availableCities = currentProvinceObj ? currentProvinceObj.cities : [];
 
     // Courier Rates Options from Biteship API / Local Matrix
@@ -984,6 +984,49 @@ export default function GiftBoxCheckoutWizardPage() {
                                     </p>
                                 </div>
 
+                                {/* JABODETABEK NOTICE (CLEAN LUXURY DESIGN - NO EMOJIS) */}
+                                <div
+                                    style={{
+                                        padding: "12px 16px",
+                                        borderRadius: "14px",
+                                        backgroundColor: "rgba(166,124,82,0.06)",
+                                        border: "1px solid rgba(166,124,82,0.22)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "12px",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: "30px",
+                                            height: "30px",
+                                            borderRadius: "50%",
+                                            backgroundColor: "#382a24",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                        <svg
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#faf7f2"
+                                            strokeWidth="2.2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        >
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                    </div>
+                                    <p style={{ margin: 0, fontSize: "0.82rem", color: "#6e5c53", lineHeight: 1.45 }}>
+                                        <strong style={{ color: "#1d1816", fontWeight: 700 }}>Khusus Pengiriman Wilayah Jabodetabek:</strong> Melayani pengiriman ke Jakarta, Bogor, Depok, Tangerang, dan Bekasi.
+                                    </p>
+                                </div>
+
                                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                     {/* Penerima */}
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
@@ -1070,7 +1113,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                                 }}
                                             >
                                                 <option value="">Pilih Provinsi</option>
-                                                {INDONESIA_SHIPPING_DATA.map((p) => (
+                                                {JABODETABEK_SHIPPING_DATA.map((p) => (
                                                     <option key={p.name} value={p.name}>
                                                         {p.name}
                                                     </option>

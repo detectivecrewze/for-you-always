@@ -519,3 +519,82 @@ export function getShippingRate(provinceName: string, cityName?: string): { cost
 
     return { cost: province.defaultCost, estimate: province.defaultEstimate };
 }
+
+export const JABODETABEK_SHIPPING_DATA: ProvinceShipping[] = [
+    {
+        name: "DKI Jakarta",
+        defaultCost: 15000,
+        defaultEstimate: "1-2 hari kerja",
+        cities: [
+            { name: "Jakarta Pusat", cost: 15000, estimate: "1-2 hari" },
+            { name: "Jakarta Selatan", cost: 15000, estimate: "1-2 hari" },
+            { name: "Jakarta Barat", cost: 15000, estimate: "1-2 hari" },
+            { name: "Jakarta Timur", cost: 15000, estimate: "1-2 hari" },
+            { name: "Jakarta Utara", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kepulauan Seribu", cost: 20000, estimate: "2-3 hari" },
+        ],
+    },
+    {
+        name: "Jawa Barat",
+        defaultCost: 15000,
+        defaultEstimate: "1-2 hari kerja",
+        cities: [
+            { name: "Kota Bogor", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kab. Bogor", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kota Depok", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kota Bekasi", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kab. Bekasi", cost: 15000, estimate: "1-2 hari" },
+        ],
+    },
+    {
+        name: "Banten",
+        defaultCost: 15000,
+        defaultEstimate: "1-2 hari kerja",
+        cities: [
+            { name: "Kota Tangerang", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kota Tangerang Selatan", cost: 15000, estimate: "1-2 hari" },
+            { name: "Kab. Tangerang", cost: 15000, estimate: "1-2 hari" },
+        ],
+    },
+];
+
+export const JABODETABEK_CITIES_FLAT = [
+    "Jakarta Pusat",
+    "Jakarta Selatan",
+    "Jakarta Barat",
+    "Jakarta Timur",
+    "Jakarta Utara",
+    "Kepulauan Seribu",
+    "Kota Bogor",
+    "Kab. Bogor",
+    "Kota Depok",
+    "Kota Bekasi",
+    "Kab. Bekasi",
+    "Kota Tangerang",
+    "Kota Tangerang Selatan",
+    "Kab. Tangerang"
+];
+
+export function isJabodetabek(city: string, province?: string): boolean {
+    if (!city) return false;
+    const cleanCity = city.toLowerCase().replace(/^(kota|kab\.|kabupaten)\s+/i, "").trim();
+    const cleanProv = (province || "").toLowerCase().replace(/^(dki|di)\s+/i, "").trim();
+
+    if (cleanProv) {
+        const validProvs = ["dki jakarta", "jakarta", "jawa barat", "banten"];
+        const matchProv = validProvs.some(vp => cleanProv.includes(vp) || vp.includes(cleanProv));
+        if (!matchProv) return false;
+    }
+
+    const jabodetabekKeywords = [
+        "jakarta",
+        "seribu",
+        "bogor",
+        "depok",
+        "bekasi",
+        "tangerang"
+    ];
+
+    return jabodetabekKeywords.some(kw => cleanCity.includes(kw));
+}
+

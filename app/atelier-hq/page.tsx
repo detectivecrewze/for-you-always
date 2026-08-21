@@ -449,7 +449,7 @@ export default function Dashboard() {
         today: "Hari Ini",
         yesterday: "Kemarin",
         "7days": "7 Hari Terakhir",
-        "30days": "30 Hari Terakhir",
+        "30days": "Bulan Ini",
         all: "Semua Waktu",
     };
 
@@ -492,10 +492,11 @@ export default function Dashboard() {
             }
 
             if (range === "30days") {
-                const thirtyDaysAgo = new Date(nowWIB);
-                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                thirtyDaysAgo.setHours(0, 0, 0, 0);
-                return orderWIB >= thirtyDaysAgo;
+                // Bulan ini saja (current month only, tidak mengambil data bulan kemarin)
+                return (
+                    orderWIB.getFullYear() === nowWIB.getFullYear() &&
+                    orderWIB.getMonth() === nowWIB.getMonth()
+                );
             }
 
             return true;
@@ -528,6 +529,7 @@ export default function Dashboard() {
             wrapped: "Wrapped",
             mixtape: "Mixtape",
             invitation: "Invitation",
+            birthday: "Birthday Scrapbook",
         };
         return map[raw] || raw || "Memoria";
     };
@@ -1228,7 +1230,7 @@ export default function Dashboard() {
                                             { id: "today", label: "Hari Ini" },
                                             { id: "yesterday", label: "Kemarin" },
                                             { id: "7days", label: "7 Hari" },
-                                            { id: "30days", label: "30 Hari" },
+                                            { id: "30days", label: "Bulan Ini" },
                                             { id: "all", label: "Semua Waktu" },
                                         ].map((tab) => {
                                             const isActive = timeRangeFilter === tab.id;

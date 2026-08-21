@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getShippingRate } from "@/lib/indonesiaShipping";
+import { getShippingRate, isJabodetabek } from "@/lib/indonesiaShipping";
 
 export const dynamic = "force-dynamic";
 
@@ -29,18 +29,17 @@ export async function POST(req: NextRequest) {
             items_value = 150000,
         } = body;
 
-        const isJabodetabek =
-            destination_province === "DKI Jakarta" ||
-            [
-                "Kota Bogor",
-                "Kab. Bogor",
-                "Kota Depok",
-                "Kota Tangerang",
-                "Kota Tangerang Selatan",
-                "Kab. Tangerang",
-                "Kota Bekasi",
-                "Kab. Bekasi",
-            ].includes(destination_city);
+        // Strict Jabodetabek Validation for Physical Gift Box Shipping
+        if (destination_city && !isJabodetabek(destination_city, destination_province)) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Pengiriman The Gift Box saat ini hanya melayani wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi).",
+                    options: [],
+                },
+                { status: 400 }
+            );
+        }
 
         const postalCode = parseInt(destination_postal_code, 10);
 

@@ -22,7 +22,7 @@ const CATALOG_ITEMS = [
         numericPrice: 139000,
         href: "/catalog/the-gift-box",
         occasions: ["Anniversary", "Birthday", "LDR"],
-        features: ["Luxury Physical Gift Box", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
+        features: ["Luxury Physical Gift Box (Jabodetabek)", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
     },
     {
         badgeText: "#1 Exclusive",

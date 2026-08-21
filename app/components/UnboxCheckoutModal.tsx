@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import posthog from 'posthog-js';
 import { trackInitiateCheckout } from "@/lib/pixel";
-import { INDONESIA_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
+import { JABODETABEK_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
 
 interface UnboxCheckoutModalProps {
     onClose: () => void;
@@ -39,7 +39,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
     });
 
     // Dynamic Shipping Rate Calculation
-    const currentProvinceObj = INDONESIA_SHIPPING_DATA.find(p => p.name === shippingDetails.province) || INDONESIA_SHIPPING_DATA[0];
+    const currentProvinceObj = JABODETABEK_SHIPPING_DATA.find(p => p.name === shippingDetails.province) || JABODETABEK_SHIPPING_DATA[0];
     const availableCities = currentProvinceObj.cities;
 
     const { cost: shippingCost, estimate: shippingEstimate } = getShippingRate(
@@ -60,7 +60,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
     }, []);
 
     const handleProvinceChange = (newProv: string) => {
-        const provObj = INDONESIA_SHIPPING_DATA.find(p => p.name === newProv);
+        const provObj = JABODETABEK_SHIPPING_DATA.find(p => p.name === newProv);
         const firstCity = provObj && provObj.cities.length > 0 ? provObj.cities[0].name : "";
         setShippingDetails(prev => ({
             ...prev,
@@ -485,7 +485,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                                                     onChange={(e) => handleProvinceChange(e.target.value)}
                                                     className="unbox-select"
                                                 >
-                                                    {INDONESIA_SHIPPING_DATA.map((p) => (
+                                                    {JABODETABEK_SHIPPING_DATA.map((p) => (
                                                         <option key={p.name} value={p.name}>
                                                             {p.name}
                                                         </option>

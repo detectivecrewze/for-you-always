@@ -404,6 +404,27 @@ export default function TheGiftBoxPage() {
                             </div>
                         </div>
 
+                        {/* JABODETABEK DELIVERY BADGE (NO EMOJIS, CLEAN LUXURY DESIGN) */}
+                        <div style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "6px 14px",
+                            borderRadius: "999px",
+                            backgroundColor: "rgba(166, 124, 82, 0.08)",
+                            border: "1px solid rgba(166, 124, 82, 0.22)",
+                            fontSize: "0.76rem",
+                            fontWeight: 600,
+                            color: "#6e5c53",
+                            marginBottom: "20px"
+                        }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span>Khusus Pengiriman Wilayah Jabodetabek</span>
+                        </div>
+
                         {/* CTA ACTION CONTAINER */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "340px", marginBottom: "26px" }}>
                             {stockData.stock > 0 ? (
@@ -985,7 +1006,7 @@ export default function TheGiftBoxPage() {
                     {[
                         {
                             q: "Berapa lama estimasi pengiriman gift box ke kota tujuan?",
-                            a: "Gift box fisik dikirim menggunakan ekspedisi terpercaya dengan pengemasan aman berlapis bubble wrap. Estimasi pengiriman 1-3 hari kerja untuk wilayah Jabodetabek & Jawa, serta 3-5 hari kerja untuk luar pulau Jawa."
+                            a: "Gift box fisik dikirim khusus ke wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi) dengan pengemasan aman berlapis bubble wrap tebal. Estimasi tiba 1-2 hari kerja atau tersedia opsi pengiriman ekspres."
                         },
                         {
                             q: "Bagaimana cara memasukkan ucapan & foto ke dalam kado digital?",
