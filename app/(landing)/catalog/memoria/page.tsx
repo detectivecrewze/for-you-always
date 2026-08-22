@@ -9,11 +9,21 @@ import { trackViewContent } from "@/lib/pixel";
 
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
-    const isMemoriaDelay = new Date().getTime() < new Date("2026-08-06T00:00:00+07:00").getTime();
+    const [memoriaNotice, setMemoriaNotice] = React.useState<{ isActive: boolean; title: string; message: string }>({
+        isActive: false,
+        title: "Info Khusus Memoria:",
+        message: "",
+    });
 
     useEffect(() => {
         window.scrollTo(0, 0);
         trackViewContent({ id: "loves", name: "Memoria Premium", price: 40000 });
+        fetch("/api/public/memoria-notice")
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data?.notice) setMemoriaNotice(data.notice);
+            })
+            .catch(() => {});
     }, []);
 
     return (
@@ -59,9 +69,31 @@ export default function ProductCatalogPage() {
                 `}</style>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        {isMemoriaDelay && (
-                            <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "16px 20px", borderRadius: "16px", marginBottom: "30px", color: "#856404", fontSize: 14, fontFamily: "var(--font-sans)", lineHeight: 1.6, boxShadow: "0 4px 12px rgba(133,100,4,0.05)" }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (5 Agustus), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                        {memoriaNotice.isActive && (
+                            <div style={{
+                                background: "#fff9f0",
+                                border: "1px solid #f0dfb8",
+                                padding: "16px 20px",
+                                borderRadius: "16px",
+                                marginBottom: "30px",
+                                color: "#6e4b20",
+                                fontSize: 13.5,
+                                fontFamily: "var(--font-sans)",
+                                lineHeight: 1.6,
+                                boxShadow: "0 4px 14px rgba(110,75,32,0.04)",
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 12
+                            }}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                                <div>
+                                    <strong style={{ color: "#382a24" }}>{memoriaNotice.title || "Info Khusus Memoria:"}</strong>{" "}
+                                    {memoriaNotice.message}
+                                </div>
                             </div>
                         )}
                         <LandscapeProductCard

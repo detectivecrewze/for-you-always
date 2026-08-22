@@ -15,15 +15,25 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
     const [closing, setClosing] = useState(false);
+    const [memoriaNotice, setMemoriaNotice] = useState<{ isActive: boolean; title: string; message: string }>({
+        isActive: false,
+        title: "Info Khusus Memoria:",
+        message: "",
+    });
 
     useEffect(() => {
         if (items.length > 0) {
             trackInitiateCheckout(items, cartTotal);
         }
+        fetch("/api/public/memoria-notice")
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data?.notice) setMemoriaNotice(data.notice);
+            })
+            .catch(() => {});
     }, []);
     
     const hasMemoria = items.some(item => item.id === "loves");
-    const isMemoriaDelay = new Date().getTime() < new Date("2026-08-06T00:00:00+07:00").getTime();
 
     const handleClose = () => {
         setClosing(true);
@@ -168,9 +178,30 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                                 : "Akses kado digital akan dikirim otomatis ke email kamu."}
                         </p>
 
-                        {hasMemoria && isMemoriaDelay && (
-                            <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (5 Agustus), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                        {hasMemoria && memoriaNotice.isActive && (
+                            <div style={{
+                                background: "#fff9f0",
+                                border: "1px solid #f0dfb8",
+                                padding: "12px 16px",
+                                borderRadius: "12px",
+                                marginBottom: "20px",
+                                color: "#6e4b20",
+                                fontSize: 13,
+                                fontFamily: "var(--font-sans)",
+                                lineHeight: 1.5,
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 10
+                            }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                                <div>
+                                    <strong style={{ color: "#382a24" }}>{memoriaNotice.title || "Info Khusus Memoria:"}</strong>{" "}
+                                    {memoriaNotice.message}
+                                </div>
                             </div>
                         )}
 
@@ -231,9 +262,30 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                             Pastikan detail pesanan dan email kamu sudah benar.
                         </p>
 
-                        {hasMemoria && isMemoriaDelay && (
-                            <div style={{ background: "#fff3cd", border: "1px solid #ffeeba", padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", color: "#856404", fontSize: 13, fontFamily: "var(--font-sans)", lineHeight: 1.5 }}>
-                                <strong>⚠️ Info Khusus Memoria:</strong> Untuk pemesanan produk Memoria hari ini (5 Agustus), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya!
+                        {hasMemoria && memoriaNotice.isActive && (
+                            <div style={{
+                                background: "#fff9f0",
+                                border: "1px solid #f0dfb8",
+                                padding: "12px 16px",
+                                borderRadius: "12px",
+                                marginBottom: "20px",
+                                color: "#6e4b20",
+                                fontSize: 13,
+                                fontFamily: "var(--font-sans)",
+                                lineHeight: 1.5,
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 10
+                            }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                                <div>
+                                    <strong style={{ color: "#382a24" }}>{memoriaNotice.title || "Info Khusus Memoria:"}</strong>{" "}
+                                    {memoriaNotice.message}
+                                </div>
                             </div>
                         )}
 

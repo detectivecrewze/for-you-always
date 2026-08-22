@@ -50,7 +50,7 @@ export default function Dashboard() {
     const [authError, setAuthError] = useState("");
 
     // Dashboard States
-    const [activeTab, setActiveTab] = useState<"overview" | "physical" | "digital">("overview");
+    const [activeTab, setActiveTab] = useState<"overview" | "physical" | "digital" | "memoria">("overview");
     const [timeRangeFilter, setTimeRangeFilter] = useState<"today" | "yesterday" | "7days" | "30days" | "all">("today");
     const [overviewStats, setOverviewStats] = useState<{
         totalRevenue: number;
@@ -232,6 +232,7 @@ export default function Dashboard() {
                 setIsAuthenticated(true);
                 fetchOrders();
                 fetchInventory();
+                fetchMemoriaNotice();
             } else {
                 setIsAuthenticated(false);
             }
@@ -255,6 +256,64 @@ export default function Dashboard() {
             console.error("Failed to fetch inventory:", e);
         } finally {
             setLoadingInventory(false);
+        }
+    };
+
+    // Memoria Announcement Notice States
+    const [memoriaNotice, setMemoriaNotice] = useState<{
+        isActive: boolean;
+        title: string;
+        message: string;
+    }>({
+        isActive: false,
+        title: "Info Khusus Memoria:",
+        message: "Untuk pemesanan produk Memoria hari ini, pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya.",
+    });
+    const [loadingNotice, setLoadingNotice] = useState(false);
+    const [savingNotice, setSavingNotice] = useState(false);
+    const [noticeFeedback, setNoticeFeedback] = useState<string | null>(null);
+
+    const fetchMemoriaNotice = async () => {
+        setLoadingNotice(true);
+        try {
+            const res = await fetch("/api/admin/settings?key=memoria_notice");
+            const data = await res.json();
+            if (res.ok && data.success && data.value) {
+                setMemoriaNotice(data.value);
+            }
+        } catch (e) {
+            console.error("Failed to fetch memoria notice:", e);
+        } finally {
+            setLoadingNotice(false);
+        }
+    };
+
+    const handleSaveMemoriaNotice = async (customPayload?: { isActive: boolean; title: string; message: string }) => {
+        const payloadToSave = customPayload || memoriaNotice;
+        setSavingNotice(true);
+        setNoticeFeedback(null);
+        try {
+            const res = await fetch("/api/admin/settings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    key: "memoria_notice",
+                    value: payloadToSave,
+                }),
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setMemoriaNotice(payloadToSave);
+                setNoticeFeedback(payloadToSave.isActive ? "Pemberitahuan Memoria berhasil diaktifkan" : "Pemberitahuan Memoria berhasil dinonaktifkan");
+                showToast(payloadToSave.isActive ? "Pemberitahuan Memoria Aktif" : "Pemberitahuan Dinonaktifkan", "success");
+                setTimeout(() => setNoticeFeedback(null), 4000);
+            } else {
+                showToast(data.message || "Gagal menyimpan pengaturan", "error");
+            }
+        } catch (e) {
+            showToast("Terjadi kesalahan jaringan", "error");
+        } finally {
+            setSavingNotice(false);
         }
     };
 
@@ -303,6 +362,7 @@ export default function Dashboard() {
                 setIsAuthenticated(true);
                 fetchOrders();
                 fetchInventory();
+                fetchMemoriaNotice();
             } else {
                 setAuthError(data.message || "Kata sandi salah. Akses ditolak.");
             }
@@ -388,24 +448,26 @@ export default function Dashboard() {
     const handleRefreshAll = () => {
         if (activeTab === "overview") {
             fetchStats(timeRangeFilter);
-        } else {
+        } else if (activeTab === "physical" || activeTab === "digital") {
             const page = activeTab === "physical" ? physicalPage : digitalPage;
             fetchOrders(activeTab, page, debouncedSearch, productFilter, statusFilter);
         }
         fetchInventory();
+        fetchMemoriaNotice();
     };
 
     useEffect(() => {
         if (isAuthenticated) {
             if (activeTab === "overview") {
                 fetchStats(timeRangeFilter);
-            } else {
+            } else if (activeTab === "physical" || activeTab === "digital") {
                 const page = activeTab === "physical" ? physicalPage : digitalPage;
                 fetchOrders(activeTab, page, debouncedSearch, productFilter, statusFilter);
             }
             if (activeTab === "physical" || activeTab === "overview") {
                 fetchInventory();
             }
+            fetchMemoriaNotice();
         }
     }, [activeTab, isAuthenticated, timeRangeFilter, physicalPage, digitalPage, debouncedSearch, productFilter, statusFilter]);
 
@@ -802,6 +864,7 @@ export default function Dashboard() {
     const getTabTitle = () => {
         if (activeTab === "overview") return "Ringkasan Penjualan";
         if (activeTab === "physical") return "Pesanan Fisik (The Gift Box)";
+        if (activeTab === "memoria") return "Pengaturan Memoria";
         return "Semua Pesanan Digital";
     };
 
@@ -1163,6 +1226,25 @@ export default function Dashboard() {
                             }}
                         >
                             Semua Pesanan Digital
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab("memoria"); setMobileMenuOpen(false); }}
+                            style={{
+                                display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 14px", borderRadius: 10,
+                                border: "none", background: activeTab === "memoria" ? "#1d1816" : "transparent",
+                                color: activeTab === "memoria" ? "#faf7f2" : "#7a685e", fontWeight: 700, fontSize: 12.5,
+                                cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
+                            }}
+                        >
+                            <span>Pengaturan Memoria</span>
+                            {memoriaNotice.isActive && (
+                                <span style={{
+                                    fontSize: 10, fontWeight: 700, background: activeTab === "memoria" ? "#a67c52" : "#2e7d32",
+                                    color: "#fff", padding: "1px 6px", borderRadius: 999,
+                                }}>
+                                    Aktif
+                                </span>
+                            )}
                         </button>
 
                         <Link
@@ -2358,6 +2440,355 @@ export default function Dashboard() {
                             </div>
                         </div>
                     )}
+
+                    {/* ── TAB 4: PENGATURAN MEMORIA (DEDICATED LUXURY TAB - NO EMOJIS) ── */}
+                    {activeTab === "memoria" && (
+                        <div>
+                            {/* Header */}
+                            <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24, flexWrap: "wrap", gap: 14 }}>
+                                <div>
+                                    <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(24px, 4vw, 30px)", fontWeight: 700, color: "#1d1816", margin: "0 0 4px" }}>
+                                        Pengaturan Memoria
+                                    </h1>
+                                    <p style={{ fontSize: 13, color: "#7a685e", margin: 0, lineHeight: 1.5 }}>
+                                        Kontrol pemberitahuan jadwal pengerjaan dan antrean pesanan khusus produk Memoria.
+                                    </p>
+                                </div>
+
+                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSaveMemoriaNotice()}
+                                        disabled={savingNotice}
+                                        style={{
+                                            padding: "10px 20px",
+                                            borderRadius: 10,
+                                            border: "none",
+                                            background: "#1d1816",
+                                            color: "#faf7f2",
+                                            fontSize: "0.82rem",
+                                            fontWeight: 700,
+                                            cursor: savingNotice ? "wait" : "pointer",
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: 8,
+                                            boxShadow: "0 4px 14px rgba(29,24,22,0.12)",
+                                            transition: "all 0.2s ease",
+                                        }}
+                                    >
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                            <polyline points="17 21 17 13 7 13 7 21" />
+                                            <polyline points="7 3 7 8 15 8" />
+                                        </svg>
+                                        <span>{savingNotice ? "Menyimpan..." : "Simpan Pengaturan"}</span>
+                                    </button>
+                                </div>
+                            </header>
+
+                            {/* Main Content Grid */}
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 20 }}>
+                                {/* Left Column: Switch & Form Controls */}
+                                <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                                    {/* 1. Status Activation Card */}
+                                    <div style={{ background: "#ffffff", borderRadius: 16, border: "1px solid #e8dfd8", padding: "20px 24px", boxShadow: "0 2px 10px rgba(29,24,22,0.02)" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                            <div>
+                                                <div style={{ fontSize: 11, fontWeight: 700, color: "#8b7e75", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
+                                                    Status Banner Pemberitahuan
+                                                </div>
+                                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                                    <span style={{
+                                                        fontSize: 12,
+                                                        fontWeight: 700,
+                                                        color: memoriaNotice.isActive ? "#2e7d32" : "#8a7b73",
+                                                        background: memoriaNotice.isActive ? "#edf7ed" : "#f5efe9",
+                                                        padding: "3px 10px",
+                                                        borderRadius: 999,
+                                                        border: `1px solid ${memoriaNotice.isActive ? "#c8e6c9" : "#e0d6cd"}`,
+                                                        display: "inline-flex",
+                                                        alignItems: "center",
+                                                        gap: 6
+                                                    }}>
+                                                        <span style={{ width: 6, height: 6, borderRadius: "50%", background: memoriaNotice.isActive ? "#2e7d32" : "#a6968c" }} />
+                                                        {memoriaNotice.isActive ? "Aktif di Website" : "Nonaktif"}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Modern Toggle Switch (No Emojis) */}
+                                            <button
+                                                type="button"
+                                                onClick={() => handleSaveMemoriaNotice({ ...memoriaNotice, isActive: !memoriaNotice.isActive })}
+                                                disabled={savingNotice}
+                                                aria-label="Toggle status"
+                                                style={{
+                                                    width: 52,
+                                                    height: 30,
+                                                    borderRadius: 999,
+                                                    border: "none",
+                                                    background: memoriaNotice.isActive ? "#1d1816" : "#e0d6cd",
+                                                    padding: "3px",
+                                                    cursor: savingNotice ? "wait" : "pointer",
+                                                    transition: "background 0.25s ease",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    position: "relative",
+                                                }}
+                                            >
+                                                <span style={{
+                                                    width: 24,
+                                                    height: 24,
+                                                    borderRadius: "50%",
+                                                    background: "#ffffff",
+                                                    boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                                                    transform: memoriaNotice.isActive ? "translateX(22px)" : "translateX(0px)",
+                                                    transition: "transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                    display: "block"
+                                                }} />
+                                            </button>
+                                        </div>
+                                        <p style={{ fontSize: 12, color: "#7a685e", margin: "14px 0 0", lineHeight: 1.45, borderTop: "1px solid #f5efe9", paddingTop: 12 }}>
+                                            Jika aktif, banner akan muncul di halaman katalog Memoria dan pada modal checkout khusus untuk pembeli yang memilih produk Memoria.
+                                        </p>
+                                    </div>
+
+                                    {/* 2. Quick Presets Card */}
+                                    <div style={{ background: "#ffffff", borderRadius: 16, border: "1px solid #e8dfd8", padding: "20px 24px", boxShadow: "0 2px 10px rgba(29,24,22,0.02)" }}>
+                                        <div style={{ fontSize: 11, fontWeight: 700, color: "#8b7e75", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 12 }}>
+                                            Pilihan Preset Pesan Cepat
+                                        </div>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const todayStr = new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long" });
+                                                    setMemoriaNotice(prev => ({
+                                                        ...prev,
+                                                        title: "Info Khusus Memoria:",
+                                                        message: `Untuk pemesanan produk Memoria hari ini (${todayStr}), pengerjaannya baru akan dilakukan besok. Namun, kamu tetap bisa mengisi form materi kado (teks/foto) hari ini juga. Terima kasih atas pengertiannya.`,
+                                                    }));
+                                                }}
+                                                style={{
+                                                    padding: "10px 14px",
+                                                    borderRadius: 10,
+                                                    border: "1px solid #e0d6cd",
+                                                    background: "#faf7f2",
+                                                    color: "#1d1816",
+                                                    fontSize: 12,
+                                                    fontWeight: 600,
+                                                    cursor: "pointer",
+                                                    textAlign: "left",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    alignItems: "center",
+                                                    transition: "all 0.18s ease"
+                                                }}
+                                                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#a67c52"}
+                                                onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e0d6cd"}
+                                            >
+                                                <span>Pengerjaan Besok (Hari Ini)</span>
+                                                <span style={{ fontSize: 11, color: "#a67c52", fontWeight: 700 }}>Terapkan →</span>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setMemoriaNotice(prev => ({
+                                                        ...prev,
+                                                        title: "Antrean Pengerjaan:",
+                                                        message: "Antrean peramuan Memoria saat ini sedang padat. Estimasi pengerjaan kado adalah 1-2 hari kerja setelah materi form lengkap dikirimkan. Terima kasih atas kesabarannya.",
+                                                    }));
+                                                }}
+                                                style={{
+                                                    padding: "10px 14px",
+                                                    borderRadius: 10,
+                                                    border: "1px solid #e0d6cd",
+                                                    background: "#faf7f2",
+                                                    color: "#1d1816",
+                                                    fontSize: 12,
+                                                    fontWeight: 600,
+                                                    cursor: "pointer",
+                                                    textAlign: "left",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    alignItems: "center",
+                                                    transition: "all 0.18s ease"
+                                                }}
+                                                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#a67c52"}
+                                                onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e0d6cd"}
+                                            >
+                                                <span>Antrean Padat (1-2 Hari)</span>
+                                                <span style={{ fontSize: 11, color: "#a67c52", fontWeight: 700 }}>Terapkan →</span>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setMemoriaNotice(prev => ({
+                                                        ...prev,
+                                                        title: "Batas Waktu Pemesanan:",
+                                                        message: "Pesanan Memoria yang masuk setelah pukul 21.00 WIB akan diramu keesokan paginya mulai pukul 08.00 WIB. Kamu tetap bisa mengisi form materi kado malam ini juga.",
+                                                    }));
+                                                }}
+                                                style={{
+                                                    padding: "10px 14px",
+                                                    borderRadius: 10,
+                                                    border: "1px solid #e0d6cd",
+                                                    background: "#faf7f2",
+                                                    color: "#1d1816",
+                                                    fontSize: 12,
+                                                    fontWeight: 600,
+                                                    cursor: "pointer",
+                                                    textAlign: "left",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    alignItems: "center",
+                                                    transition: "all 0.18s ease"
+                                                }}
+                                                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#a67c52"}
+                                                onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e0d6cd"}
+                                            >
+                                                <span>Batas Waktu Malam (21.00 WIB)</span>
+                                                <span style={{ fontSize: 11, color: "#a67c52", fontWeight: 700 }}>Terapkan →</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* 3. Form Editor Card */}
+                                    <div style={{ background: "#ffffff", borderRadius: 16, border: "1px solid #e8dfd8", padding: "20px 24px", boxShadow: "0 2px 10px rgba(29,24,22,0.02)" }}>
+                                        <div style={{ fontSize: 11, fontWeight: 700, color: "#8b7e75", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>
+                                            Editor Konten Banner
+                                        </div>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                                            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                                                <label style={{ fontSize: 12, fontWeight: 700, color: "#1d1816" }}>Label / Judul Banner</label>
+                                                <input
+                                                    type="text"
+                                                    value={memoriaNotice.title}
+                                                    onChange={(e) => setMemoriaNotice({ ...memoriaNotice, title: e.target.value })}
+                                                    placeholder="Contoh: Info Khusus Memoria:"
+                                                    style={{
+                                                        padding: "10px 14px",
+                                                        borderRadius: 10,
+                                                        border: "1px solid #dcd1c6",
+                                                        fontSize: 13,
+                                                        fontFamily: "var(--font-sans)",
+                                                        background: "#faf7f2",
+                                                        color: "#1d1816"
+                                                    }}
+                                                />
+                                            </div>
+
+                                            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                                                <label style={{ fontSize: 12, fontWeight: 700, color: "#1d1816" }}>Isi Teks Pemberitahuan</label>
+                                                <textarea
+                                                    rows={4}
+                                                    value={memoriaNotice.message}
+                                                    onChange={(e) => setMemoriaNotice({ ...memoriaNotice, message: e.target.value })}
+                                                    placeholder="Tuliskan isi pesan pemberitahuan di sini..."
+                                                    style={{
+                                                        padding: "12px 14px",
+                                                        borderRadius: 10,
+                                                        border: "1px solid #dcd1c6",
+                                                        fontSize: 13,
+                                                        fontFamily: "var(--font-sans)",
+                                                        background: "#faf7f2",
+                                                        color: "#1d1816",
+                                                        resize: "vertical",
+                                                        lineHeight: 1.55
+                                                    }}
+                                                />
+                                            </div>
+
+                                            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 4 }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleSaveMemoriaNotice()}
+                                                    disabled={savingNotice}
+                                                    style={{
+                                                        padding: "10px 22px",
+                                                        borderRadius: 10,
+                                                        border: "none",
+                                                        background: "#1d1816",
+                                                        color: "#faf7f2",
+                                                        fontSize: "0.82rem",
+                                                        fontWeight: 700,
+                                                        cursor: savingNotice ? "wait" : "pointer",
+                                                        transition: "all 0.2s ease"
+                                                    }}
+                                                >
+                                                    {savingNotice ? "Menyimpan..." : "Simpan Perubahan"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Column: Live Preview & Logic Explainer */}
+                                <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                                    {/* Live Preview Card */}
+                                    <div style={{ background: "#ffffff", borderRadius: 16, border: "1px solid #e8dfd8", padding: "20px 24px", boxShadow: "0 2px 10px rgba(29,24,22,0.02)" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                                            <div style={{ fontSize: 11, fontWeight: 700, color: "#8b7e75", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                                                Pratinjau Langsung (Live Preview)
+                                            </div>
+                                            <span style={{ fontSize: 11, color: "#a67c52", fontWeight: 600 }}>Tampilan Customer</span>
+                                        </div>
+
+                                        <div style={{
+                                            background: "#fff9f0",
+                                            border: "1px solid #f0e1cf",
+                                            padding: "16px 18px",
+                                            borderRadius: "14px",
+                                            color: "#6e4b20",
+                                            fontSize: 13,
+                                            fontFamily: "var(--font-sans)",
+                                            lineHeight: 1.55,
+                                            opacity: memoriaNotice.isActive ? 1 : 0.6,
+                                            display: "flex",
+                                            gap: 12,
+                                            alignItems: "flex-start"
+                                        }}>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="12" y1="8" x2="12" y2="12" />
+                                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                                            </svg>
+                                            <div>
+                                                <strong style={{ color: "#382a24" }}>{memoriaNotice.title || "Info Khusus Memoria:"}</strong>{" "}
+                                                {memoriaNotice.message || "(Isi pesan belum ditentukan)"}
+                                            </div>
+                                        </div>
+
+                                        {!memoriaNotice.isActive && (
+                                            <p style={{ fontSize: 11.5, color: "#a6968c", fontStyle: "italic", margin: "10px 0 0", textAlign: "center" }}>
+                                                Status saat ini Nonaktif. Banner tidak akan ditampilkan ke customer.
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Target Information Card */}
+                                    <div style={{ background: "#faf7f2", borderRadius: 16, border: "1px solid #e0d6cd", padding: "20px 24px" }}>
+                                        <div style={{ fontSize: 11, fontWeight: 700, color: "#8b7e75", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 10 }}>
+                                            Aturan Penayangan Otomatis
+                                        </div>
+                                        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: "#59483f", lineHeight: 1.6 }}>
+                                            <li style={{ marginBottom: 6 }}>
+                                                <strong>Hanya untuk Pembeli Memoria:</strong> Banner checkout hanya muncul jika keranjang pembeli memuat produk Memoria.
+                                            </li>
+                                            <li style={{ marginBottom: 6 }}>
+                                                <strong>Produk Lain Terisolasi:</strong> Pembeli produk Letter, Voices, Arcade, Retro, Scrapbook, atau Gift Box tidak akan terganggu oleh banner ini.
+                                            </li>
+                                            <li>
+                                                <strong>Katalog Terintegrasi:</strong> Pengunjung halaman katalog Memoria juga akan melihat banner ini secara sinkron.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </main>
             </div>
 
@@ -3464,7 +3895,7 @@ export default function Dashboard() {
                     fontWeight: 600,
                     fontFamily: "var(--font-sans)",
                 }}>
-                    <span style={{ fontSize: "1rem" }}>{toastMessage.type === "success" ? "✓" : "⚠️"}</span>
+                    <span style={{ fontSize: "1rem", fontWeight: 700 }}>{toastMessage.type === "success" ? "✓" : "!"}</span>
                     <span>{toastMessage.text}</span>
                 </div>
             )}
