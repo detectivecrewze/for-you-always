@@ -801,6 +801,11 @@ export default function Dashboard() {
     };
 
     const handleOpenDispatchModal = (order: OrderItem) => {
+        const isPaid = order.status === "paid" || order.status === "success";
+        if (!isPaid) {
+            showToast("Pesanan belum dibayar. Request pick-up hanya untuk pesanan lunas.", "error");
+            return;
+        }
         setDispatchConfirmOrder(order);
     };
 
@@ -2217,6 +2222,25 @@ export default function Dashboard() {
                                                                                     Edit Resi
                                                                                 </button>
                                                                             </div>
+                                                                        </div>
+                                                                    ) : !isPaid ? (
+                                                                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                                                            <div style={{ fontSize: 9.5, color: "#6e5c53" }}>
+                                                                                Kurir: <strong>{ship.courier || "J&T"}</strong>
+                                                                            </div>
+                                                                            <span style={{
+                                                                                display: "inline-block",
+                                                                                padding: "3px 7px",
+                                                                                borderRadius: 5,
+                                                                                fontSize: 9.5,
+                                                                                fontWeight: 700,
+                                                                                width: "fit-content",
+                                                                                background: "#fff8e1",
+                                                                                color: "#b26a00",
+                                                                                border: "1px dashed #ffe082"
+                                                                            }}>
+                                                                                Menunggu Pembayaran
+                                                                            </span>
                                                                         </div>
                                                                     ) : (
                                                                         <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>

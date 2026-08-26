@@ -79,6 +79,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, message: "Data pesanan tidak lengkap." }, { status: 400 });
         }
 
+        const isPaid = order_data.status === "paid" || order_data.status === "success";
+        if (!isPaid) {
+            return NextResponse.json({ success: false, message: "Pesanan belum dibayar. Tidak dapat melakukan request pick-up." }, { status: 400 });
+        }
+
         // Parse Shipping Details
         let shipDetails = order_data.shipping_details;
         if (typeof shipDetails === "string") {
