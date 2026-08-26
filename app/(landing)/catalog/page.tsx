@@ -23,7 +23,7 @@ const CATALOG_ITEMS = [
         numericPrice: 75000,
         href: "/catalog/the-gift-box",
         occasions: ["Anniversary", "Birthday", "LDR"],
-        features: ["Classic Kraft Box & Hardbox Tier", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
+        features: ["Classic Kraft Box & Hardbox Tier", "Digital Memory Card (QR)", "Pilihan Memoria, Scrapbook, Letter & Voices"]
     },
     {
         badgeText: "#1 Exclusive",

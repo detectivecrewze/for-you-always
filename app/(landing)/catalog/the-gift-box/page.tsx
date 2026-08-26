@@ -132,7 +132,7 @@ export const GIFT_BOX_ASSETS = {
 };
 
 export default function TheGiftBoxPage() {
-    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("letter");
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "birthday" | "letter" | "voices">("letter");
     const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -186,7 +186,7 @@ export default function TheGiftBoxPage() {
 
     const tabContainerRef = useRef<HTMLDivElement>(null);
     const isFirstRender = useRef(true);
-    const experienceKeys: Array<"memoria" | "letter" | "voices"> = ["memoria", "letter", "voices"];
+    const experienceKeys: Array<"memoria" | "birthday" | "letter" | "voices"> = ["memoria", "birthday", "letter", "voices"];
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
         if (key === selectedDigitalExperience) return;
@@ -235,6 +235,21 @@ export default function TheGiftBoxPage() {
             hardboxNumericPrice: 150000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
+        },
+        birthday: {
+            title: "Birthday Scrapbook",
+            subtitle: "Scrapbook Interaktif & Wish Inbox",
+            desc: "Rayakan momen ulang tahun spesial dengan scrapbook interaktif 4 ruangan, 15 galeri polaroid foto/video, 3 soundtrack musik latar, surat digital, dan wish inbox.",
+            badge: "Birthday",
+            color: "#bf7b19",
+            kraftPrice: "Rp 80.000",
+            kraftOldPrice: "Rp 105.000",
+            kraftNumericPrice: 80000,
+            hardboxPrice: "Rp 135.000",
+            hardboxOldPrice: "Rp 180.000",
+            hardboxNumericPrice: 135000,
+            previewUrl: "/catalog/birthday",
+            imageSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp"
         },
         letter: {
             title: "Letter Edition",
