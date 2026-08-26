@@ -51,9 +51,9 @@ export default function BirthdayCatalogPage() {
                                 </div>
                             }
                             title="Birthday Scrapbook"
-                            description="Rayakan momen ulang tahun spesial dengan scrapbook digital interaktif. Tersedia pilihan tema Snoopy Comic dan Dubu & Dudu, lengkap dengan 15 galeri foto/video polaroid, 3 playlist soundtrack musik, surat personal, dan wish inbox interaktif."
+                            description="Rayakan momen ulang tahun spesial dengan scrapbook digital interaktif. Tersedia pilihan tema Snoopy Comic, Dubu & Dudu, dan Nailong, lengkap dengan 15 galeri foto/video polaroid, 3 playlist soundtrack musik, surat personal, dan wish inbox interaktif."
                             features={[
-                                "Pilihan Tema: Snoopy & Dubu",
+                                "Pilihan Tema: Snoopy, Dubu & Nailong",
                                 "4 Ruangan Interaktif",
                                 "3 Playlist Soundtrack Musik",
                                 "Surat Digital & Wish Inbox",
@@ -128,6 +128,33 @@ export default function BirthdayCatalogPage() {
                                         { name: "Musik", fallbackImgSrc: "/assets/dubu-features/room-musicdubu-6.webp" },
                                         { name: "Surat", fallbackImgSrc: "/assets/dubu-features/room-letterdubu-7.webp" },
                                         { name: "Perayaan", fallbackImgSrc: "/assets/dubu-features/room-endingdubu-8.webp" }
+                                    ]
+                                },
+                                {
+                                    name: "Nailong",
+                                    desc: "Tema naga kuning ceria yang riang, menggemaskan, playful, dan penuh energi",
+                                    title: "Nailong Birthday Scrapbook",
+                                    description: "Rayakan hari ulang tahun spesial bersama karakter naga kuning Nailong yang lucu dan playful. Hadir dengan 4 ruangan kejutan interaktif, galeri foto/video polaroid, pemutar musik, surat personal, dan wish inbox.",
+                                    color: "#f5a623",
+                                    features: [
+                                        "Nuansa Visual Ceria & Playful",
+                                        "4 Ruangan Interaktif",
+                                        "3 Playlist Soundtrack Musik",
+                                        "Surat Digital & Wish Inbox",
+                                        "Akses Instan & Custom Studio"
+                                    ],
+                                    demoLink: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62",
+                                    demoLabel: "Lihat",
+                                    defaultSubThemeIndex: 0,
+                                    subThemes: [
+                                        { name: "Opening", fallbackImgSrc: "/assets/snoopy-features/opening-1.webp" },
+                                        { name: "Wishes", fallbackImgSrc: "/assets/snoopy-features/wishes-2.webp" },
+                                        { name: "Scrapbook", fallbackImgSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp" },
+                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/snoopy-features/wish-card-update-snoopy.webp" },
+                                        { name: "Galeri", fallbackImgSrc: "/assets/snoopy-features/room-galleries-5.webp" },
+                                        { name: "Musik", fallbackImgSrc: "/assets/snoopy-features/room-music-6.webp" },
+                                        { name: "Surat", fallbackImgSrc: "/assets/snoopy-features/letter-7.webp" },
+                                        { name: "Perayaan", fallbackImgSrc: "/assets/snoopy-features/ending-8.webp" }
                                     ]
                                 }
                             ]}
