@@ -10,19 +10,20 @@ import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerMo
 // Konstanta statis di luar komponen — tidak dibuat ulang setiap render
 const CATALOG_ITEMS = [
     {
-        badgeText: "PHYSICAL GIFT",
+        badgeText: "Physical Gift",
         badgeColor: "#1d1816",
-        slotBadgeText: "Sisa 11 Box",
+        badgeVariant: "solid",
+        slotBadgeText: "Sisa 10 Box",
         titleColor: "#382a24",
-        imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
+        imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         title: "The Gift Box",
-        oldPrice: "Rp 180.000",
-        newPrice: "Rp 139.000",
+        oldPrice: "Rp 100.000",
+        newPrice: "Rp 75.000",
         id: "the-gift-box",
-        numericPrice: 139000,
+        numericPrice: 75000,
         href: "/catalog/the-gift-box",
         occasions: ["Anniversary", "Birthday", "LDR"],
-        features: ["Luxury Physical Gift Box (Jabodetabek)", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
+        features: ["Classic Kraft Box & Hardbox Tier", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
     },
     {
         badgeText: "#1 Exclusive",

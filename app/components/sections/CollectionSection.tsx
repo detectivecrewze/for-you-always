@@ -97,14 +97,14 @@ export default function CollectionSection() {
                                 badgeText: "PHYSICAL GIFT",
                                 badgeColor: "#1d1816",
                                 badgeVariant: "solid",
-                                slotBadgeText: unboxStock !== null ? `Sisa ${unboxStock} Box` : "Sisa 11 Box",
-                                imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
-                                price: <DiscountPrice oldPrice="Rp 180.000" newPrice="Rp 139.000" size="sm" layout="inline" />,
+                                slotBadgeText: unboxStock !== null ? `Sisa ${unboxStock} Box` : "Sisa 10 Box",
+                                imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+                                price: <DiscountPrice oldPrice="Rp 100.000" newPrice="Rp 75.000" size="sm" layout="inline" />,
                                 title: "The Gift Box",
                                 titleColor: "#382a24",
                                 description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif pilihanmu.",
                                 href: "/catalog/the-gift-box",
-                                onAddToCart: () => window.location.href = "/catalog/the-gift-box/checkout"
+                                onAddToCart: () => window.location.href = "/catalog/the-gift-box/checkout?boxType=kraft"
                             },
                             {
                                 badgeText: "#1 Exclusive",

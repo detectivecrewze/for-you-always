@@ -186,6 +186,12 @@ export default function Dashboard() {
     const [savingInventory, setSavingInventory] = useState(false);
     const [inventoryFeedback, setInventoryFeedback] = useState<string | null>(null);
 
+    // Kraft Box Stock State
+    const [kraftStock, setKraftStock] = useState<number>(10);
+    const [kraftInputVal, setKraftInputVal] = useState<string>("10");
+    const [savingKraftStock, setSavingKraftStock] = useState(false);
+    const [kraftStockFeedback, setKraftStockFeedback] = useState<string | null>(null);
+
     // Order Delete State
     const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
 
@@ -247,10 +253,16 @@ export default function Dashboard() {
             const res = await fetch("/api/admin/inventory");
             const data = await res.json();
             if (res.ok && data.success && data.inventory?.length > 0) {
-                const item = data.inventory[0];
+                const item = data.inventory.find((i: any) => i.product_id === "the-gift-box" || i.id === "inv_unbox") || data.inventory[0];
                 setInventoryStock(item.stock);
                 setStockInputVal(String(item.stock));
                 setInventoryThreshold(item.low_stock_threshold || 3);
+
+                const kraftItem = data.inventory.find((i: any) => i.product_id === "the-gift-box-kraft");
+                if (kraftItem) {
+                    setKraftStock(kraftItem.stock);
+                    setKraftInputVal(String(kraftItem.stock));
+                }
             }
         } catch (e) {
             console.error("Failed to fetch inventory:", e);
@@ -326,7 +338,7 @@ export default function Dashboard() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    product_id: "unbox-the-memory",
+                    product_id: "the-gift-box",
                     stock: targetStock,
                     low_stock_threshold: inventoryThreshold,
                 }),
@@ -343,6 +355,35 @@ export default function Dashboard() {
             setInventoryFeedback("Gagal memperbarui stok.");
         } finally {
             setSavingInventory(false);
+        }
+    };
+
+    const handleUpdateKraftStock = async (newVal: number) => {
+        const targetStock = Math.max(0, newVal);
+        setSavingKraftStock(true);
+        setKraftStockFeedback(null);
+        try {
+            const res = await fetch("/api/admin/inventory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    product_id: "the-gift-box-kraft",
+                    stock: targetStock,
+                    low_stock_threshold: 3,
+                }),
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setKraftStock(targetStock);
+                setKraftInputVal(String(targetStock));
+                setKraftStockFeedback(`Stok Kraft berhasil diupdate jadi ${targetStock} Box!`);
+                setTimeout(() => setKraftStockFeedback(null), 3500);
+            }
+        } catch (e) {
+            console.error("Failed to update kraft stock:", e);
+            setKraftStockFeedback("Gagal memperbarui stok Kraft Box.");
+        } finally {
+            setSavingKraftStock(false);
         }
     };
 
@@ -1522,7 +1563,7 @@ export default function Dashboard() {
                                         </div>
                                         <div>
                                             <div style={{ fontSize: 11, fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                                                Inventaris Gift Box Fisik (The Gift Box)
+                                                Signature Hardbox — Stok
                                             </div>
                                             <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 2 }}>
                                                 <span style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "#1d1816" }}>
@@ -1618,6 +1659,136 @@ export default function Dashboard() {
                                 {inventoryFeedback && (
                                     <div style={{ fontSize: 11, fontWeight: 600, color: "#2e7d32", background: "#e8f5e9", padding: "6px 10px", borderRadius: 6 }}>
                                         {inventoryFeedback}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* KRAFT BOX STOCK PANEL */}
+                            <div style={{
+                                background: "#fffdf9",
+                                border: "1px solid rgba(166,124,82,0.25)",
+                                borderRadius: 14,
+                                padding: "16px 20px",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 12,
+                                boxShadow: "0 2px 10px rgba(0,0,0,0.02)"
+                            }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                        <div style={{
+                                            width: 44,
+                                            height: 44,
+                                            borderRadius: 10,
+                                            background: "rgba(120,90,55,0.1)",
+                                            color: "#785a37",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}>
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: 11, fontWeight: 700, color: "#7a685e", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                                Classic Kraft Box — Stok
+                                            </div>
+                                            <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 2 }}>
+                                                <span style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "#1d1816" }}>
+                                                    {kraftStock} <span style={{ fontSize: 16, fontWeight: 600, color: "#7a685e" }}>Box Tersedia</span>
+                                                </span>
+                                                <span style={{
+                                                    padding: "3px 8px",
+                                                    borderRadius: 6,
+                                                    fontSize: 10.5,
+                                                    fontWeight: 700,
+                                                    background: kraftStock === 0 ? "#ffebee" : kraftStock <= 3 ? "#fff3e0" : "#e8f5e9",
+                                                    color: kraftStock === 0 ? "#c62828" : kraftStock <= 3 ? "#e65100" : "#2e7d32",
+                                                }}>
+                                                    {kraftStock === 0 ? "HABIS (SOLD OUT)" : kraftStock <= 3 ? "STOK MENIPIS" : "STOK AMAN"}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Quick Increment Controls & Manual Input */}
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                        <div style={{ display: "flex", gap: 4 }}>
+                                            <button
+                                                onClick={() => handleUpdateKraftStock(kraftStock - 1)}
+                                                disabled={savingKraftStock || kraftStock <= 0}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Kurangi 1"
+                                            >
+                                                -1
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateKraftStock(kraftStock + 1)}
+                                                disabled={savingKraftStock}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Tambah 1"
+                                            >
+                                                +1
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateKraftStock(kraftStock + 5)}
+                                                disabled={savingKraftStock}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Tambah 5"
+                                            >
+                                                +5
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateKraftStock(kraftStock + 10)}
+                                                disabled={savingKraftStock}
+                                                style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#faf7f2", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+                                                title="Tambah 10"
+                                            >
+                                                +10
+                                            </button>
+                                        </div>
+
+                                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                value={kraftInputVal}
+                                                onChange={(e) => setKraftInputVal(e.target.value)}
+                                                style={{
+                                                    width: 65,
+                                                    padding: "6px 8px",
+                                                    borderRadius: 6,
+                                                    border: "1px solid #dcd1c6",
+                                                    fontSize: 12,
+                                                    fontWeight: 700,
+                                                    textAlign: "center"
+                                                }}
+                                            />
+                                            <button
+                                                onClick={() => handleUpdateKraftStock(parseInt(kraftInputVal, 10) || 0)}
+                                                disabled={savingKraftStock}
+                                                style={{
+                                                    padding: "7px 12px",
+                                                    borderRadius: 6,
+                                                    border: "none",
+                                                    background: "#785a37",
+                                                    color: "#fff",
+                                                    fontSize: 11,
+                                                    fontWeight: 700,
+                                                    cursor: "pointer"
+                                                }}
+                                            >
+                                                {savingKraftStock ? "..." : "Set Stok"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {kraftStockFeedback && (
+                                    <div style={{ fontSize: 11, fontWeight: 600, color: "#2e7d32", background: "#e8f5e9", padding: "6px 10px", borderRadius: 6 }}>
+                                        {kraftStockFeedback}
                                     </div>
                                 )}
                             </div>

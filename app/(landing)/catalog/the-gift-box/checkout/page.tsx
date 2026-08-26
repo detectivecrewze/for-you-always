@@ -21,6 +21,11 @@ interface DigitalOption {
     numericPrice: number;
 }
 
+const BOX_PRICE_MAP: Record<string, { label: string }> = {
+    hardbox: { label: "Signature Hardbox" },
+    kraft: { label: "Classic Kraft Box" },
+};
+
 const DIGITAL_OPTIONS: DigitalOption[] = [
     {
         id: "loves",
@@ -63,11 +68,12 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
 export default function GiftBoxCheckoutWizardPage() {
     const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedBoxType, setSelectedBoxType] = useState<"hardbox" | "kraft">("kraft");
     const [stockData, setStockData] = useState<{
         stock: number;
         in_stock: boolean;
         is_low_stock: boolean;
-    }>({ stock: 12, in_stock: true, is_low_stock: false });
+    }>({ stock: 10, in_stock: true, is_low_stock: false });
 
     // Form States
     const [selectedDigital, setSelectedDigital] = useState("letter");
@@ -128,7 +134,9 @@ export default function GiftBoxCheckoutWizardPage() {
 
     const selectedDigitalObj =
         DIGITAL_OPTIONS.find((d) => d.id === selectedDigital) || DIGITAL_OPTIONS[0];
-    const currentBoxPrice = selectedDigitalObj.numericPrice;
+    const boxMeta = BOX_PRICE_MAP[selectedBoxType] ?? BOX_PRICE_MAP["hardbox"];
+    const isKraft = selectedBoxType === "kraft";
+    const currentBoxPrice = isKraft ? 75000 : selectedDigitalObj.numericPrice;
     const totalAmount = currentBoxPrice + shippingCost;
 
     // Fetch dynamic districts whenever city changes
@@ -213,18 +221,30 @@ export default function GiftBoxCheckoutWizardPage() {
     }, [shippingDetails.province, shippingDetails.city, shippingDetails.postalCode, currentBoxPrice]);
 
     useEffect(() => {
+        // Baca boxType dan digital dari URL query param
+        const params = new URLSearchParams(window.location.search);
+        const bt = params.get("boxType") === "hardbox" ? "hardbox" : "kraft";
+        const dig = params.get("digital");
+        if (dig && DIGITAL_OPTIONS.some((d) => d.id === dig)) {
+            setSelectedDigital(dig);
+        }
+        setSelectedBoxType(bt);
+
         trackInitiateCheckout(
             [
                 {
-                    id: `unbox_${selectedDigital}`,
+                    id: `unbox_${dig || "letter"}`,
                     title: `The Gift Box (${selectedDigitalObj.title})`,
                     numericPrice: totalAmount,
                 },
             ],
             totalAmount
         );
+    }, []);
 
-        fetch("/api/inventory?product_id=the-gift-box")
+    useEffect(() => {
+        const stockProductId = selectedBoxType === "kraft" ? "the-gift-box-kraft" : "the-gift-box";
+        fetch(`/api/inventory?product_id=${stockProductId}`)
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
@@ -236,7 +256,7 @@ export default function GiftBoxCheckoutWizardPage() {
                 }
             })
             .catch(() => {});
-    }, []);
+    }, [selectedBoxType]);
 
     const handleProvinceChange = (newProv: string) => {
         setShippingDetails((prev) => ({
@@ -375,7 +395,8 @@ export default function GiftBoxCheckoutWizardPage() {
         try {
             // Pre-check stock availability
             try {
-                const checkRes = await fetch("/api/inventory?product_id=the-gift-box");
+                const stockProductId = selectedBoxType === "kraft" ? "the-gift-box-kraft" : "the-gift-box";
+                const checkRes = await fetch(`/api/inventory?product_id=${stockProductId}`);
                 const checkData = await checkRes.json();
                 if (checkData && typeof checkData.stock === "number" && checkData.stock <= 0) {
                     alert("Mohon maaf, slot gift box fisik untuk batch ini baru saja habis. Silakan hubungi admin kami untuk pre-order batch berikutnya.");
@@ -418,10 +439,10 @@ export default function GiftBoxCheckoutWizardPage() {
                         },
                         item_details: [
                             {
-                                id: `unbox-box`,
+                                id: `unbox-box-${selectedBoxType}`,
                                 price: currentBoxPrice,
                                 quantity: 1,
-                                name: `The Gift Box Gift Box + ${selectedDigitalObj.title} QR`,
+                                name: `${boxMeta.label} + ${selectedDigitalObj.title} (The Gift Box)`,
                             },
                             {
                                 id: `shipping-rate`,
@@ -631,9 +652,63 @@ export default function GiftBoxCheckoutWizardPage() {
                                             lineHeight: 1.2,
                                         }}
                                     >
-                                        Pilih Format Kado di Kartu QR
+                                        Pilih Kemasan Box Fisik
                                     </h2>
-                                    <p style={{ fontSize: "0.86rem", color: "#6e5c53", margin: 0, lineHeight: 1.5 }}>
+                                    <p style={{ fontSize: "0.86rem", color: "#6e5c53", margin: "0 0 12px", lineHeight: 1.5 }}>
+                                        Pilih tipe box kemasan hampers fisik yang ingin kamu kirimkan.
+                                    </p>
+
+                                    {/* Dual Box Selector */}
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "16px" }}>
+                                        <div
+                                            onClick={() => setSelectedBoxType("kraft")}
+                                            style={{
+                                                padding: "12px 14px",
+                                                borderRadius: "14px",
+                                                border: selectedBoxType === "kraft" ? "2px solid #382a24" : "1px solid #e8ded6",
+                                                backgroundColor: selectedBoxType === "kraft" ? "rgba(56,42,36,0.04)" : "#ffffff",
+                                                cursor: "pointer",
+                                                transition: "all 0.2s ease",
+                                            }}
+                                        >
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
+                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816" }}>Classic Kraft</span>
+                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px" }}>Rp 75.000</span>
+                                            </div>
+                                            <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "3px" }}>Kotak kraft hemat (All-in)</div>
+                                        </div>
+
+                                        <div
+                                            onClick={() => setSelectedBoxType("hardbox")}
+                                            style={{
+                                                padding: "12px 14px",
+                                                borderRadius: "14px",
+                                                border: selectedBoxType === "hardbox" ? "2px solid #382a24" : "1px solid #e8ded6",
+                                                backgroundColor: selectedBoxType === "hardbox" ? "rgba(56,42,36,0.04)" : "#ffffff",
+                                                cursor: "pointer",
+                                                transition: "all 0.2s ease",
+                                            }}
+                                        >
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
+                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816" }}>Signature Hardbox</span>
+                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px" }}>Signature</span>
+                                            </div>
+                                            <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "3px" }}>Hardbox rigid pita satin</div>
+                                        </div>
+                                    </div>
+
+                                    <h3
+                                        style={{
+                                            fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                            fontSize: "1.3rem",
+                                            fontWeight: 600,
+                                            color: "#1d1816",
+                                            margin: "12px 0 4px",
+                                        }}
+                                    >
+                                        Pilih Format Kado di Kartu QR
+                                    </h3>
+                                    <p style={{ fontSize: "0.84rem", color: "#6e5c53", margin: "0 0 12px", lineHeight: 1.4 }}>
                                         Penerima akan membuka box kado dan memindai (scan) kartu ucapan fisik untuk membuka kado digital pilihanmu.
                                     </p>
                                 </div>
@@ -711,18 +786,33 @@ export default function GiftBoxCheckoutWizardPage() {
                                                                 {opt.badge}
                                                             </span>
                                                         ) : null}
-                                                        <span
-                                                            style={{
-                                                                fontSize: "0.82rem",
-                                                                fontWeight: 700,
-                                                                color: "#1d1816",
-                                                                backgroundColor: "rgba(205,171,143,0.18)",
-                                                                padding: "2px 8px",
-                                                                borderRadius: "999px",
-                                                            }}
-                                                        >
-                                                            {opt.price}
-                                                        </span>
+                                                        {selectedBoxType === "kraft" ? (
+                                                            <span
+                                                                style={{
+                                                                    fontSize: "0.74rem",
+                                                                    fontWeight: 700,
+                                                                    color: "#2e7d32",
+                                                                    backgroundColor: "#e8f5e9",
+                                                                    padding: "2px 8px",
+                                                                    borderRadius: "999px",
+                                                                }}
+                                                            >
+                                                                Termasuk dlm Paket
+                                                            </span>
+                                                        ) : (
+                                                            <span
+                                                                style={{
+                                                                    fontSize: "0.82rem",
+                                                                    fontWeight: 700,
+                                                                    color: "#1d1816",
+                                                                    backgroundColor: "rgba(205,171,143,0.18)",
+                                                                    padding: "2px 8px",
+                                                                    borderRadius: "999px",
+                                                                }}
+                                                            >
+                                                                {opt.price}
+                                                            </span>
+                                                        )}
                                                     </div>
                                                     <div
                                                         style={{
@@ -1597,10 +1687,10 @@ export default function GiftBoxCheckoutWizardPage() {
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase" }}>
-                                                Format Kado QR
+                                                Pilihan Box &amp; Format QR
                                             </div>
                                             <div style={{ fontSize: "1rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                                {selectedDigitalObj.title} ({selectedDigitalObj.badge})
+                                                {boxMeta.label} • {selectedDigitalObj.title}
                                             </div>
                                         </div>
                                         <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#a67c52", whiteSpace: "nowrap", flexShrink: 0 }}>
@@ -1730,7 +1820,7 @@ export default function GiftBoxCheckoutWizardPage() {
                             </div>
                             <div>
                                 <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#a67c52", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                    Physical Hampers
+                                    {boxMeta.label}
                                 </span>
                                 <h4 style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.2rem", fontWeight: 600, color: "#1d1816", margin: "2px 0 0" }}>
                                     The Gift Box
@@ -1744,7 +1834,9 @@ export default function GiftBoxCheckoutWizardPage() {
                         {/* Breakdown */}
                         <div style={{ borderTop: "1px solid rgba(205,171,143,0.2)", borderBottom: "1px solid rgba(205,171,143,0.2)", padding: "12px 0", display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.85rem" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
-                                <span style={{ color: "#6e5c53", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Gift Box + Cetak QR</span>
+                                <span style={{ color: "#6e5c53", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                    {isKraft ? "Classic Kraft Box (All-in)" : "Signature Hardbox + QR"}
+                                </span>
                                 <span style={{ fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", flexShrink: 0 }}>Rp {currentBoxPrice.toLocaleString("id-ID")}</span>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>

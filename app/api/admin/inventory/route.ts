@@ -35,6 +35,8 @@ export async function GET(req: NextRequest) {
                         );
                         INSERT OR IGNORE INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active)
                         VALUES ('inv_unbox', 'the-gift-box', 'The Gift Box', 12, 3, 1);
+                        INSERT OR IGNORE INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active)
+                        VALUES ('inv_kraft', 'the-gift-box-kraft', 'Classic Kraft Box', 10, 3, 1);
                         SELECT * FROM inventory ORDER BY updated_at DESC;`,
                     }),
                 }
@@ -89,6 +91,11 @@ export async function POST(req: NextRequest) {
         const threshold = low_stock_threshold !== undefined ? parseInt(low_stock_threshold, 10) : 3;
         const active = is_active !== undefined ? (is_active ? 1 : 0) : 1;
 
+        const PRODUCT_META: Record<string, { invId: string; name: string }> = {
+            "the-gift-box-kraft": { invId: "inv_kraft", name: "Classic Kraft Box" },
+        };
+        const meta = PRODUCT_META[targetProductId] || { invId: "inv_unbox", name: "The Gift Box" };
+
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
             const updateRes = await fetch(
                 `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`,
@@ -100,13 +107,13 @@ export async function POST(req: NextRequest) {
                     },
                     body: JSON.stringify({
                         sql: `INSERT INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active, updated_at)
-                              VALUES ('inv_unbox', ?, 'The Gift Box', ?, ?, ?, CURRENT_TIMESTAMP)
+                              VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
                               ON CONFLICT(product_id) DO UPDATE SET
                                 stock = excluded.stock,
                                 low_stock_threshold = excluded.low_stock_threshold,
                                 is_active = excluded.is_active,
                                 updated_at = CURRENT_TIMESTAMP;`,
-                        params: [targetProductId, newStock, threshold, active],
+                        params: [meta.invId, targetProductId, meta.name, newStock, threshold, active],
                     }),
                 }
             );

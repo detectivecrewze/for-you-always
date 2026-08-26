@@ -7,7 +7,6 @@ import Navbar from "../../../components/Navbar";
 
 import { trackViewContent } from "@/lib/pixel";
 import UnboxCheckoutModal from "../../../components/UnboxCheckoutModal";
-import DiscountPrice from "../../../components/DiscountPrice";
 
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
@@ -120,17 +119,45 @@ function ShowcaseGridCard({
 
 export default function TheGiftBoxPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("letter");
+    const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [stockData, setStockData] = useState<{
         stock: number;
         in_stock: boolean;
         is_low_stock: boolean;
-    }>({ stock: 12, in_stock: true, is_low_stock: false });
+    }>({ stock: 10, in_stock: true, is_low_stock: false });
+
+    // Pilihan Box Fisik (hardcoded — foto diisi nanti)
+    const BOX_TYPES = {
+        hardbox: {
+            id: "hardbox",
+            name: "Signature Hardbox",
+            tagline: "Hardbox premium rigid, finishing elegan & berkelas.",
+            basePrice: 0, // Harga Hardbox sudah termasuk dalam harga digital experience
+            badge: "Default",
+            badgeColor: "#a67c52",
+            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+        },
+        kraft: {
+            id: "kraft",
+            name: "Classic Kraft Box",
+            tagline: "Kotak kraft natural premium, kesan hangat & timeless.",
+            basePrice: 75000,
+            badge: "Lebih Hemat",
+            badgeColor: "#2e7d32",
+            // Ganti URL di bawah setelah foto diunggah ke CDN
+            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+        },
+    } as const;
 
     useEffect(() => {
         trackViewContent({ id: "the-gift-box", name: "The Gift Box" });
-        fetch("/api/inventory?product_id=the-gift-box")
+    }, []);
+
+    useEffect(() => {
+        const pid = selectedBoxType === "kraft" ? "the-gift-box-kraft" : "the-gift-box";
+        fetch(`/api/inventory?product_id=${pid}`)
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
@@ -142,7 +169,7 @@ export default function TheGiftBoxPage() {
                 }
             })
             .catch(() => {});
-    }, []);
+    }, [selectedBoxType]);
 
     const tabContainerRef = useRef<HTMLDivElement>(null);
     const isFirstRender = useRef(true);
@@ -218,6 +245,12 @@ export default function TheGiftBoxPage() {
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
     };
+
+    const currentBox = BOX_TYPES[selectedBoxType];
+    // Harga: Kraft Box = Rp 75.000 all-in; Hardbox = harga digital experience yang dipilih
+    const displayPrice = selectedBoxType === "kraft"
+        ? 75000
+        : digitalExperiences[selectedDigitalExperience].numericPrice;
 
     return (
         <div style={{ backgroundColor: "#faf7f2", color: "#382a24", minHeight: "100vh", fontFamily: "var(--font-sans, system-ui, sans-serif)", position: "relative", overflowX: "hidden" }}>
@@ -356,43 +389,48 @@ export default function TheGiftBoxPage() {
                         }}>
                             Gift box fisik dengan kejutan digital personal, dibuat untuk menyampaikan sesuatu yang sulit diucapkan langsung.
                         </p>
-
-                        {/* UNIFIED LUXURY PRICE & LIVE STOCK BAR */}
+                                              {/* UNIFIED LUXURY PRICE & LIVE STOCK BAR */}
                         <div style={{
                             display: "inline-flex",
                             alignItems: "center",
-                            gap: "12px",
-                            padding: "8px 16px",
+                            gap: "14px",
+                            padding: "10px 18px",
                             borderRadius: "999px",
                             backgroundColor: "#ffffff",
                             border: "1px solid rgba(205, 171, 143, 0.35)",
-                            boxShadow: "0 2px 10px rgba(56, 42, 36, 0.04)",
-                            marginBottom: "28px",
+                            boxShadow: "0 4px 16px rgba(56, 42, 36, 0.04)",
+                            marginBottom: "24px",
                             flexWrap: "wrap",
                         }}>
-                            <DiscountPrice
-                                oldPrice="Rp 180.000"
-                                newPrice="Rp 139.000"
-                                size="md"
-                                layout="inline"
-                            />
-                            
-                            <span style={{ color: "rgba(205,171,143,0.5)", fontSize: "0.85rem" }}>|</span>
-
+                            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+                                <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#8a7569", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                    {selectedBoxType === "kraft" ? "Paket All-in" : "Mulai dari"}
+                                </span>
+                                <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.45rem", fontWeight: 700, color: "#1d1816", letterSpacing: "0.01em" }}>
+                                    Rp {displayPrice.toLocaleString("id-ID")}
+                                </span>
+                                {selectedBoxType === "kraft" && (
+                                    <span style={{ fontSize: "0.85rem", color: "#b09b8d", textDecoration: "line-through", marginLeft: "2px" }}>
+                                        Rp 100.000
+                                    </span>
+                                )}
+                            </div>
+                            <span style={{ color: "rgba(205,171,143,0.4)", fontSize: "0.9rem" }}>|</span>
                             <div style={{
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "6px",
                                 fontSize: "0.78rem",
                                 fontWeight: 600,
-                                color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#6e5c53"
+                                color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32"
                             }}>
                                 <span style={{
-                                    width: 6,
-                                    height: 6,
+                                    width: 7,
+                                    height: 7,
                                     borderRadius: "50%",
                                     backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
                                     display: "inline-block",
+                                    boxShadow: stockData.stock > 0 ? "0 0 0 2px rgba(46,125,50,0.2)" : "none"
                                 }} />
                                 <span>
                                     {stockData.stock === 0
@@ -401,6 +439,88 @@ export default function TheGiftBoxPage() {
                                         ? `Sisa ${stockData.stock} Box Saja`
                                         : `Tersedia ${stockData.stock} Box`}
                                 </span>
+                            </div>
+                        </div>
+
+                        {/* BOX SELECTOR — pilihan tipe box fisik */}
+                        <div style={{ marginBottom: "24px", width: "100%", maxWidth: "480px" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "10px" }}>
+                                <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#a88365" }}>
+                                    Pilih Tipe Kemasan Box
+                                </span>
+                                <span style={{ fontSize: "0.74rem", color: "#8a7569" }}>
+                                    {selectedBoxType === "kraft" ? "Opsi Hemat All-in" : "Edisi Rigid Mewah"}
+                                </span>
+                            </div>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                                {/* Card 1: Classic Kraft Box */}
+                                <div
+                                    onClick={() => setSelectedBoxType("kraft")}
+                                    style={{
+                                        padding: "14px 14px",
+                                        borderRadius: "16px",
+                                        border: selectedBoxType === "kraft" ? "2px solid #382a24" : "1.5px solid rgba(205,171,143,0.3)",
+                                        backgroundColor: selectedBoxType === "kraft" ? "rgba(56,42,36,0.04)" : "#ffffff",
+                                        cursor: "pointer",
+                                        transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "space-between",
+                                        boxShadow: selectedBoxType === "kraft" ? "0 4px 16px rgba(56,42,36,0.08)" : "none",
+                                        position: "relative",
+                                    }}
+                                >
+                                    <div>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 4, marginBottom: 4 }}>
+                                            <span style={{ fontSize: "0.92rem", fontWeight: 700, color: "#1d1816" }}>Classic Kraft</span>
+                                            <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px", letterSpacing: "0.02em" }}>
+                                                Hemat
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35, marginBottom: 8 }}>
+                                            Kotak kraft natural aesthetic
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", alignItems: "baseline", gap: 4, paddingTop: 6, borderTop: "1px dashed rgba(205,171,143,0.3)" }}>
+                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#2e7d32" }}>Rp 75.000</span>
+                                        <span style={{ fontSize: "0.68rem", color: "#8a7569" }}>All-in</span>
+                                    </div>
+                                </div>
+
+                                {/* Card 2: Signature Hardbox */}
+                                <div
+                                    onClick={() => setSelectedBoxType("hardbox")}
+                                    style={{
+                                        padding: "14px 14px",
+                                        borderRadius: "16px",
+                                        border: selectedBoxType === "hardbox" ? "2px solid #382a24" : "1.5px solid rgba(205,171,143,0.3)",
+                                        backgroundColor: selectedBoxType === "hardbox" ? "rgba(56,42,36,0.04)" : "#ffffff",
+                                        cursor: "pointer",
+                                        transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "space-between",
+                                        boxShadow: selectedBoxType === "hardbox" ? "0 4px 16px rgba(56,42,36,0.08)" : "none",
+                                        position: "relative",
+                                    }}
+                                >
+                                    <div>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 4, marginBottom: 4 }}>
+                                            <span style={{ fontSize: "0.92rem", fontWeight: 700, color: "#1d1816" }}>Signature Hardbox</span>
+                                            <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px", letterSpacing: "0.02em" }}>
+                                                Premium
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35, marginBottom: 8 }}>
+                                            Hardbox rigid pita satin
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", alignItems: "baseline", gap: 4, paddingTop: 6, borderTop: "1px dashed rgba(205,171,143,0.3)" }}>
+                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#382a24" }}>
+                                            Rp {digitalExperiences[selectedDigitalExperience].numericPrice.toLocaleString("id-ID")}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -426,41 +546,42 @@ export default function TheGiftBoxPage() {
                         </div>
 
                         {/* CTA ACTION CONTAINER */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "340px", marginBottom: "26px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "480px", marginBottom: "26px" }}>
+                            {/* Primary Order Button */}
                             {stockData.stock > 0 ? (
                                 <Link
-                                    href="/catalog/the-gift-box/checkout"
+                                    href={`/catalog/the-gift-box/checkout?boxType=${selectedBoxType}&digital=${selectedDigitalExperience}`}
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
                                         gap: "10px",
-                                        backgroundColor: "#382a24",
+                                        backgroundColor: "#1d1816",
                                         color: "#faf7f2",
                                         fontWeight: 700,
                                         fontSize: "0.92rem",
-                                        padding: "13px 24px",
-                                        borderRadius: "12px",
+                                        padding: "14px 24px",
+                                        borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 8px 20px -6px rgba(56,42,36,0.22)",
+                                        boxShadow: "0 8px 22px -6px rgba(29,24,22,0.28)",
                                         transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
                                     onMouseOver={(e) => {
                                         e.currentTarget.style.transform = "translateY(-2px)";
-                                        e.currentTarget.style.backgroundColor = "#523e35";
+                                        e.currentTarget.style.backgroundColor = "#382a24";
                                     }}
                                     onMouseOut={(e) => {
                                         e.currentTarget.style.transform = "translateY(0)";
-                                        e.currentTarget.style.backgroundColor = "#382a24";
+                                        e.currentTarget.style.backgroundColor = "#1d1816";
                                     }}
                                 >
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                         <line x1="3" y1="6" x2="21" y2="6"></line>
                                         <path d="M16 10a4 4 0 0 1-8 0"></path>
                                     </svg>
-                                    <span>Pesan Gift Box Sekarang</span>
+                                    <span>Pesan {selectedBoxType === "kraft" ? "Classic Kraft Box" : "Signature Hardbox"} (Rp {displayPrice.toLocaleString("id-ID")})</span>
                                 </Link>
                             ) : (
                                 <a
@@ -476,17 +597,55 @@ export default function TheGiftBoxPage() {
                                         color: "#faf7f2",
                                         fontWeight: 700,
                                         fontSize: "0.92rem",
-                                        padding: "13px 24px",
-                                        borderRadius: "12px",
+                                        padding: "14px 24px",
+                                        borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 8px 20px -6px rgba(56,42,36,0.22)",
-                                        transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
                                 >
-                                    <span>Pre-Order Batch Berikutnya (WA) ↗</span>
+                                    <span>Pre-Order Batch Berikutnya (Hubungi Admin)</span>
                                 </a>
                             )}
+
+                            {/* Secondary WhatsApp Consultation Button */}
+                            <a
+                                href="https://wa.me/6281936109076?text=Halo%20Admin%20For%20You%20Always,%20saya%20ingin%20konsultasi%20mengenai%20The%20Gift%20Box%20(Kraft%20/%20Hardbox)."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "8px",
+                                    backgroundColor: "#ffffff",
+                                    color: "#1d1816",
+                                    border: "1.5px solid rgba(205, 171, 143, 0.4)",
+                                    fontWeight: 700,
+                                    fontSize: "0.86rem",
+                                    padding: "12px 20px",
+                                    borderRadius: "14px",
+                                    textDecoration: "none",
+                                    boxShadow: "0 2px 8px rgba(56,42,36,0.03)",
+                                    transition: "all 0.2s ease",
+                                    textAlign: "center"
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.borderColor = "#25D366";
+                                    e.currentTarget.style.backgroundColor = "rgba(37, 211, 102, 0.04)";
+                                    e.currentTarget.style.transform = "translateY(-1px)";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.borderColor = "rgba(205, 171, 143, 0.4)";
+                                    e.currentTarget.style.backgroundColor = "#ffffff";
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                }}
+                            >
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                </svg>
+                                <span>Tanya / Konsultasi Admin via WhatsApp</span>
+                            </a>
+                        </div>
 
                             <Link
                                 href="/catalog"
@@ -512,7 +671,6 @@ export default function TheGiftBoxPage() {
                             >
                                 <span>Prefer a digital gift? →</span>
                             </Link>
-                        </div>
 
                         {/* REASSURANCE BULLETS ROW (SUBTLE & CLEAN) */}
                         <div style={{
@@ -1132,16 +1290,16 @@ export default function TheGiftBoxPage() {
                         whiteSpace: "nowrap",
                     }}>
                         <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
-                            Mulai Rp 139.000
+                            Mulai Rp 75.000
                         </span>
                         <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
-                            Rp 180.000
+                            Rp 100.000
                         </span>
                     </div>
                     <br />
 
                     <Link
-                        href="/catalog/the-gift-box/checkout"
+                        href="/catalog/the-gift-box/checkout?boxType=kraft"
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
