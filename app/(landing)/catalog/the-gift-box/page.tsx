@@ -376,177 +376,154 @@ export default function TheGiftBoxPage() {
                             Made To Be<br />
                             <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Remembered.</span>
                         </h1>
-
                         {/* DESCRIPTION PARAGRAPH */}
                         <p style={{
                             fontSize: "clamp(0.92rem, 1.5vw, 1.02rem)",
                             color: "#6e5c53",
                             lineHeight: 1.65,
-                            marginBottom: "24px",
+                            marginBottom: "20px",
                             fontWeight: 400,
                             maxWidth: "460px",
                             textAlign: "left"
                         }}>
                             Gift box fisik dengan kejutan digital personal, dibuat untuk menyampaikan sesuatu yang sulit diucapkan langsung.
                         </p>
-                                              {/* UNIFIED LUXURY PRICE & LIVE STOCK BAR */}
+
+                        {/* EDITORIAL PRICE & REALTIME STOCK */}
                         <div style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "14px",
-                            padding: "10px 18px",
-                            borderRadius: "999px",
-                            backgroundColor: "#ffffff",
-                            border: "1px solid rgba(205, 171, 143, 0.35)",
-                            boxShadow: "0 4px 16px rgba(56, 42, 36, 0.04)",
-                            marginBottom: "24px",
-                            flexWrap: "wrap",
+                            display: "flex",
+                            alignItems: "baseline",
+                            justifyContent: "space-between",
+                            width: "100%",
+                            maxWidth: "440px",
+                            marginBottom: "16px",
+                            paddingBottom: "14px",
+                            borderBottom: "1px solid rgba(205, 171, 143, 0.25)"
                         }}>
-                            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-                                <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#8a7569", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                                    {selectedBoxType === "kraft" ? "Paket All-in" : "Mulai dari"}
-                                </span>
-                                <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "1.45rem", fontWeight: 700, color: "#1d1816", letterSpacing: "0.01em" }}>
+                            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                                <span style={{
+                                    fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                    fontSize: "clamp(2rem, 3vw, 2.4rem)",
+                                    fontWeight: 700,
+                                    color: "#1d1816",
+                                    lineHeight: 1
+                                }}>
                                     Rp {displayPrice.toLocaleString("id-ID")}
                                 </span>
                                 {selectedBoxType === "kraft" && (
-                                    <span style={{ fontSize: "0.85rem", color: "#b09b8d", textDecoration: "line-through", marginLeft: "2px" }}>
+                                    <span style={{ fontSize: "0.95rem", color: "#a89589", textDecoration: "line-through" }}>
                                         Rp 100.000
                                     </span>
                                 )}
+                                <span style={{
+                                    fontSize: "0.68rem",
+                                    fontWeight: 700,
+                                    textTransform: "uppercase",
+                                    letterSpacing: "0.08em",
+                                    color: selectedBoxType === "kraft" ? "#2e7d32" : "#a67c52",
+                                    backgroundColor: selectedBoxType === "kraft" ? "#e8f5e9" : "rgba(166,124,82,0.12)",
+                                    padding: "3px 8px",
+                                    borderRadius: "999px"
+                                }}>
+                                    {selectedBoxType === "kraft" ? "All-in Bundle" : "Signature"}
+                                </span>
                             </div>
-                            <span style={{ color: "rgba(205,171,143,0.4)", fontSize: "0.9rem" }}>|</span>
+
                             <div style={{
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "6px",
-                                fontSize: "0.78rem",
+                                fontSize: "0.76rem",
                                 fontWeight: 600,
                                 color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32"
                             }}>
                                 <span style={{
-                                    width: 7,
-                                    height: 7,
+                                    width: 6,
+                                    height: 6,
                                     borderRadius: "50%",
                                     backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
                                     display: "inline-block",
-                                    boxShadow: stockData.stock > 0 ? "0 0 0 2px rgba(46,125,50,0.2)" : "none"
                                 }} />
                                 <span>
                                     {stockData.stock === 0
-                                        ? "Slot Habis"
-                                        : stockData.is_low_stock
-                                        ? `Sisa ${stockData.stock} Box Saja`
-                                        : `Tersedia ${stockData.stock} Box`}
+                                        ? "Habis"
+                                        : `Sisa ${stockData.stock} Box`}
                                 </span>
                             </div>
                         </div>
 
-                        {/* BOX SELECTOR — pilihan tipe box fisik */}
-                        <div style={{ marginBottom: "24px", width: "100%", maxWidth: "480px" }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "10px" }}>
-                                <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#a88365" }}>
-                                    Pilih Tipe Kemasan Box
-                                </span>
-                                <span style={{ fontSize: "0.74rem", color: "#8a7569" }}>
-                                    {selectedBoxType === "kraft" ? "Opsi Hemat All-in" : "Edisi Rigid Mewah"}
-                                </span>
-                            </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                                {/* Card 1: Classic Kraft Box */}
-                                <div
+                        {/* MINIMALIST SEGMENTED BOX SELECTOR */}
+                        <div style={{ marginBottom: "20px", width: "100%", maxWidth: "440px" }}>
+                            <div style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr",
+                                padding: "4px",
+                                borderRadius: "14px",
+                                backgroundColor: "rgba(205, 171, 143, 0.16)",
+                                gap: "4px"
+                            }}>
+                                <button
+                                    type="button"
                                     onClick={() => setSelectedBoxType("kraft")}
                                     style={{
-                                        padding: "14px 14px",
-                                        borderRadius: "16px",
-                                        border: selectedBoxType === "kraft" ? "2px solid #382a24" : "1.5px solid rgba(205,171,143,0.3)",
-                                        backgroundColor: selectedBoxType === "kraft" ? "rgba(56,42,36,0.04)" : "#ffffff",
+                                        padding: "10px 14px",
+                                        borderRadius: "11px",
+                                        border: "none",
+                                        backgroundColor: selectedBoxType === "kraft" ? "#ffffff" : "transparent",
+                                        color: "#1d1816",
                                         cursor: "pointer",
-                                        transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+                                        boxShadow: selectedBoxType === "kraft" ? "0 2px 8px rgba(29, 24, 22, 0.08)" : "none",
+                                        transition: "all 0.2s ease",
                                         display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        boxShadow: selectedBoxType === "kraft" ? "0 4px 16px rgba(56,42,36,0.08)" : "none",
-                                        position: "relative",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "8px",
+                                        fontWeight: selectedBoxType === "kraft" ? 700 : 500,
+                                        fontSize: "0.86rem",
                                     }}
                                 >
-                                    <div>
-                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 4, marginBottom: 4 }}>
-                                            <span style={{ fontSize: "0.92rem", fontWeight: 700, color: "#1d1816" }}>Classic Kraft</span>
-                                            <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px", letterSpacing: "0.02em" }}>
-                                                Hemat
-                                            </span>
-                                        </div>
-                                        <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35, marginBottom: 8 }}>
-                                            Kotak kraft natural aesthetic
-                                        </div>
-                                    </div>
-                                    <div style={{ display: "flex", alignItems: "baseline", gap: 4, paddingTop: 6, borderTop: "1px dashed rgba(205,171,143,0.3)" }}>
-                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#2e7d32" }}>Rp 75.000</span>
-                                        <span style={{ fontSize: "0.68rem", color: "#8a7569" }}>All-in</span>
-                                    </div>
-                                </div>
+                                    <span>Classic Kraft</span>
+                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "1px 6px", borderRadius: "999px" }}>
+                                        75K
+                                    </span>
+                                </button>
 
-                                {/* Card 2: Signature Hardbox */}
-                                <div
+                                <button
+                                    type="button"
                                     onClick={() => setSelectedBoxType("hardbox")}
                                     style={{
-                                        padding: "14px 14px",
-                                        borderRadius: "16px",
-                                        border: selectedBoxType === "hardbox" ? "2px solid #382a24" : "1.5px solid rgba(205,171,143,0.3)",
-                                        backgroundColor: selectedBoxType === "hardbox" ? "rgba(56,42,36,0.04)" : "#ffffff",
+                                        padding: "10px 14px",
+                                        borderRadius: "11px",
+                                        border: "none",
+                                        backgroundColor: selectedBoxType === "hardbox" ? "#ffffff" : "transparent",
+                                        color: "#1d1816",
                                         cursor: "pointer",
-                                        transition: "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+                                        boxShadow: selectedBoxType === "hardbox" ? "0 2px 8px rgba(29, 24, 22, 0.08)" : "none",
+                                        transition: "all 0.2s ease",
                                         display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        boxShadow: selectedBoxType === "hardbox" ? "0 4px 16px rgba(56,42,36,0.08)" : "none",
-                                        position: "relative",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "8px",
+                                        fontWeight: selectedBoxType === "hardbox" ? 700 : 500,
+                                        fontSize: "0.86rem",
                                     }}
                                 >
-                                    <div>
-                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 4, marginBottom: 4 }}>
-                                            <span style={{ fontSize: "0.92rem", fontWeight: 700, color: "#1d1816" }}>Signature Hardbox</span>
-                                            <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px", letterSpacing: "0.02em" }}>
-                                                Premium
-                                            </span>
-                                        </div>
-                                        <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35, marginBottom: 8 }}>
-                                            Hardbox rigid pita satin
-                                        </div>
-                                    </div>
-                                    <div style={{ display: "flex", alignItems: "baseline", gap: 4, paddingTop: 6, borderTop: "1px dashed rgba(205,171,143,0.3)" }}>
-                                        <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#382a24" }}>
-                                            Rp {digitalExperiences[selectedDigitalExperience].numericPrice.toLocaleString("id-ID")}
-                                        </span>
-                                    </div>
-                                </div>
+                                    <span>Signature Hardbox</span>
+                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "1px 6px", borderRadius: "999px" }}>
+                                        Rigid
+                                    </span>
+                                </button>
                             </div>
-                        </div>
 
-                        {/* JABODETABEK DELIVERY BADGE (NO EMOJIS, CLEAN LUXURY DESIGN) */}
-                        <div style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            padding: "6px 14px",
-                            borderRadius: "999px",
-                            backgroundColor: "rgba(166, 124, 82, 0.08)",
-                            border: "1px solid rgba(166, 124, 82, 0.22)",
-                            fontSize: "0.76rem",
-                            fontWeight: 600,
-                            color: "#6e5c53",
-                            marginBottom: "20px"
-                        }}>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <span>Khusus Pengiriman Wilayah Jabodetabek</span>
+                            <div style={{ fontSize: "0.76rem", color: "#8a7569", marginTop: "8px", paddingLeft: "4px" }}>
+                                {selectedBoxType === "kraft"
+                                    ? "Kotak kraft natural aesthetic (All-in sudah termasuk box + kado digital)."
+                                    : "Hardbox rigid premium eksklusif dengan balutan pita satin mewah."}
+                            </div>
                         </div>
 
                         {/* CTA ACTION CONTAINER */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "480px", marginBottom: "26px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "440px", marginBottom: "20px" }}>
                             {/* Primary Order Button */}
                             {stockData.stock > 0 ? (
                                 <Link
@@ -559,11 +536,11 @@ export default function TheGiftBoxPage() {
                                         backgroundColor: "#1d1816",
                                         color: "#faf7f2",
                                         fontWeight: 700,
-                                        fontSize: "0.92rem",
-                                        padding: "14px 24px",
+                                        fontSize: "0.94rem",
+                                        padding: "15px 24px",
                                         borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 8px 22px -6px rgba(29,24,22,0.28)",
+                                        boxShadow: "0 8px 24px -6px rgba(29,24,22,0.25)",
                                         transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
@@ -581,7 +558,7 @@ export default function TheGiftBoxPage() {
                                         <line x1="3" y1="6" x2="21" y2="6"></line>
                                         <path d="M16 10a4 4 0 0 1-8 0"></path>
                                     </svg>
-                                    <span>Pesan {selectedBoxType === "kraft" ? "Classic Kraft Box" : "Signature Hardbox"} (Rp {displayPrice.toLocaleString("id-ID")})</span>
+                                    <span>Pesan Gift Box Sekarang</span>
                                 </Link>
                             ) : (
                                 <a
@@ -607,70 +584,70 @@ export default function TheGiftBoxPage() {
                                 </a>
                             )}
 
-                            {/* Secondary WhatsApp Consultation Button */}
-                            <a
-                                href="https://wa.me/6281936109076?text=Halo%20Admin%20For%20You%20Always,%20saya%20ingin%20konsultasi%20mengenai%20The%20Gift%20Box%20(Kraft%20/%20Hardbox)."
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "8px",
-                                    backgroundColor: "#ffffff",
-                                    color: "#1d1816",
-                                    border: "1.5px solid rgba(205, 171, 143, 0.4)",
-                                    fontWeight: 700,
-                                    fontSize: "0.86rem",
-                                    padding: "12px 20px",
-                                    borderRadius: "14px",
-                                    textDecoration: "none",
-                                    boxShadow: "0 2px 8px rgba(56,42,36,0.03)",
-                                    transition: "all 0.2s ease",
-                                    textAlign: "center"
-                                }}
-                                onMouseOver={(e) => {
-                                    e.currentTarget.style.borderColor = "#25D366";
-                                    e.currentTarget.style.backgroundColor = "rgba(37, 211, 102, 0.04)";
-                                    e.currentTarget.style.transform = "translateY(-1px)";
-                                }}
-                                onMouseOut={(e) => {
-                                    e.currentTarget.style.borderColor = "rgba(205, 171, 143, 0.4)";
-                                    e.currentTarget.style.backgroundColor = "#ffffff";
-                                    e.currentTarget.style.transform = "translateY(0)";
-                                }}
-                            >
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                                </svg>
-                                <span>Tanya / Konsultasi Admin via WhatsApp</span>
-                            </a>
+                            {/* Minimalist Sub-Row (Jabodetabek Info + WhatsApp Consultation) */}
+                            <div style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: "8px",
+                                paddingTop: "4px",
+                                fontSize: "0.78rem",
+                                color: "#8a7569"
+                            }}>
+                                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Khusus Jabodetabek
+                                </span>
+
+                                <a
+                                    href="https://wa.me/6281936109076?text=Halo%20Admin%20For%20You%20Always,%20saya%20ingin%20konsultasi%20mengenai%20The%20Gift%20Box%20(Kraft%20/%20Hardbox)."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "5px",
+                                        color: "#1d1816",
+                                        fontWeight: 600,
+                                        textDecoration: "none",
+                                        transition: "color 0.2s ease"
+                                    }}
+                                    onMouseOver={(e) => (e.currentTarget.style.color = "#25D366")}
+                                    onMouseOut={(e) => (e.currentTarget.style.color = "#1d1816")}
+                                >
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                    </svg>
+                                    <span>Konsultasi WA ↗</span>
+                                </a>
+                            </div>
                         </div>
 
-                            <Link
-                                href="/catalog"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "6px",
-                                    color: "#8a7569",
-                                    fontSize: "0.8rem",
-                                    fontWeight: 500,
-                                    textDecoration: "none",
-                                    padding: "4px 8px",
-                                    transition: "color 0.2s ease",
-                                    textAlign: "center"
-                                }}
-                                onMouseOver={(e) => {
-                                    e.currentTarget.style.color = "#382a24";
-                                }}
-                                onMouseOut={(e) => {
-                                    e.currentTarget.style.color = "#8a7569";
-                                }}
-                            >
-                                <span>Prefer a digital gift? →</span>
-                            </Link>
+                        <Link
+                            href="/catalog"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                color: "#8a7569",
+                                fontSize: "0.78rem",
+                                fontWeight: 500,
+                                textDecoration: "none",
+                                padding: "2px 0",
+                                transition: "color 0.2s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.color = "#382a24";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.color = "#8a7569";
+                            }}
+                        >
+                            <span>Prefer a digital gift? Jelajahi Katalog →</span>
+                        </Link>
 
                         {/* REASSURANCE BULLETS ROW (SUBTLE & CLEAN) */}
                         <div style={{
