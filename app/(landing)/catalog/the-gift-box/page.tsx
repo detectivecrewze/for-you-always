@@ -117,6 +117,20 @@ function ShowcaseGridCard({
     );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 📸 CDN IMAGE ASSETS CONFIGURATION
+// Ganti URL di bawah ini dengan link CDN foto baru saat sudah siap diupload.
+// ─────────────────────────────────────────────────────────────────────────────
+export const GIFT_BOX_ASSETS = {
+    // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
+    kraftBoxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",      // Foto Classic Kraft Box
+    hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
+
+    // 2. Foto Kartu 3-Grid Showcase ("Luxury Gift Box")
+    luxuryBoxCardFront: "/the-gift-box/IMG_2214_hd.webp",                            // Foto depan (Slide 1) Luxury Gift Box
+    luxuryBoxCardHover: "https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png", // Foto detail / dalam (Slide 2) Luxury Gift Box
+};
+
 export default function TheGiftBoxPage() {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("letter");
     const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
@@ -128,16 +142,16 @@ export default function TheGiftBoxPage() {
         is_low_stock: boolean;
     }>({ stock: 10, in_stock: true, is_low_stock: false });
 
-    // Pilihan Box Fisik (hardcoded — foto diisi nanti)
+    // Pilihan Box Fisik
     const BOX_TYPES = {
         hardbox: {
             id: "hardbox",
             name: "Signature Hardbox",
             tagline: "Hardbox premium rigid, finishing elegan & berkelas.",
-            basePrice: 0, // Harga Hardbox sudah termasuk dalam harga digital experience
-            badge: "Default",
+            basePrice: 0,
+            badge: "Signature",
             badgeColor: "#a67c52",
-            imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
+            imageSrc: GIFT_BOX_ASSETS.hardboxHero,
         },
         kraft: {
             id: "kraft",
@@ -146,8 +160,7 @@ export default function TheGiftBoxPage() {
             basePrice: 75000,
             badge: "Lebih Hemat",
             badgeColor: "#2e7d32",
-            // Ganti URL di bawah setelah foto diunggah ke CDN
-            imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
+            imageSrc: GIFT_BOX_ASSETS.kraftBoxHero,
         },
     } as const;
 
@@ -345,8 +358,9 @@ export default function TheGiftBoxPage() {
                             background: "#1d1816"
                         }}>
                             <Image
-                                src="https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg"
-                                alt="The Gift Box Gift Box Hampers Showcase"
+                                key={selectedBoxType}
+                                src={currentBox.imageSrc}
+                                alt={currentBox.name}
                                 fill
                                 style={{
                                     objectFit: "cover",
@@ -701,8 +715,8 @@ export default function TheGiftBoxPage() {
                     gap: "24px"
                 }}>
                     <ShowcaseGridCard
-                        img="/the-gift-box/IMG_2214_hd.webp"
-                        hoverImg="https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png"
+                        img={GIFT_BOX_ASSETS.luxuryBoxCardFront}
+                        hoverImg={GIFT_BOX_ASSETS.luxuryBoxCardHover}
                         title="Luxury Gift Box"
                         desc="Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
                     />

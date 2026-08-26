@@ -8,6 +8,16 @@ import { JABODETABEK_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipp
 import posthog from "posthog-js";
 import { trackInitiateCheckout } from "@/lib/pixel";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 📸 CDN IMAGE ASSETS CONFIGURATION
+// Ganti URL di bawah ini dengan link CDN foto baru saat sudah siap diupload.
+// ─────────────────────────────────────────────────────────────────────────────
+export const GIFT_BOX_ASSETS = {
+    // 1. Foto Hero / Summary Box
+    kraftBoxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",      // Foto Classic Kraft Box
+    hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
+};
+
 interface DigitalOption {
     id: string;
     title: string;
@@ -1824,7 +1834,8 @@ export default function GiftBoxCheckoutWizardPage() {
                                 }}
                             >
                                 <Image
-                                    src="https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg"
+                                    key={selectedBoxType}
+                                    src={selectedBoxType === "kraft" ? GIFT_BOX_ASSETS.kraftBoxHero : GIFT_BOX_ASSETS.hardboxHero}
                                     alt="The Gift Box"
                                     fill
                                     style={{ objectFit: "cover" }}
