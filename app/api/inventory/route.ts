@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     const productId = searchParams.get("product_id") || "the-gift-box";
 
     // Default stock per product type
-    const defaultStock = productId === "the-gift-box-kraft" ? 10 : 12;
+    const defaultStock = productId === "the-gift-box-kraft" ? 10 : 8;
 
     try {
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
                         },
                         {
                             headers: {
-                                "Cache-Control": "public, s-maxage=10, stale-while-revalidate=30",
+                                "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
                             },
                         }
                     );

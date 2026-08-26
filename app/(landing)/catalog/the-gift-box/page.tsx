@@ -214,9 +214,9 @@ export default function TheGiftBoxPage() {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#a67c52",
-            price: "Rp 159.000",
+            price: "Rp 155.000",
             oldPrice: "Rp 200.000",
-            numericPrice: 159000,
+            numericPrice: 155000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
@@ -226,9 +226,9 @@ export default function TheGiftBoxPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Best Seller",
             color: "#a67c52",
-            price: "Rp 149.000",
+            price: "Rp 135.000",
             oldPrice: "Rp 180.000",
-            numericPrice: 149000,
+            numericPrice: 135000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -238,9 +238,9 @@ export default function TheGiftBoxPage() {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "",
             color: "#a67c52",
-            price: "Rp 139.000",
+            price: "Rp 135.000",
             oldPrice: "Rp 180.000",
-            numericPrice: 139000,
+            numericPrice: 135000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
@@ -648,27 +648,6 @@ export default function TheGiftBoxPage() {
                         >
                             <span>Prefer a digital gift? Jelajahi Katalog →</span>
                         </Link>
-
-                        {/* REASSURANCE BULLETS ROW (SUBTLE & CLEAN) */}
-                        <div style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            gap: "8px 14px",
-                            paddingTop: "18px",
-                            borderTop: "1px solid rgba(205,171,143,0.18)",
-                            width: "100%",
-                            maxWidth: "460px",
-                            fontSize: "0.78rem",
-                            color: "#8a7569",
-                            fontWeight: 500
-                        }}>
-                            <span>Box Hampers Eksklusif</span>
-                            <span style={{ opacity: 0.35 }}>·</span>
-                            <span>Kartu QR Code Custom</span>
-                            <span style={{ opacity: 0.35 }}>·</span>
-                            <span>Garansi Pengiriman Aman</span>
-                        </div>
                     </div>
                 </div>
             </section>

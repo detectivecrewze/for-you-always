@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                         );
                         INSERT OR IGNORE INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active)
-                        VALUES ('inv_unbox', 'the-gift-box', 'The Gift Box', 12, 3, 1);
+                        VALUES ('inv_unbox', 'the-gift-box', 'The Gift Box', 8, 3, 1);
                         INSERT OR IGNORE INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active)
                         VALUES ('inv_kraft', 'the-gift-box-kraft', 'Classic Kraft Box', 10, 3, 1);
                         SELECT * FROM inventory ORDER BY updated_at DESC;`,
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
                     id: "inv_unbox",
                     product_id: "the-gift-box",
                     product_name: "The Gift Box",
-                    stock: 12,
+                    stock: 8,
                     low_stock_threshold: 3,
                     is_active: 1,
                 },
