@@ -147,14 +147,14 @@ export default function BirthdayCatalogPage() {
                                     demoLabel: "Lihat",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
-                                        { name: "Opening", fallbackImgSrc: "/assets/snoopy-features/opening-1.webp" },
-                                        { name: "Wishes", fallbackImgSrc: "/assets/snoopy-features/wishes-2.webp" },
-                                        { name: "Scrapbook", fallbackImgSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp" },
-                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/snoopy-features/wish-card-update-snoopy.webp" },
-                                        { name: "Galeri", fallbackImgSrc: "/assets/snoopy-features/room-galleries-5.webp" },
-                                        { name: "Musik", fallbackImgSrc: "/assets/snoopy-features/room-music-6.webp" },
-                                        { name: "Surat", fallbackImgSrc: "/assets/snoopy-features/letter-7.webp" },
-                                        { name: "Perayaan", fallbackImgSrc: "/assets/snoopy-features/ending-8.webp" }
+                                        { name: "Opening", fallbackImgSrc: "/assets/nailong-features/opening.webp" },
+                                        { name: "Wishes", fallbackImgSrc: "/assets/nailong-features/wish.webp" },
+                                        { name: "Scrapbook", fallbackImgSrc: "/assets/nailong-features/scrapebook.webp" },
+                                        { name: "Wish Inbox", fallbackImgSrc: "/assets/nailong-features/warmwishes.webp" },
+                                        { name: "Galeri", fallbackImgSrc: "/assets/nailong-features/room-galleries-5.webp" },
+                                        { name: "Musik", fallbackImgSrc: "/assets/nailong-features/song.webp" },
+                                        { name: "Surat", fallbackImgSrc: "/assets/nailong-features/letter.webp" },
+                                        { name: "Perayaan", fallbackImgSrc: "/assets/nailong-features/perayaan.webp" }
                                     ]
                                 }
                             ]}
