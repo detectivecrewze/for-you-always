@@ -1306,7 +1306,7 @@ export default function TheGiftBoxPage() {
                     <br />
 
                     <Link
-                        href="/catalog/the-gift-box/checkout?boxType=kraft"
+                        href={`/catalog/the-gift-box/checkout?boxType=${selectedBoxType}&digital=${selectedDigitalExperience}`}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",

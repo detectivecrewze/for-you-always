@@ -11,9 +11,10 @@ interface UnboxCheckoutModalProps {
 }
 
 const DIGITAL_OPTIONS = [
-    { id: "loves", title: "Memoria", subtitle: "Kisah Sinematik & Galeri", color: "#d4af37", badge: "Signature", price: 159000, oldPrice: 200000 },
-    { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Best Seller", price: 149000, oldPrice: 180000 },
-    { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "", price: 139000, oldPrice: 180000 },
+    { id: "loves", title: "Memoria", subtitle: "Kisah Sinematik & Galeri", color: "#d4af37", badge: "Signature", price: 150000, oldPrice: 200000 },
+    { id: "birthday", title: "Birthday Scrapbook", subtitle: "Scrapbook Komik & Galeri", color: "#bf7b19", badge: "New Release", price: 135000, oldPrice: 180000 },
+    { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Best Seller", price: 135000, oldPrice: 180000 },
+    { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "", price: 135000, oldPrice: 180000 },
 ];
 
 export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "letter" }: UnboxCheckoutModalProps) {
