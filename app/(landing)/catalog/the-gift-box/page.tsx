@@ -137,7 +137,7 @@ export default function TheGiftBoxPage() {
             basePrice: 0, // Harga Hardbox sudah termasuk dalam harga digital experience
             badge: "Default",
             badgeColor: "#a67c52",
-            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+            imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         },
         kraft: {
             id: "kraft",
@@ -147,7 +147,7 @@ export default function TheGiftBoxPage() {
             badge: "Lebih Hemat",
             badgeColor: "#2e7d32",
             // Ganti URL di bawah setelah foto diunggah ke CDN
-            imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+            imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         },
     } as const;
 

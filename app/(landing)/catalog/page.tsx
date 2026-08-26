@@ -15,7 +15,7 @@ const CATALOG_ITEMS = [
         badgeVariant: "solid",
         slotBadgeText: "Sisa 10 Box",
         titleColor: "#382a24",
-        imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
+        imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         title: "The Gift Box",
         oldPrice: "Rp 100.000",
         newPrice: "Rp 75.000",
