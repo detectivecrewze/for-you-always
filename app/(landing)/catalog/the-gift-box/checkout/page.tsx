@@ -16,9 +16,12 @@ interface DigitalOption {
     badgeColor: string;
     image: string;
     demoUrl: string;
-    price: string;
-    oldPrice: string;
-    numericPrice: number;
+    kraftPrice: string;
+    kraftOldPrice: string;
+    kraftNumericPrice: number;
+    hardboxPrice: string;
+    hardboxOldPrice: string;
+    hardboxNumericPrice: number;
 }
 
 const BOX_PRICE_MAP: Record<string, { label: string }> = {
@@ -35,9 +38,12 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#b38742",
         image: "/assets/opening_gate.png",
         demoUrl: "https://anniv.for-you-always.my.id/",
-        price: "Rp 155.000",
-        oldPrice: "Rp 200.000",
-        numericPrice: 155000,
+        kraftPrice: "Rp 85.000",
+        kraftOldPrice: "Rp 110.000",
+        kraftNumericPrice: 85000,
+        hardboxPrice: "Rp 150.000",
+        hardboxOldPrice: "Rp 200.000",
+        hardboxNumericPrice: 150000,
     },
     {
         id: "letter",
@@ -47,9 +53,12 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#a67c52",
         image: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
         demoUrl: "https://letter.for-you-always.my.id/",
-        price: "Rp 135.000",
-        oldPrice: "Rp 180.000",
-        numericPrice: 135000,
+        kraftPrice: "Rp 75.000",
+        kraftOldPrice: "Rp 100.000",
+        kraftNumericPrice: 75000,
+        hardboxPrice: "Rp 135.000",
+        hardboxOldPrice: "Rp 180.000",
+        hardboxNumericPrice: 135000,
     },
     {
         id: "voices",
@@ -59,9 +68,12 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#994d5d",
         image: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
         demoUrl: "https://voices.for-you-always.my.id/",
-        price: "Rp 135.000",
-        oldPrice: "Rp 180.000",
-        numericPrice: 135000,
+        kraftPrice: "Rp 75.000",
+        kraftOldPrice: "Rp 100.000",
+        kraftNumericPrice: 75000,
+        hardboxPrice: "Rp 135.000",
+        hardboxOldPrice: "Rp 180.000",
+        hardboxNumericPrice: 135000,
     },
 ];
 
@@ -136,7 +148,7 @@ export default function GiftBoxCheckoutWizardPage() {
         DIGITAL_OPTIONS.find((d) => d.id === selectedDigital) || DIGITAL_OPTIONS[0];
     const boxMeta = BOX_PRICE_MAP[selectedBoxType] ?? BOX_PRICE_MAP["hardbox"];
     const isKraft = selectedBoxType === "kraft";
-    const currentBoxPrice = isKraft ? 75000 : selectedDigitalObj.numericPrice;
+    const currentBoxPrice = isKraft ? selectedDigitalObj.kraftNumericPrice : selectedDigitalObj.hardboxNumericPrice;
     const totalAmount = currentBoxPrice + shippingCost;
 
     // Fetch dynamic districts whenever city changes
@@ -789,7 +801,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                                         {selectedBoxType === "kraft" ? (
                                                             <span
                                                                 style={{
-                                                                    fontSize: "0.74rem",
+                                                                    fontSize: "0.78rem",
                                                                     fontWeight: 700,
                                                                     color: "#2e7d32",
                                                                     backgroundColor: "#e8f5e9",
@@ -797,7 +809,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                                                     borderRadius: "999px",
                                                                 }}
                                                             >
-                                                                Termasuk dlm Paket
+                                                                {opt.kraftPrice}
                                                             </span>
                                                         ) : (
                                                             <span
@@ -810,7 +822,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                                                     borderRadius: "999px",
                                                                 }}
                                                             >
-                                                                {opt.price}
+                                                                {opt.hardboxPrice}
                                                             </span>
                                                         )}
                                                     </div>

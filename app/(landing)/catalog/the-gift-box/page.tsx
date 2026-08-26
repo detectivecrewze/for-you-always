@@ -214,9 +214,12 @@ export default function TheGiftBoxPage() {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#a67c52",
-            price: "Rp 155.000",
-            oldPrice: "Rp 200.000",
-            numericPrice: 155000,
+            kraftPrice: "Rp 85.000",
+            kraftOldPrice: "Rp 110.000",
+            kraftNumericPrice: 85000,
+            hardboxPrice: "Rp 150.000",
+            hardboxOldPrice: "Rp 200.000",
+            hardboxNumericPrice: 150000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
@@ -226,9 +229,12 @@ export default function TheGiftBoxPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Best Seller",
             color: "#a67c52",
-            price: "Rp 135.000",
-            oldPrice: "Rp 180.000",
-            numericPrice: 135000,
+            kraftPrice: "Rp 75.000",
+            kraftOldPrice: "Rp 100.000",
+            kraftNumericPrice: 75000,
+            hardboxPrice: "Rp 135.000",
+            hardboxOldPrice: "Rp 180.000",
+            hardboxNumericPrice: 135000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -238,19 +244,25 @@ export default function TheGiftBoxPage() {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "",
             color: "#a67c52",
-            price: "Rp 135.000",
-            oldPrice: "Rp 180.000",
-            numericPrice: 135000,
+            kraftPrice: "Rp 75.000",
+            kraftOldPrice: "Rp 100.000",
+            kraftNumericPrice: 75000,
+            hardboxPrice: "Rp 135.000",
+            hardboxOldPrice: "Rp 180.000",
+            hardboxNumericPrice: 135000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
     };
 
     const currentBox = BOX_TYPES[selectedBoxType];
-    // Harga: Kraft Box = Rp 75.000 all-in; Hardbox = harga digital experience yang dipilih
+    const currentExp = digitalExperiences[selectedDigitalExperience];
     const displayPrice = selectedBoxType === "kraft"
-        ? 75000
-        : digitalExperiences[selectedDigitalExperience].numericPrice;
+        ? currentExp.kraftNumericPrice
+        : currentExp.hardboxNumericPrice;
+    const displayOldPrice = selectedBoxType === "kraft"
+        ? currentExp.kraftOldPrice
+        : currentExp.hardboxOldPrice;
 
     return (
         <div style={{ backgroundColor: "#faf7f2", color: "#382a24", minHeight: "100vh", fontFamily: "var(--font-sans, system-ui, sans-serif)", position: "relative", overflowX: "hidden" }}>
@@ -410,9 +422,9 @@ export default function TheGiftBoxPage() {
                                 }}>
                                     Rp {displayPrice.toLocaleString("id-ID")}
                                 </span>
-                                {selectedBoxType === "kraft" && (
+                                {displayOldPrice && (
                                     <span style={{ fontSize: "0.95rem", color: "#a89589", textDecoration: "line-through" }}>
-                                        Rp 100.000
+                                        {displayOldPrice}
                                     </span>
                                 )}
                                 <span style={{
@@ -895,7 +907,9 @@ export default function TheGiftBoxPage() {
                                 >
                                     <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
                                         <span>{exp.title}</span>
-                                        <span style={{ fontSize: "0.75rem", opacity: isSelected ? 1 : 0.75, fontWeight: 700 }}>• {exp.price}</span>
+                                        <span style={{ fontSize: "0.75rem", opacity: isSelected ? 1 : 0.75, fontWeight: 700 }}>
+                                            • {selectedBoxType === "kraft" ? exp.kraftPrice : exp.hardboxPrice}
+                                        </span>
                                     </span>
                                 </button>
                             );
@@ -970,7 +984,7 @@ export default function TheGiftBoxPage() {
                                         padding: "5px 12px",
                                         borderRadius: "999px",
                                     }}>
-                                        Paket Box: {currentExp.price}
+                                        Paket Box: {selectedBoxType === "kraft" ? currentExp.kraftPrice : currentExp.hardboxPrice}
                                     </span>
                                 </div>
                                 <h3 style={{
