@@ -126,9 +126,13 @@ export const GIFT_BOX_ASSETS = {
     kraftBoxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",      // Foto Classic Kraft Box
     hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
 
-    // 2. Foto Kartu 3-Grid Showcase ("Luxury Gift Box")
-    luxuryBoxCardFront: "/the-gift-box/IMG_2214_hd.webp",                            // Foto depan (Slide 1) Luxury Gift Box
-    luxuryBoxCardHover: "https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png", // Foto detail / dalam (Slide 2) Luxury Gift Box
+    // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
+    kraftBoxCardFront: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",  // Foto depan Classic Kraft Box
+    kraftBoxCardHover: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",  // Foto detail Classic Kraft Box
+
+    // 3. Foto Kartu 3-Grid Showcase (Signature Hardbox)
+    luxuryBoxCardFront: "/the-gift-box/IMG_2214_hd.webp",                            // Foto depan (Slide 1) Signature Hardbox
+    luxuryBoxCardHover: "https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png", // Foto detail / dalam (Slide 2) Signature Hardbox
 };
 
 export default function TheGiftBoxPage() {
@@ -730,10 +734,14 @@ export default function TheGiftBoxPage() {
                     gap: "24px"
                 }}>
                     <ShowcaseGridCard
-                        img={GIFT_BOX_ASSETS.luxuryBoxCardFront}
-                        hoverImg={GIFT_BOX_ASSETS.luxuryBoxCardHover}
-                        title="Luxury Gift Box"
-                        desc="Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
+                        img={selectedBoxType === "kraft" ? GIFT_BOX_ASSETS.kraftBoxCardFront : GIFT_BOX_ASSETS.luxuryBoxCardFront}
+                        hoverImg={selectedBoxType === "kraft" ? GIFT_BOX_ASSETS.kraftBoxCardHover : GIFT_BOX_ASSETS.luxuryBoxCardHover}
+                        title={selectedBoxType === "kraft" ? "Classic Kraft Box" : "Signature Hardbox"}
+                        desc={
+                            selectedBoxType === "kraft"
+                                ? "Kotak kraft natural aesthetic dengan sentuhan earthy & vintage yang hangat, dirancang ramah lingkungan dan penuh ketulusan untuk melengkapi kado spesialmu."
+                                : "Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
+                        }
                     />
                     <ShowcaseGridCard
                         img="/the-gift-box/IMG_2217_hd.webp"
