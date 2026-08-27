@@ -140,9 +140,10 @@ function ShowcaseGridCard({
 // ─────────────────────────────────────────────────────────────────────────────
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
-    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box (main)
-    kraftBoxHero2: "/assets/classic-kraftbox/classic-kraftbox2.webp",  // Foto Classic Kraft Box (secondary)
-    hardboxHero: "/the-gift-box/IMG_2214_hd.webp",                    // Foto Signature Hardbox (Rigid)
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box (Slide 1 - isi)
+    kraftBoxHero2: "/assets/classic-kraftbox/classic-kraftbox2.webp",  // Foto Classic Kraft Box (Slide 2 - luar)
+    hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg", // Foto Signature Hardbox (Slide 1 - isi)
+    hardboxHero2: "/the-gift-box/IMG_2214_hd.webp",                    // Foto Signature Hardbox (Slide 2 - luar pita merah)
 
     // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
     kraftBoxCardFront: "/assets/classic-kraftbox/classic-kraftbox1.webp",  // Foto depan Classic Kraft Box
@@ -158,6 +159,7 @@ export default function TheGiftBoxPage() {
     const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [heroSlide, setHeroSlide] = useState(0); // 0 = foto utama (isi box), 1 = foto kedua (luar/packaging)
     const [stocks, setStocks] = useState<{
         kraft: { stock: number; in_stock: boolean; is_low_stock: boolean };
         hardbox: { stock: number; in_stock: boolean; is_low_stock: boolean };
@@ -165,6 +167,11 @@ export default function TheGiftBoxPage() {
         kraft: { stock: 10, in_stock: true, is_low_stock: false },
         hardbox: { stock: 8, in_stock: true, is_low_stock: false },
     });
+
+    // Reset hero slide ke foto utama saat switch box type (tanpa auto-slide)
+    useEffect(() => {
+        setHeroSlide(0);
+    }, [selectedBoxType]);
 
     const stockData = stocks[selectedBoxType];
 
@@ -412,21 +419,44 @@ export default function TheGiftBoxPage() {
                             position: "relative",
                             width: "100%",
                             maxWidth: "480px",
-                            paddingBottom: "24px",
-                            paddingRight: "24px",
                         }}>
-                            {/* Main image frame */}
-                            <div style={{
-                                position: "relative",
-                                width: "100%",
-                                aspectRatio: "4 / 3",
-                                borderRadius: "24px",
-                                overflow: "hidden",
-                                border: "1px solid rgba(205,171,143,0.3)",
-                                boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
-                                background: "#2a211c"
-                            }}>
-                                {/* Layer 1: Classic Kraft Box Photo main */}
+                            {/* Main image frame — hover to swap (desktop), tap to cycle (mobile) */}
+                            <div
+                                role="button"
+                                tabIndex={0}
+                                aria-label="Ganti foto preview box"
+                                style={{
+                                    position: "relative",
+                                    width: "100%",
+                                    aspectRatio: "4 / 3",
+                                    borderRadius: "24px",
+                                    overflow: "hidden",
+                                    border: "1px solid rgba(205,171,143,0.3)",
+                                    boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
+                                    background: "#2a211c",
+                                    cursor: "pointer",
+                                    userSelect: "none",
+                                    WebkitTapHighlightColor: "transparent",
+                                }}
+                                onMouseEnter={() => {
+                                    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+                                        setHeroSlide(1);
+                                    }
+                                }}
+                                onMouseLeave={() => {
+                                    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+                                        setHeroSlide(0);
+                                    }
+                                }}
+                                onClick={() => setHeroSlide(prev => (prev === 0 ? 1 : 0))}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        setHeroSlide(prev => (prev === 0 ? 1 : 0));
+                                    }
+                                }}
+                            >
+                                {/* Layer 1: Classic Kraft Box — Foto Utama (Isi Hampers) */}
                                 <Image
                                     src={GIFT_BOX_ASSETS.kraftBoxHero}
                                     alt="Classic Kraft Box"
@@ -435,14 +465,27 @@ export default function TheGiftBoxPage() {
                                     style={{
                                         objectFit: "cover",
                                         objectPosition: "center 48%",
-                                        borderRadius: "24px",
-                                        opacity: selectedBoxType === "kraft" ? 1 : 0,
-                                        transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                                        pointerEvents: selectedBoxType === "kraft" ? "auto" : "none",
+                                        opacity: selectedBoxType === "kraft" && heroSlide === 0 ? 1 : 0,
+                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        pointerEvents: "none",
                                     }}
                                     priority
                                 />
-                                {/* Layer 2: Signature Hardbox Photo */}
+                                {/* Layer 2: Classic Kraft Box — Foto Kedua (Luar/Packaging) */}
+                                <Image
+                                    src={GIFT_BOX_ASSETS.kraftBoxHero2}
+                                    alt="Classic Kraft Box detail"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 480px"
+                                    style={{
+                                        objectFit: "cover",
+                                        objectPosition: "center",
+                                        opacity: selectedBoxType === "kraft" && heroSlide === 1 ? 1 : 0,
+                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        pointerEvents: "none",
+                                    }}
+                                />
+                                {/* Layer 3: Signature Hardbox — Foto Utama (Isi Hampers) */}
                                 <Image
                                     src={GIFT_BOX_ASSETS.hardboxHero}
                                     alt="Signature Hardbox"
@@ -451,43 +494,64 @@ export default function TheGiftBoxPage() {
                                     style={{
                                         objectFit: "cover",
                                         objectPosition: "center 48%",
-                                        borderRadius: "24px",
-                                        opacity: selectedBoxType === "hardbox" ? 1 : 0,
-                                        transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                                        pointerEvents: selectedBoxType === "hardbox" ? "auto" : "none",
+                                        opacity: selectedBoxType === "hardbox" && heroSlide === 0 ? 1 : 0,
+                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        pointerEvents: "none",
                                     }}
                                     priority
                                 />
-                            </div>
-
-                            {/* Secondary Kraft photo — floating card (only visible when Kraft selected) */}
-                            <div style={{
-                                position: "absolute",
-                                bottom: "-18px",
-                                right: "-18px",
-                                width: "42%",
-                                aspectRatio: "3 / 4",
-                                borderRadius: "16px",
-                                overflow: "hidden",
-                                border: "3px solid #faf7f2",
-                                boxShadow: "0 12px 32px -6px rgba(56,42,36,0.2)",
-                                background: "#2a211c",
-                                opacity: selectedBoxType === "kraft" ? 1 : 0,
-                                transform: selectedBoxType === "kraft" ? "scale(1) translateY(0)" : "scale(0.95) translateY(8px)",
-                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                                pointerEvents: selectedBoxType === "kraft" ? "auto" : "none",
-                                zIndex: 2,
-                            }}>
+                                {/* Layer 4: Signature Hardbox — Foto Kedua (Luar/Pita Merah) */}
                                 <Image
-                                    src={GIFT_BOX_ASSETS.kraftBoxHero2}
-                                    alt="Classic Kraft Box detail"
+                                    src={GIFT_BOX_ASSETS.hardboxHero2}
+                                    alt="Signature Hardbox packaging"
                                     fill
-                                    sizes="200px"
+                                    sizes="(max-width: 768px) 100vw, 480px"
                                     style={{
                                         objectFit: "cover",
                                         objectPosition: "center",
+                                        opacity: selectedBoxType === "hardbox" && heroSlide === 1 ? 1 : 0,
+                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        pointerEvents: "none",
                                     }}
                                 />
+
+                                {/* Dot indicators — clickable buttons */}
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: 14,
+                                    left: "50%",
+                                    transform: "translateX(-50%)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 6,
+                                    zIndex: 5,
+                                    padding: "4px 8px",
+                                    borderRadius: 999,
+                                    background: "rgba(29, 24, 22, 0.45)",
+                                    backdropFilter: "blur(6px)",
+                                }}>
+                                    {[0, 1].map(i => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setHeroSlide(i);
+                                            }}
+                                            aria-label={`Lihat foto ${i + 1}`}
+                                            style={{
+                                                width: heroSlide === i ? 18 : 6,
+                                                height: 6,
+                                                borderRadius: 999,
+                                                backgroundColor: heroSlide === i ? "#ffffff" : "rgba(255,255,255,0.45)",
+                                                transition: "all 0.3s ease",
+                                                border: "none",
+                                                padding: 0,
+                                                cursor: "pointer",
+                                            }}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
