@@ -808,6 +808,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                                         src={opt.image}
                                                         alt={opt.title}
                                                         fill
+                                                        sizes="72px"
                                                         style={{ objectFit: "cover" }}
                                                     />
                                                 </div>

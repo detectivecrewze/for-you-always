@@ -3,6 +3,7 @@
 export const metadata: Metadata = {
   title: "Birthday Scrapbook - Kado Ulang Tahun Digital Retro | For you, Always.",
   description: "Kado ulang tahun digital interaktif bergaya komik retro dengan 4 ruangan kejutan, pemutar musik, galeri polaroid, dan wish inbox.",
+  alternates: { canonical: "/catalog/birthday" },
   openGraph: {
     title: "Birthday Scrapbook - Kado Ulang Tahun Digital Retro",
     description: "Kado ulang tahun digital interaktif bergaya komik retro dengan 4 ruangan kejutan, pemutar musik, galeri polaroid, dan wish inbox.",

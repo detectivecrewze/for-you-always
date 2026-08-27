@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Invitation Edition - Undangan Kencan Interaktif | For you, Always.",
   description: "Kirimkan undangan kencan yang manis dan interaktif. Amplop digital, pilih tanggal, aktivitas, dress code, dan tiket kencan eksklusif sebagai kenangan.",
+  alternates: { canonical: "/catalog/invitation" },
   openGraph: {
     title: "Invitation Edition - Undangan Kencan Interaktif",
     description: "Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu.",
