@@ -24,8 +24,12 @@ export async function GET(req: NextRequest) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        sql: "SELECT * FROM inventory WHERE product_id = ? LIMIT 1",
-                        params: [productId],
+                        sql: `SELECT * FROM inventory 
+                              WHERE product_id = ? 
+                                 OR (product_id IN ('the-gift-box', 'the-gift-box-hardbox', 'unbox-the-memory') AND ? IN ('the-gift-box', 'the-gift-box-hardbox', 'unbox-the-memory'))
+                              ORDER BY CASE WHEN product_id = ? THEN 0 ELSE 1 END, updated_at DESC 
+                              LIMIT 1`,
+                        params: [productId, productId, productId],
                     }),
                 }
             );

@@ -253,7 +253,11 @@ export default function Dashboard() {
             const res = await fetch("/api/admin/inventory");
             const data = await res.json();
             if (res.ok && data.success && data.inventory?.length > 0) {
-                const item = data.inventory.find((i: any) => i.product_id === "the-gift-box" || i.id === "inv_unbox") || data.inventory[0];
+                const item = data.inventory.find((i: any) => i.product_id === "the-gift-box")
+                    || data.inventory.find((i: any) => i.product_id === "the-gift-box-hardbox")
+                    || data.inventory.find((i: any) => i.id === "inv_the-gift-box")
+                    || data.inventory.find((i: any) => i.id === "inv_unbox")
+                    || data.inventory[0];
                 setInventoryStock(item.stock);
                 setStockInputVal(String(item.stock));
                 setInventoryThreshold(item.low_stock_threshold || 3);

@@ -157,11 +157,15 @@ export default function TheGiftBoxPage() {
     const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-    const [stockData, setStockData] = useState<{
-        stock: number;
-        in_stock: boolean;
-        is_low_stock: boolean;
-    }>({ stock: 10, in_stock: true, is_low_stock: false });
+    const [stocks, setStocks] = useState<{
+        kraft: { stock: number; in_stock: boolean; is_low_stock: boolean };
+        hardbox: { stock: number; in_stock: boolean; is_low_stock: boolean };
+    }>({
+        kraft: { stock: 10, in_stock: true, is_low_stock: false },
+        hardbox: { stock: 8, in_stock: true, is_low_stock: false },
+    });
+
+    const stockData = stocks[selectedBoxType];
 
     // Pilihan Box Fisik
     const BOX_TYPES = {
@@ -190,20 +194,40 @@ export default function TheGiftBoxPage() {
     }, []);
 
     useEffect(() => {
-        const pid = selectedBoxType === "kraft" ? "the-gift-box-kraft" : "the-gift-box";
-        fetch(`/api/inventory?product_id=${pid}`)
+        // Live sync Kraft stock
+        fetch("/api/inventory?product_id=the-gift-box-kraft")
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
-                    setStockData({
-                        stock: data.stock,
-                        in_stock: data.in_stock,
-                        is_low_stock: data.is_low_stock,
-                    });
+                    setStocks((prev) => ({
+                        ...prev,
+                        kraft: {
+                            stock: data.stock,
+                            in_stock: data.in_stock,
+                            is_low_stock: data.is_low_stock,
+                        },
+                    }));
                 }
             })
             .catch(() => {});
-    }, [selectedBoxType]);
+
+        // Live sync Hardbox stock
+        fetch("/api/inventory?product_id=the-gift-box")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && typeof data.stock === "number") {
+                    setStocks((prev) => ({
+                        ...prev,
+                        hardbox: {
+                            stock: data.stock,
+                            in_stock: data.in_stock,
+                            is_low_stock: data.is_low_stock,
+                        },
+                    }));
+                }
+            })
+            .catch(() => {});
+    }, []);
 
     const tabContainerRef = useRef<HTMLDivElement>(null);
     const isFirstRender = useRef(true);
