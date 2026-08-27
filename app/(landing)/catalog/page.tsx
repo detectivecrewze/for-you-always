@@ -194,7 +194,7 @@ export default function CatalogPage() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetch("/api/inventory?product_id=the-gift-box")
+        fetch("/api/inventory?product_id=the-gift-box-kraft")
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
