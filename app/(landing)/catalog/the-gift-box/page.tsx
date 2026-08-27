@@ -1369,10 +1369,10 @@ export default function TheGiftBoxPage() {
                         whiteSpace: "nowrap",
                     }}>
                         <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
-                            Mulai Rp 75.000
+                            Mulai Rp 80.000
                         </span>
                         <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
-                            Rp 100.000
+                            Rp 110.000
                         </span>
                     </div>
                     <br />

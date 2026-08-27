@@ -17,10 +17,10 @@ const CATALOG_ITEMS = [
         titleColor: "#382a24",
         imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
         title: "The Gift Box",
-        oldPrice: "Rp 100.000",
-        newPrice: "Rp 75.000",
+        oldPrice: "Rp 110.000",
+        newPrice: "Rp 80.000",
         id: "the-gift-box",
-        numericPrice: 75000,
+        numericPrice: 80000,
         href: "/catalog/the-gift-box",
         occasions: ["Anniversary", "Birthday", "LDR"],
         features: ["Classic Kraft Box & Hardbox Tier", "Digital Memory Card (QR)", "Pilihan Memoria, Scrapbook, Letter & Voices"]

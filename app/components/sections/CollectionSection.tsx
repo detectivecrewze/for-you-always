@@ -99,7 +99,7 @@ export default function CollectionSection() {
                                 badgeVariant: "solid",
                                 slotBadgeText: unboxStock !== null ? `Sisa ${unboxStock} Box` : "Sisa 10 Box",
                                 imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
-                                price: <DiscountPrice oldPrice="Rp 100.000" newPrice="Rp 75.000" size="sm" layout="inline" />,
+                                price: <DiscountPrice oldPrice="Rp 110.000" newPrice="Rp 80.000" size="sm" layout="inline" />,
                                 title: "The Gift Box",
                                 titleColor: "#382a24",
                                 description: "Gift box hampers fisik eksklusif terintegrasi dengan kado digital interaktif pilihanmu.",

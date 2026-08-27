@@ -713,12 +713,9 @@ export default function GiftBoxCheckoutWizardPage() {
                                             }}
                                         >
                                             <div>
-                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4px 6px", marginBottom: "4px" }}>
-                                                    <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>
+                                                <div style={{ display: "flex", alignItems: "center", marginBottom: "4px" }}>
+                                                    <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1d1816" }}>
                                                         Classic Kraft
-                                                    </span>
-                                                    <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
-                                                        Rp 75.000
                                                     </span>
                                                 </div>
                                                 <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35 }}>
@@ -743,12 +740,9 @@ export default function GiftBoxCheckoutWizardPage() {
                                             }}
                                         >
                                             <div>
-                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4px 6px", marginBottom: "4px" }}>
-                                                    <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>
+                                                <div style={{ display: "flex", alignItems: "center", marginBottom: "4px" }}>
+                                                    <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1d1816" }}>
                                                         Signature Hardbox
-                                                    </span>
-                                                    <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
-                                                        Signature
                                                     </span>
                                                 </div>
                                                 <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35 }}>
