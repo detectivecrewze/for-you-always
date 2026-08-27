@@ -272,9 +272,9 @@ export default function TheGiftBoxPage() {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#a67c52",
-            kraftPrice: "Rp 85.000",
+            kraftPrice: "Rp 90.000",
             kraftOldPrice: "Rp 110.000",
-            kraftNumericPrice: 85000,
+            kraftNumericPrice: 90000,
             hardboxPrice: "Rp 150.000",
             hardboxOldPrice: "Rp 200.000",
             hardboxNumericPrice: 150000,
@@ -287,12 +287,12 @@ export default function TheGiftBoxPage() {
             desc: "Rayakan momen ulang tahun spesial dengan scrapbook interaktif 4 ruangan, 15 galeri polaroid foto/video, 3 soundtrack musik latar, surat digital, dan wish inbox.",
             badge: "Birthday",
             color: "#bf7b19",
-            kraftPrice: "Rp 80.000",
+            kraftPrice: "Rp 85.000",
             kraftOldPrice: "Rp 105.000",
-            kraftNumericPrice: 80000,
-            hardboxPrice: "Rp 135.000",
+            kraftNumericPrice: 85000,
+            hardboxPrice: "Rp 140.000",
             hardboxOldPrice: "Rp 180.000",
-            hardboxNumericPrice: 135000,
+            hardboxNumericPrice: 140000,
             previewUrl: "/catalog/birthday",
             imageSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp"
         },
@@ -302,12 +302,12 @@ export default function TheGiftBoxPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Best Seller",
             color: "#a67c52",
-            kraftPrice: "Rp 75.000",
+            kraftPrice: "Rp 80.000",
             kraftOldPrice: "Rp 100.000",
-            kraftNumericPrice: 75000,
-            hardboxPrice: "Rp 135.000",
+            kraftNumericPrice: 80000,
+            hardboxPrice: "Rp 130.000",
             hardboxOldPrice: "Rp 180.000",
-            hardboxNumericPrice: 135000,
+            hardboxNumericPrice: 130000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -317,16 +317,17 @@ export default function TheGiftBoxPage() {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "",
             color: "#a67c52",
-            kraftPrice: "Rp 75.000",
+            kraftPrice: "Rp 80.000",
             kraftOldPrice: "Rp 100.000",
-            kraftNumericPrice: 75000,
-            hardboxPrice: "Rp 135.000",
+            kraftNumericPrice: 80000,
+            hardboxPrice: "Rp 130.000",
             hardboxOldPrice: "Rp 180.000",
-            hardboxNumericPrice: 135000,
+            hardboxNumericPrice: 130000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
     };
+
 
     const currentBox = BOX_TYPES[selectedBoxType];
     const currentExp = digitalExperiences[selectedDigitalExperience];
