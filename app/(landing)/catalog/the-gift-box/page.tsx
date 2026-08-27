@@ -456,18 +456,38 @@ export default function TheGiftBoxPage() {
                     {/* RIGHT COLUMN: EYEBROW, H1, DESC, PRICE & CTAS */}
                     <div style={{ flex: "1 1 440px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                         
-                        {/* EYEBROW */}
-                        <span style={{
-                            fontSize: "0.76rem",
-                            fontWeight: 700,
-                            letterSpacing: "0.22em",
-                            textTransform: "uppercase",
-                            color: "#a88365",
-                            display: "block",
-                            marginBottom: "12px"
-                        }}>
-                            THE GIFT BOX
-                        </span>
+                        {/* EYEBROW + JABODETABEK INLINE */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                            <span style={{
+                                fontSize: "0.76rem",
+                                fontWeight: 700,
+                                letterSpacing: "0.22em",
+                                textTransform: "uppercase",
+                                color: "#a88365",
+                            }}>
+                                THE GIFT BOX
+                            </span>
+                            <span style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                fontSize: "0.62rem",
+                                fontWeight: 600,
+                                letterSpacing: "0.06em",
+                                textTransform: "uppercase",
+                                color: "#8a7060",
+                                backgroundColor: "rgba(166,124,82,0.07)",
+                                border: "1px solid rgba(166,124,82,0.18)",
+                                padding: "2px 8px",
+                                borderRadius: "999px",
+                            }}>
+                                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Jabodetabek
+                            </span>
+                        </div>
 
                         {/* H1 HEADLINE */}
                         <h1 style={{
@@ -498,73 +518,85 @@ export default function TheGiftBoxPage() {
 
                         {/* EDITORIAL PRICE & REALTIME STOCK */}
                         <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            flexWrap: "wrap",
-                            gap: "8px 12px",
                             width: "100%",
                             maxWidth: "440px",
-                            marginBottom: "16px",
-                            paddingBottom: "14px",
-                            borderBottom: "1px solid rgba(205, 171, 143, 0.25)"
+                            marginBottom: "24px",
                         }}>
-                            <div style={{ display: "flex", alignItems: "baseline", gap: "8px", flexWrap: "wrap" }}>
+                            {/* Row 1: Main price */}
+                            <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "10px" }}>
                                 <span style={{
                                     fontFamily: "var(--font-display, Cormorant Garamond, serif)",
-                                    fontSize: "clamp(1.85rem, 3.8vw, 2.4rem)",
+                                    fontSize: "clamp(2.2rem, 4.5vw, 2.8rem)",
                                     fontWeight: 700,
                                     color: "#1d1816",
                                     lineHeight: 1,
-                                    whiteSpace: "nowrap"
+                                    letterSpacing: "-0.02em",
                                 }}>
                                     Rp {displayPrice.toLocaleString("id-ID")}
                                 </span>
                                 {displayOldPrice && (
-                                    <span style={{ fontSize: "0.92rem", color: "#a89589", textDecoration: "line-through", whiteSpace: "nowrap" }}>
+                                    <span style={{
+                                        fontSize: "1rem",
+                                        color: "#b0998c",
+                                        textDecoration: "line-through",
+                                        fontFamily: "var(--font-sans)",
+                                        fontWeight: 400,
+                                    }}>
                                         {displayOldPrice}
                                     </span>
                                 )}
+                            </div>
+
+                            {/* Row 2: Meta info — badge + stock */}
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                 <span style={{
-                                    fontSize: "0.68rem",
+                                    fontSize: "0.65rem",
                                     fontWeight: 700,
                                     textTransform: "uppercase",
-                                    letterSpacing: "0.06em",
-                                    color: selectedBoxType === "kraft" ? "#2e7d32" : "#a67c52",
-                                    backgroundColor: selectedBoxType === "kraft" ? "#e8f5e9" : "rgba(166,124,82,0.12)",
-                                    padding: "3px 8px",
+                                    letterSpacing: "0.08em",
+                                    color: selectedBoxType === "kraft" ? "#2e7d32" : "#7a5c38",
+                                    backgroundColor: selectedBoxType === "kraft" ? "#edf7ee" : "rgba(166,124,82,0.1)",
+                                    padding: "4px 10px",
                                     borderRadius: "999px",
-                                    whiteSpace: "nowrap",
-                                    flexShrink: 0
+                                    border: selectedBoxType === "kraft" ? "1px solid rgba(46,125,50,0.2)" : "1px solid rgba(166,124,82,0.2)",
                                 }}>
                                     {selectedBoxType === "kraft" ? "All-in Bundle" : "Signature"}
                                 </span>
-                            </div>
 
-                            <div style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "6px",
-                                fontSize: "0.76rem",
-                                fontWeight: 600,
-                                whiteSpace: "nowrap",
-                                flexShrink: 0,
-                                color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32"
-                            }}>
                                 <span style={{
-                                    width: 6,
-                                    height: 6,
-                                    borderRadius: "50%",
-                                    backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                    width: 1,
+                                    height: 14,
+                                    backgroundColor: "rgba(166,124,82,0.25)",
                                     display: "inline-block",
-                                    flexShrink: 0
+                                    flexShrink: 0,
                                 }} />
-                                <span style={{ whiteSpace: "nowrap" }}>
-                                    {stockData.stock === 0
-                                        ? "Habis"
-                                        : `Sisa ${stockData.stock} Box`}
+
+                                <span style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                    fontSize: "0.72rem",
+                                    fontWeight: 600,
+                                    color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                }}>
+                                    <span style={{
+                                        width: 6,
+                                        height: 6,
+                                        borderRadius: "50%",
+                                        backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                        display: "inline-block",
+                                        flexShrink: 0,
+                                    }} />
+                                    {stockData.stock === 0 ? "Stok Habis" : `Sisa ${stockData.stock} Box`}
                                 </span>
                             </div>
+
+                            {/* Subtle divider */}
+                            <div style={{
+                                marginTop: "16px",
+                                height: 1,
+                                backgroundColor: "rgba(205, 171, 143, 0.2)",
+                            }} />
                         </div>
 
                         {/* MINIMALIST SEGMENTED BOX SELECTOR */}
@@ -599,9 +631,6 @@ export default function TheGiftBoxPage() {
                                     }}
                                 >
                                     <span style={{ whiteSpace: "nowrap" }}>Classic Kraft</span>
-                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 7px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
-                                        75K
-                                    </span>
                                 </button>
 
                                 <button
@@ -611,10 +640,10 @@ export default function TheGiftBoxPage() {
                                         padding: "10px 8px",
                                         borderRadius: "11px",
                                         border: "none",
-                                        backgroundColor: selectedBoxType === "hardbox" ? "#ffffff" : "transparent",
-                                        color: "#1d1816",
+                                        backgroundColor: selectedBoxType === "hardbox" ? "#382a24" : "transparent",
+                                        color: selectedBoxType === "hardbox" ? "#faf7f2" : "#1d1816",
                                         cursor: "pointer",
-                                        boxShadow: selectedBoxType === "hardbox" ? "0 2px 8px rgba(29, 24, 22, 0.08)" : "none",
+                                        boxShadow: selectedBoxType === "hardbox" ? "0 4px 12px rgba(56,42,36,0.25)" : "none",
                                         transition: "all 0.2s ease",
                                         display: "flex",
                                         alignItems: "center",
@@ -626,21 +655,22 @@ export default function TheGiftBoxPage() {
                                     }}
                                 >
                                     <span style={{ whiteSpace: "nowrap" }}>Signature Hardbox</span>
-                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 7px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
-                                        Rigid
-                                    </span>
                                 </button>
                             </div>
 
-                            <div style={{ fontSize: "0.76rem", color: "#8a7569", marginTop: "8px", paddingLeft: "4px" }}>
-                                {selectedBoxType === "kraft"
-                                    ? "Kotak kraft natural aesthetic (All-in sudah termasuk box + kado digital)."
-                                    : "Hardbox rigid premium eksklusif dengan balutan pita satin mewah."}
+                            {/* Box description */}
+                            <div style={{ marginTop: "8px" }}>
+                                <span style={{ fontSize: "0.75rem", color: "#8a7569" }}>
+                                    {selectedBoxType === "kraft"
+                                        ? "Kotak kraft natural aesthetic (All-in sudah termasuk box + kado digital)."
+                                        : "Hardbox rigid premium eksklusif dengan balutan pita satin mewah."}
+                                </span>
                             </div>
                         </div>
 
                         {/* CTA ACTION CONTAINER */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "440px", marginBottom: "20px" }}>
+
                             {/* Primary Order Button */}
                             {stockData.stock > 0 ? (
                                 <Link
@@ -701,46 +731,41 @@ export default function TheGiftBoxPage() {
                                 </a>
                             )}
 
-                            {/* Minimalist Sub-Row (Jabodetabek Info + WhatsApp Consultation) */}
-                            <div style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                gap: "8px",
-                                paddingTop: "4px",
-                                fontSize: "0.78rem",
-                                color: "#8a7569"
-                            }}>
-                                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                        <circle cx="12" cy="10" r="3"></circle>
-                                    </svg>
-                                    Khusus Jabodetabek
-                                </span>
-
-                                <a
-                                    href="https://wa.me/6281936109076?text=Halo%20Admin%20For%20You%20Always,%20saya%20ingin%20konsultasi%20mengenai%20The%20Gift%20Box%20(Kraft%20/%20Hardbox)."
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                        color: "#1d1816",
-                                        fontWeight: 600,
-                                        textDecoration: "none",
-                                        transition: "color 0.2s ease"
-                                    }}
-                                    onMouseOver={(e) => (e.currentTarget.style.color = "#25D366")}
-                                    onMouseOut={(e) => (e.currentTarget.style.color = "#1d1816")}
-                                >
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                                    </svg>
-                                    <span>Konsultasi WA ↗</span>
-                                </a>
-                            </div>
+                            {/* Secondary: Konsultasi WA — full-width button */}
+                            <a
+                                href="https://wa.me/6281936109076?text=Halo%20Admin%20For%20You%20Always,%20saya%20ingin%20konsultasi%20mengenai%20The%20Gift%20Box%20(Kraft%20/%20Hardbox)."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "9px",
+                                    backgroundColor: "transparent",
+                                    border: "1.5px solid #25D366",
+                                    color: "#1d1816",
+                                    fontWeight: 700,
+                                    fontSize: "0.94rem",
+                                    padding: "14px 24px",
+                                    borderRadius: "14px",
+                                    textDecoration: "none",
+                                    transition: "all 0.25s ease",
+                                    textAlign: "center",
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.backgroundColor = "rgba(37,211,102,0.07)";
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.backgroundColor = "transparent";
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                }}
+                            >
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                </svg>
+                                <span>Konsultasi WA</span>
+                            </a>
                         </div>
 
                         <Link
@@ -1419,48 +1444,6 @@ export default function TheGiftBoxPage() {
                     initialDigitalProduct={selectedDigitalExperience}
                 />
             )}
-
-            {/* Floating WhatsApp with label (Bottom Right) */}
-            <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20The%20Gift%20Box." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
-                onMouseEnter={e => { 
-                    const btn = e.currentTarget.children[1] as HTMLElement;
-                    if (btn) { btn.style.background = "#cdab8f"; btn.style.transform = "scale(1.05)"; }
-                    const bubble = e.currentTarget.children[0] as HTMLElement;
-                    if (bubble) { bubble.style.transform = "translateY(-2px)"; bubble.style.boxShadow = "0 12px 28px -4px rgba(29, 24, 22, 0.15)"; }
-                }}
-                onMouseLeave={e => { 
-                    const btn = e.currentTarget.children[1] as HTMLElement;
-                    if (btn) { btn.style.background = "#1d1816"; btn.style.transform = "scale(1)"; }
-                    const bubble = e.currentTarget.children[0] as HTMLElement;
-                    if (bubble) { bubble.style.transform = "translateY(0)"; bubble.style.boxShadow = "0 8px 24px -4px rgba(29, 24, 22, 0.12)"; }
-                }}
-            >
-                {/* Text Bubble */}
-                <div className="hidden md:flex items-center gap-[6px]" style={{
-                    background: "rgba(255, 255, 255, 0.95)",
-                    backdropFilter: "blur(10px)",
-                    padding: "10px 20px",
-                    borderRadius: "999px",
-                    boxShadow: "0 8px 24px -4px rgba(29, 24, 22, 0.12)",
-                    border: "1px solid rgba(205, 171, 143, 0.2)",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}>
-                    <span style={{ fontSize: 12.5, fontWeight: 500, color: "#6e5c53", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
-                        Butuh bantuan? <strong style={{ color: "#382a24", fontWeight: 700 }}>Chat Admin</strong>
-                    </span>
-                </div>
-
-                {/* WA Icon */}
-                <div
-                    style={{ width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", flexShrink: 0 }}
-                >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf7f2">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
-                    </svg>
-                </div>
-            </a>
 
             {/* CSS KEYFRAME ANIMATIONS */}
             <style>{`
