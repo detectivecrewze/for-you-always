@@ -91,45 +91,38 @@ export async function POST(req: NextRequest) {
         const threshold = low_stock_threshold !== undefined ? parseInt(low_stock_threshold, 10) : 3;
         const active = is_active !== undefined ? (is_active ? 1 : 0) : 1;
 
-        const isHardbox = targetProductId === "the-gift-box" || targetProductId === "the-gift-box-hardbox" || targetProductId === "unbox-the-memory";
-        const invId = isHardbox ? "inv_the-gift-box" : "inv_the-gift-box-kraft";
-        const prodName = isHardbox ? "Signature Hardbox" : "Classic Kraft Box";
-        const canonicalPid = isHardbox ? "the-gift-box" : "the-gift-box-kraft";
+        const isHardbox = targetProductId === "the-gift-box" || targetProductId === "the-gift-box-hardbox";
+        const isKraft = targetProductId === "the-gift-box-kraft";
 
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
-            const sql = isHardbox
-                ? `INSERT INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active, updated_at)
-                   VALUES ('inv_the-gift-box', 'the-gift-box', 'Signature Hardbox', ?, ?, ?, CURRENT_TIMESTAMP)
-                   ON CONFLICT(product_id) DO UPDATE SET
-                     stock = excluded.stock,
-                     low_stock_threshold = excluded.low_stock_threshold,
-                     is_active = excluded.is_active,
-                     updated_at = CURRENT_TIMESTAMP;
-                   UPDATE inventory SET stock = ?, low_stock_threshold = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
-                   WHERE product_id IN ('the-gift-box-hardbox', 'unbox-the-memory');`
-                : `INSERT INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active, updated_at)
-                   VALUES ('inv_the-gift-box-kraft', 'the-gift-box-kraft', 'Classic Kraft Box', ?, ?, ?, CURRENT_TIMESTAMP)
-                   ON CONFLICT(product_id) DO UPDATE SET
-                     stock = excluded.stock,
-                     low_stock_threshold = excluded.low_stock_threshold,
-                     is_active = excluded.is_active,
-                     updated_at = CURRENT_TIMESTAMP;`;
+            const d1Url = `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`;
+            const d1Headers = {
+                "Authorization": `Bearer ${CF_API_KEY}`,
+                "Content-Type": "application/json",
+            };
 
-            const params = isHardbox
-                ? [newStock, threshold, active, newStock, threshold, active]
-                : [newStock, threshold, active];
+            const upsertSql = `INSERT INTO inventory (id, product_id, product_name, stock, low_stock_threshold, is_active, updated_at)
+                               VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                               ON CONFLICT(product_id) DO UPDATE SET
+                                 stock = excluded.stock,
+                                 low_stock_threshold = excluded.low_stock_threshold,
+                                 is_active = excluded.is_active,
+                                 updated_at = CURRENT_TIMESTAMP;`;
 
-            const updateRes = await fetch(
-                `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}/query`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${CF_API_KEY}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ sql, params }),
-                }
-            );
+            // Determine canonical ID and name
+            const invId = isHardbox ? "inv_the-gift-box" : "inv_the-gift-box-kraft";
+            const prodName = isHardbox ? "Signature Hardbox" : "Classic Kraft Box";
+            const canonicalPid = isHardbox ? "the-gift-box" : "the-gift-box-kraft";
+
+            // Single upsert query (no multi-statement — D1 doesn't support params with multiple statements)
+            const updateRes = await fetch(d1Url, {
+                method: "POST",
+                headers: d1Headers,
+                body: JSON.stringify({
+                    sql: upsertSql,
+                    params: [invId, canonicalPid, prodName, newStock, threshold, active],
+                }),
+            });
 
             const resData = await updateRes.json();
             if (resData.success) {
