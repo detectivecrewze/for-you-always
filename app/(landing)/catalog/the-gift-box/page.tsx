@@ -58,17 +58,34 @@ function ShowcaseGridCard({
         >
             <div style={{ height: "230px", overflow: "hidden", position: "relative", backgroundColor: "#1d1816" }}>
                 <Image
-                    src={isShowingSecond && hoverImg ? hoverImg : img}
+                    src={img}
                     alt={title}
                     fill
                     sizes="(max-width: 768px) 100vw, 360px"
                     style={{
                         objectFit: "cover",
-                        objectPosition: isShowingSecond && hoverImg ? "center 48%" : objectPosition,
+                        objectPosition: objectPosition,
                         transform: isShowingSecond ? "scale(1.04)" : "scale(1)",
-                        transition: "transform 0.5s ease, opacity 0.3s ease"
+                        opacity: isShowingSecond ? 0 : 1,
+                        transition: "transform 0.5s ease, opacity 0.3s ease",
                     }}
                 />
+                {hoverImg && (
+                    <Image
+                        src={hoverImg}
+                        alt={`${title} Detail`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 360px"
+                        style={{
+                            objectFit: "cover",
+                            objectPosition: "center 48%",
+                            transform: isShowingSecond ? "scale(1.04)" : "scale(1)",
+                            opacity: isShowingSecond ? 1 : 0,
+                            transition: "transform 0.5s ease, opacity 0.3s ease",
+                            pointerEvents: isShowingSecond ? "auto" : "none",
+                        }}
+                    />
+                )}
 
                 {/* NUMBER & DOT INDICATOR FOR MULTI-PHOTO CARDS (MOBILE & DESKTOP) */}
                 {hoverImg && (
@@ -374,17 +391,37 @@ export default function TheGiftBoxPage() {
                             overflow: "hidden",
                             border: "1px solid rgba(205,171,143,0.3)",
                             boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
-                            background: "#1d1816"
+                            background: "#2a211c"
                         }}>
+                            {/* Layer 1: Classic Kraft Box Photo (Instant Preload & Zero Delay) */}
                             <Image
-                                key={selectedBoxType}
-                                src={currentBox.imageSrc}
-                                alt={currentBox.name}
+                                src={GIFT_BOX_ASSETS.kraftBoxHero}
+                                alt="Classic Kraft Box"
                                 fill
+                                sizes="(max-width: 768px) 100vw, 480px"
                                 style={{
                                     objectFit: "cover",
                                     objectPosition: "center 48%",
                                     borderRadius: "24px",
+                                    opacity: selectedBoxType === "kraft" ? 1 : 0,
+                                    transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                                    pointerEvents: selectedBoxType === "kraft" ? "auto" : "none",
+                                }}
+                                priority
+                            />
+                            {/* Layer 2: Signature Hardbox Photo (Instant Preload & Zero Delay) */}
+                            <Image
+                                src={GIFT_BOX_ASSETS.hardboxHero}
+                                alt="Signature Hardbox"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 480px"
+                                style={{
+                                    objectFit: "cover",
+                                    objectPosition: "center 48%",
+                                    borderRadius: "24px",
+                                    opacity: selectedBoxType === "hardbox" ? 1 : 0,
+                                    transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                                    pointerEvents: selectedBoxType === "hardbox" ? "auto" : "none",
                                 }}
                                 priority
                             />

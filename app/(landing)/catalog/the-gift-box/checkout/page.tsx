@@ -1873,11 +1873,26 @@ export default function GiftBoxCheckoutWizardPage() {
                                 }}
                             >
                                 <Image
-                                    key={selectedBoxType}
-                                    src={selectedBoxType === "kraft" ? GIFT_BOX_ASSETS.kraftBoxHero : GIFT_BOX_ASSETS.hardboxHero}
-                                    alt="The Gift Box"
+                                    src={GIFT_BOX_ASSETS.kraftBoxHero}
+                                    alt="Classic Kraft Box"
                                     fill
-                                    style={{ objectFit: "cover" }}
+                                    sizes="60px"
+                                    style={{
+                                        objectFit: "cover",
+                                        opacity: selectedBoxType === "kraft" ? 1 : 0,
+                                        transition: "opacity 0.25s ease",
+                                    }}
+                                />
+                                <Image
+                                    src={GIFT_BOX_ASSETS.hardboxHero}
+                                    alt="Signature Hardbox"
+                                    fill
+                                    sizes="60px"
+                                    style={{
+                                        objectFit: "cover",
+                                        opacity: selectedBoxType === "hardbox" ? 1 : 0,
+                                        transition: "opacity 0.25s ease",
+                                    }}
                                 />
                             </div>
                             <div>
