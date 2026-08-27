@@ -14,7 +14,7 @@ import { trackInitiateCheckout } from "@/lib/pixel";
 // ─────────────────────────────────────────────────────────────────────────────
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Summary Box
-    kraftBoxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",      // Foto Classic Kraft Box
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",      // Foto Classic Kraft Box
     hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
 };
 
