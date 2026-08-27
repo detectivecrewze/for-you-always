@@ -14,7 +14,7 @@ import { trackInitiateCheckout } from "@/lib/pixel";
 // ─────────────────────────────────────────────────────────────────────────────
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Summary Box
-    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",      // Foto Classic Kraft Box
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-43.jpg",        // Foto Classic Kraft Box
     hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
 };
 
@@ -709,8 +709,8 @@ export default function GiftBoxCheckoutWizardPage() {
                                             }}
                                         >
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
-                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816" }}>Classic Kraft</span>
-                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px" }}>Rp 75.000</span>
+                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>Classic Kraft</span>
+                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>Rp 75.000</span>
                                             </div>
                                             <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "3px" }}>Kotak kraft hemat (All-in)</div>
                                         </div>
@@ -727,8 +727,8 @@ export default function GiftBoxCheckoutWizardPage() {
                                             }}
                                         >
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
-                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816" }}>Signature Hardbox</span>
-                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px" }}>Signature</span>
+                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>Signature Hardbox</span>
+                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>Signature</span>
                                             </div>
                                             <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "3px" }}>Hardbox rigid pita satin</div>
                                         </div>

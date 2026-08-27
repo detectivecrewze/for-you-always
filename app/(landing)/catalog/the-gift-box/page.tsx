@@ -123,7 +123,7 @@ function ShowcaseGridCard({
 // ─────────────────────────────────────────────────────────────────────────────
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
-    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",      // Foto Classic Kraft Box
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-43.jpg",        // Foto Classic Kraft Box
     hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
 
     // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
@@ -437,26 +437,29 @@ export default function TheGiftBoxPage() {
                         {/* EDITORIAL PRICE & REALTIME STOCK */}
                         <div style={{
                             display: "flex",
-                            alignItems: "baseline",
+                            alignItems: "center",
                             justifyContent: "space-between",
+                            flexWrap: "wrap",
+                            gap: "8px 12px",
                             width: "100%",
                             maxWidth: "440px",
                             marginBottom: "16px",
                             paddingBottom: "14px",
                             borderBottom: "1px solid rgba(205, 171, 143, 0.25)"
                         }}>
-                            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                            <div style={{ display: "flex", alignItems: "baseline", gap: "8px", flexWrap: "wrap" }}>
                                 <span style={{
                                     fontFamily: "var(--font-display, Cormorant Garamond, serif)",
-                                    fontSize: "clamp(2rem, 3vw, 2.4rem)",
+                                    fontSize: "clamp(1.85rem, 3.8vw, 2.4rem)",
                                     fontWeight: 700,
                                     color: "#1d1816",
-                                    lineHeight: 1
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap"
                                 }}>
                                     Rp {displayPrice.toLocaleString("id-ID")}
                                 </span>
                                 {displayOldPrice && (
-                                    <span style={{ fontSize: "0.95rem", color: "#a89589", textDecoration: "line-through" }}>
+                                    <span style={{ fontSize: "0.92rem", color: "#a89589", textDecoration: "line-through", whiteSpace: "nowrap" }}>
                                         {displayOldPrice}
                                     </span>
                                 )}
@@ -464,11 +467,13 @@ export default function TheGiftBoxPage() {
                                     fontSize: "0.68rem",
                                     fontWeight: 700,
                                     textTransform: "uppercase",
-                                    letterSpacing: "0.08em",
+                                    letterSpacing: "0.06em",
                                     color: selectedBoxType === "kraft" ? "#2e7d32" : "#a67c52",
                                     backgroundColor: selectedBoxType === "kraft" ? "#e8f5e9" : "rgba(166,124,82,0.12)",
                                     padding: "3px 8px",
-                                    borderRadius: "999px"
+                                    borderRadius: "999px",
+                                    whiteSpace: "nowrap",
+                                    flexShrink: 0
                                 }}>
                                     {selectedBoxType === "kraft" ? "All-in Bundle" : "Signature"}
                                 </span>
@@ -480,6 +485,8 @@ export default function TheGiftBoxPage() {
                                 gap: "6px",
                                 fontSize: "0.76rem",
                                 fontWeight: 600,
+                                whiteSpace: "nowrap",
+                                flexShrink: 0,
                                 color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32"
                             }}>
                                 <span style={{
@@ -488,8 +495,9 @@ export default function TheGiftBoxPage() {
                                     borderRadius: "50%",
                                     backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
                                     display: "inline-block",
+                                    flexShrink: 0
                                 }} />
-                                <span>
+                                <span style={{ whiteSpace: "nowrap" }}>
                                     {stockData.stock === 0
                                         ? "Habis"
                                         : `Sisa ${stockData.stock} Box`}
@@ -511,7 +519,7 @@ export default function TheGiftBoxPage() {
                                     type="button"
                                     onClick={() => setSelectedBoxType("kraft")}
                                     style={{
-                                        padding: "10px 14px",
+                                        padding: "10px 8px",
                                         borderRadius: "11px",
                                         border: "none",
                                         backgroundColor: selectedBoxType === "kraft" ? "#ffffff" : "transparent",
@@ -522,13 +530,14 @@ export default function TheGiftBoxPage() {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        gap: "8px",
+                                        gap: "6px",
                                         fontWeight: selectedBoxType === "kraft" ? 700 : 500,
-                                        fontSize: "0.86rem",
+                                        fontSize: "clamp(0.78rem, 2.3vw, 0.86rem)",
+                                        minWidth: 0,
                                     }}
                                 >
-                                    <span>Classic Kraft</span>
-                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "1px 6px", borderRadius: "999px" }}>
+                                    <span style={{ whiteSpace: "nowrap" }}>Classic Kraft</span>
+                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 7px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
                                         75K
                                     </span>
                                 </button>
@@ -537,7 +546,7 @@ export default function TheGiftBoxPage() {
                                     type="button"
                                     onClick={() => setSelectedBoxType("hardbox")}
                                     style={{
-                                        padding: "10px 14px",
+                                        padding: "10px 8px",
                                         borderRadius: "11px",
                                         border: "none",
                                         backgroundColor: selectedBoxType === "hardbox" ? "#ffffff" : "transparent",
@@ -548,13 +557,14 @@ export default function TheGiftBoxPage() {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        gap: "8px",
+                                        gap: "6px",
                                         fontWeight: selectedBoxType === "hardbox" ? 700 : 500,
-                                        fontSize: "0.86rem",
+                                        fontSize: "clamp(0.78rem, 2.3vw, 0.86rem)",
+                                        minWidth: 0,
                                     }}
                                 >
-                                    <span>Signature Hardbox</span>
-                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "1px 6px", borderRadius: "999px" }}>
+                                    <span style={{ whiteSpace: "nowrap" }}>Signature Hardbox</span>
+                                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 7px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
                                         Rigid
                                     </span>
                                 </button>
