@@ -140,8 +140,9 @@ function ShowcaseGridCard({
 // ─────────────────────────────────────────────────────────────────────────────
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
-    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box
-    hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box (main)
+    kraftBoxHero2: "/assets/classic-kraftbox/classic-kraftbox2.webp",  // Foto Classic Kraft Box (secondary)
+    hardboxHero: "/the-gift-box/IMG_2214_hd.webp",                    // Foto Signature Hardbox (Rigid)
 
     // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
     kraftBoxCardFront: "/assets/classic-kraftbox/classic-kraftbox1.webp",  // Foto depan Classic Kraft Box
@@ -411,45 +412,83 @@ export default function TheGiftBoxPage() {
                             position: "relative",
                             width: "100%",
                             maxWidth: "480px",
-                            aspectRatio: "4 / 3",
-                            borderRadius: "24px",
-                            overflow: "hidden",
-                            border: "1px solid rgba(205,171,143,0.3)",
-                            boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
-                            background: "#2a211c"
+                            paddingBottom: "24px",
+                            paddingRight: "24px",
                         }}>
-                            {/* Layer 1: Classic Kraft Box Photo (Instant Preload & Zero Delay) */}
-                            <Image
-                                src={GIFT_BOX_ASSETS.kraftBoxHero}
-                                alt="Classic Kraft Box"
-                                fill
-                                sizes="(max-width: 768px) 100vw, 480px"
-                                style={{
-                                    objectFit: "cover",
-                                    objectPosition: "center 48%",
-                                    borderRadius: "24px",
-                                    opacity: selectedBoxType === "kraft" ? 1 : 0,
-                                    transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                                    pointerEvents: selectedBoxType === "kraft" ? "auto" : "none",
-                                }}
-                                priority
-                            />
-                            {/* Layer 2: Signature Hardbox Photo (Instant Preload & Zero Delay) */}
-                            <Image
-                                src={GIFT_BOX_ASSETS.hardboxHero}
-                                alt="Signature Hardbox"
-                                fill
-                                sizes="(max-width: 768px) 100vw, 480px"
-                                style={{
-                                    objectFit: "cover",
-                                    objectPosition: "center 48%",
-                                    borderRadius: "24px",
-                                    opacity: selectedBoxType === "hardbox" ? 1 : 0,
-                                    transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                                    pointerEvents: selectedBoxType === "hardbox" ? "auto" : "none",
-                                }}
-                                priority
-                            />
+                            {/* Main image frame */}
+                            <div style={{
+                                position: "relative",
+                                width: "100%",
+                                aspectRatio: "4 / 3",
+                                borderRadius: "24px",
+                                overflow: "hidden",
+                                border: "1px solid rgba(205,171,143,0.3)",
+                                boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
+                                background: "#2a211c"
+                            }}>
+                                {/* Layer 1: Classic Kraft Box Photo main */}
+                                <Image
+                                    src={GIFT_BOX_ASSETS.kraftBoxHero}
+                                    alt="Classic Kraft Box"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 480px"
+                                    style={{
+                                        objectFit: "cover",
+                                        objectPosition: "center 48%",
+                                        borderRadius: "24px",
+                                        opacity: selectedBoxType === "kraft" ? 1 : 0,
+                                        transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        pointerEvents: selectedBoxType === "kraft" ? "auto" : "none",
+                                    }}
+                                    priority
+                                />
+                                {/* Layer 2: Signature Hardbox Photo */}
+                                <Image
+                                    src={GIFT_BOX_ASSETS.hardboxHero}
+                                    alt="Signature Hardbox"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 480px"
+                                    style={{
+                                        objectFit: "cover",
+                                        objectPosition: "center 48%",
+                                        borderRadius: "24px",
+                                        opacity: selectedBoxType === "hardbox" ? 1 : 0,
+                                        transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        pointerEvents: selectedBoxType === "hardbox" ? "auto" : "none",
+                                    }}
+                                    priority
+                                />
+                            </div>
+
+                            {/* Secondary Kraft photo — floating card (only visible when Kraft selected) */}
+                            <div style={{
+                                position: "absolute",
+                                bottom: "-18px",
+                                right: "-18px",
+                                width: "42%",
+                                aspectRatio: "3 / 4",
+                                borderRadius: "16px",
+                                overflow: "hidden",
+                                border: "3px solid #faf7f2",
+                                boxShadow: "0 12px 32px -6px rgba(56,42,36,0.2)",
+                                background: "#2a211c",
+                                opacity: selectedBoxType === "kraft" ? 1 : 0,
+                                transform: selectedBoxType === "kraft" ? "scale(1) translateY(0)" : "scale(0.95) translateY(8px)",
+                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                pointerEvents: selectedBoxType === "kraft" ? "auto" : "none",
+                                zIndex: 2,
+                            }}>
+                                <Image
+                                    src={GIFT_BOX_ASSETS.kraftBoxHero2}
+                                    alt="Classic Kraft Box detail"
+                                    fill
+                                    sizes="200px"
+                                    style={{
+                                        objectFit: "cover",
+                                        objectPosition: "center",
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
 
