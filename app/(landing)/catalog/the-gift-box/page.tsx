@@ -140,7 +140,7 @@ function ShowcaseGridCard({
 // ─────────────────────────────────────────────────────────────────────────────
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
-    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-43.jpg",        // Foto Classic Kraft Box
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box
     hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
 
     // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
