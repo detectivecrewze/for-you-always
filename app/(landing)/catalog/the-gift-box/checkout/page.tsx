@@ -700,37 +700,61 @@ export default function GiftBoxCheckoutWizardPage() {
                                         <div
                                             onClick={() => setSelectedBoxType("kraft")}
                                             style={{
-                                                padding: "12px 14px",
+                                                padding: "12px 12px",
                                                 borderRadius: "14px",
                                                 border: selectedBoxType === "kraft" ? "2px solid #382a24" : "1px solid #e8ded6",
                                                 backgroundColor: selectedBoxType === "kraft" ? "rgba(56,42,36,0.04)" : "#ffffff",
                                                 cursor: "pointer",
                                                 transition: "all 0.2s ease",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "space-between",
+                                                minHeight: "76px",
                                             }}
                                         >
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
-                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>Classic Kraft</span>
-                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>Rp 75.000</span>
+                                            <div>
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4px 6px", marginBottom: "4px" }}>
+                                                    <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>
+                                                        Classic Kraft
+                                                    </span>
+                                                    <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#2e7d32", backgroundColor: "#e8f5e9", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
+                                                        Rp 75.000
+                                                    </span>
+                                                </div>
+                                                <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35 }}>
+                                                    Kotak kraft hemat (All-in)
+                                                </div>
                                             </div>
-                                            <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "3px" }}>Kotak kraft hemat (All-in)</div>
                                         </div>
 
                                         <div
                                             onClick={() => setSelectedBoxType("hardbox")}
                                             style={{
-                                                padding: "12px 14px",
+                                                padding: "12px 12px",
                                                 borderRadius: "14px",
                                                 border: selectedBoxType === "hardbox" ? "2px solid #382a24" : "1px solid #e8ded6",
                                                 backgroundColor: selectedBoxType === "hardbox" ? "rgba(56,42,36,0.04)" : "#ffffff",
                                                 cursor: "pointer",
                                                 transition: "all 0.2s ease",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "space-between",
+                                                minHeight: "76px",
                                             }}
                                         >
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4 }}>
-                                                <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>Signature Hardbox</span>
-                                                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>Signature</span>
+                                            <div>
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4px 6px", marginBottom: "4px" }}>
+                                                    <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap" }}>
+                                                        Signature Hardbox
+                                                    </span>
+                                                    <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#a67c52", backgroundColor: "rgba(166,124,82,0.12)", padding: "2px 6px", borderRadius: "999px", whiteSpace: "nowrap", flexShrink: 0 }}>
+                                                        Signature
+                                                    </span>
+                                                </div>
+                                                <div style={{ fontSize: "0.74rem", color: "#7a685e", lineHeight: 1.35 }}>
+                                                    Hardbox rigid pita satin
+                                                </div>
                                             </div>
-                                            <div style={{ fontSize: "0.75rem", color: "#7a685e", marginTop: "3px" }}>Hardbox rigid pita satin</div>
                                         </div>
                                     </div>
 
