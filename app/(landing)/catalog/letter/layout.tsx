@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Letter Edition - Surat Digital Aesthetic | For you, Always.",
   description: "Sampaikan pesan bermakna melalui surat digital bernuansa sinematik. Hadir dengan amplop interaktif, efek typewriter klasik, dan kustomisasi eksklusif.",
+  alternates: { canonical: "/catalog/letter" },
   openGraph: {
     title: "Letter Edition - Surat Digital Aesthetic",
     description: "Sampaikan pesan bermakna melalui surat digital bernuansa sinematik.",

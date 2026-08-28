@@ -8,7 +8,10 @@ const CF_API_KEY = process.env.CLOUDFLARE_D1_API_KEY;
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const productId = searchParams.get("product_id") || "unbox-the-memory";
+    const productId = searchParams.get("product_id") || "the-gift-box";
+
+    // Default stock per product type
+    const defaultStock = productId === "the-gift-box-kraft" ? 5 : 12;
 
     try {
         if (CF_ACCOUNT_ID && CF_D1_DATABASE_ID && CF_API_KEY) {
@@ -21,8 +24,12 @@ export async function GET(req: NextRequest) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        sql: "SELECT * FROM inventory WHERE product_id = ? OR product_id = 'unbox-the-memory' OR product_id = 'the-gift-box' LIMIT 1",
-                        params: [productId],
+                        sql: `SELECT * FROM inventory
+                              WHERE product_id = ?
+                                  OR (product_id IN ('the-gift-box', 'the-gift-box-hardbox', 'unbox-the-memory') AND ? IN ('the-gift-box', 'the-gift-box-hardbox', 'unbox-the-memory'))
+                              ORDER BY CASE WHEN product_id = ? THEN 0 ELSE 1 END, updated_at DESC
+                              LIMIT 1`,
+                        params: [productId, productId, productId],
                     }),
                 }
             );
@@ -43,7 +50,7 @@ export async function GET(req: NextRequest) {
                         },
                         {
                             headers: {
-                                "Cache-Control": "public, s-maxage=10, stale-while-revalidate=30",
+                                "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
                             },
                         }
                     );
@@ -55,8 +62,8 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({
             success: true,
             product_id: productId,
-            product_name: "The Gift Box",
-            stock: 12,
+            product_name: productId === "the-gift-box-kraft" ? "Classic Kraft Box" : "The Gift Box",
+            stock: defaultStock,
             in_stock: true,
             is_low_stock: false,
             low_stock_threshold: 3,
@@ -66,7 +73,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({
             success: true,
             product_id: productId,
-            stock: 12,
+            stock: defaultStock,
             in_stock: true,
             is_low_stock: false,
             low_stock_threshold: 3,

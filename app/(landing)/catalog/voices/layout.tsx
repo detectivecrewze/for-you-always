@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Voices Gift - Kado Suara & Foto | For you, Always.",
   description: "Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik. Ungkapkan perasaanmu secara langsung.",
+  alternates: { canonical: "/catalog/voices" },
   openGraph: {
     title: "Voices Gift - Kado Suara & Foto",
     description: "Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik.",

@@ -10,19 +10,20 @@ import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerMo
 // Konstanta statis di luar komponen — tidak dibuat ulang setiap render
 const CATALOG_ITEMS = [
     {
-        badgeText: "PHYSICAL GIFT",
+        badgeText: "Physical Gift",
         badgeColor: "#1d1816",
-        slotBadgeText: "Sisa 11 Box",
+        badgeVariant: "solid",
+        slotBadgeText: "Sisa 5 Box",
         titleColor: "#382a24",
-        imageSrc: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",
+        imageSrc: "/the-gift-box/IMG_2213_hd.webp",
         title: "The Gift Box",
-        oldPrice: "Rp 180.000",
-        newPrice: "Rp 139.000",
+        oldPrice: "Rp 110.000",
+        newPrice: "Rp 80.000",
         id: "the-gift-box",
-        numericPrice: 139000,
+        numericPrice: 80000,
         href: "/catalog/the-gift-box",
         occasions: ["Anniversary", "Birthday", "LDR"],
-        features: ["Luxury Physical Gift Box (Jabodetabek)", "Digital Memory Card (QR)", "Pilihan Memoria, Letter & Voices"]
+        features: ["Classic Kraft Box & Hardbox Tier", "Kartu Akses QR Custom", "Pilihan Memoria, Birthday, Letter & Voices"]
     },
     {
         badgeText: "#1 Exclusive",
@@ -193,7 +194,7 @@ export default function CatalogPage() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetch("/api/inventory?product_id=the-gift-box")
+        fetch("/api/inventory?product_id=the-gift-box-kraft")
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
@@ -293,7 +294,7 @@ export default function CatalogPage() {
                 }}>
                 {CATALOG_ITEMS.map((item, idx) => {
                     const slotText = (item.id === "the-gift-box" || item.id === "unbox-the-memory")
-                        ? (unboxStock !== null ? `Sisa ${unboxStock} Box` : (item.slotBadgeText || "Sisa 11 Box"))
+                        ? (unboxStock !== null ? `Sisa ${unboxStock} Box` : (item.slotBadgeText || "Sisa 5 Box"))
                         : item.slotBadgeText;
 
                     return (

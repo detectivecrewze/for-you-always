@@ -7,7 +7,6 @@ import Navbar from "../../../components/Navbar";
 
 import { trackViewContent } from "@/lib/pixel";
 import UnboxCheckoutModal from "../../../components/UnboxCheckoutModal";
-import DiscountPrice from "../../../components/DiscountPrice";
 
 // SHOPEE STORE LINK
 const SHOPEE_URL = "https://shopee.co.id"; // Link toko Shopee resmi Aldo saat siap
@@ -59,17 +58,34 @@ function ShowcaseGridCard({
         >
             <div style={{ height: "230px", overflow: "hidden", position: "relative", backgroundColor: "#1d1816" }}>
                 <Image
-                    src={isShowingSecond && hoverImg ? hoverImg : img}
+                    src={img}
                     alt={title}
                     fill
                     sizes="(max-width: 768px) 100vw, 360px"
                     style={{
                         objectFit: "cover",
-                        objectPosition: isShowingSecond && hoverImg ? "center 48%" : objectPosition,
+                        objectPosition: objectPosition,
                         transform: isShowingSecond ? "scale(1.04)" : "scale(1)",
-                        transition: "transform 0.5s ease, opacity 0.3s ease"
+                        opacity: isShowingSecond ? 0 : 1,
+                        transition: "transform 0.5s ease, opacity 0.3s ease",
                     }}
                 />
+                {hoverImg && (
+                    <Image
+                        src={hoverImg}
+                        alt={`${title} Detail`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 360px"
+                        style={{
+                            objectFit: "cover",
+                            objectPosition: "center 48%",
+                            transform: isShowingSecond ? "scale(1.04)" : "scale(1)",
+                            opacity: isShowingSecond ? 1 : 0,
+                            transition: "transform 0.5s ease, opacity 0.3s ease",
+                            pointerEvents: isShowingSecond ? "auto" : "none",
+                        }}
+                    />
+                )}
 
                 {/* NUMBER & DOT INDICATOR FOR MULTI-PHOTO CARDS (MOBILE & DESKTOP) */}
                 {hoverImg && (
@@ -118,27 +134,104 @@ function ShowcaseGridCard({
     );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 📸 CDN IMAGE ASSETS CONFIGURATION
+// Ganti URL di bawah ini dengan link CDN foto baru saat sudah siap diupload.
+// ─────────────────────────────────────────────────────────────────────────────
+export const GIFT_BOX_ASSETS = {
+    // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
+    kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box (Slide 1 - isi)
+    kraftBoxHero2: "/assets/classic-kraftbox/classic-kraftbox2.webp",  // Foto Classic Kraft Box (Slide 2 - luar)
+    hardboxHero: "/the-gift-box/IMG_2213_hd.webp",                            // Foto Signature Hardbox (Slide 1 - isi)
+    hardboxHero2: "/the-gift-box/IMG_2214_hd.webp",                    // Foto Signature Hardbox (Slide 2 - luar pita merah)
+
+    // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
+    kraftBoxCardFront: "/assets/classic-kraftbox/classic-kraftbox1.webp",  // Foto depan Classic Kraft Box
+    kraftBoxCardHover: "/assets/classic-kraftbox/classic-kraftbox2.webp",  // Foto detail Classic Kraft Box
+
+    // 3. Foto Kartu 3-Grid Showcase (Signature Hardbox)
+    luxuryBoxCardFront: "/the-gift-box/IMG_2214_hd.webp",                            // Foto depan (Slide 1) Signature Hardbox
+    luxuryBoxCardHover: "https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png", // Foto detail / dalam (Slide 2) Signature Hardbox
+};
+
 export default function TheGiftBoxPage() {
-    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "letter" | "voices">("letter");
+    const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "birthday" | "letter" | "voices">("letter");
+    const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-    const [stockData, setStockData] = useState<{
-        stock: number;
-        in_stock: boolean;
-        is_low_stock: boolean;
-    }>({ stock: 12, in_stock: true, is_low_stock: false });
+    const [heroSlide, setHeroSlide] = useState(0); // 0 = foto utama (isi box), 1 = foto kedua (luar/packaging)
+    const [stocks, setStocks] = useState<{
+        kraft: { stock: number; in_stock: boolean; is_low_stock: boolean };
+        hardbox: { stock: number; in_stock: boolean; is_low_stock: boolean };
+    }>({
+        kraft: { stock: 5, in_stock: true, is_low_stock: false },
+        hardbox: { stock: 12, in_stock: true, is_low_stock: false },
+    });
+
+    // Reset hero slide ke foto utama saat switch box type (tanpa auto-slide)
+    useEffect(() => {
+        setHeroSlide(0);
+    }, [selectedBoxType]);
+
+    const stockData = stocks[selectedBoxType];
+
+    // Pilihan Box Fisik
+    const BOX_TYPES = {
+        hardbox: {
+            id: "hardbox",
+            name: "Signature Hardbox",
+            tagline: "Hardbox premium rigid, finishing elegan & berkelas.",
+            basePrice: 0,
+            badge: "Signature",
+            badgeColor: "#a67c52",
+            imageSrc: GIFT_BOX_ASSETS.hardboxHero,
+        },
+        kraft: {
+            id: "kraft",
+            name: "Classic Kraft Box",
+            tagline: "Kotak kraft natural premium, kesan hangat & timeless.",
+            basePrice: 75000,
+            badge: "Lebih Hemat",
+            badgeColor: "#2e7d32",
+            imageSrc: GIFT_BOX_ASSETS.kraftBoxHero,
+        },
+    } as const;
 
     useEffect(() => {
         trackViewContent({ id: "the-gift-box", name: "The Gift Box" });
+    }, []);
+
+    useEffect(() => {
+        // Live sync Kraft stock
+        fetch("/api/inventory?product_id=the-gift-box-kraft")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && typeof data.stock === "number") {
+                    setStocks((prev) => ({
+                        ...prev,
+                        kraft: {
+                            stock: data.stock,
+                            in_stock: data.in_stock,
+                            is_low_stock: data.is_low_stock,
+                        },
+                    }));
+                }
+            })
+            .catch(() => {});
+
+        // Live sync Hardbox stock
         fetch("/api/inventory?product_id=the-gift-box")
             .then((res) => res.json())
             .then((data) => {
                 if (data && typeof data.stock === "number") {
-                    setStockData({
-                        stock: data.stock,
-                        in_stock: data.in_stock,
-                        is_low_stock: data.is_low_stock,
-                    });
+                    setStocks((prev) => ({
+                        ...prev,
+                        hardbox: {
+                            stock: data.stock,
+                            in_stock: data.in_stock,
+                            is_low_stock: data.is_low_stock,
+                        },
+                    }));
                 }
             })
             .catch(() => {});
@@ -146,7 +239,7 @@ export default function TheGiftBoxPage() {
 
     const tabContainerRef = useRef<HTMLDivElement>(null);
     const isFirstRender = useRef(true);
-    const experienceKeys: Array<"memoria" | "letter" | "voices"> = ["memoria", "letter", "voices"];
+    const experienceKeys: Array<"memoria" | "birthday" | "letter" | "voices"> = ["memoria", "birthday", "letter", "voices"];
 
     const handleTabChange = (key: keyof typeof digitalExperiences) => {
         if (key === selectedDigitalExperience) return;
@@ -187,11 +280,29 @@ export default function TheGiftBoxPage() {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#a67c52",
-            price: "Rp 159.000",
-            oldPrice: "Rp 200.000",
-            numericPrice: 159000,
+            kraftPrice: "Rp 90.000",
+            kraftOldPrice: "Rp 110.000",
+            kraftNumericPrice: 90000,
+            hardboxPrice: "Rp 150.000",
+            hardboxOldPrice: "Rp 200.000",
+            hardboxNumericPrice: 150000,
             previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
+        },
+        birthday: {
+            title: "Birthday Scrapbook",
+            subtitle: "Scrapbook Interaktif & Wish Inbox",
+            desc: "Rayakan momen ulang tahun spesial dengan scrapbook interaktif 4 ruangan, 15 galeri polaroid foto/video, 3 soundtrack musik latar, surat digital, dan wish inbox.",
+            badge: "Birthday",
+            color: "#bf7b19",
+            kraftPrice: "Rp 85.000",
+            kraftOldPrice: "Rp 105.000",
+            kraftNumericPrice: 85000,
+            hardboxPrice: "Rp 140.000",
+            hardboxOldPrice: "Rp 180.000",
+            hardboxNumericPrice: 140000,
+            previewUrl: "/catalog/birthday",
+            imageSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp"
         },
         letter: {
             title: "Letter Edition",
@@ -199,9 +310,12 @@ export default function TheGiftBoxPage() {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Best Seller",
             color: "#a67c52",
-            price: "Rp 149.000",
-            oldPrice: "Rp 180.000",
-            numericPrice: 149000,
+            kraftPrice: "Rp 80.000",
+            kraftOldPrice: "Rp 100.000",
+            kraftNumericPrice: 80000,
+            hardboxPrice: "Rp 130.000",
+            hardboxOldPrice: "Rp 180.000",
+            hardboxNumericPrice: 130000,
             previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
@@ -211,13 +325,26 @@ export default function TheGiftBoxPage() {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "",
             color: "#a67c52",
-            price: "Rp 139.000",
-            oldPrice: "Rp 180.000",
-            numericPrice: 139000,
+            kraftPrice: "Rp 80.000",
+            kraftOldPrice: "Rp 100.000",
+            kraftNumericPrice: 80000,
+            hardboxPrice: "Rp 130.000",
+            hardboxOldPrice: "Rp 180.000",
+            hardboxNumericPrice: 130000,
             previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
     };
+
+
+    const currentBox = BOX_TYPES[selectedBoxType];
+    const currentExp = digitalExperiences[selectedDigitalExperience];
+    const displayPrice = selectedBoxType === "kraft"
+        ? currentExp.kraftNumericPrice
+        : currentExp.hardboxNumericPrice;
+    const displayOldPrice = selectedBoxType === "kraft"
+        ? currentExp.kraftOldPrice
+        : currentExp.hardboxOldPrice;
 
     return (
         <div style={{ backgroundColor: "#faf7f2", color: "#382a24", minHeight: "100vh", fontFamily: "var(--font-sans, system-ui, sans-serif)", position: "relative", overflowX: "hidden" }}>
@@ -232,7 +359,7 @@ export default function TheGiftBoxPage() {
             </div>
 
             {/* ── HERO SECTION ── */}
-            <section style={{
+            <section className="gift-box-hero" style={{
                 position: "relative",
                 zIndex: 1,
                 paddingTop: "clamp(120px, 15vh, 150px)",
@@ -243,7 +370,7 @@ export default function TheGiftBoxPage() {
                 paddingRight: "24px"
             }}>
                 {/* MINIMALIST BREADCRUMB */}
-                <div style={{ marginBottom: "24px" }}>
+                <div className="gift-box-breadcrumb" style={{ marginBottom: "24px" }}>
                     <Link
                         href="/catalog"
                         style={{
@@ -271,7 +398,7 @@ export default function TheGiftBoxPage() {
                 </div>
 
                 {/* HERO 2-COLUMN LAYOUT: PHOTO ON LEFT, TEXT ON RIGHT */}
-                <div style={{
+                <div className="gift-box-hero-layout" style={{
                     display: "flex",
                     flexWrap: "wrap",
                     alignItems: "center",
@@ -292,45 +419,188 @@ export default function TheGiftBoxPage() {
                             position: "relative",
                             width: "100%",
                             maxWidth: "480px",
-                            aspectRatio: "4 / 3",
-                            borderRadius: "24px",
-                            overflow: "hidden",
-                            border: "1px solid rgba(205,171,143,0.3)",
-                            boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
-                            background: "#1d1816"
                         }}>
-                            <Image
-                                src="https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg"
-                                alt="The Gift Box Gift Box Hampers Showcase"
-                                fill
+                            {/* Main image frame — hover to swap (desktop), tap to cycle (mobile) */}
+                            <div
+                                className="gift-box-hero-image"
+                                role="button"
+                                tabIndex={0}
+                                aria-label="Ganti foto preview box"
                                 style={{
-                                    objectFit: "cover",
-                                    objectPosition: "center 48%",
+                                    position: "relative",
+                                    width: "100%",
+                                    aspectRatio: "4 / 3",
                                     borderRadius: "24px",
+                                    overflow: "hidden",
+                                    border: "1px solid rgba(205,171,143,0.3)",
+                                    boxShadow: "0 18px 45px -12px rgba(56,42,36,0.12)",
+                                    background: "#2a211c",
+                                    cursor: "pointer",
+                                    userSelect: "none",
+                                    WebkitTapHighlightColor: "transparent",
                                 }}
-                                priority
-                            />
+                                onMouseEnter={() => {
+                                    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+                                        setHeroSlide(1);
+                                    }
+                                }}
+                                onMouseLeave={() => {
+                                    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+                                        setHeroSlide(0);
+                                    }
+                                }}
+                                onClick={() => setHeroSlide(prev => (prev === 0 ? 1 : 0))}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        setHeroSlide(prev => (prev === 0 ? 1 : 0));
+                                    }
+                                }}
+                            >
+                                {selectedBoxType === "kraft" ? (
+                                    <>
+                                        {/* Classic Kraft Box — Foto Utama (Isi Hampers) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.kraftBoxHero}
+                                            alt="Classic Kraft Box"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center 48%",
+                                                opacity: heroSlide === 0 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                            priority
+                                        />
+                                        {/* Classic Kraft Box — Foto Kedua (Luar/Packaging) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.kraftBoxHero2}
+                                            alt="Classic Kraft Box detail"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center",
+                                                opacity: heroSlide === 1 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Signature Hardbox — Foto Utama (Isi Hampers) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.hardboxHero}
+                                            alt="Signature Hardbox"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center 48%",
+                                                opacity: heroSlide === 0 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                        />
+                                        {/* Signature Hardbox — Foto Kedua (Luar/Pita Merah) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.hardboxHero2}
+                                            alt="Signature Hardbox packaging"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center",
+                                                opacity: heroSlide === 1 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                        />
+                                    </>
+                                )}
+
+                                {/* Dot indicators — clickable buttons */}
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: 14,
+                                    left: "50%",
+                                    transform: "translateX(-50%)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 6,
+                                    zIndex: 5,
+                                    padding: "4px 8px",
+                                    borderRadius: 999,
+                                    background: "rgba(29, 24, 22, 0.45)",
+                                    backdropFilter: "blur(6px)",
+                                }}>
+                                    {[0, 1].map(i => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setHeroSlide(i);
+                                            }}
+                                            aria-label={`Lihat foto ${i + 1}`}
+                                            style={{
+                                                width: heroSlide === i ? 18 : 6,
+                                                height: 6,
+                                                borderRadius: 999,
+                                                backgroundColor: heroSlide === i ? "#ffffff" : "rgba(255,255,255,0.45)",
+                                                transition: "all 0.3s ease",
+                                                border: "none",
+                                                padding: 0,
+                                                cursor: "pointer",
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     {/* RIGHT COLUMN: EYEBROW, H1, DESC, PRICE & CTAS */}
                     <div style={{ flex: "1 1 440px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                         
-                        {/* EYEBROW */}
-                        <span style={{
-                            fontSize: "0.76rem",
-                            fontWeight: 700,
-                            letterSpacing: "0.22em",
-                            textTransform: "uppercase",
-                            color: "#a88365",
-                            display: "block",
-                            marginBottom: "12px"
-                        }}>
-                            THE GIFT BOX
-                        </span>
+                        {/* EYEBROW + JABODETABEK INLINE */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                            <span style={{
+                                fontSize: "0.76rem",
+                                fontWeight: 700,
+                                letterSpacing: "0.22em",
+                                textTransform: "uppercase",
+                                color: "#a88365",
+                            }}>
+                                THE GIFT BOX
+                            </span>
+                            <span style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                fontSize: "0.62rem",
+                                fontWeight: 600,
+                                letterSpacing: "0.06em",
+                                textTransform: "uppercase",
+                                color: "#8a7060",
+                                backgroundColor: "rgba(166,124,82,0.07)",
+                                border: "1px solid rgba(166,124,82,0.18)",
+                                padding: "2px 8px",
+                                borderRadius: "999px",
+                            }}>
+                                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Jabodetabek
+                            </span>
+                        </div>
 
                         {/* H1 HEADLINE */}
-                        <h1 style={{
+                        <h1 className="gift-box-hero-title" style={{
                             fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
                             fontSize: "clamp(2.4rem, 4.4vw, 3.8rem)",
                             fontWeight: 400,
@@ -343,13 +613,12 @@ export default function TheGiftBoxPage() {
                             Made To Be<br />
                             <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Remembered.</span>
                         </h1>
-
                         {/* DESCRIPTION PARAGRAPH */}
                         <p style={{
                             fontSize: "clamp(0.92rem, 1.5vw, 1.02rem)",
                             color: "#6e5c53",
                             lineHeight: 1.65,
-                            marginBottom: "24px",
+                            marginBottom: "20px",
                             fontWeight: 400,
                             maxWidth: "460px",
                             textAlign: "left"
@@ -357,105 +626,199 @@ export default function TheGiftBoxPage() {
                             Gift box fisik dengan kejutan digital personal, dibuat untuk menyampaikan sesuatu yang sulit diucapkan langsung.
                         </p>
 
-                        {/* UNIFIED LUXURY PRICE & LIVE STOCK BAR */}
+                        {/* EDITORIAL PRICE & REALTIME STOCK */}
                         <div style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "12px",
-                            padding: "8px 16px",
-                            borderRadius: "999px",
-                            backgroundColor: "#ffffff",
-                            border: "1px solid rgba(205, 171, 143, 0.35)",
-                            boxShadow: "0 2px 10px rgba(56, 42, 36, 0.04)",
-                            marginBottom: "28px",
-                            flexWrap: "wrap",
+                            width: "100%",
+                            maxWidth: "440px",
+                            marginBottom: "24px",
                         }}>
-                            <DiscountPrice
-                                oldPrice="Rp 180.000"
-                                newPrice="Rp 139.000"
-                                size="md"
-                                layout="inline"
-                            />
-                            
-                            <span style={{ color: "rgba(205,171,143,0.5)", fontSize: "0.85rem" }}>|</span>
-
-                            <div style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "6px",
-                                fontSize: "0.78rem",
-                                fontWeight: 600,
-                                color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#6e5c53"
-                            }}>
+                            {/* Row 1: Main price */}
+                            <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "10px" }}>
                                 <span style={{
-                                    width: 6,
-                                    height: 6,
-                                    borderRadius: "50%",
-                                    backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                    fontFamily: "var(--font-display, Cormorant Garamond, serif)",
+                                    fontSize: "clamp(2.2rem, 4.5vw, 2.8rem)",
+                                    fontWeight: 700,
+                                    color: "#1d1816",
+                                    lineHeight: 1,
+                                    letterSpacing: "-0.02em",
+                                }}>
+                                    Rp {displayPrice.toLocaleString("id-ID")}
+                                </span>
+                                {displayOldPrice && (
+                                    <span style={{
+                                        fontSize: "1rem",
+                                        color: "#b0998c",
+                                        textDecoration: "line-through",
+                                        fontFamily: "var(--font-sans)",
+                                        fontWeight: 400,
+                                    }}>
+                                        {displayOldPrice}
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Row 2: Meta info — badge + stock */}
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                <span style={{
+                                    fontSize: "0.65rem",
+                                    fontWeight: 700,
+                                    textTransform: "uppercase",
+                                    letterSpacing: "0.08em",
+                                    color: selectedBoxType === "kraft" ? "#2e7d32" : "#7a5c38",
+                                    backgroundColor: selectedBoxType === "kraft" ? "#edf7ee" : "rgba(166,124,82,0.1)",
+                                    padding: "4px 10px",
+                                    borderRadius: "999px",
+                                    border: selectedBoxType === "kraft" ? "1px solid rgba(46,125,50,0.2)" : "1px solid rgba(166,124,82,0.2)",
+                                }}>
+                                    {selectedBoxType === "kraft" ? "All-in Bundle" : "Signature"}
+                                </span>
+
+                                <span style={{
+                                    width: 1,
+                                    height: 14,
+                                    backgroundColor: "rgba(166,124,82,0.25)",
                                     display: "inline-block",
+                                    flexShrink: 0,
                                 }} />
-                                <span>
-                                    {stockData.stock === 0
-                                        ? "Slot Habis"
-                                        : stockData.is_low_stock
-                                        ? `Sisa ${stockData.stock} Box Saja`
-                                        : `Tersedia ${stockData.stock} Box`}
+
+                                <span style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                    fontSize: "0.72rem",
+                                    fontWeight: 600,
+                                    color: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                }}>
+                                    <span style={{
+                                        width: 6,
+                                        height: 6,
+                                        borderRadius: "50%",
+                                        backgroundColor: stockData.stock === 0 ? "#c62828" : stockData.is_low_stock ? "#b26a00" : "#2e7d32",
+                                        display: "inline-block",
+                                        flexShrink: 0,
+                                    }} />
+                                    {stockData.stock === 0 ? "Stok Habis" : `Sisa ${stockData.stock} Box`}
+                                </span>
+                            </div>
+
+                            {/* Subtle divider */}
+                            <div style={{
+                                marginTop: "16px",
+                                height: 1,
+                                backgroundColor: "rgba(205, 171, 143, 0.2)",
+                            }} />
+                        </div>
+
+                        {/* MINIMALIST SEGMENTED BOX SELECTOR */}
+                        <div style={{ marginBottom: "20px", width: "100%", maxWidth: "440px" }}>
+                            <div style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr",
+                                padding: "4px",
+                                borderRadius: "14px",
+                                backgroundColor: "rgba(205, 171, 143, 0.16)",
+                                gap: "4px"
+                            }}>
+                                <button
+                                    type="button"
+                                    aria-pressed={selectedBoxType === "kraft"}
+                                    onClick={() => {
+                                        setHeroSlide(0);
+                                        setSelectedBoxType("kraft");
+                                    }}
+                                    style={{
+                                        padding: "10px 8px",
+                                        borderRadius: "11px",
+                                        border: "none",
+                                        backgroundColor: selectedBoxType === "kraft" ? "#ffffff" : "transparent",
+                                        color: "#1d1816",
+                                        cursor: "pointer",
+                                        boxShadow: selectedBoxType === "kraft" ? "0 2px 8px rgba(29, 24, 22, 0.08)" : "none",
+                                        transition: "all 0.2s ease",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "6px",
+                                        fontWeight: selectedBoxType === "kraft" ? 700 : 500,
+                                        fontSize: "clamp(0.78rem, 2.3vw, 0.86rem)",
+                                        minWidth: 0,
+                                    }}
+                                >
+                                    <span style={{ whiteSpace: "nowrap" }}>Classic Kraft</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    aria-pressed={selectedBoxType === "hardbox"}
+                                    onClick={() => {
+                                        setHeroSlide(0);
+                                        setSelectedBoxType("hardbox");
+                                    }}
+                                    style={{
+                                        padding: "10px 8px",
+                                        borderRadius: "11px",
+                                        border: "none",
+                                        backgroundColor: selectedBoxType === "hardbox" ? "#382a24" : "transparent",
+                                        color: selectedBoxType === "hardbox" ? "#faf7f2" : "#1d1816",
+                                        cursor: "pointer",
+                                        boxShadow: selectedBoxType === "hardbox" ? "0 4px 12px rgba(56,42,36,0.25)" : "none",
+                                        transition: "all 0.2s ease",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "6px",
+                                        fontWeight: selectedBoxType === "hardbox" ? 700 : 500,
+                                        fontSize: "clamp(0.78rem, 2.3vw, 0.86rem)",
+                                        minWidth: 0,
+                                    }}
+                                >
+                                    <span style={{ whiteSpace: "nowrap" }}>Signature Hardbox</span>
+                                </button>
+                            </div>
+
+                            {/* Box description */}
+                            <div style={{ marginTop: "8px" }}>
+                                <span style={{ fontSize: "0.75rem", color: "#8a7569" }}>
+                                    {selectedBoxType === "kraft"
+                                        ? "Kotak kraft natural aesthetic (All-in sudah termasuk box + kado digital)."
+                                        : "Hardbox rigid premium eksklusif dengan balutan pita satin mewah."}
                                 </span>
                             </div>
                         </div>
 
-                        {/* JABODETABEK DELIVERY BADGE (NO EMOJIS, CLEAN LUXURY DESIGN) */}
-                        <div style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            padding: "6px 14px",
-                            borderRadius: "999px",
-                            backgroundColor: "rgba(166, 124, 82, 0.08)",
-                            border: "1px solid rgba(166, 124, 82, 0.22)",
-                            fontSize: "0.76rem",
-                            fontWeight: 600,
-                            color: "#6e5c53",
-                            marginBottom: "20px"
-                        }}>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a67c52" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <span>Khusus Pengiriman Wilayah Jabodetabek</span>
-                        </div>
-
                         {/* CTA ACTION CONTAINER */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "340px", marginBottom: "26px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%", maxWidth: "440px", marginBottom: "20px" }}>
+
+                            {/* Primary Order Button */}
                             {stockData.stock > 0 ? (
                                 <Link
-                                    href="/catalog/the-gift-box/checkout"
+                                    href={`/catalog/the-gift-box/checkout?boxType=${selectedBoxType}&digital=${selectedDigitalExperience}`}
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
                                         gap: "10px",
-                                        backgroundColor: "#382a24",
+                                        backgroundColor: "#1d1816",
                                         color: "#faf7f2",
                                         fontWeight: 700,
-                                        fontSize: "0.92rem",
-                                        padding: "13px 24px",
-                                        borderRadius: "12px",
+                                        fontSize: "0.94rem",
+                                        padding: "15px 24px",
+                                        borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 8px 20px -6px rgba(56,42,36,0.22)",
+                                        boxShadow: "0 8px 24px -6px rgba(29,24,22,0.25)",
                                         transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
                                     onMouseOver={(e) => {
                                         e.currentTarget.style.transform = "translateY(-2px)";
-                                        e.currentTarget.style.backgroundColor = "#523e35";
+                                        e.currentTarget.style.backgroundColor = "#382a24";
                                     }}
                                     onMouseOut={(e) => {
                                         e.currentTarget.style.transform = "translateY(0)";
-                                        e.currentTarget.style.backgroundColor = "#382a24";
+                                        e.currentTarget.style.backgroundColor = "#1d1816";
                                     }}
                                 >
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                         <line x1="3" y1="6" x2="21" y2="6"></line>
                                         <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -476,64 +839,75 @@ export default function TheGiftBoxPage() {
                                         color: "#faf7f2",
                                         fontWeight: 700,
                                         fontSize: "0.92rem",
-                                        padding: "13px 24px",
-                                        borderRadius: "12px",
+                                        padding: "14px 24px",
+                                        borderRadius: "14px",
                                         textDecoration: "none",
-                                        boxShadow: "0 8px 20px -6px rgba(56,42,36,0.22)",
-                                        transition: "all 0.25s ease",
                                         textAlign: "center"
                                     }}
                                 >
-                                    <span>Pre-Order Batch Berikutnya (WA) ↗</span>
+                                    <span>Pre-Order Batch Berikutnya (Hubungi Admin)</span>
                                 </a>
                             )}
 
-                            <Link
-                                href="/catalog"
+                            {/* Secondary: Konsultasi WA — full-width button */}
+                            <a
+                                href="https://wa.me/6281936109076?text=Halo%20Admin%20For%20You%20Always,%20saya%20ingin%20konsultasi%20mengenai%20The%20Gift%20Box%20(Kraft%20/%20Hardbox)."
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 style={{
-                                    display: "inline-flex",
+                                    display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    gap: "6px",
-                                    color: "#8a7569",
-                                    fontSize: "0.8rem",
-                                    fontWeight: 500,
+                                    gap: "9px",
+                                    backgroundColor: "transparent",
+                                    border: "1.5px solid #25D366",
+                                    color: "#1d1816",
+                                    fontWeight: 700,
+                                    fontSize: "0.94rem",
+                                    padding: "14px 24px",
+                                    borderRadius: "14px",
                                     textDecoration: "none",
-                                    padding: "4px 8px",
-                                    transition: "color 0.2s ease",
-                                    textAlign: "center"
+                                    transition: "all 0.25s ease",
+                                    textAlign: "center",
                                 }}
                                 onMouseOver={(e) => {
-                                    e.currentTarget.style.color = "#382a24";
+                                    e.currentTarget.style.backgroundColor = "rgba(37,211,102,0.07)";
+                                    e.currentTarget.style.transform = "translateY(-2px)";
                                 }}
                                 onMouseOut={(e) => {
-                                    e.currentTarget.style.color = "#8a7569";
+                                    e.currentTarget.style.backgroundColor = "transparent";
+                                    e.currentTarget.style.transform = "translateY(0)";
                                 }}
                             >
-                                <span>Prefer a digital gift? →</span>
-                            </Link>
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                </svg>
+                                <span>Konsultasi WA</span>
+                            </a>
                         </div>
 
-                        {/* REASSURANCE BULLETS ROW (SUBTLE & CLEAN) */}
-                        <div style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            gap: "8px 14px",
-                            paddingTop: "18px",
-                            borderTop: "1px solid rgba(205,171,143,0.18)",
-                            width: "100%",
-                            maxWidth: "460px",
-                            fontSize: "0.78rem",
-                            color: "#8a7569",
-                            fontWeight: 500
-                        }}>
-                            <span>Box Hampers Eksklusif</span>
-                            <span style={{ opacity: 0.35 }}>·</span>
-                            <span>Kartu QR Code Custom</span>
-                            <span style={{ opacity: 0.35 }}>·</span>
-                            <span>Garansi Pengiriman Aman</span>
-                        </div>
+                        <Link
+                            href="/catalog"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                color: "#8a7569",
+                                fontSize: "0.78rem",
+                                fontWeight: 500,
+                                textDecoration: "none",
+                                padding: "2px 0",
+                                transition: "color 0.2s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.color = "#382a24";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.color = "#8a7569";
+                            }}
+                        >
+                            <span>Mencari kado digital saja? Jelajahi Katalog →</span>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -575,10 +949,14 @@ export default function TheGiftBoxPage() {
                     gap: "24px"
                 }}>
                     <ShowcaseGridCard
-                        img="/the-gift-box/IMG_2214_hd.webp"
-                        hoverImg="https://cdn.for-you-always.my.id/1786961453803-dxyo1x.png"
-                        title="Luxury Gift Box"
-                        desc="Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
+                        img={selectedBoxType === "kraft" ? GIFT_BOX_ASSETS.kraftBoxCardFront : GIFT_BOX_ASSETS.luxuryBoxCardFront}
+                        hoverImg={selectedBoxType === "kraft" ? GIFT_BOX_ASSETS.kraftBoxCardHover : GIFT_BOX_ASSETS.luxuryBoxCardHover}
+                        title={selectedBoxType === "kraft" ? "Classic Kraft Box" : "Signature Hardbox"}
+                        desc={
+                            selectedBoxType === "kraft"
+                                ? "Gift box dengan kemasan kraft yang simpel dan hangat, berisi rangkaian kado pilihan dan kejutan digital personal untuk momen spesialmu."
+                                : "Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
+                        }
                     />
                     <ShowcaseGridCard
                         img="/the-gift-box/IMG_2217_hd.webp"
@@ -587,8 +965,8 @@ export default function TheGiftBoxPage() {
                     />
                     <ShowcaseGridCard
                         img="/the-gift-box/IMG_2215_hd.webp"
-                        title="Personal QR Experience"
-                        desc="Kartu akses ber-QR eksklusif yang menjadi gerbang pembuka menuju pengalaman kado digital interaktif — penuh dengan musik, foto, dan pesan yang dibuat khusus untuknya."
+                        title="Kartu Akses QR Custom"
+                        desc="Kartu Akses QR Custom eksklusif yang menjadi gerbang menuju pengalaman kado digital interaktif, lengkap dengan musik, foto, dan pesan yang dibuat khusus untuknya."
                         objectPosition="center center"
                     />
                 </div>
@@ -618,7 +996,7 @@ export default function TheGiftBoxPage() {
                             {
                                 num: "01",
                                 title: "Pilih & Personalisasi",
-                                desc: "Pilih format kado digital favoritmu (Letter, Voices, atau Memoria) dan lengkapi alamat pengiriman saat checkout.",
+                                desc: "Pilih format kado digital favoritmu (Letter, Voices, Birthday, atau Memoria) dan lengkapi alamat pengiriman saat checkout.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -630,7 +1008,7 @@ export default function TheGiftBoxPage() {
                             {
                                 num: "02",
                                 title: "Kami Rangkai & Kirim",
-                                desc: "Kami merangkai gift box eksklusif, mencetak Kartu Akses QR kado digitalmu, dan mengirimkannya dengan aman.",
+                                desc: "Kami merangkai gift box eksklusif, mencetak Kartu Akses QR Custom, dan mengirimkannya dengan aman.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -641,8 +1019,8 @@ export default function TheGiftBoxPage() {
                             },
                             {
                                 num: "03",
-                                title: "Scan QR & Buka Kado",
-                                desc: "Penerima cukup scan kartu QR dengan kamera HP. Halaman kado digital langsung terbuka dengan musik dan animasi.",
+                                title: "Pindai & Buka Kado",
+                                desc: "Penerima cukup memindai Kartu Akses QR Custom dengan kamera HP. Halaman kado digital langsung terbuka dengan musik dan animasi.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -693,10 +1071,10 @@ export default function TheGiftBoxPage() {
                         color: "#382a24",
                         marginTop: "8px"
                     }}>
-                        Apa Isi QR Code Di Dalam <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Kotak?</span>
+                        Apa Isi Kartu Akses QR <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Custom?</span>
                     </h2>
                     <p style={{ color: "#6e5c53", maxWidth: "580px", margin: "12px auto 0", fontSize: "0.98rem", lineHeight: 1.6 }}>
-                        Pilih salah satu edisi digital favorit untuk disematkan secara eksklusif ke dalam Kartu QR Code hampers fisikmu.
+                        Pilih salah satu edisi digital favorit untuk dihubungkan secara eksklusif melalui Kartu Akses QR Custom di dalam gift box.
                     </p>
                 </div>
 
@@ -781,7 +1159,9 @@ export default function TheGiftBoxPage() {
                                 >
                                     <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
                                         <span>{exp.title}</span>
-                                        <span style={{ fontSize: "0.75rem", opacity: isSelected ? 1 : 0.75, fontWeight: 700 }}>• {exp.price}</span>
+                                        <span style={{ fontSize: "0.75rem", opacity: isSelected ? 1 : 0.75, fontWeight: 700 }}>
+                                            • {selectedBoxType === "kraft" ? exp.kraftPrice : exp.hardboxPrice}
+                                        </span>
                                     </span>
                                 </button>
                             );
@@ -856,7 +1236,7 @@ export default function TheGiftBoxPage() {
                                         padding: "5px 12px",
                                         borderRadius: "999px",
                                     }}>
-                                        Paket Box: {currentExp.price}
+                                        Paket Box: {selectedBoxType === "kraft" ? currentExp.kraftPrice : currentExp.hardboxPrice}
                                     </span>
                                 </div>
                                 <h3 style={{
@@ -914,7 +1294,6 @@ export default function TheGiftBoxPage() {
                                         alt={`Preview ${currentExp.title}`}
                                         width={480}
                                         height={320}
-                                        priority
                                         style={{
                                             position: "absolute",
                                             inset: 0,
@@ -947,7 +1326,7 @@ export default function TheGiftBoxPage() {
                                             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                                             <line x1="12" y1="18" x2="12.01" y2="18"></line>
                                         </svg>
-                                        <span>QR Scan Result Preview</span>
+                                        <span>Preview Kado Digital</span>
                                     </div>
                                 </div>
 
@@ -956,10 +1335,10 @@ export default function TheGiftBoxPage() {
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                         </svg>
-                                        <span>Tampilan Saat QR Discanned</span>
+                                        <span>Tampilan Setelah Dipindai</span>
                                     </p>
                                     <p style={{ fontSize: "0.82rem", color: "rgba(250,247,242,0.65)", marginTop: "4px", lineHeight: 1.5, margin: "4px 0 0 0" }}>
-                                        Saat QR pada kartu di-scan, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima.
+                                        Saat Kartu Akses QR Custom dipindai, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima.
                                     </p>
                                 </div>
                             </div>
@@ -997,7 +1376,7 @@ export default function TheGiftBoxPage() {
                             Pertanyaan Yang Sering <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Diajukan</span>
                         </h2>
                         <p style={{ color: "#6e5c53", maxWidth: "540px", margin: "12px auto 0", fontSize: "0.95rem", lineHeight: 1.6 }}>
-                            Temukan jawaban lengkap mengenai pemesanan hampers fisik, kartu QR emas, hingga akses kado digital.
+                            Temukan jawaban lengkap mengenai pemesanan gift box fisik, Kartu Akses QR Custom, hingga akses kado digital.
                         </p>
                     </div>
                 </SpringAnimatedSection>
@@ -1013,8 +1392,8 @@ export default function TheGiftBoxPage() {
                             a: "Setelah pemesanan terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan, dan memilih lagu favorit dengan sangat mudah."
                         },
                         {
-                            q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka QR Code?",
-                            a: "Tidak perlu aplikasi apa pun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR. Halaman kado digital sinematik akan langsung terbuka otomatis di browser HP."
+                            q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka Kartu Akses QR Custom?",
+                            a: "Tidak perlu aplikasi apa pun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR Custom. Halaman kado digital sinematik akan langsung terbuka otomatis di browser HP."
                         },
                         {
                             q: "Bisakah gift box dikirimkan langsung ke alamat penerima (sebagai kejutan)?",
@@ -1132,16 +1511,16 @@ export default function TheGiftBoxPage() {
                         whiteSpace: "nowrap",
                     }}>
                         <span style={{ fontFamily: "var(--font-display, Cormorant Garamond, serif)", fontSize: "clamp(1.8rem, 3.5vw, 2.2rem)", fontWeight: 600, color: "#ffffff", whiteSpace: "nowrap" }}>
-                            Mulai Rp 139.000
+                            Mulai Rp 80.000
                         </span>
                         <span style={{ fontSize: "0.95rem", color: "rgba(250,247,242,0.45)", textDecoration: "line-through", whiteSpace: "nowrap" }}>
-                            Rp 180.000
+                            Rp 110.000
                         </span>
                     </div>
                     <br />
 
                     <Link
-                        href="/catalog/the-gift-box/checkout"
+                        href={`/catalog/the-gift-box/checkout?boxType=${selectedBoxType}&digital=${selectedDigitalExperience}`}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -1183,48 +1562,6 @@ export default function TheGiftBoxPage() {
                 />
             )}
 
-            {/* Floating WhatsApp with label (Bottom Right) */}
-            <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20The%20Gift%20Box." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
-                onMouseEnter={e => { 
-                    const btn = e.currentTarget.children[1] as HTMLElement;
-                    if (btn) { btn.style.background = "#cdab8f"; btn.style.transform = "scale(1.05)"; }
-                    const bubble = e.currentTarget.children[0] as HTMLElement;
-                    if (bubble) { bubble.style.transform = "translateY(-2px)"; bubble.style.boxShadow = "0 12px 28px -4px rgba(29, 24, 22, 0.15)"; }
-                }}
-                onMouseLeave={e => { 
-                    const btn = e.currentTarget.children[1] as HTMLElement;
-                    if (btn) { btn.style.background = "#1d1816"; btn.style.transform = "scale(1)"; }
-                    const bubble = e.currentTarget.children[0] as HTMLElement;
-                    if (bubble) { bubble.style.transform = "translateY(0)"; bubble.style.boxShadow = "0 8px 24px -4px rgba(29, 24, 22, 0.12)"; }
-                }}
-            >
-                {/* Text Bubble */}
-                <div className="hidden md:flex items-center gap-[6px]" style={{
-                    background: "rgba(255, 255, 255, 0.95)",
-                    backdropFilter: "blur(10px)",
-                    padding: "10px 20px",
-                    borderRadius: "999px",
-                    boxShadow: "0 8px 24px -4px rgba(29, 24, 22, 0.12)",
-                    border: "1px solid rgba(205, 171, 143, 0.2)",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}>
-                    <span style={{ fontSize: 12.5, fontWeight: 500, color: "#6e5c53", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
-                        Butuh bantuan? <strong style={{ color: "#382a24", fontWeight: 700 }}>Chat Admin</strong>
-                    </span>
-                </div>
-
-                {/* WA Icon */}
-                <div
-                    style={{ width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", flexShrink: 0 }}
-                >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf7f2">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
-                    </svg>
-                </div>
-            </a>
-
             {/* CSS KEYFRAME ANIMATIONS */}
             <style>{`
                 @keyframes ribbon-beam-sweep {
@@ -1241,6 +1578,31 @@ export default function TheGiftBoxPage() {
 
                 .no-scrollbar::-webkit-scrollbar {
                     display: none;
+                }
+
+                @media (max-width: 768px) {
+                    .gift-box-hero {
+                        padding-top: 92px !important;
+                        padding-bottom: 48px !important;
+                    }
+
+                    .gift-box-breadcrumb {
+                        margin-bottom: 16px !important;
+                    }
+
+                    .gift-box-hero-layout {
+                        gap: 20px !important;
+                    }
+
+                    .gift-box-hero-image {
+                        aspect-ratio: 16 / 9 !important;
+                        border-radius: 20px !important;
+                    }
+
+                    .gift-box-hero-title {
+                        font-size: 2.25rem !important;
+                        margin-bottom: 12px !important;
+                    }
                 }
             `}</style>
         </div>

@@ -49,25 +49,25 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
                 "1 Batang Coklat Cadbury Dairy Milk 62g",
                 "1 Kotak Snack Pocky",
                 "Buket Bunga Kering Asli (Baby's Breath & Lavender)",
-                "Kartu Akses QR Cetak Custom 'For [Nama Pasangan]'"
+                "Kartu Akses QR Custom dengan nama penerima"
             ],
             packagingDetails: "Bantalan shredded paper pelindung, kardus pengiriman tebal, stiker fragile, dan bubble wrap ganda.",
-            shippingEstimate: "Jabodetabek 1-3 hari kerja, luar Jawa 3-5 hari kerja. Bisa dikirim langsung ke alamat pasangan."
+            shippingEstimate: "Khusus wilayah Jabodetabek dengan estimasi tiba 1-2 hari kerja atau opsi pengiriman ekspres. Bisa dikirim langsung ke alamat pasangan."
         },
         digitalExperience: {
-            interactiveMechanism: "Penerima kado membuka boks fisik, lalu memindai (scan) kartu QR menggunakan kamera HP untuk membuka website kenangan interaktif personal.",
-            themesAvailable: ["Memoria Wrapped Recap", "Letter Edition Wax Envelope", "Voices Audio Player"]
+            interactiveMechanism: "Penerima kado membuka boks fisik, lalu memindai Kartu Akses QR Custom menggunakan kamera HP untuk membuka website kenangan interaktif personal.",
+            themesAvailable: ["Memoria Wrapped Recap", "Birthday Scrapbook", "Letter Edition Wax Envelope", "Voices Audio Player"]
         },
         targetOccasions: ["Anniversary", "Ulang Tahun Pacar", "LDR (Kado Kejutan Jarak Jauh)", "Hari Jadian", "Girlfriend Day"],
         emotionalHooks: [
-            "Sensasi unboxing kado fisik yang membuka website kenangan digital saat di-scan QR-nya.",
+            "Sensasi unboxing kado fisik yang membuka website kenangan digital saat Kartu Akses QR Custom dipindai.",
             "Kado yang tidak akan pernah layu atau basi karena link kenangannya aktif selamanya.",
             "Solusi sempurna untuk pasangan LDR yang ingin mengirim pelukan fisik dan suara secara bersamaan."
         ],
         faqs: [
             {
                 q: "Bagaimana cara kerja The Gift Box?",
-                a: "Pembeli memesan The Gift Box, lalu mengisi foto, pesan, dan suara di Studio Editor kami. Kami merakit boks fisiknya, mencetak Kartu Akses QR kado digitalnya, dan mengirimkannya ke alamat tujuan."
+                a: "Pembeli memesan The Gift Box, lalu mengisi foto, pesan, dan suara di Studio Editor kami. Kami merakit boks fisiknya, mencetak Kartu Akses QR Custom, dan mengirimkannya ke alamat tujuan."
             },
             {
                 q: "Apakah link kado digitalnya punya masa kedaluwarsa?",

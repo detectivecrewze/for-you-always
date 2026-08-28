@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Memoria - Kado Digital Premium (Done For You) | For you, Always.",
   description: "Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda.",
+  alternates: { canonical: "/catalog/memoria" },
   openGraph: {
     title: "Memoria - Kado Digital Premium",
     description: "Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda.",

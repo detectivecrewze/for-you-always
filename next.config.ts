@@ -27,14 +27,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Cache homepage di Vercel CDN edge selama 60 detik
-        // stale-while-revalidate: kirim cache lama sambil update di background
-        source: "/",
+        source: "/:path*",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "public, s-maxage=60, stale-while-revalidate=300",
-          },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
         ],
       },
     ];

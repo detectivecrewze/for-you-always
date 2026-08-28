@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
@@ -32,6 +32,29 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     const duration = singleSetWidth / speed;
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [navigatingKey, setNavigatingKey] = useState<string | null>(null);
+    const [isInViewport, setIsInViewport] = useState(false);
+    const [isPageVisible, setIsPageVisible] = useState(true);
+    const carouselRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsInViewport(entry.isIntersecting),
+            { threshold: 0.05 }
+        );
+        const handleVisibilityChange = () => setIsPageVisible(!document.hidden);
+
+        observer.observe(carousel);
+        handleVisibilityChange();
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            observer.disconnect();
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, []);
 
     const handlePesanClick = (card: LoopCard) => {
         if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
@@ -81,9 +104,9 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     src={card.imageSrc}
                     alt={card.title}
                     fill
-                    unoptimized={true}
                     draggable={false}
                     loading="lazy"
+                    sizes="(max-width: 768px) calc(100vw - 54px), 360px"
                     style={{
                         objectFit: "cover",
                         transition: "transform 0.5s ease",
@@ -318,7 +341,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
 
     return (
         <>
-            <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+            <div ref={carouselRef} className="auto-scroll-carousel-shell" style={{ position: "relative", width: "100%", overflow: "hidden" }}>
                 <style>{`
                     @keyframes slide-infinite-css {
                         from { transform: translateX(0); }
@@ -327,15 +350,26 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                     @media (max-width: 1024px) {
                         .carousel-fade { display: none !important; }
                     }
+                    @media (prefers-reduced-motion: reduce) {
+                        .auto-scroll-carousel-shell {
+                            overflow-x: auto !important;
+                        }
+                        .auto-scroll-carousel-track {
+                            animation: none !important;
+                            transform: none !important;
+                        }
+                    }
                 `}</style>
                 
                 {/* The moving track — duplicated for seamless loop */}
                 <div
+                    className="auto-scroll-carousel-track"
                     style={{
                         display: "flex",
                         gap: 20,
                         width: "max-content",
                         animation: `slide-infinite-css ${duration}s linear infinite`,
+                        animationPlayState: isInViewport && isPageVisible ? "running" : "paused",
                         paddingBottom: 16,
                         paddingTop: 8,
                     }}

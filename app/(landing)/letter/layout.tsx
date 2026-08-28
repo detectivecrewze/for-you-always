@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Letter Edition — For you, Always.",
     description: "Sampaikan pesan bermakna melalui surat digital bernuansa sinematik. Hadir dengan amplop interaktif, efek typewriter klasik, dan kustomisasi tema eksklusif.",
+    alternates: { canonical: "/letter" },
     openGraph: {
         title: "Letter Edition — For you, Always.",
         description: "Sampaikan pesan bermakna melalui surat digital bernuansa sinematik. Hadir dengan amplop interaktif dan efek typewriter klasik.",
