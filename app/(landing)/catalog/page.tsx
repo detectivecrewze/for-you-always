@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
-import { AnimatedSection } from "../../components/LandscapeProductCard";
+import { AnimatedSection } from "../../components/AnimatedSection";
 import { useCart } from "../../context/CartContext";
 import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
 
@@ -298,10 +298,11 @@ export default function CatalogPage() {
                         : item.slotBadgeText;
 
                     return (
-                        <AnimatedSection key={item.id} delay={0} priority={true} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                        <AnimatedSection key={item.id} delay={0} priority={idx === 0} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
                             <CompactProductCard
                                 {...item}
                                 slotBadgeText={slotText}
+                                priority={idx === 0}
                                 onAddToCart={() => handlePesan(item)}
                             />
                         </AnimatedSection>

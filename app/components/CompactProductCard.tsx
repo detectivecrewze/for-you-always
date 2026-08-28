@@ -109,11 +109,11 @@ export default function CompactProductCard({
         onMouseLeave={handleCardMouseLeave}>
             {/* Image Container */}
             <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", zIndex: 1, backgroundColor: "#1d1816" }}>
-                <Image 
-                    src={imageSrc} 
-                    alt={title} 
+                <Image
+                    src={imageSrc}
+                    alt={title}
                     fill
-                    unoptimized={true}
+                    sizes="(max-width: 768px) calc(100vw - 32px), 360px"
                     priority={priority}
                     loading={priority ? undefined : "lazy"}
                     style={{ 
@@ -363,7 +363,7 @@ export default function CompactProductCard({
                 <div style={{ display: "flex", gap: 8 }}>
                     <Link 
                         href={href} 
-                        prefetch={true} 
+                        prefetch={true}
                         onClick={() => setIsNavigating(true)}
                         style={{
                             flex: 1, textAlign: "center", padding: "12px 10px", borderRadius: 14,
