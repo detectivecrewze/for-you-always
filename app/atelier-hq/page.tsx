@@ -17,6 +17,7 @@ interface OrderItem {
     customer_phone?: string;
     product_id?: string;
     shipping_details?: string | {
+        box_type?: "kraft" | "hardbox";
         recipient_name?: string;
         recipient_phone?: string;
         address?: string;
@@ -187,8 +188,8 @@ export default function Dashboard() {
     const [inventoryFeedback, setInventoryFeedback] = useState<string | null>(null);
 
     // Kraft Box Stock State
-    const [kraftStock, setKraftStock] = useState<number>(10);
-    const [kraftInputVal, setKraftInputVal] = useState<string>("10");
+    const [kraftStock, setKraftStock] = useState<number>(5);
+    const [kraftInputVal, setKraftInputVal] = useState<string>("5");
     const [savingKraftStock, setSavingKraftStock] = useState(false);
     const [kraftStockFeedback, setKraftStockFeedback] = useState<string | null>(null);
 
@@ -777,19 +778,23 @@ export default function Dashboard() {
         if (!editingAddressOrder) return;
         setSavingAddress(true);
         try {
+            const updatedShippingDetails = {
+                ...parseMeta(editingAddressOrder.shipping_details),
+                ...addressForm,
+            };
             const res = await fetch("/api/admin/update-resi", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     order_id: editingAddressOrder.order_id,
-                    shipping_details: addressForm,
+                    shipping_details: updatedShippingDetails,
                     courier: addressForm.courier,
                 }),
             });
             if (res.ok) {
                 setOrders(orders.map(o => o.order_id === editingAddressOrder.order_id ? {
                     ...o,
-                    shipping_details: JSON.stringify(addressForm),
+                    shipping_details: JSON.stringify(updatedShippingDetails),
                     courier: addressForm.courier,
                 } : o));
                 setEditingAddressOrder(null);
@@ -1957,8 +1962,13 @@ export default function Dashboard() {
                                                                 background: "rgba(166,124,82,0.1)", color: "#a67c52", fontWeight: 700,
                                                                 fontSize: 10, textTransform: "capitalize",
                                                             }}>
-                                                                {getDigitalFormatName(order)}
+                                                        {getDigitalFormatName(order)}
                                                             </span>
+                                                            {ship.box_type && (
+                                                                <div style={{ marginTop: 5, fontSize: 10.5, fontWeight: 700, color: "#59483f" }}>
+                                                                    {ship.box_type === "kraft" ? "Classic Kraft Box" : "Signature Hardbox"}
+                                                                </div>
+                                                            )}
                                                         </td>
                                                         <td style={{ padding: "12px", verticalAlign: "top", maxWidth: 220 }}>
                                                             <div style={{ fontWeight: 700, color: "#1d1816" }}>

@@ -142,7 +142,7 @@ export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Preview Box (Otomatis berganti saat switch tab Kraft / Hardbox)
     kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box (Slide 1 - isi)
     kraftBoxHero2: "/assets/classic-kraftbox/classic-kraftbox2.webp",  // Foto Classic Kraft Box (Slide 2 - luar)
-    hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg", // Foto Signature Hardbox (Slide 1 - isi)
+    hardboxHero: "/the-gift-box/IMG_2213_hd.webp",                            // Foto Signature Hardbox (Slide 1 - isi)
     hardboxHero2: "/the-gift-box/IMG_2214_hd.webp",                    // Foto Signature Hardbox (Slide 2 - luar pita merah)
 
     // 2. Foto Kartu 3-Grid Showcase (Classic Kraft Box)
@@ -164,8 +164,8 @@ export default function TheGiftBoxPage() {
         kraft: { stock: number; in_stock: boolean; is_low_stock: boolean };
         hardbox: { stock: number; in_stock: boolean; is_low_stock: boolean };
     }>({
-        kraft: { stock: 10, in_stock: true, is_low_stock: false },
-        hardbox: { stock: 8, in_stock: true, is_low_stock: false },
+        kraft: { stock: 5, in_stock: true, is_low_stock: false },
+        hardbox: { stock: 12, in_stock: true, is_low_stock: false },
     });
 
     // Reset hero slide ke foto utama saat switch box type (tanpa auto-slide)
@@ -359,7 +359,7 @@ export default function TheGiftBoxPage() {
             </div>
 
             {/* ── HERO SECTION ── */}
-            <section style={{
+            <section className="gift-box-hero" style={{
                 position: "relative",
                 zIndex: 1,
                 paddingTop: "clamp(120px, 15vh, 150px)",
@@ -370,7 +370,7 @@ export default function TheGiftBoxPage() {
                 paddingRight: "24px"
             }}>
                 {/* MINIMALIST BREADCRUMB */}
-                <div style={{ marginBottom: "24px" }}>
+                <div className="gift-box-breadcrumb" style={{ marginBottom: "24px" }}>
                     <Link
                         href="/catalog"
                         style={{
@@ -398,7 +398,7 @@ export default function TheGiftBoxPage() {
                 </div>
 
                 {/* HERO 2-COLUMN LAYOUT: PHOTO ON LEFT, TEXT ON RIGHT */}
-                <div style={{
+                <div className="gift-box-hero-layout" style={{
                     display: "flex",
                     flexWrap: "wrap",
                     alignItems: "center",
@@ -422,6 +422,7 @@ export default function TheGiftBoxPage() {
                         }}>
                             {/* Main image frame — hover to swap (desktop), tap to cycle (mobile) */}
                             <div
+                                className="gift-box-hero-image"
                                 role="button"
                                 tabIndex={0}
                                 aria-label="Ganti foto preview box"
@@ -456,64 +457,70 @@ export default function TheGiftBoxPage() {
                                     }
                                 }}
                             >
-                                {/* Layer 1: Classic Kraft Box — Foto Utama (Isi Hampers) */}
-                                <Image
-                                    src={GIFT_BOX_ASSETS.kraftBoxHero}
-                                    alt="Classic Kraft Box"
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 480px"
-                                    style={{
-                                        objectFit: "cover",
-                                        objectPosition: "center 48%",
-                                        opacity: selectedBoxType === "kraft" && heroSlide === 0 ? 1 : 0,
-                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                                        pointerEvents: "none",
-                                    }}
-                                    priority
-                                />
-                                {/* Layer 2: Classic Kraft Box — Foto Kedua (Luar/Packaging) */}
-                                <Image
-                                    src={GIFT_BOX_ASSETS.kraftBoxHero2}
-                                    alt="Classic Kraft Box detail"
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 480px"
-                                    style={{
-                                        objectFit: "cover",
-                                        objectPosition: "center",
-                                        opacity: selectedBoxType === "kraft" && heroSlide === 1 ? 1 : 0,
-                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                                        pointerEvents: "none",
-                                    }}
-                                />
-                                {/* Layer 3: Signature Hardbox — Foto Utama (Isi Hampers) */}
-                                <Image
-                                    src={GIFT_BOX_ASSETS.hardboxHero}
-                                    alt="Signature Hardbox"
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 480px"
-                                    style={{
-                                        objectFit: "cover",
-                                        objectPosition: "center 48%",
-                                        opacity: selectedBoxType === "hardbox" && heroSlide === 0 ? 1 : 0,
-                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                                        pointerEvents: "none",
-                                    }}
-                                    priority
-                                />
-                                {/* Layer 4: Signature Hardbox — Foto Kedua (Luar/Pita Merah) */}
-                                <Image
-                                    src={GIFT_BOX_ASSETS.hardboxHero2}
-                                    alt="Signature Hardbox packaging"
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 480px"
-                                    style={{
-                                        objectFit: "cover",
-                                        objectPosition: "center",
-                                        opacity: selectedBoxType === "hardbox" && heroSlide === 1 ? 1 : 0,
-                                        transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                                        pointerEvents: "none",
-                                    }}
-                                />
+                                {selectedBoxType === "kraft" ? (
+                                    <>
+                                        {/* Classic Kraft Box — Foto Utama (Isi Hampers) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.kraftBoxHero}
+                                            alt="Classic Kraft Box"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center 48%",
+                                                opacity: heroSlide === 0 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                            priority
+                                        />
+                                        {/* Classic Kraft Box — Foto Kedua (Luar/Packaging) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.kraftBoxHero2}
+                                            alt="Classic Kraft Box detail"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center",
+                                                opacity: heroSlide === 1 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Signature Hardbox — Foto Utama (Isi Hampers) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.hardboxHero}
+                                            alt="Signature Hardbox"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center 48%",
+                                                opacity: heroSlide === 0 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                        />
+                                        {/* Signature Hardbox — Foto Kedua (Luar/Pita Merah) */}
+                                        <Image
+                                            src={GIFT_BOX_ASSETS.hardboxHero2}
+                                            alt="Signature Hardbox packaging"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 480px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center",
+                                                opacity: heroSlide === 1 ? 1 : 0,
+                                                transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                pointerEvents: "none",
+                                            }}
+                                        />
+                                    </>
+                                )}
 
                                 {/* Dot indicators — clickable buttons */}
                                 <div style={{
@@ -593,7 +600,7 @@ export default function TheGiftBoxPage() {
                         </div>
 
                         {/* H1 HEADLINE */}
-                        <h1 style={{
+                        <h1 className="gift-box-hero-title" style={{
                             fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
                             fontSize: "clamp(2.4rem, 4.4vw, 3.8rem)",
                             fontWeight: 400,
@@ -714,7 +721,11 @@ export default function TheGiftBoxPage() {
                             }}>
                                 <button
                                     type="button"
-                                    onClick={() => setSelectedBoxType("kraft")}
+                                    aria-pressed={selectedBoxType === "kraft"}
+                                    onClick={() => {
+                                        setHeroSlide(0);
+                                        setSelectedBoxType("kraft");
+                                    }}
                                     style={{
                                         padding: "10px 8px",
                                         borderRadius: "11px",
@@ -738,7 +749,11 @@ export default function TheGiftBoxPage() {
 
                                 <button
                                     type="button"
-                                    onClick={() => setSelectedBoxType("hardbox")}
+                                    aria-pressed={selectedBoxType === "hardbox"}
+                                    onClick={() => {
+                                        setHeroSlide(0);
+                                        setSelectedBoxType("hardbox");
+                                    }}
                                     style={{
                                         padding: "10px 8px",
                                         borderRadius: "11px",
@@ -891,7 +906,7 @@ export default function TheGiftBoxPage() {
                                 e.currentTarget.style.color = "#8a7569";
                             }}
                         >
-                            <span>Prefer a digital gift? Jelajahi Katalog →</span>
+                            <span>Mencari kado digital saja? Jelajahi Katalog →</span>
                         </Link>
                     </div>
                 </div>
@@ -939,7 +954,7 @@ export default function TheGiftBoxPage() {
                         title={selectedBoxType === "kraft" ? "Classic Kraft Box" : "Signature Hardbox"}
                         desc={
                             selectedBoxType === "kraft"
-                                ? "Kotak kraft natural aesthetic dengan sentuhan earthy & vintage yang hangat, dirancang ramah lingkungan dan penuh ketulusan untuk melengkapi kado spesialmu."
+                                ? "Gift box dengan kemasan kraft yang simpel dan hangat, berisi rangkaian kado pilihan dan kejutan digital personal untuk momen spesialmu."
                                 : "Hardbox eksklusif dengan balutan pita satin elegan, dirancang presisi untuk menghadirkan kesan mewah dan tak terlupakan sejak pertama kali digenggam."
                         }
                     />
@@ -950,8 +965,8 @@ export default function TheGiftBoxPage() {
                     />
                     <ShowcaseGridCard
                         img="/the-gift-box/IMG_2215_hd.webp"
-                        title="Personal QR Experience"
-                        desc="Kartu akses ber-QR eksklusif yang menjadi gerbang pembuka menuju pengalaman kado digital interaktif — penuh dengan musik, foto, dan pesan yang dibuat khusus untuknya."
+                        title="Kartu Akses QR Custom"
+                        desc="Kartu Akses QR Custom eksklusif yang menjadi gerbang menuju pengalaman kado digital interaktif, lengkap dengan musik, foto, dan pesan yang dibuat khusus untuknya."
                         objectPosition="center center"
                     />
                 </div>
@@ -981,7 +996,7 @@ export default function TheGiftBoxPage() {
                             {
                                 num: "01",
                                 title: "Pilih & Personalisasi",
-                                desc: "Pilih format kado digital favoritmu (Letter, Voices, atau Memoria) dan lengkapi alamat pengiriman saat checkout.",
+                                desc: "Pilih format kado digital favoritmu (Letter, Voices, Birthday, atau Memoria) dan lengkapi alamat pengiriman saat checkout.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -993,7 +1008,7 @@ export default function TheGiftBoxPage() {
                             {
                                 num: "02",
                                 title: "Kami Rangkai & Kirim",
-                                desc: "Kami merangkai gift box eksklusif, mencetak Kartu Akses QR kado digitalmu, dan mengirimkannya dengan aman.",
+                                desc: "Kami merangkai gift box eksklusif, mencetak Kartu Akses QR Custom, dan mengirimkannya dengan aman.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -1004,8 +1019,8 @@ export default function TheGiftBoxPage() {
                             },
                             {
                                 num: "03",
-                                title: "Scan QR & Buka Kado",
-                                desc: "Penerima cukup scan kartu QR dengan kamera HP. Halaman kado digital langsung terbuka dengan musik dan animasi.",
+                                title: "Pindai & Buka Kado",
+                                desc: "Penerima cukup memindai Kartu Akses QR Custom dengan kamera HP. Halaman kado digital langsung terbuka dengan musik dan animasi.",
                                 icon: (
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -1056,10 +1071,10 @@ export default function TheGiftBoxPage() {
                         color: "#382a24",
                         marginTop: "8px"
                     }}>
-                        Apa Isi QR Code Di Dalam <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Kotak?</span>
+                        Apa Isi Kartu Akses QR <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Custom?</span>
                     </h2>
                     <p style={{ color: "#6e5c53", maxWidth: "580px", margin: "12px auto 0", fontSize: "0.98rem", lineHeight: 1.6 }}>
-                        Pilih salah satu edisi digital favorit untuk disematkan secara eksklusif ke dalam Kartu QR Code hampers fisikmu.
+                        Pilih salah satu edisi digital favorit untuk dihubungkan secara eksklusif melalui Kartu Akses QR Custom di dalam gift box.
                     </p>
                 </div>
 
@@ -1279,7 +1294,6 @@ export default function TheGiftBoxPage() {
                                         alt={`Preview ${currentExp.title}`}
                                         width={480}
                                         height={320}
-                                        priority
                                         style={{
                                             position: "absolute",
                                             inset: 0,
@@ -1312,7 +1326,7 @@ export default function TheGiftBoxPage() {
                                             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                                             <line x1="12" y1="18" x2="12.01" y2="18"></line>
                                         </svg>
-                                        <span>QR Scan Result Preview</span>
+                                        <span>Preview Kado Digital</span>
                                     </div>
                                 </div>
 
@@ -1321,10 +1335,10 @@ export default function TheGiftBoxPage() {
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                         </svg>
-                                        <span>Tampilan Saat QR Discanned</span>
+                                        <span>Tampilan Setelah Dipindai</span>
                                     </p>
                                     <p style={{ fontSize: "0.82rem", color: "rgba(250,247,242,0.65)", marginTop: "4px", lineHeight: 1.5, margin: "4px 0 0 0" }}>
-                                        Saat QR pada kartu di-scan, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima.
+                                        Saat Kartu Akses QR Custom dipindai, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima.
                                     </p>
                                 </div>
                             </div>
@@ -1362,7 +1376,7 @@ export default function TheGiftBoxPage() {
                             Pertanyaan Yang Sering <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Diajukan</span>
                         </h2>
                         <p style={{ color: "#6e5c53", maxWidth: "540px", margin: "12px auto 0", fontSize: "0.95rem", lineHeight: 1.6 }}>
-                            Temukan jawaban lengkap mengenai pemesanan hampers fisik, kartu QR emas, hingga akses kado digital.
+                            Temukan jawaban lengkap mengenai pemesanan gift box fisik, Kartu Akses QR Custom, hingga akses kado digital.
                         </p>
                     </div>
                 </SpringAnimatedSection>
@@ -1378,8 +1392,8 @@ export default function TheGiftBoxPage() {
                             a: "Setelah pemesanan terkonfirmasi, kamu akan menerima link Studio Pembuat Kado. Di sana kamu dapat mengunggah foto kenangan, menuliskan pesan, dan memilih lagu favorit dengan sangat mudah."
                         },
                         {
-                            q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka QR Code?",
-                            a: "Tidak perlu aplikasi apa pun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR. Halaman kado digital sinematik akan langsung terbuka otomatis di browser HP."
+                            q: "Apakah penerima harus meng-install aplikasi khusus untuk membuka Kartu Akses QR Custom?",
+                            a: "Tidak perlu aplikasi apa pun. Penerima cukup mengarahkan kamera bawaan HP (iPhone / Android) ke Kartu Akses QR Custom. Halaman kado digital sinematik akan langsung terbuka otomatis di browser HP."
                         },
                         {
                             q: "Bisakah gift box dikirimkan langsung ke alamat penerima (sebagai kejutan)?",
@@ -1564,6 +1578,31 @@ export default function TheGiftBoxPage() {
 
                 .no-scrollbar::-webkit-scrollbar {
                     display: none;
+                }
+
+                @media (max-width: 768px) {
+                    .gift-box-hero {
+                        padding-top: 92px !important;
+                        padding-bottom: 48px !important;
+                    }
+
+                    .gift-box-breadcrumb {
+                        margin-bottom: 16px !important;
+                    }
+
+                    .gift-box-hero-layout {
+                        gap: 20px !important;
+                    }
+
+                    .gift-box-hero-image {
+                        aspect-ratio: 16 / 9 !important;
+                        border-radius: 20px !important;
+                    }
+
+                    .gift-box-hero-title {
+                        font-size: 2.25rem !important;
+                        margin-bottom: 12px !important;
+                    }
                 }
             `}</style>
         </div>

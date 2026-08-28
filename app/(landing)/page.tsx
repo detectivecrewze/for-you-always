@@ -6,18 +6,20 @@ import TestimonialsSection from "../components/sections/TestimonialsSection";
 import FAQSection from "../components/sections/FAQSection";
 import FooterSection from "../components/sections/FooterSection";
 
-// ISR: pre-render homepage sebagai static dan regenerate setiap 60 detik.
-// Ini menghilangkan cold start SSR — TTFB turun dari ~1.5s ke ~50ms.
-export const revalidate = 60;
-
 export default function MainHubPage() {
     return (
-        <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
+        <div style={{ minHeight: "100vh", position: "relative", background: "#faf7f2", overflowX: "clip" }}>
             {/* Ambient Blobs — Frosted Champagne */}
-            <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: "-10%", left: "-5%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.06)", filter: "blur(120px)" }} />
-                <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "50vw", height: "50vw", borderRadius: "50%", background: "rgba(205,171,143,0.04)", filter: "blur(120px)" }} />
-            </div>
+            <div
+                aria-hidden="true"
+                style={{
+                    position: "absolute",
+                    inset: 0,
+                    pointerEvents: "none",
+                    zIndex: 0,
+                    background: "radial-gradient(circle at 0% 0%, rgba(205,171,143,0.1) 0%, transparent 34%), radial-gradient(circle at 100% 100%, rgba(205,171,143,0.07) 0%, transparent 32%)",
+                }}
+            />
 
             <Navbar />
             <HeroSection />
@@ -28,4 +30,4 @@ export default function MainHubPage() {
             <FooterSection />
         </div>
     );
-}
+}

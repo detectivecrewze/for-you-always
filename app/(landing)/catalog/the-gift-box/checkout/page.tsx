@@ -15,7 +15,7 @@ import { trackInitiateCheckout } from "@/lib/pixel";
 export const GIFT_BOX_ASSETS = {
     // 1. Foto Hero / Summary Box
     kraftBoxHero: "/assets/classic-kraftbox/kraftbox-hero.jpg",        // Foto Classic Kraft Box
-    hardboxHero: "https://cdn.for-you-always.my.id/1786911997774-xrhcf4.jpg",       // Foto Signature Hardbox (Rigid)
+    hardboxHero: "/the-gift-box/IMG_2213_hd.webp",                // Foto Signature Hardbox (Rigid)
 };
 
 interface DigitalOption {
@@ -110,7 +110,7 @@ export default function GiftBoxCheckoutWizardPage() {
         stock: number;
         in_stock: boolean;
         is_low_stock: boolean;
-    }>({ stock: 10, in_stock: true, is_low_stock: false });
+    }>({ stock: 5, in_stock: true, is_low_stock: false });
 
     // Form States
     const [selectedDigital, setSelectedDigital] = useState("letter");
@@ -455,12 +455,14 @@ export default function GiftBoxCheckoutWizardPage() {
                         order_id: orderId,
                         gross_amount: totalAmount,
                         product_type: `unbox_${selectedDigital}`,
+                        box_type: selectedBoxType,
                         customer_details: {
                             first_name: customerDetails.senderName,
                             email: customerDetails.email,
                             phone: customerDetails.whatsapp,
                         },
                         shipping_details: {
+                            box_type: selectedBoxType,
                             recipient_name: shippingDetails.recipientName,
                             recipient_phone: shippingDetails.recipientPhone,
                             address: shippingDetails.address,
@@ -697,7 +699,9 @@ export default function GiftBoxCheckoutWizardPage() {
 
                                     {/* Dual Box Selector */}
                                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "16px" }}>
-                                        <div
+                                        <button
+                                            type="button"
+                                            aria-pressed={selectedBoxType === "kraft"}
                                             onClick={() => setSelectedBoxType("kraft")}
                                             style={{
                                                 padding: "12px 12px",
@@ -710,6 +714,9 @@ export default function GiftBoxCheckoutWizardPage() {
                                                 flexDirection: "column",
                                                 justifyContent: "space-between",
                                                 minHeight: "76px",
+                                                width: "100%",
+                                                fontFamily: "inherit",
+                                                textAlign: "left",
                                             }}
                                         >
                                             <div>
@@ -722,9 +729,11 @@ export default function GiftBoxCheckoutWizardPage() {
                                                     Kotak kraft hemat (All-in)
                                                 </div>
                                             </div>
-                                        </div>
+                                        </button>
 
-                                        <div
+                                        <button
+                                            type="button"
+                                            aria-pressed={selectedBoxType === "hardbox"}
                                             onClick={() => setSelectedBoxType("hardbox")}
                                             style={{
                                                 padding: "12px 12px",
@@ -737,6 +746,9 @@ export default function GiftBoxCheckoutWizardPage() {
                                                 flexDirection: "column",
                                                 justifyContent: "space-between",
                                                 minHeight: "76px",
+                                                width: "100%",
+                                                fontFamily: "inherit",
+                                                textAlign: "left",
                                             }}
                                         >
                                             <div>
@@ -749,7 +761,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                                     Hardbox rigid pita satin
                                                 </div>
                                             </div>
-                                        </div>
+                                        </button>
                                     </div>
 
                                     <h3
@@ -761,21 +773,34 @@ export default function GiftBoxCheckoutWizardPage() {
                                             margin: "12px 0 4px",
                                         }}
                                     >
-                                        Pilih Format Kado di Kartu QR
+                                        Pilih Kado Digital untuk Kartu Akses QR Custom
                                     </h3>
                                     <p style={{ fontSize: "0.84rem", color: "#6e5c53", margin: "0 0 12px", lineHeight: 1.4 }}>
-                                        Penerima akan membuka box kado dan memindai (scan) kartu ucapan fisik untuk membuka kado digital pilihanmu.
+                                        Penerima akan membuka gift box dan memindai Kartu Akses QR Custom untuk membuka kado digital pilihanmu.
                                     </p>
                                 </div>
 
                                 {/* 3 Compact Visual Cards */}
-                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                <div
+                                    role="radiogroup"
+                                    aria-label="Pilih kado digital"
+                                    style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+                                >
                                     {DIGITAL_OPTIONS.map((opt) => {
                                         const isSelected = selectedDigital === opt.id;
                                         return (
                                             <div
+                                                role="radio"
+                                                tabIndex={0}
                                                 key={opt.id}
+                                                aria-checked={isSelected}
                                                 onClick={() => setSelectedDigital(opt.id)}
+                                                onKeyDown={(event) => {
+                                                    if (event.key === "Enter" || event.key === " ") {
+                                                        event.preventDefault();
+                                                        setSelectedDigital(opt.id);
+                                                    }
+                                                }}
                                                 style={{
                                                     borderRadius: "16px",
                                                     border: isSelected
@@ -790,6 +815,9 @@ export default function GiftBoxCheckoutWizardPage() {
                                                     alignItems: "center",
                                                     gap: "14px",
                                                     transition: "all 0.2s ease",
+                                                    width: "100%",
+                                                    fontFamily: "inherit",
+                                                    textAlign: "left",
                                                 }}
                                             >
                                                 {/* Left Thumbnail with Badge */}
@@ -1743,7 +1771,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#7a685e", textTransform: "uppercase" }}>
-                                                Pilihan Box &amp; Format QR
+                                                Pilihan Box &amp; Kado Digital
                                             </div>
                                             <div style={{ fontSize: "1rem", fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                                 {boxMeta.label} • {selectedDigitalObj.title}
@@ -1898,7 +1926,7 @@ export default function GiftBoxCheckoutWizardPage() {
                                     The Gift Box
                                 </h4>
                                 <div style={{ fontSize: "0.78rem", color: "#7a685e" }}>
-                                    QR: {selectedDigitalObj.title}
+                                    Kado Digital: {selectedDigitalObj.title}
                                 </div>
                             </div>
                         </div>
@@ -1907,7 +1935,7 @@ export default function GiftBoxCheckoutWizardPage() {
                         <div style={{ borderTop: "1px solid rgba(205,171,143,0.2)", borderBottom: "1px solid rgba(205,171,143,0.2)", padding: "12px 0", display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.85rem" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
                                 <span style={{ color: "#6e5c53", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                    {isKraft ? "Classic Kraft Box (All-in)" : "Signature Hardbox + QR"}
+                                    {isKraft ? "Classic Kraft Box (All-in)" : "Signature Hardbox + Kartu Akses QR Custom"}
                                 </span>
                                 <span style={{ fontWeight: 700, color: "#1d1816", whiteSpace: "nowrap", flexShrink: 0 }}>Rp {currentBoxPrice.toLocaleString("id-ID")}</span>
                             </div>

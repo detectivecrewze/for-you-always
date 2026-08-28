@@ -1,16 +1,24 @@
 import React from "react";
-import { preload } from "react-dom";
-import { AnimatedSection } from "../LandscapeProductCard";
 
 export default function HeroSection() {
-    preload('https://cdn.for-you-always.my.id/1781807802981-yohlpk.gif', { as: 'image', fetchPriority: 'high' });
-
     return (
         <>
             <style>{`
                 @keyframes bounce-soft {
                     0%, 100% { transform: translateY(0); }
                     50% { transform: translateY(8px); }
+                }
+                @keyframes hero-reveal {
+                    from { opacity: 0; transform: translateY(8px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .hero-reveal {
+                    animation: hero-reveal 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .hero-reveal {
+                        animation: none !important;
+                    }
                 }
                 @keyframes wiggle-bubble {
                     0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -80,8 +88,7 @@ export default function HeroSection() {
                 <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "60px" }}>
                     
                     {/* LEFT COLUMN: HERO MOCKUP */}
-                    <div style={{ flex: "1 1 400px", position: "relative", display: "flex", justifyContent: "center" }}>
-                        <AnimatedSection delay={100}>
+                    <div className="hero-reveal" style={{ flex: "1 1 400px", position: "relative", display: "flex", justifyContent: "center" }}>
                             <div style={{ position: "relative", display: "inline-block" }}>
                                 {/* Image Utama - Menggunakan <img> biasa (bukan Next/Image) agar
                                     animated GIF dapat bergerak di iOS TikTok in-app browser.
@@ -93,6 +100,7 @@ export default function HeroSection() {
                                     alt="Preview kado digital For You Always"
                                     className="hero-mockup-img"
                                     fetchPriority="high"
+                                    decoding="async"
                                     width="360"
                                     height="450"
                                     style={{
@@ -150,13 +158,10 @@ export default function HeroSection() {
                                     <p style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: '#1d1816' }}>Hubungi kami</p>
                                 </a>
                             </div>
-                        </AnimatedSection>
                     </div>
 
                     {/* RIGHT COLUMN: TEXT & CTA */}
-                    <div style={{ flex: "1 1 500px", textAlign: "left" }} className="hero-text-container">
-
-                        <AnimatedSection delay={100}>
+                    <div style={{ flex: "1 1 500px", textAlign: "left" }} className="hero-text-container hero-reveal">
                             <h1 style={{
                                 fontFamily: "var(--font-sans)",
                                 fontSize: 11,
@@ -178,9 +183,7 @@ export default function HeroSection() {
                                 The Art of<br />
                                 <span style={{ fontStyle: "italic", color: "#cdab8f" }}>Gifting.</span>
                             </h2>
-                        </AnimatedSection>
 
-                        <AnimatedSection delay={200}>
                             <p style={{
                                 fontFamily: "var(--font-sans)",
                                 fontSize: "clamp(1.1rem, 2vw, 1.25rem)",
@@ -190,10 +193,8 @@ export default function HeroSection() {
                             }}>
                                 Kado kejutan website romantis untuk si dia, siap dalam 1 menit. Mulai dari <strong style={{ color: '#1d1816', fontWeight: 800 }}>Rp 15.000.</strong>
                             </p>
-                        </AnimatedSection>
 
                         {/* Hero CTA Buttons */}
-                        <AnimatedSection delay={350}>
                             <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "nowrap", width: "100%", maxWidth: "400px", marginBottom: 20 }}>
                                 <a
                                     href="#collection"
@@ -222,10 +223,8 @@ export default function HeroSection() {
                                     Lihat Catalog
                                 </a>
                             </div>
-                        </AnimatedSection>
 
                         {/* Social Proof */}
-                        <AnimatedSection delay={450}>
                             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                     <span style={{ fontFamily: "var(--font-sans)", fontSize: "17px", fontWeight: 800, color: "#1d1816" }}>
@@ -274,7 +273,6 @@ export default function HeroSection() {
                                     </div>
                                 </div>
                             </div>
-                        </AnimatedSection>
                     </div>
                 </div>
             </section>
