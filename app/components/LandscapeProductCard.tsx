@@ -1,10 +1,16 @@
 "use client";
-import posthog from 'posthog-js';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
-import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
+import dynamic from "next/dynamic";
+import type { SlotPickerConfig } from "./SlotPickerModal";
 import DiscountPrice from "./DiscountPrice";
+
+const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
+
+function captureProductEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js").then(({ default: posthog }) => posthog.capture(event, properties));
+}
 
 export function AnimatedSection({
     children,
@@ -110,6 +116,7 @@ export function LandscapeProductCard({
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const showcaseRef = useRef<HTMLDivElement>(null);
     
     // Track selected sub-theme per tema
     const [selectedSubThemeIndex, setSelectedSubThemeIndex] = useState<number>(() => {
@@ -272,14 +279,14 @@ export function LandscapeProductCard({
         const prevIndex = selectedIndex === null ? 0 : selectedIndex;
         const newIndex = prevIndex === 0 ? (themes?.length ?? 1) - 1 : prevIndex - 1;
         setSelectedIndex(newIndex);
-        posthog.capture('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'prev' });
+        captureProductEvent('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'prev' });
     }, [selectedIndex, themes, title]);
 
     const handleNextTheme = useCallback(() => {
         const prevIndex = selectedIndex === null ? 0 : selectedIndex;
         const newIndex = prevIndex === (themes?.length ?? 1) - 1 ? 0 : prevIndex + 1;
         setSelectedIndex(newIndex);
-        posthog.capture('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'next' });
+        captureProductEvent('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'next' });
     }, [selectedIndex, themes, title]);
 
     const handlePrevSubTheme = useCallback(() => {
@@ -293,7 +300,7 @@ export function LandscapeProductCard({
     }, [subThemePanelData.currentTheme]);
 
     const handlePesanClick = useCallback(() => {
-        posthog.capture('clicked_pesan', { product: title });
+        captureProductEvent('clicked_pesan', { product: title });
         if (onAddThreeSlotToCart && onAddToCart) {
             setSlotPickerConfig({
                 productId: title,
@@ -328,7 +335,17 @@ export function LandscapeProductCard({
     }, []);
 
 
-    // Handle Auto Cycling
+    useEffect(() => {
+        if (!autoCycle || !showcaseRef.current) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsInView(entry.isIntersecting),
+            { threshold: 0.1 }
+        );
+        observer.observe(showcaseRef.current);
+        return () => observer.disconnect();
+    }, [autoCycle]);
+
+    // Handle Auto Cycling only while the card is visible.
     useEffect(() => {
         if (!autoCycle || !themes || themes.length <= 1 || !isInView) return;
         const interval = setInterval(() => {
@@ -342,7 +359,7 @@ export function LandscapeProductCard({
     return (
         <>
         <AnimatedSection delay={delay} priority={priority}>
-            <div className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
+            <div ref={showcaseRef} className={`hub-showcase-row ${reverse ? "reverse" : ""}`}>
 
                 {/* Media Column Wrapper */}
                 <div className="hub-showcase-media-wrapper" style={{ gap: 24 }}>
@@ -359,9 +376,9 @@ export function LandscapeProductCard({
                                 src={(activeFallbackImgSrc || mediaSrc) as string}
                                 alt={title}
                                 fill
-                                unoptimized={true}
                                 priority={priority}
                                 loading={priority ? undefined : "lazy"}
+                                sizes="(max-width: 768px) calc(100vw - 32px), (max-width: 1200px) 50vw, 560px"
                                 style={{ objectFit: "cover", display: "block", aspectRatio: "16/9", animation: priority ? "none" : "image-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1)" }}
                             />
                         ) : (
@@ -1075,6 +1092,38 @@ export function LandscapeProductCard({
                 </div>
             </div>
         </AnimatedSection>
+
+        {onAddToCart && (
+            <div className="product-sticky-cta" role="region" aria-label={`Pesan ${title}`}>
+                <div style={{ minWidth: 0 }}>
+                    <span style={{ display: "block", fontSize: 9, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", color: "#9a806d" }}>Mulai dari</span>
+                    <strong style={{ display: "block", color: "#382a24", fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{price}</strong>
+                </div>
+                <button type="button" onClick={handlePesanClick} style={{ border: 0, borderRadius: 12, padding: "12px 18px", background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent, color: "#fff", fontSize: 11, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase", cursor: "pointer", flexShrink: 0 }}>Pesan</button>
+            </div>
+        )}
+
+        <style>{`
+            .product-sticky-cta { display: none; }
+            @media (max-width: 768px) {
+                .product-sticky-cta {
+                    position: fixed;
+                    left: 12px;
+                    right: 82px;
+                    bottom: calc(12px + env(safe-area-inset-bottom));
+                    z-index: 990;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    padding: 8px 8px 8px 14px;
+                    border: 1px solid rgba(205,171,143,.35);
+                    border-radius: 17px;
+                    background: rgba(250,247,242,.97);
+                    box-shadow: 0 12px 34px rgba(29,24,22,.18);
+                }
+            }
+        `}</style>
 
         {/* Slot Picker Modal */}
         {slotPickerConfig && (

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import posthog from 'posthog-js';
 
 export interface CartItem {
     id: string;
@@ -116,7 +115,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     const openDrawer = useCallback(() => {
         setIsDrawerOpen(true);
-        posthog.capture('cart_opened', { item_count: items.length });
+        void import("posthog-js").then(({ default: posthog }) => {
+            posthog.capture('cart_opened', { item_count: items.length });
+        });
     }, [items.length]);
     const closeDrawer = useCallback(() => setIsDrawerOpen(false), []);
 

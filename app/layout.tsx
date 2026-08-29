@@ -113,10 +113,10 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Microsoft Clarity — loaded after page is interactive, no LCP impact */}
+        {/* Microsoft Clarity — wait until the load event so it does not compete with hydration. */}
         <Script
           id="microsoft-clarity"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

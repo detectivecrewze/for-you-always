@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../../../../components/Navbar";
@@ -33,6 +33,15 @@ interface DigitalOption {
     hardboxOldPrice: string;
     hardboxNumericPrice: number;
 }
+
+interface AreaOption {
+    name: string;
+    id: string;
+    postal_code?: string;
+}
+
+const districtCache = new Map<string, AreaOption[]>();
+const villageCache = new Map<string, AreaOption[]>();
 
 const BOX_PRICE_MAP: Record<string, { label: string }> = {
     hardbox: { label: "Signature Hardbox" },
@@ -105,6 +114,8 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
 export default function GiftBoxCheckoutWizardPage() {
     const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectionInitialized, setSelectionInitialized] = useState(false);
+    const checkoutTrackedRef = useRef(false);
     const [selectedBoxType, setSelectedBoxType] = useState<"hardbox" | "kraft">("kraft");
     const [stockData, setStockData] = useState<{
         stock: number;
@@ -152,11 +163,6 @@ export default function GiftBoxCheckoutWizardPage() {
     const [loadingRates, setLoadingRates] = useState(false);
 
     // District & Village (Kelurahan / Desa) Options
-    interface AreaOption {
-        name: string;
-        id: string;
-        postal_code?: string;
-    }
     const [availableDistricts, setAvailableDistricts] = useState<AreaOption[]>([]);
     const [loadingDistricts, setLoadingDistricts] = useState(false);
 
@@ -184,17 +190,28 @@ export default function GiftBoxCheckoutWizardPage() {
             return;
         }
 
+        const cacheKey = `${shippingDetails.province}:${shippingDetails.city}`;
+        const cachedDistricts = districtCache.get(cacheKey);
+        if (cachedDistricts) {
+            setAvailableDistricts(cachedDistricts);
+            setLoadingDistricts(false);
+            return;
+        }
+
         let isMounted = true;
+        const controller = new AbortController();
         setLoadingDistricts(true);
 
-        fetch(`/api/shipping/areas?city=${encodeURIComponent(shippingDetails.city)}&province=${encodeURIComponent(shippingDetails.province)}`)
+        fetch(`/api/shipping/areas?city=${encodeURIComponent(shippingDetails.city)}&province=${encodeURIComponent(shippingDetails.province)}`, { signal: controller.signal })
             .then((res) => res.json())
             .then((data) => {
                 if (isMounted && data && Array.isArray(data.districts)) {
+                    districtCache.set(cacheKey, data.districts);
                     setAvailableDistricts(data.districts);
                 }
             })
             .catch((err) => {
+                if (err instanceof DOMException && err.name === "AbortError") return;
                 console.error("Failed to load districts:", err);
             })
             .finally(() => {
@@ -203,31 +220,36 @@ export default function GiftBoxCheckoutWizardPage() {
 
         return () => {
             isMounted = false;
+            controller.abort();
         };
     }, [shippingDetails.city, shippingDetails.province]);
 
     // Fetch dynamic courier rates whenever address changes
     useEffect(() => {
-        if (!shippingDetails.province || !shippingDetails.city) {
+        if (currentStep !== 3 || !shippingDetails.province || !shippingDetails.city || !/^\d{5}$/.test(shippingDetails.postalCode)) {
             setCourierOptions([]);
             setSelectedCourier(null);
             setSelectedCourierCode("");
+            setLoadingRates(false);
             return;
         }
 
         let isMounted = true;
-        setLoadingRates(true);
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => {
+            setLoadingRates(true);
 
-        fetch("/api/shipping/rates", {
+            fetch("/api/shipping/rates", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            signal: controller.signal,
             body: JSON.stringify({
                 destination_postal_code: shippingDetails.postalCode,
                 destination_province: shippingDetails.province,
                 destination_city: shippingDetails.city,
                 items_value: currentBoxPrice,
             }),
-        })
+            })
             .then((res) => res.json())
             .then((data) => {
                 if (isMounted && data && Array.isArray(data.options)) {
@@ -246,16 +268,20 @@ export default function GiftBoxCheckoutWizardPage() {
                 }
             })
             .catch((err) => {
+                if (err instanceof DOMException && err.name === "AbortError") return;
                 console.error("Failed to fetch rates:", err);
             })
             .finally(() => {
                 if (isMounted) setLoadingRates(false);
             });
+        }, 300);
 
         return () => {
             isMounted = false;
+            window.clearTimeout(timer);
+            controller.abort();
         };
-    }, [shippingDetails.province, shippingDetails.city, shippingDetails.postalCode, currentBoxPrice]);
+    }, [currentStep, shippingDetails.province, shippingDetails.city, shippingDetails.postalCode, currentBoxPrice]);
 
     useEffect(() => {
         // Baca boxType dan digital dari URL query param
@@ -266,18 +292,23 @@ export default function GiftBoxCheckoutWizardPage() {
             setSelectedDigital(dig);
         }
         setSelectedBoxType(bt);
+        setSelectionInitialized(true);
+    }, []);
 
+    useEffect(() => {
+        if (!selectionInitialized || checkoutTrackedRef.current) return;
+        checkoutTrackedRef.current = true;
         trackInitiateCheckout(
             [
                 {
-                    id: `unbox_${dig || "letter"}`,
+                    id: `unbox_${selectedDigital}`,
                     title: `The Gift Box (${selectedDigitalObj.title})`,
-                    numericPrice: totalAmount,
+                    numericPrice: currentBoxPrice,
                 },
             ],
-            totalAmount
+            currentBoxPrice
         );
-    }, []);
+    }, [selectionInitialized, selectedDigital, selectedDigitalObj.title, currentBoxPrice]);
 
     useEffect(() => {
         const stockProductId = selectedBoxType === "kraft" ? "the-gift-box-kraft" : "the-gift-box";
@@ -336,16 +367,22 @@ export default function GiftBoxCheckoutWizardPage() {
 
         // Load Villages for this district
         if (found && found.id) {
-            setLoadingVillages(true);
-            fetch(`/api/shipping/areas?district_id=${found.id}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data && Array.isArray(data.villages)) {
-                        setAvailableVillages(data.villages);
-                    }
-                })
-                .catch(() => {})
-                .finally(() => setLoadingVillages(false));
+            const cachedVillages = villageCache.get(found.id);
+            if (cachedVillages) {
+                setAvailableVillages(cachedVillages);
+            } else {
+                setLoadingVillages(true);
+                fetch(`/api/shipping/areas?district_id=${found.id}`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data && Array.isArray(data.villages)) {
+                            villageCache.set(found.id, data.villages);
+                            setAvailableVillages(data.villages);
+                        }
+                    })
+                    .catch(() => {})
+                    .finally(() => setLoadingVillages(false));
+            }
         }
 
         // Auto-fetch Postal Code for district if available

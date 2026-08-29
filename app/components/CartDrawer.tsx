@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useCart, CartItem } from "../context/CartContext";
-import CartCheckoutModal from "./CartCheckoutModal";
 import posthog from 'posthog-js';
+
+const CartCheckoutModal = dynamic(() => import("./CartCheckoutModal"), { ssr: false });
 
 export default function CartDrawer() {
     const { items, removeFromCart, clearCart, cartTotal, isDrawerOpen, closeDrawer } = useCart();
@@ -214,7 +216,7 @@ export default function CartDrawer() {
                                                 src={group.themeImgSrc} 
                                                 alt={group.title}
                                                 fill
-                                                unoptimized={true}
+                                                sizes="40px"
                                                 style={{ objectFit: "cover" }}
                                             />
                                         )}

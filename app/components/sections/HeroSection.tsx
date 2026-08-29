@@ -136,7 +136,9 @@ export default function HeroSection() {
                                     zIndex: 10,
                                     animation: 'bounce-soft 4s ease-in-out infinite'
                                 }}>
-                                    <span style={{ fontSize: 14 }}>⚡</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                                        <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+                                    </svg>
                                     <p style={{ margin: 0, fontSize: '11px', fontWeight: 600, color: '#382a24', textAlign: 'left', lineHeight: 1.3 }}>Akses Instan<br/>tanpa menunggu</p>
                                 </div>
 

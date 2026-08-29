@@ -1,5 +1,7 @@
 export function trackViewContent({ id, name, price }: { id: string; name: string; price?: number }) {
-    if (typeof window !== 'undefined' && (window as any).ttq) {
+    if (typeof window === 'undefined') return;
+    const send = () => {
+        if (!(window as any).ttq) return;
         (window as any).ttq.track('ViewContent', {
             content_type: 'product',
             content_id: id,
@@ -7,6 +9,11 @@ export function trackViewContent({ id, name, price }: { id: string; name: string
             value: price || 0,
             currency: 'IDR',
         });
+    };
+    if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(send, { timeout: 1200 });
+    } else {
+        setTimeout(send, 300);
     }
 }
 

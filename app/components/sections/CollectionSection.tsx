@@ -161,7 +161,7 @@ export default function CollectionSection() {
                                 onAddThreeSlotToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 25000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })
                             },
                             {
-                                badgeText: "New ✨",
+                                badgeText: "New",
                                 badgeColor: "#e8789a",
                                 badgeVariant: "solid",
                                 imageSrc: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",

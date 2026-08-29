@@ -3,7 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import SlotPickerModal, { SlotPickerConfig } from "./SlotPickerModal";
+import dynamic from "next/dynamic";
+import type { SlotPickerConfig } from "./SlotPickerModal";
+
+const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
 
 interface LoopCard {
     badgeText?: string;
@@ -141,7 +144,10 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                         whiteSpace: "nowrap",
                         boxShadow: "0 8px 24px rgba(0,0,0,0.3)"
                     }}>
-                        <span style={{ fontSize: 11 }}>🔒</span>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                            <rect x="4" y="10" width="16" height="10" rx="2" />
+                            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                        </svg>
                         <span>REVEALING SOON</span>
                     </div>
                 )}

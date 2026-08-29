@@ -70,8 +70,8 @@ export default function Navbar() {
                     height: 52,
                     padding: "0 16px 0 16px",
                     background: "rgba(250,247,242,0.96)",
-                    backdropFilter: "blur(24px) saturate(180%)",
-                    WebkitBackdropFilter: "blur(24px) saturate(180%)",
+                    backdropFilter: "blur(12px) saturate(150%)",
+                    WebkitBackdropFilter: "blur(12px) saturate(150%)",
                     border: "1px solid rgba(205,171,143,0.25)",
                     borderRadius: 999,
                     boxShadow: scrolled
@@ -82,7 +82,7 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0, position: "relative", zIndex: 10 }}>
                         <div style={{ position: "relative", width: 26, height: 26, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(205,171,143,0.3)", flexShrink: 0 }}>
-                            <Image src="/logo.png" alt="Logo" fill unoptimized={true} style={{ objectFit: "cover" }} sizes="26px" />
+                            <Image src="/logo.png" alt="Logo" fill style={{ objectFit: "cover" }} sizes="26px" />
                         </div>
                         <span style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "#382a24", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
                             For you, Always.
@@ -235,7 +235,7 @@ export default function Navbar() {
             {/* Mobile dropdown menu */}
             <div style={{
                 position: "fixed", top: scrolled ? 74 : 80, left: 20, right: 20, zIndex: 998,
-                background: "rgba(250,247,242,0.98)", backdropFilter: "blur(24px)",
+                background: "rgba(250,247,242,0.98)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)",
                 border: mobileOpen ? "1px solid rgba(205,171,143,0.25)" : "none",
                 opacity: mobileOpen ? 1 : 0,
                 borderRadius: 20,
