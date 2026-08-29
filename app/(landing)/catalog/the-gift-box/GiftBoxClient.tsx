@@ -1525,16 +1525,6 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                 </div>
             </section>
 
-            <div className="gift-box-sticky-cta" role="region" aria-label="Pesan The Gift Box">
-                <div>
-                    <span>Mulai dari</span>
-                    <strong>Rp {displayPrice.toLocaleString("id-ID")}</strong>
-                </div>
-                <Link href={`/catalog/the-gift-box/checkout?boxType=${selectedBoxType}&digital=${selectedDigitalExperience}`}>
-                    Pesan
-                </Link>
-            </div>
-
             {/* UNBOX CHECKOUT MODAL */}
             {showCheckoutModal && (
                 <UnboxCheckoutModal
@@ -1561,49 +1551,7 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                     display: none;
                 }
 
-                .gift-box-sticky-cta { display: none; }
-
                 @media (max-width: 768px) {
-                    .gift-box-sticky-cta {
-                        position: fixed;
-                        left: 12px;
-                        right: 82px;
-                        bottom: calc(12px + env(safe-area-inset-bottom));
-                        z-index: 990;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        gap: 12px;
-                        padding: 8px 8px 8px 14px;
-                        border: 1px solid rgba(205,171,143,.35);
-                        border-radius: 17px;
-                        background: rgba(250,247,242,.97);
-                        box-shadow: 0 12px 34px rgba(29,24,22,.18);
-                    }
-                    .gift-box-sticky-cta span {
-                        display: block;
-                        color: #9a806d;
-                        font-size: 9px;
-                        font-weight: 800;
-                        letter-spacing: .1em;
-                        text-transform: uppercase;
-                    }
-                    .gift-box-sticky-cta strong {
-                        display: block;
-                        color: #382a24;
-                        font-size: 13px;
-                    }
-                    .gift-box-sticky-cta a {
-                        padding: 12px 20px;
-                        border-radius: 12px;
-                        background: #382a24;
-                        color: #fff;
-                        font-size: 11px;
-                        font-weight: 800;
-                        letter-spacing: .08em;
-                        text-decoration: none;
-                        text-transform: uppercase;
-                    }
                     .gift-box-hero {
                         padding-top: 92px !important;
                         padding-bottom: 48px !important;

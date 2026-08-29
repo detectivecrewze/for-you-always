@@ -1093,38 +1093,6 @@ export function LandscapeProductCard({
             </div>
         </AnimatedSection>
 
-        {onAddToCart && (
-            <div className="product-sticky-cta" role="region" aria-label={`Pesan ${title}`}>
-                <div style={{ minWidth: 0 }}>
-                    <span style={{ display: "block", fontSize: 9, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", color: "#9a806d" }}>Mulai dari</span>
-                    <strong style={{ display: "block", color: "#382a24", fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{price}</strong>
-                </div>
-                <button type="button" onClick={handlePesanClick} style={{ border: 0, borderRadius: 12, padding: "12px 18px", background: activeAccent === "#faf7f2" ? "#382a24" : activeAccent, color: "#fff", fontSize: 11, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase", cursor: "pointer", flexShrink: 0 }}>Pesan</button>
-            </div>
-        )}
-
-        <style>{`
-            .product-sticky-cta { display: none; }
-            @media (max-width: 768px) {
-                .product-sticky-cta {
-                    position: fixed;
-                    left: 12px;
-                    right: 82px;
-                    bottom: calc(12px + env(safe-area-inset-bottom));
-                    z-index: 990;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 12px;
-                    padding: 8px 8px 8px 14px;
-                    border: 1px solid rgba(205,171,143,.35);
-                    border-radius: 17px;
-                    background: rgba(250,247,242,.97);
-                    box-shadow: 0 12px 34px rgba(29,24,22,.18);
-                }
-            }
-        `}</style>
-
         {/* Slot Picker Modal */}
         {slotPickerConfig && (
             <SlotPickerModal
