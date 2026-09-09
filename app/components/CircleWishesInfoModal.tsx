@@ -7,7 +7,11 @@ import Image from "next/image";
 interface CircleWishesInfoModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onDemoOpen?: (url: string, label: string) => void;
 }
+
+const CIRCLE_DEMO_URL = "https://anniv.for-you-always.my.id/auto-circle?preview=circle#circle-wishes-section";
+const CIRCLE_DEMO_LABEL = "Demo Memoria Circle Edition";
 
 interface SlideItem {
     id: string;
@@ -47,7 +51,7 @@ const FEATURE_SLIDES: SlideItem[] = [
     },
 ];
 
-export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesInfoModalProps) {
+export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: CircleWishesInfoModalProps) {
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
@@ -95,6 +99,14 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
             onCloseRef.current();
         }, 220);
     }, []);
+
+    const handleDemoOpen = useCallback(() => {
+        if (onDemoOpen) {
+            onDemoOpen(CIRCLE_DEMO_URL, CIRCLE_DEMO_LABEL);
+            return;
+        }
+        window.open(CIRCLE_DEMO_URL, "_blank", "noopener,noreferrer");
+    }, [onDemoOpen]);
 
     const goToPrev = useCallback(() => {
         setActiveSlideIndex((prev) => (prev > 0 ? prev - 1 : FEATURE_SLIDES.length - 1));
@@ -890,10 +902,9 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                         Tutup
                     </button>
 
-                    <a
-                        href="https://anniv.for-you-always.my.id/auto-circle"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <button
+                        type="button"
+                        onClick={handleDemoOpen}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -905,8 +916,9 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                             fontWeight: 700,
                             padding: "9px clamp(14px, 3.5vw, 20px)",
                             borderRadius: 999,
+                            border: "none",
                             whiteSpace: "nowrap",
-                            textDecoration: "none",
+                            cursor: "pointer",
                             boxShadow: "0 6px 20px rgba(226, 133, 155, 0.3)",
                             transition: "all 0.2s ease",
                         }}
@@ -924,7 +936,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                             <path d="M7 17L17 7" />
                             <path d="M7 7h10v10" />
                         </svg>
-                    </a>
+                    </button>
                 </div>
             </div>
 

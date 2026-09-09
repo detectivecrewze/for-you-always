@@ -1,16 +1,47 @@
 "use client";
 
 import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import CircleWishesInfoModal from "../../../components/CircleWishesInfoModal";
+import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
+
+type DemoVariant = "personal" | "circle";
+type DemoSource = "product_card" | "circle_wishes_info";
+
+interface ActiveDemo {
+    variant: DemoVariant;
+    source: DemoSource;
+    url: string;
+    label: string;
+}
+
+const PERSONAL_DEMO_URL = "https://anniv.for-you-always.my.id/untuk-nadia";
+const MEMORIA_CART_ITEM = {
+    id: "loves",
+    title: "Memoria Premium",
+    numericPrice: 40000,
+    oldNumericPrice: 50000,
+    themeColor: "#581824",
+};
+
+function captureDemoEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, properties))
+        .catch(() => {});
+}
+
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
     const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
+    const [activeDemo, setActiveDemo] = React.useState<ActiveDemo | null>(null);
+    const demoOpenedAtRef = React.useRef(0);
     const [memoriaNotice, setMemoriaNotice] = React.useState<{ isActive: boolean; title: string; message: string }>({
         isActive: false,
         title: "Info Khusus Memoria:",
@@ -27,6 +58,56 @@ export default function ProductCatalogPage() {
             })
             .catch(() => {});
     }, []);
+
+    const demoAnalyticsProperties = React.useCallback((demo: ActiveDemo) => ({
+        product_id: "loves",
+        product_name: "Memoria Premium",
+        demo_variant: demo.variant,
+        source: demo.source,
+    }), []);
+
+    const openDemo = React.useCallback((
+        variant: DemoVariant,
+        source: DemoSource,
+        url: string,
+        label: string
+    ) => {
+        setIsInfoModalOpen(false);
+        demoOpenedAtRef.current = performance.now();
+        const demo = { variant, source, url, label };
+        captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
+        setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const closeDemo = React.useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_closed", {
+            ...demoAnalyticsProperties(activeDemo),
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoLoaded = React.useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_loaded", {
+            ...demoAnalyticsProperties(activeDemo),
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoOrder = React.useCallback(() => {
+        if (activeDemo) {
+            captureDemoEvent("product_demo_cta_clicked", {
+                ...demoAnalyticsProperties(activeDemo),
+                destination: "cart",
+                price: MEMORIA_CART_ITEM.numericPrice,
+                currency: "IDR",
+            });
+        }
+        addToCart(MEMORIA_CART_ITEM);
+    }, [activeDemo, addToCart, demoAnalyticsProperties]);
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -211,13 +292,14 @@ export default function ProductCatalogPage() {
                             ]}
                             price="Rp 40.000"
                             oldPrice="Rp 50.000"
-                            demoLink="https://anniv.for-you-always.my.id/"
+                            demoLink={PERSONAL_DEMO_URL}
+                            onDemoOpen={(url, label) => openDemo("personal", "product_card", url, label)}
                             mediaSrc=""
                             fallbackImgSrc="/assets/opening_gate.png"
                             mediaType="image"
                             accentColor="#faf7f2"
                             accentGlow="rgba(250,247,242,0.15)"
-                            onAddToCart={() => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })}
+                            onAddToCart={() => addToCart(MEMORIA_CART_ITEM)}
                             themesLabel="Koleksi Pages"
                             themes={[
                                 { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
@@ -240,7 +322,24 @@ export default function ProductCatalogPage() {
                         <CircleWishesInfoModal
                             isOpen={isInfoModalOpen}
                             onClose={() => setIsInfoModalOpen(false)}
+                            onDemoOpen={(url, label) => openDemo("circle", "circle_wishes_info", url, label)}
                         />
+
+                        {activeDemo && (
+                            <DemoPreviewModal
+                                isOpen
+                                src={activeDemo.url}
+                                title={activeDemo.variant === "circle" ? "Circle Wishes Preview" : "Memoria Preview"}
+                                subtitle={activeDemo.variant === "circle"
+                                    ? "Lihat bagaimana ucapan teman hadir di dalam kado"
+                                    : "Jelajahi contoh Personal Edition"}
+                                productName="Memoria Premium"
+                                price="Rp 40.000"
+                                onClose={closeDemo}
+                                onOrder={handleDemoOrder}
+                                onLoaded={handleDemoLoaded}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

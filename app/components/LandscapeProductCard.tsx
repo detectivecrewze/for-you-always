@@ -86,6 +86,7 @@ export function LandscapeProductCard({
     tiktokHref,
     demoLink,
     demoLabel,
+    onDemoOpen,
     priority = false,
 }: {
     label: React.ReactNode;
@@ -112,6 +113,7 @@ export function LandscapeProductCard({
     tiktokHref?: string;
     demoLink?: string;
     demoLabel?: string;
+    onDemoOpen?: (url: string, label: string) => void;
     priority?: boolean;
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
@@ -245,12 +247,12 @@ export function LandscapeProductCard({
         el.style.borderColor = "rgba(255,255,255,0.15)";
     }, []);
 
-    const handleDemoMouseEnter = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleDemoMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
         e.currentTarget.style.background = "rgba(250, 247, 242, 0.95)";
         e.currentTarget.style.transform = "translateY(-2px)";
     }, []);
 
-    const handleDemoMouseLeave = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleDemoMouseLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
         e.currentTarget.style.background = "rgba(250, 247, 242, 0.85)";
         e.currentTarget.style.transform = "translateY(0)";
     }, []);
@@ -405,16 +407,18 @@ export function LandscapeProductCard({
                         )}
 
                         {/* Floating Demo Button Overlay */}
-                        {activeDemoLink && (
-                            <a href={activeDemoLink} target="_blank" rel="noopener noreferrer" style={{
+                        {activeDemoLink && (() => {
+                            const demoControlStyle: React.CSSProperties = {
                                 position: "absolute",
                                 bottom: 16,
                                 left: 16,
+                                minHeight: 44,
                                 background: "rgba(250, 247, 242, 0.85)",
                                 backdropFilter: "blur(8px)",
                                 WebkitBackdropFilter: "blur(8px)",
                                 border: "1px solid rgba(56, 42, 36, 0.15)",
                                 color: "#382a24",
+                                fontFamily: "inherit",
                                 fontSize: 12,
                                 fontWeight: 800,
                                 padding: "8px 16px",
@@ -425,17 +429,42 @@ export function LandscapeProductCard({
                                 boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                                 letterSpacing: "0.02em",
                                 textDecoration: "none",
-                                transition: "all 0.2s ease"
-                            }}
-                            onMouseEnter={handleDemoMouseEnter}
-                            onMouseLeave={handleDemoMouseLeave}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                {activeDemoLabel}
-                            </a>
-                        )}
+                                transition: "all 0.2s ease",
+                                cursor: "pointer",
+                            };
+                            const demoControlContent = (
+                                <>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    {activeDemoLabel}
+                                </>
+                            );
+
+                            return onDemoOpen ? (
+                                <button
+                                    type="button"
+                                    onClick={() => onDemoOpen(activeDemoLink, activeDemoLabel)}
+                                    style={demoControlStyle}
+                                    onMouseEnter={handleDemoMouseEnter}
+                                    onMouseLeave={handleDemoMouseLeave}
+                                >
+                                    {demoControlContent}
+                                </button>
+                            ) : (
+                                <a
+                                    href={activeDemoLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={demoControlStyle}
+                                    onMouseEnter={handleDemoMouseEnter}
+                                    onMouseLeave={handleDemoMouseLeave}
+                                >
+                                    {demoControlContent}
+                                </a>
+                            );
+                        })()}
                     </div>
 
 
