@@ -889,6 +889,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             whiteSpace: "nowrap",
                             cursor: "pointer",
                             transition: "all 0.2s ease",
+                            flexShrink: 0,
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.color = "#FDE8E9";
@@ -908,6 +909,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
+                            justifyContent: "center",
                             gap: 7,
                             background: "linear-gradient(135deg, #E2859B 0%, #C96880 100%)",
                             color: "#2D141E",
@@ -921,6 +923,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             cursor: "pointer",
                             boxShadow: "0 6px 20px rgba(226, 133, 155, 0.3)",
                             transition: "all 0.2s ease",
+                            flex: "1 1 auto",
+                            textAlign: "center",
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = "translateY(-1px)";
@@ -969,37 +973,57 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            gap: 12,
+                            gap: "clamp(8px, 2vw, 12px)",
                             marginBottom: 10,
                             flexShrink: 0,
+                            width: "100%",
+                            minWidth: 0,
                         }}
                     >
                         <div style={{
-                            display: "inline-flex",
+                            display: "flex",
                             alignItems: "center",
                             gap: 8,
+                            minWidth: 0,
+                            flex: "1 1 auto",
+                            overflow: "hidden",
                             fontFamily: "var(--font-sans)",
-                            fontSize: "clamp(11.5px, 2.7vw, 13px)",
+                            fontSize: "clamp(11px, 2.7vw, 13px)",
                             color: "#FDE8E9",
                             fontWeight: 600,
                         }}>
                             <span style={{
-                                padding: "3px 10px",
+                                padding: "3px 9px",
                                 borderRadius: 999,
                                 background: "rgba(226, 133, 155, 0.2)",
                                 border: "1px solid rgba(226, 133, 155, 0.45)",
                                 color: "#FDE8E9",
-                                fontSize: 11,
+                                fontSize: "clamp(10px, 2.5vw, 11px)",
                                 fontWeight: 700,
                                 textTransform: "uppercase",
                                 letterSpacing: "0.06em",
+                                whiteSpace: "nowrap",
+                                flexShrink: 0,
                             }}>
                                 Langkah {activeSlideIndex + 1}/{FEATURE_SLIDES.length}
                             </span>
-                            <span style={{ opacity: 0.9 }}>{currentSlide.title}</span>
+                            <span style={{
+                                opacity: 0.9,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                minWidth: 0,
+                            }}>
+                                {currentSlide.title}
+                            </span>
                         </div>
 
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "clamp(6px, 1.8vw, 8px)",
+                            flexShrink: 0,
+                        }}>
                             {/* Toggle Zoom Scale Button */}
                             <button
                                 type="button"
@@ -1008,19 +1032,21 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                                     display: "inline-flex",
                                     alignItems: "center",
                                     gap: 5,
-                                    padding: "6px 12px",
+                                    padding: "6px clamp(8px, 2vw, 12px)",
                                     borderRadius: 999,
                                     background: zoomScale > 1 ? "rgba(226, 133, 155, 0.25)" : "rgba(255, 255, 255, 0.1)",
                                     border: "1px solid " + (zoomScale > 1 ? "rgba(226, 133, 155, 0.6)" : "rgba(255, 255, 255, 0.2)"),
                                     color: "#FDE8E9",
                                     fontFamily: "var(--font-sans)",
-                                    fontSize: 11.5,
+                                    fontSize: "clamp(10.5px, 2.6vw, 11.5px)",
                                     fontWeight: 600,
                                     cursor: "pointer",
                                     transition: "all 0.2s ease",
+                                    whiteSpace: "nowrap",
+                                    flexShrink: 0,
                                 }}
                             >
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                                     <circle cx="11" cy="11" r="8" />
                                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                                     {zoomScale > 1 ? (
@@ -1032,7 +1058,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                                         </>
                                     )}
                                 </svg>
-                                <span>{zoomScale > 1 ? "Perkecil (1x)" : "Perbesar (2x)"}</span>
+                                <span style={{ whiteSpace: "nowrap" }}>{zoomScale > 1 ? "Perkecil (1x)" : "Perbesar (2x)"}</span>
                             </button>
 
                             {/* Close Button */}
@@ -1055,6 +1081,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                                     alignItems: "center",
                                     justifyContent: "center",
                                     transition: "all 0.2s ease",
+                                    flexShrink: 0,
                                 }}
                             >
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
