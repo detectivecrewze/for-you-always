@@ -29,17 +29,21 @@ export function AnimatedSection({
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        let revealTimer: ReturnType<typeof setTimeout> | null = null;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setTimeout(() => setIsVisible(true), delay);
+                    revealTimer = setTimeout(() => setIsVisible(true), delay);
                     observer.disconnect(); // Only animate once, stop observing to save CPU
                 }
             },
             { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
         );
         if (ref.current && !priority) observer.observe(ref.current);
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            if (revealTimer) clearTimeout(revealTimer);
+        };
     }, [delay, priority]);
 
     return (

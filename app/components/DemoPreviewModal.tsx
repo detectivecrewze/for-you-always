@@ -474,9 +474,6 @@ export default function DemoPreviewModal({
         }
         setLoading(false);
         setTimedOut(false);
-        if (window.matchMedia("(max-width: 767px)").matches) {
-            iframeRef.current?.focus({ preventScroll: true });
-        }
         if (!hasReportedLoadRef.current) {
             hasReportedLoadRef.current = true;
             onLoadedRef.current?.(Math.round(performance.now() - loadStartedAtRef.current));
@@ -526,17 +523,14 @@ export default function DemoPreviewModal({
                     pointer-events: auto;
                 }
                 .memoria-demo-viewport {
-                    overflow-y: auto !important;
+                    overflow-y: hidden !important;
                     overflow-x: hidden !important;
-                    -webkit-overflow-scrolling: touch !important;
-                    touch-action: pan-y !important;
                 }
                 .memoria-demo-iframe {
                     width: 100% !important;
                     height: 100% !important;
                     display: block;
                     border: 0;
-                    touch-action: pan-y !important;
                     pointer-events: auto !important;
                 }
                 .memoria-demo-close:hover,
@@ -579,14 +573,8 @@ export default function DemoPreviewModal({
                         padding: 10px 12px max(10px, env(safe-area-inset-bottom)) !important;
                     }
                     .memoria-demo-viewport {
-                        overflow-y: auto !important;
+                        overflow-y: hidden !important;
                         overflow-x: hidden !important;
-                        -webkit-overflow-scrolling: touch !important;
-                        touch-action: pan-y !important;
-                    }
-                    .memoria-demo-iframe {
-                        touch-action: pan-y !important;
-                        pointer-events: auto !important;
                     }
                 }
                 @media (prefers-reduced-motion: reduce) {
@@ -699,9 +687,7 @@ export default function DemoPreviewModal({
                     style={{
                         position: "relative",
                         minHeight: 0,
-                        overflowY: "auto",
-                        overflowX: "hidden",
-                        WebkitOverflowScrolling: "touch",
+                        overflow: "hidden",
                         background: "#F9F1EA",
                     }}
                 >

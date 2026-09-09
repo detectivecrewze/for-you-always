@@ -275,8 +275,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                         onClick={handleClose}
                         aria-label="Tutup dialog"
                         style={{
-                            width: 32,
-                            height: 32,
+                            width: 44,
+                            height: 44,
                             borderRadius: "50%",
                             border: "1px solid rgba(255, 255, 255, 0.18)",
                             background: "rgba(64, 28, 43, 0.65)",
@@ -431,8 +431,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             left: 8,
                             top: "50%",
                             transform: "translateY(-50%)",
-                            width: 32,
-                            height: 32,
+                            width: 44,
+                            height: 44,
                             borderRadius: "50%",
                             background: "rgba(22, 9, 16, 0.8)",
                             backdropFilter: "blur(6px)",
@@ -474,8 +474,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             right: 8,
                             top: "50%",
                             transform: "translateY(-50%)",
-                            width: 32,
-                            height: 32,
+                            width: 44,
+                            height: 44,
                             borderRadius: "50%",
                             background: "rgba(22, 9, 16, 0.8)",
                             backdropFilter: "blur(6px)",
@@ -949,7 +949,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                 <div
                     role="dialog"
                     aria-label="Tinjauan Foto Perbesar"
-                    onClick={() => {
+                    onClick={(event) => {
+                        event.stopPropagation();
                         setIsZoomed(false);
                         setZoomScale(1);
                     }}
@@ -1044,6 +1045,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                                     transition: "all 0.2s ease",
                                     whiteSpace: "nowrap",
                                     flexShrink: 0,
+                                    minHeight: 44,
                                 }}
                             >
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
@@ -1070,8 +1072,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                                 }}
                                 aria-label="Tutup zoom"
                                 style={{
-                                    width: 36,
-                                    height: 36,
+                                    width: 44,
+                                    height: 44,
                                     borderRadius: "50%",
                                     background: "rgba(255, 255, 255, 0.12)",
                                     border: "1px solid rgba(255, 255, 255, 0.25)",
@@ -1106,8 +1108,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             left: "clamp(10px, 2.5vw, 24px)",
                             top: "50%",
                             transform: "translateY(-50%)",
-                            width: "clamp(40px, 5.2vw, 48px)",
-                            height: "clamp(40px, 5.2vw, 48px)",
+                            width: "clamp(44px, 5.2vw, 48px)",
+                            height: "clamp(44px, 5.2vw, 48px)",
                             borderRadius: "50%",
                             background: "rgba(22, 9, 16, 0.82)",
                             backdropFilter: "blur(10px)",
@@ -1152,8 +1154,8 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                             right: "clamp(10px, 2.5vw, 24px)",
                             top: "50%",
                             transform: "translateY(-50%)",
-                            width: "clamp(40px, 5.2vw, 48px)",
-                            height: "clamp(40px, 5.2vw, 48px)",
+                            width: "clamp(44px, 5.2vw, 48px)",
+                            height: "clamp(44px, 5.2vw, 48px)",
                             borderRadius: "50%",
                             background: "rgba(22, 9, 16, 0.82)",
                             backdropFilter: "blur(10px)",
