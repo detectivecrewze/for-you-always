@@ -1,19 +1,87 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
+
+interface ActiveDemo {
+    url: string;
+    label: string;
+}
+
+const INVITATION_CART_ITEM = {
+    id: "invitation",
+    title: "Invitation Edition",
+    numericPrice: 20000,
+    oldNumericPrice: 30000,
+    themeColor: "#8a3050",
+};
+
+function captureDemoEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, properties))
+        .catch(() => {});
+}
+
 export default function InvitationCatalogPage() {
     const { addToCart } = useCart();
+    const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
+    const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         trackViewContent({ id: "invitation", name: "Invitation Edition", price: 20000 });
     }, []);
+
+    const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
+        product_id: "invitation",
+        product_name: "Invitation Edition",
+        demo_label: demo.label,
+    }), []);
+
+    const openDemo = useCallback((url: string, label: string) => {
+        demoOpenedAtRef.current = performance.now();
+        const demo = { url, label };
+        captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
+        setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_closed", {
+            ...demoAnalyticsProperties(activeDemo),
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_loaded", {
+            ...demoAnalyticsProperties(activeDemo),
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            captureDemoEvent("product_demo_cta_clicked", {
+                ...demoAnalyticsProperties(activeDemo),
+                destination: "cart",
+                price: INVITATION_CART_ITEM.numericPrice,
+                currency: "IDR",
+            });
+        }
+        addToCart(INVITATION_CART_ITEM);
+    }, [activeDemo, addToCart, demoAnalyticsProperties]);
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -122,7 +190,23 @@ export default function InvitationCatalogPage() {
                             reverse={false}
                             initialSelectedIndex={0}
                             autoCycle={false}
+                            onDemoOpen={(url, label) => openDemo(url, label)}
                         />
+
+                        {activeDemo && (
+                            <DemoPreviewModal
+                                isOpen
+                                src={activeDemo.url}
+                                title={activeDemo.label || "Invitation Edition"}
+                                subtitle="Rasakan pengalaman tiket kencan digital interaktif"
+                                productName="Invitation Edition"
+                                price="Rp 20.000"
+                                theme="invitation"
+                                onClose={closeDemo}
+                                onOrder={handleDemoOrder}
+                                onLoaded={handleDemoLoaded}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

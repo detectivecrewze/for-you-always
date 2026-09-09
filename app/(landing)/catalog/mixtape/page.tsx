@@ -1,19 +1,87 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
+
+interface ActiveDemo {
+    url: string;
+    label: string;
+}
+
+const MIXTAPE_CART_ITEM = {
+    id: "mixtape",
+    title: "Mixtape Edition",
+    numericPrice: 20000,
+    oldNumericPrice: 30000,
+    themeColor: "#5a8d9e",
+};
+
+function captureDemoEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, properties))
+        .catch(() => {});
+}
+
 export default function MixtapeCatalogPage() {
     const { addToCart } = useCart();
+    const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
+    const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         trackViewContent({ id: "mixtape", name: "Mixtape Edition", price: 20000 });
     }, []);
+
+    const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
+        product_id: "mixtape",
+        product_name: "Mixtape Edition",
+        demo_label: demo.label,
+    }), []);
+
+    const openDemo = useCallback((url: string, label: string) => {
+        demoOpenedAtRef.current = performance.now();
+        const demo = { url, label };
+        captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
+        setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_closed", {
+            ...demoAnalyticsProperties(activeDemo),
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_loaded", {
+            ...demoAnalyticsProperties(activeDemo),
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            captureDemoEvent("product_demo_cta_clicked", {
+                ...demoAnalyticsProperties(activeDemo),
+                destination: "cart",
+                price: MIXTAPE_CART_ITEM.numericPrice,
+                currency: "IDR",
+            });
+        }
+        addToCart(MIXTAPE_CART_ITEM);
+    }, [activeDemo, addToCart, demoAnalyticsProperties]);
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -48,7 +116,7 @@ export default function MixtapeCatalogPage() {
                             mediaType="image"
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
-                            onAddToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#5a8d9e" })}
+                            onAddToCart={() => addToCart(MIXTAPE_CART_ITEM)}
                             onAddThreeSlotToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 25000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })}
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
@@ -60,7 +128,23 @@ export default function MixtapeCatalogPage() {
                             delay={100}
                             initialSelectedIndex={0}
                             autoCycle={false}
+                            onDemoOpen={(url, label) => openDemo(url, label)}
                         />
+
+                        {activeDemo && (
+                            <DemoPreviewModal
+                                isOpen
+                                src={activeDemo.url}
+                                title={activeDemo.label || "Mixtape Edition"}
+                                subtitle="Putar kaset retro interaktif berpadu foto & lagu favorit"
+                                productName="Mixtape Edition"
+                                price="Rp 20.000"
+                                theme="mixtape"
+                                onClose={closeDemo}
+                                onOrder={handleDemoOrder}
+                                onLoaded={handleDemoLoaded}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

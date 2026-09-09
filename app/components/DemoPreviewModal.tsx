@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 export type DemoCloseReason = "button" | "backdrop" | "escape" | "order";
-export type DemoModalTheme = "memoria" | "letter" | "voices";
+export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation";
 
 interface DemoThemeTokens {
     backdropBg: string;
@@ -119,6 +119,62 @@ const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
         retryLinkColor: "#8E5E36",
         emptyBg: "radial-gradient(circle at 50% 40%, #FAF5F0 0%, #EDE0D4 72%)",
         emptyText: "#5C371B",
+    },
+    mixtape: {
+        backdropBg: "rgba(9, 17, 22, 0.82)",
+        frameBg: "linear-gradient(160deg, #112028 0%, #091116 100%)",
+        frameBorder: "1px solid rgba(90, 141, 158, 0.32)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(90, 141, 158, 0.12)",
+        headerBg: "rgba(17, 32, 40, 0.96)",
+        headerBorder: "1px solid rgba(90, 141, 158, 0.2)",
+        footerBg: "rgba(17, 32, 40, 0.98)",
+        footerBorder: "1px solid rgba(90, 141, 158, 0.2)",
+        titleColor: "#E6F2F5",
+        subtitleColor: "#8FAEB8",
+        closeBg: "rgba(230, 242, 245, 0.08)",
+        closeBorder: "1px solid rgba(90, 141, 158, 0.3)",
+        closeColor: "#E6F2F5",
+        closeHoverBg: "rgba(90, 141, 158, 0.2)",
+        closeHoverBorder: "rgba(90, 141, 158, 0.55)",
+        orderBg: "linear-gradient(135deg, #7BB0C2 0%, #5A8D9E 100%)",
+        orderColor: "#0B171D",
+        orderShadow: "0 7px 20px rgba(90, 141, 158, 0.28)",
+        orderHoverShadow: "0 10px 24px rgba(90, 141, 158, 0.38)",
+        spinnerTrack: "rgba(90, 141, 158, 0.18)",
+        spinnerAccent: "#7BB0C2",
+        retryBtnBg: "#1C3B47",
+        retryBtnColor: "#E6F2F5",
+        retryLinkColor: "#5A8D9E",
+        emptyBg: "radial-gradient(circle at 50% 40%, #F4F8FA 0%, #DEE8ED 72%)",
+        emptyText: "#1C3B47",
+    },
+    invitation: {
+        backdropBg: "rgba(22, 10, 15, 0.82)",
+        frameBg: "linear-gradient(160deg, #26111A 0%, #15080E 100%)",
+        frameBorder: "1px solid rgba(232, 120, 154, 0.32)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(232, 120, 154, 0.12)",
+        headerBg: "rgba(38, 17, 26, 0.96)",
+        headerBorder: "1px solid rgba(232, 120, 154, 0.2)",
+        footerBg: "rgba(38, 17, 26, 0.98)",
+        footerBorder: "1px solid rgba(232, 120, 154, 0.2)",
+        titleColor: "#FDF0F4",
+        subtitleColor: "#D9A7B8",
+        closeBg: "rgba(253, 240, 244, 0.08)",
+        closeBorder: "1px solid rgba(232, 120, 154, 0.3)",
+        closeColor: "#FDF0F4",
+        closeHoverBg: "rgba(232, 120, 154, 0.2)",
+        closeHoverBorder: "rgba(232, 120, 154, 0.55)",
+        orderBg: "linear-gradient(135deg, #F095B2 0%, #E8789A 100%)",
+        orderColor: "#26111A",
+        orderShadow: "0 7px 20px rgba(232, 120, 154, 0.28)",
+        orderHoverShadow: "0 10px 24px rgba(232, 120, 154, 0.38)",
+        spinnerTrack: "rgba(232, 120, 154, 0.18)",
+        spinnerAccent: "#E8789A",
+        retryBtnBg: "#5E2036",
+        retryBtnColor: "#FDF0F4",
+        retryLinkColor: "#993B5D",
+        emptyBg: "radial-gradient(circle at 50% 40%, #FFF8FA 0%, #F9E8EE 72%)",
+        emptyText: "#5E2036",
     },
 };
 
