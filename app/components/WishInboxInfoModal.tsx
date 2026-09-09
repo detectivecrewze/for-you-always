@@ -37,6 +37,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
     const [closing, setClosing] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
+    const [lightboxTouchStartX, setLightboxTouchStartX] = useState<number | null>(null);
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomScale, setZoomScale] = useState(1);
     const closingRef = useRef(false);
@@ -154,8 +155,10 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                 }
             } else if (e.key === "ArrowLeft") {
                 goToPrev();
+                setZoomScale(1);
             } else if (e.key === "ArrowRight") {
                 goToNext();
+                setZoomScale(1);
             }
         };
 
@@ -730,6 +733,98 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         </div>
                     </div>
 
+                    {/* Floating Prev Button */}
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            goToPrev();
+                            setZoomScale(1);
+                        }}
+                        aria-label="Foto sebelumnya"
+                        style={{
+                            position: "fixed",
+                            left: "clamp(10px, 2.5vw, 24px)",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "clamp(40px, 5.2vw, 48px)",
+                            height: "clamp(40px, 5.2vw, 48px)",
+                            borderRadius: "50%",
+                            background: "rgba(32, 25, 12, 0.85)",
+                            backdropFilter: "blur(10px)",
+                            WebkitBackdropFilter: "blur(10px)",
+                            border: "1px solid rgba(245, 183, 56, 0.45)",
+                            color: "#FAF7F2",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            zIndex: 100010,
+                            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.65)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(245, 183, 56, 0.35)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.8)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1.08)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(32, 25, 12, 0.85)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.45)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+                        }}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+
+                    {/* Floating Next Button */}
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            goToNext();
+                            setZoomScale(1);
+                        }}
+                        aria-label="Foto berikutnya"
+                        style={{
+                            position: "fixed",
+                            right: "clamp(10px, 2.5vw, 24px)",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "clamp(40px, 5.2vw, 48px)",
+                            height: "clamp(40px, 5.2vw, 48px)",
+                            borderRadius: "50%",
+                            background: "rgba(32, 25, 12, 0.85)",
+                            backdropFilter: "blur(10px)",
+                            WebkitBackdropFilter: "blur(10px)",
+                            border: "1px solid rgba(245, 183, 56, 0.45)",
+                            color: "#FAF7F2",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            zIndex: 100010,
+                            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.65)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(245, 183, 56, 0.35)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.8)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1.08)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(32, 25, 12, 0.85)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.45)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+                        }}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+
                     {/* Scrollable & Pinch/Pan Friendly Viewport */}
                     <div
                         onClick={(e) => {
@@ -738,6 +833,26 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                                 setZoomScale(1);
                             }
                         }}
+                        onTouchStart={(e) => {
+                            if (zoomScale === 1 && e.touches && e.touches.length > 0) {
+                                setLightboxTouchStartX(e.touches[0].clientX);
+                            }
+                        }}
+                        onTouchEnd={(e) => {
+                            if (zoomScale === 1 && lightboxTouchStartX !== null && e.changedTouches && e.changedTouches.length > 0) {
+                                const touchEndX = e.changedTouches[0].clientX;
+                                const diff = lightboxTouchStartX - touchEndX;
+                                if (diff > 45) {
+                                    goToNext();
+                                    setZoomScale(1);
+                                } else if (diff < -45) {
+                                    goToPrev();
+                                    setZoomScale(1);
+                                }
+                            }
+                            setLightboxTouchStartX(null);
+                        }}
+                        onTouchCancel={() => setLightboxTouchStartX(null)}
                         style={{
                             flex: 1,
                             overflow: "auto",
@@ -747,6 +862,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             touchAction: "pan-x pan-y pinch-zoom",
                             WebkitOverflowScrolling: "touch",
                             padding: "8px 0",
+                            position: "relative",
                         }}
                     >
                         <div
@@ -783,16 +899,57 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         </div>
                     </div>
 
-                    {/* Bottom Helper Hint */}
-                    <div style={{
-                        textAlign: "center",
-                        fontFamily: "var(--font-sans)",
-                        fontSize: 11,
-                        color: "#E0CCA9",
-                        paddingTop: 8,
-                        flexShrink: 0,
-                    }}>
-                        Ketuk foto untuk memperbesar 2x &middot; Geser layar untuk membaca teks secara jelas
+                    {/* Bottom Controls: Navigation Dots & Helper Hint */}
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 6,
+                            paddingTop: 8,
+                            flexShrink: 0,
+                        }}
+                    >
+                        {/* Slide Dots Indicator */}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                        }}>
+                            {FEATURE_SLIDES.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    type="button"
+                                    onClick={() => {
+                                        setActiveSlideIndex(idx);
+                                        setZoomScale(1);
+                                    }}
+                                    aria-label={`Lihat foto ${idx + 1}`}
+                                    style={{
+                                        width: idx === activeSlideIndex ? 22 : 6,
+                                        height: 6,
+                                        borderRadius: 999,
+                                        background: idx === activeSlideIndex ? "#F5B738" : "rgba(245, 183, 56, 0.35)",
+                                        border: "none",
+                                        padding: 0,
+                                        cursor: "pointer",
+                                        transition: "all 0.25s ease",
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Helper Hint */}
+                        <div style={{
+                            textAlign: "center",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: 11,
+                            color: "#E0CCA9",
+                        }}>
+                            Gunakan panah / swipe untuk berganti foto &middot; Ketuk foto untuk zoom 2x
+                        </div>
                     </div>
                 </div>
             )}

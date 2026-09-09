@@ -53,8 +53,10 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
     const [closing, setClosing] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
+    const [lightboxTouchStartX, setLightboxTouchStartX] = useState<number | null>(null);
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomScale, setZoomScale] = useState(1);
+    const [isStepsOpen, setIsStepsOpen] = useState(false);
     const closingRef = useRef(false);
     const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
     const originalOverflowRef = useRef<string>("");
@@ -82,6 +84,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
         setVisible(false);
         setIsZoomed(false);
         setZoomScale(1);
+        setIsStepsOpen(false);
         if (closeTimerRef.current) {
             clearTimeout(closeTimerRef.current);
         }
@@ -113,6 +116,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
             setActiveSlideIndex(0);
             setIsZoomed(false);
             setZoomScale(1);
+            setIsStepsOpen(false);
             const timer = setTimeout(() => setVisible(true), 15);
             document.body.style.overflow = "hidden";
             return () => {
@@ -127,6 +131,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
             setVisible(false);
             setIsZoomed(false);
             setZoomScale(1);
+            setIsStepsOpen(false);
             document.body.style.overflow = originalOverflowRef.current;
         }
     }, [isOpen]);
@@ -168,8 +173,10 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                 }
             } else if (e.key === "ArrowLeft") {
                 goToPrev();
+                setZoomScale(1);
             } else if (e.key === "ArrowRight") {
                 goToNext();
+                setZoomScale(1);
             }
         };
 
@@ -518,196 +525,283 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                     </div>
                 </div>
 
-                {/* 3 Steps Flow (Informasi Alur Kerja Lengkap & Rapi) */}
+                {/* 3 Steps Flow Accordion (Collapsible Alur Kerja) */}
                 <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
                     marginBottom: 16,
                     flexShrink: 0,
                 }}>
-                    <div style={{
-                        fontFamily: "var(--font-sans)",
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "#E2859B",
-                        marginBottom: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                    }}>
-                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#E2859B" }} />
-                        3 Langkah Mudah Circle Wishes
-                    </div>
-
-                    {/* Step 1 */}
-                    <div style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 10,
-                        padding: "10px 12px",
-                        borderRadius: 12,
-                        background: "rgba(64, 28, 43, 0.35)",
-                        border: "1px solid rgba(226, 133, 155, 0.15)",
-                    }}>
-                        <div style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: 6,
-                            background: "rgba(226, 133, 155, 0.18)",
-                            border: "1px solid rgba(226, 133, 155, 0.35)",
+                    {/* Banner Kapsul Header Toggle */}
+                    <button
+                        type="button"
+                        onClick={() => setIsStepsOpen((prev) => !prev)}
+                        aria-expanded={isStepsOpen}
+                        style={{
+                            width: "100%",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                            color: "#E2859B",
-                            fontFamily: "var(--font-cormorant)",
-                            fontSize: 13,
-                            fontWeight: 700,
-                            marginTop: 1,
-                        }}>
-                            1
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(12px, 3vw, 13px)",
-                                fontWeight: 700,
-                                color: "#FDE8E9",
-                                marginBottom: 2,
-                            }}>
-                                Bagikan Link Khusus
-                            </div>
-                            <div style={{
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(11px, 2.7vw, 11.5px)",
-                                color: "#D1A7B1",
-                                lineHeight: 1.45,
-                            }}>
-                                Dapatkan link pengumpulan (contoh: <code style={{ color: "#E2859B", background: "rgba(226, 133, 155, 0.15)", padding: "1px 5px", borderRadius: 4 }}>for-you-always.my.id/c/nama</code>) untuk dibagikan secara perorangan atau ke grup WhatsApp. Teman tidak perlu login atau instal aplikasi.
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 10,
-                        padding: "10px 12px",
-                        borderRadius: 12,
-                        background: "rgba(64, 28, 43, 0.35)",
-                        border: "1px solid rgba(226, 133, 155, 0.15)",
-                    }}>
+                            justifyContent: "space-between",
+                            gap: 10,
+                            padding: "10px 14px",
+                            borderRadius: 13,
+                            background: isStepsOpen ? "rgba(64, 28, 43, 0.55)" : "rgba(64, 28, 43, 0.38)",
+                            border: "1px solid " + (isStepsOpen ? "rgba(226, 133, 155, 0.38)" : "rgba(226, 133, 155, 0.18)"),
+                            cursor: "pointer",
+                            transition: "all 0.25s ease",
+                            textAlign: "left",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(64, 28, 43, 0.6)";
+                            e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.45)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = isStepsOpen ? "rgba(64, 28, 43, 0.55)" : "rgba(64, 28, 43, 0.38)";
+                            e.currentTarget.style.borderColor = isStepsOpen ? "rgba(226, 133, 155, 0.38)" : "rgba(226, 133, 155, 0.18)";
+                        }}
+                    >
                         <div style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: 6,
-                            background: "rgba(226, 133, 155, 0.18)",
-                            border: "1px solid rgba(226, 133, 155, 0.35)",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                            color: "#E2859B",
-                            fontFamily: "var(--font-cormorant)",
-                            fontSize: 13,
-                            fontWeight: 700,
-                            marginTop: 1,
+                            gap: 8,
+                            minWidth: 0,
                         }}>
-                            2
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{
+                            <span style={{
+                                width: 6,
+                                height: 6,
+                                borderRadius: "50%",
+                                background: "#E2859B",
+                                boxShadow: "0 0 8px rgba(226, 133, 155, 0.6)",
+                                flexShrink: 0,
+                            }} />
+                            <span style={{
                                 fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(12px, 3vw, 13px)",
+                                fontSize: "clamp(11px, 2.7vw, 12px)",
                                 fontWeight: 700,
+                                letterSpacing: "0.06em",
+                                textTransform: "uppercase",
                                 color: "#FDE8E9",
-                                marginBottom: 2,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
                             }}>
-                                Teman Mengisi Pesan & Media
-                            </div>
-                            <div style={{
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(11px, 2.7vw, 11.5px)",
-                                color: "#D1A7B1",
-                                lineHeight: 1.45,
-                                marginBottom: 4,
-                            }}>
-                                Setiap orang bebas memilih format yang paling berkesan:
-                            </div>
-                            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                                {[
-                                    "Pesan Teks",
-                                    "Foto Kenangan",
-                                    "Video Singkat (1–15s)",
-                                    "Voice Note Suara",
-                                ].map((format) => (
-                                    <span key={format} style={{
-                                        fontFamily: "var(--font-sans)",
-                                        fontSize: 9.5,
-                                        fontWeight: 600,
-                                        padding: "1px 7px",
-                                        borderRadius: 999,
-                                        background: "rgba(226, 133, 155, 0.15)",
-                                        border: "1px solid rgba(226, 133, 155, 0.25)",
-                                        color: "#E2859B",
-                                        whiteSpace: "nowrap",
-                                    }}>
-                                        {format}
-                                    </span>
-                                ))}
-                            </div>
+                                3 Langkah Mudah Circle Wishes
+                            </span>
                         </div>
-                    </div>
 
-                    {/* Step 3 */}
-                    <div style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 10,
-                        padding: "10px 12px",
-                        borderRadius: 12,
-                        background: "rgba(64, 28, 43, 0.35)",
-                        border: "1px solid rgba(226, 133, 155, 0.15)",
-                    }}>
+                        {/* Dynamic Label & Rotating Chevron */}
                         <div style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: 6,
-                            background: "rgba(226, 133, 155, 0.18)",
-                            border: "1px solid rgba(226, 133, 155, 0.35)",
-                            display: "flex",
+                            display: "inline-flex",
                             alignItems: "center",
-                            justifyContent: "center",
+                            gap: 6,
+                            padding: "4px 10px",
+                            borderRadius: 999,
+                            background: isStepsOpen ? "rgba(226, 133, 155, 0.22)" : "rgba(226, 133, 155, 0.12)",
+                            border: "1px solid " + (isStepsOpen ? "rgba(226, 133, 155, 0.4)" : "rgba(226, 133, 155, 0.22)"),
+                            color: "#FDE8E9",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: "clamp(10px, 2.4vw, 11px)",
+                            fontWeight: 600,
                             flexShrink: 0,
-                            color: "#E2859B",
-                            fontFamily: "var(--font-cormorant)",
-                            fontSize: 13,
-                            fontWeight: 700,
-                            marginTop: 1,
+                            transition: "all 0.25s ease",
                         }}>
-                            3
+                            <span>{isStepsOpen ? "Sembunyikan" : "Lihat Langkah"}</span>
+                            <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth={2.6}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                style={{
+                                    transform: isStepsOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                    transition: "transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+                                }}
+                            >
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
                         </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
+                    </button>
+
+                    {/* Collapsible Content */}
+                    <div style={{
+                        maxHeight: isStepsOpen ? 900 : 0,
+                        opacity: isStepsOpen ? 1 : 0,
+                        overflow: "hidden",
+                        transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease, margin 0.25s ease",
+                        pointerEvents: isStepsOpen ? "auto" : "none",
+                        marginTop: isStepsOpen ? 8 : 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                    }}>
+                        {/* Step 1 */}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            gap: 10,
+                            padding: "10px 12px",
+                            borderRadius: 12,
+                            background: "rgba(64, 28, 43, 0.35)",
+                            border: "1px solid rgba(226, 133, 155, 0.15)",
+                        }}>
                             <div style={{
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(12px, 3vw, 13px)",
+                                width: 22,
+                                height: 22,
+                                borderRadius: 6,
+                                background: "rgba(226, 133, 155, 0.18)",
+                                border: "1px solid rgba(226, 133, 155, 0.35)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                                color: "#E2859B",
+                                fontFamily: "var(--font-cormorant)",
+                                fontSize: 13,
                                 fontWeight: 700,
-                                color: "#FDE8E9",
-                                marginBottom: 2,
+                                marginTop: 1,
                             }}>
-                                Tersaji Otomatis dalam 1 Kado Memoria
+                                1
                             </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(12px, 3vw, 13px)",
+                                    fontWeight: 700,
+                                    color: "#FDE8E9",
+                                    marginBottom: 2,
+                                }}>
+                                    Bagikan Link Khusus
+                                </div>
+                                <div style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(11px, 2.7vw, 11.5px)",
+                                    color: "#D1A7B1",
+                                    lineHeight: 1.45,
+                                }}>
+                                    Dapatkan link pengumpulan (contoh: <code style={{ color: "#E2859B", background: "rgba(226, 133, 155, 0.15)", padding: "1px 5px", borderRadius: 4 }}>for-you-always.my.id/c/nama</code>) untuk dibagikan secara perorangan atau ke grup WhatsApp. Teman tidak perlu login atau instal aplikasi.
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Step 2 */}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            gap: 10,
+                            padding: "10px 12px",
+                            borderRadius: 12,
+                            background: "rgba(64, 28, 43, 0.35)",
+                            border: "1px solid rgba(226, 133, 155, 0.15)",
+                        }}>
                             <div style={{
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(11px, 2.7vw, 11.5px)",
-                                color: "#D1A7B1",
-                                lineHeight: 1.45,
+                                width: 22,
+                                height: 22,
+                                borderRadius: 6,
+                                background: "rgba(226, 133, 155, 0.18)",
+                                border: "1px solid rgba(226, 133, 155, 0.35)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                                color: "#E2859B",
+                                fontFamily: "var(--font-cormorant)",
+                                fontSize: 13,
+                                fontWeight: 700,
+                                marginTop: 1,
                             }}>
-                                Seluruh ucapan tersusun rapi di Bento Grid kado Memoria dengan kontrol audio/video cerdas tanpa mengganggu musik latar kado.
+                                2
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(12px, 3vw, 13px)",
+                                    fontWeight: 700,
+                                    color: "#FDE8E9",
+                                    marginBottom: 2,
+                                }}>
+                                    Teman Mengisi Pesan & Media
+                                </div>
+                                <div style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(11px, 2.7vw, 11.5px)",
+                                    color: "#D1A7B1",
+                                    lineHeight: 1.45,
+                                    marginBottom: 4,
+                                }}>
+                                    Setiap orang bebas memilih format yang paling berkesan:
+                                </div>
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                                    {[
+                                        "Pesan Teks",
+                                        "Foto Kenangan",
+                                        "Video Singkat (1–15s)",
+                                        "Voice Note Suara",
+                                    ].map((format) => (
+                                        <span key={format} style={{
+                                            fontFamily: "var(--font-sans)",
+                                            fontSize: 9.5,
+                                            fontWeight: 600,
+                                            padding: "1px 7px",
+                                            borderRadius: 999,
+                                            background: "rgba(226, 133, 155, 0.15)",
+                                            border: "1px solid rgba(226, 133, 155, 0.25)",
+                                            color: "#E2859B",
+                                            whiteSpace: "nowrap",
+                                        }}>
+                                            {format}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Step 3 */}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            gap: 10,
+                            padding: "10px 12px",
+                            borderRadius: 12,
+                            background: "rgba(64, 28, 43, 0.35)",
+                            border: "1px solid rgba(226, 133, 155, 0.15)",
+                        }}>
+                            <div style={{
+                                width: 22,
+                                height: 22,
+                                borderRadius: 6,
+                                background: "rgba(226, 133, 155, 0.18)",
+                                border: "1px solid rgba(226, 133, 155, 0.35)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                                color: "#E2859B",
+                                fontFamily: "var(--font-cormorant)",
+                                fontSize: 13,
+                                fontWeight: 700,
+                                marginTop: 1,
+                            }}>
+                                3
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(12px, 3vw, 13px)",
+                                    fontWeight: 700,
+                                    color: "#FDE8E9",
+                                    marginBottom: 2,
+                                }}>
+                                    Tersaji Otomatis dalam 1 Kado Memoria
+                                </div>
+                                <div style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(11px, 2.7vw, 11.5px)",
+                                    color: "#D1A7B1",
+                                    lineHeight: 1.45,
+                                }}>
+                                    Seluruh ucapan tersusun rapi di Bento Grid kado Memoria dengan kontrol audio/video cerdas tanpa mengganggu musik latar kado.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -915,6 +1009,98 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                         </div>
                     </div>
 
+                    {/* Floating Prev Button */}
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            goToPrev();
+                            setZoomScale(1);
+                        }}
+                        aria-label="Foto sebelumnya"
+                        style={{
+                            position: "fixed",
+                            left: "clamp(10px, 2.5vw, 24px)",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "clamp(40px, 5.2vw, 48px)",
+                            height: "clamp(40px, 5.2vw, 48px)",
+                            borderRadius: "50%",
+                            background: "rgba(22, 9, 16, 0.82)",
+                            backdropFilter: "blur(10px)",
+                            WebkitBackdropFilter: "blur(10px)",
+                            border: "1px solid rgba(226, 133, 155, 0.45)",
+                            color: "#FDE8E9",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            zIndex: 100010,
+                            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.65)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(226, 133, 155, 0.35)";
+                            e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.8)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1.08)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(22, 9, 16, 0.82)";
+                            e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.45)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+                        }}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+
+                    {/* Floating Next Button */}
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            goToNext();
+                            setZoomScale(1);
+                        }}
+                        aria-label="Foto berikutnya"
+                        style={{
+                            position: "fixed",
+                            right: "clamp(10px, 2.5vw, 24px)",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "clamp(40px, 5.2vw, 48px)",
+                            height: "clamp(40px, 5.2vw, 48px)",
+                            borderRadius: "50%",
+                            background: "rgba(22, 9, 16, 0.82)",
+                            backdropFilter: "blur(10px)",
+                            WebkitBackdropFilter: "blur(10px)",
+                            border: "1px solid rgba(226, 133, 155, 0.45)",
+                            color: "#FDE8E9",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            zIndex: 100010,
+                            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.65)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(226, 133, 155, 0.35)";
+                            e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.8)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1.08)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(22, 9, 16, 0.82)";
+                            e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.45)";
+                            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+                        }}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+
                     {/* Scrollable & Pinch/Pan Friendly Viewport */}
                     <div
                         onClick={(e) => {
@@ -923,6 +1109,26 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                                 setZoomScale(1);
                             }
                         }}
+                        onTouchStart={(e) => {
+                            if (zoomScale === 1 && e.touches && e.touches.length > 0) {
+                                setLightboxTouchStartX(e.touches[0].clientX);
+                            }
+                        }}
+                        onTouchEnd={(e) => {
+                            if (zoomScale === 1 && lightboxTouchStartX !== null && e.changedTouches && e.changedTouches.length > 0) {
+                                const touchEndX = e.changedTouches[0].clientX;
+                                const diff = lightboxTouchStartX - touchEndX;
+                                if (diff > 45) {
+                                    goToNext();
+                                    setZoomScale(1);
+                                } else if (diff < -45) {
+                                    goToPrev();
+                                    setZoomScale(1);
+                                }
+                            }
+                            setLightboxTouchStartX(null);
+                        }}
+                        onTouchCancel={() => setLightboxTouchStartX(null)}
                         style={{
                             flex: 1,
                             overflow: "auto",
@@ -932,6 +1138,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                             touchAction: "pan-x pan-y pinch-zoom",
                             WebkitOverflowScrolling: "touch",
                             padding: "8px 0",
+                            position: "relative",
                         }}
                     >
                         <div
@@ -968,16 +1175,57 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                         </div>
                     </div>
 
-                    {/* Bottom Helper Hint */}
-                    <div style={{
-                        textAlign: "center",
-                        fontFamily: "var(--font-sans)",
-                        fontSize: 11,
-                        color: "#D1A7B1",
-                        paddingTop: 8,
-                        flexShrink: 0,
-                    }}>
-                        Ketuk foto untuk memperbesar 2x &middot; Geser layar untuk membaca teks secara jelas
+                    {/* Bottom Controls: Navigation Dots & Helper Hint */}
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 6,
+                            paddingTop: 8,
+                            flexShrink: 0,
+                        }}
+                    >
+                        {/* Slide Dots Indicator */}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                        }}>
+                            {FEATURE_SLIDES.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    type="button"
+                                    onClick={() => {
+                                        setActiveSlideIndex(idx);
+                                        setZoomScale(1);
+                                    }}
+                                    aria-label={`Lihat foto ${idx + 1}`}
+                                    style={{
+                                        width: idx === activeSlideIndex ? 22 : 6,
+                                        height: 6,
+                                        borderRadius: 999,
+                                        background: idx === activeSlideIndex ? "#E2859B" : "rgba(226, 133, 155, 0.3)",
+                                        border: "none",
+                                        padding: 0,
+                                        cursor: "pointer",
+                                        transition: "all 0.25s ease",
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Helper Hint */}
+                        <div style={{
+                            textAlign: "center",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: 11,
+                            color: "#D1A7B1",
+                        }}>
+                            Gunakan panah / swipe untuk berganti foto &middot; Ketuk foto untuk zoom 2x
+                        </div>
                     </div>
                 </div>
             )}
