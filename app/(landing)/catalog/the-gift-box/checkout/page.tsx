@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import Navbar from "../../../../components/Navbar";
 import { JABODETABEK_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
 import posthog from "posthog-js";
 import { trackInitiateCheckout } from "@/lib/pixel";
+import type { DemoCloseReason, DemoModalTheme } from "../../../../components/DemoPreviewModal";
+
+const DemoPreviewModal = dynamic(() => import("../../../../components/DemoPreviewModal"), { ssr: false });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 📸 CDN IMAGE ASSETS CONFIGURATION
@@ -26,6 +30,8 @@ interface DigitalOption {
     badgeColor: string;
     image: string;
     demoUrl: string;
+    theme: DemoModalTheme;
+    previewSubtitle: string;
     kraftPrice: string;
     kraftOldPrice: string;
     kraftNumericPrice: number;
@@ -56,7 +62,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badge: "Signature",
         badgeColor: "#581824",
         image: "/assets/opening_gate.png",
-        demoUrl: "https://anniv.for-you-always.my.id/",
+        demoUrl: "https://anniv.for-you-always.my.id/untuk-nadia?preview=personal",
+        theme: "memoria",
+        previewSubtitle: "Jelajahi kisah cinta sinematik dengan musik latar & galeri",
         kraftPrice: "Rp 90.000",
         kraftOldPrice: "Rp 110.000",
         kraftNumericPrice: 90000,
@@ -72,6 +80,8 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badgeColor: "#bf7b19",
         image: "/assets/snoopy-features/main-card-updatesnoopy.webp",
         demoUrl: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62",
+        theme: "birthday",
+        previewSubtitle: "Jelajahi scrapbook digital interaktif dengan 4 ruangan kejutan",
         kraftPrice: "Rp 85.000",
         kraftOldPrice: "Rp 105.000",
         kraftNumericPrice: 85000,
@@ -86,7 +96,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badge: "Best Seller",
         badgeColor: "#a67c52",
         image: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
-        demoUrl: "https://letter.for-you-always.my.id/vintage/letter-test",
+        demoUrl: "https://letter.for-you-always.my.id/letter-test",
+        theme: "letter",
+        previewSubtitle: "Buka amplop digital berbalut animasi typewriter dan musik latar",
         kraftPrice: "Rp 80.000",
         kraftOldPrice: "Rp 100.000",
         kraftNumericPrice: 80000,
@@ -101,7 +113,9 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badge: "",
         badgeColor: "#994d5d",
         image: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp",
-        demoUrl: "https://voices.for-you-always.my.id/",
+        demoUrl: "https://voice.for-you-always.my.id/gift/for-nadin",
+        theme: "voices",
+        previewSubtitle: "Dengarkan rekaman suara personal dipadu galeri foto sinematik",
         kraftPrice: "Rp 80.000",
         kraftOldPrice: "Rp 100.000",
         kraftNumericPrice: 80000,
@@ -117,6 +131,75 @@ export default function GiftBoxCheckoutWizardPage() {
     const [selectionInitialized, setSelectionInitialized] = useState(false);
     const checkoutTrackedRef = useRef(false);
     const [selectedBoxType, setSelectedBoxType] = useState<"hardbox" | "kraft">("kraft");
+    const [activeDemo, setActiveDemo] = useState<{
+        url: string;
+        title: string;
+        subtitle: string;
+        theme: DemoModalTheme;
+        optionId: string;
+        optionTitle: string;
+        kraftPrice: string;
+        hardboxPrice: string;
+    } | null>(null);
+    const demoOpenedAtRef = useRef(0);
+
+    const openDemo = useCallback((opt: DigitalOption) => {
+        demoOpenedAtRef.current = performance.now();
+        posthog.capture("product_demo_opened", {
+            product_id: "the-gift-box",
+            product_name: "The Gift Box Checkout",
+            digital_experience: opt.id,
+            demo_label: opt.title,
+        });
+        setActiveDemo({
+            url: opt.demoUrl,
+            title: `Demo ${opt.title}`,
+            subtitle: opt.previewSubtitle,
+            theme: opt.theme,
+            optionId: opt.id,
+            optionTitle: opt.title,
+            kraftPrice: opt.kraftPrice,
+            hardboxPrice: opt.hardboxPrice,
+        });
+    }, []);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        posthog.capture("product_demo_closed", {
+            product_id: "the-gift-box",
+            product_name: "The Gift Box Checkout",
+            digital_experience: activeDemo.optionId,
+            demo_label: activeDemo.title,
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        posthog.capture("product_demo_loaded", {
+            product_id: "the-gift-box",
+            product_name: "The Gift Box Checkout",
+            digital_experience: activeDemo.optionId,
+            demo_label: activeDemo.title,
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            posthog.capture("product_demo_cta_clicked", {
+                product_id: "the-gift-box",
+                product_name: "The Gift Box Checkout",
+                digital_experience: activeDemo.optionId,
+                box_type: selectedBoxType,
+                destination: "select_format",
+            });
+            setSelectedDigital(activeDemo.optionId);
+            setActiveDemo(null);
+        }
+    }, [activeDemo, selectedBoxType]);
     const [stockData, setStockData] = useState<{
         stock: number;
         in_stock: boolean;
@@ -946,11 +1029,12 @@ export default function GiftBoxCheckoutWizardPage() {
                                                         {opt.tagline}
                                                     </div>
                                                     <div style={{ marginTop: "4px" }}>
-                                                        <a
-                                                            href={opt.demoUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            onClick={(e) => e.stopPropagation()}
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                openDemo(opt);
+                                                            }}
                                                             style={{
                                                                 fontSize: "0.76rem",
                                                                 fontWeight: 600,
@@ -958,11 +1042,20 @@ export default function GiftBoxCheckoutWizardPage() {
                                                                 textDecoration: "none",
                                                                 display: "inline-flex",
                                                                 alignItems: "center",
-                                                                gap: "3px",
+                                                                gap: "4px",
+                                                                background: "transparent",
+                                                                border: "none",
+                                                                padding: 0,
+                                                                cursor: "pointer",
+                                                                fontFamily: "inherit",
                                                             }}
                                                         >
-                                                            <span>Lihat Contoh Live ↗</span>
-                                                        </a>
+                                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                                <circle cx="12" cy="12" r="3"></circle>
+                                                            </svg>
+                                                            <span>Lihat Contoh Live</span>
+                                                        </button>
                                                     </div>
                                                 </div>
 
@@ -1998,6 +2091,23 @@ export default function GiftBoxCheckoutWizardPage() {
                     </div>
                 </div>
             </main>
+
+            {/* LIVE DEMO PREVIEW MODAL */}
+            {activeDemo && (
+                <DemoPreviewModal
+                    isOpen
+                    src={activeDemo.url}
+                    title={activeDemo.title}
+                    subtitle={activeDemo.subtitle}
+                    productName={`The Gift Box • ${activeDemo.optionTitle}`}
+                    price={selectedBoxType === "kraft" ? activeDemo.kraftPrice : activeDemo.hardboxPrice}
+                    theme={activeDemo.theme}
+                    orderButtonLabel="Gunakan Format Ini"
+                    onClose={closeDemo}
+                    onOrder={handleDemoOrder}
+                    onLoaded={handleDemoLoaded}
+                />
+            )}
         </div>
     );
 }

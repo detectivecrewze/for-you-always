@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 
 import { trackViewContent } from "@/lib/pixel";
+import type { DemoCloseReason, DemoModalTheme } from "../../../components/DemoPreviewModal";
+
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
 
 const UnboxCheckoutModal = dynamic(() => import("../../../components/UnboxCheckoutModal"), {
     ssr: false,
@@ -168,6 +171,14 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
     const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [activeDemo, setActiveDemo] = useState<{
+        url: string;
+        title: string;
+        subtitle: string;
+        theme: DemoModalTheme;
+        productKey: "memoria" | "birthday" | "letter" | "voices";
+    } | null>(null);
+    const demoOpenedAtRef = useRef(0);
     const [heroSlide, setHeroSlide] = useState(0); // 0 = foto utama (isi box), 1 = foto kedua (luar/packaging)
     const [stocks, setStocks] = useState<{
         kraft: { stock: number; in_stock: boolean; is_low_stock: boolean };
@@ -327,13 +338,15 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
             desc: "Halaman interaktif ultra-premium dengan animasi kelas atas, menceritakan perjalanan kasih kalian secara spesial.",
             badge: "Signature",
             color: "#a67c52",
+            theme: "memoria" as DemoModalTheme,
+            demoUrl: "https://anniv.for-you-always.my.id/untuk-nadia?preview=personal",
+            previewSubtitle: "Jelajahi kisah cinta sinematik dengan musik latar & galeri",
             kraftPrice: "Rp 90.000",
             kraftOldPrice: "Rp 110.000",
             kraftNumericPrice: 90000,
             hardboxPrice: "Rp 150.000",
             hardboxOldPrice: "Rp 200.000",
             hardboxNumericPrice: 150000,
-            previewUrl: "/catalog/memoria",
             imageSrc: "/assets/opening_gate.png"
         },
         birthday: {
@@ -342,13 +355,15 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
             desc: "Rayakan momen ulang tahun spesial dengan scrapbook interaktif 4 ruangan, 15 galeri polaroid foto/video, 3 soundtrack musik latar, surat digital, dan wish inbox.",
             badge: "Birthday",
             color: "#bf7b19",
+            theme: "birthday" as DemoModalTheme,
+            demoUrl: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62",
+            previewSubtitle: "Jelajahi scrapbook digital interaktif dengan 4 ruangan kejutan",
             kraftPrice: "Rp 85.000",
             kraftOldPrice: "Rp 105.000",
             kraftNumericPrice: 85000,
             hardboxPrice: "Rp 140.000",
             hardboxOldPrice: "Rp 180.000",
             hardboxNumericPrice: 140000,
-            previewUrl: "/catalog/birthday",
             imageSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp"
         },
         letter: {
@@ -357,13 +372,15 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
             desc: "Penerima akan membuka amplop digital dengan animasi typewriter sinematik, musik latar syahdu, serta galeri kenangan tersembunyi.",
             badge: "Best Seller",
             color: "#a67c52",
+            theme: "letter" as DemoModalTheme,
+            demoUrl: "https://letter.for-you-always.my.id/letter-test",
+            previewSubtitle: "Buka amplop digital berbalut animasi typewriter dan musik latar",
             kraftPrice: "Rp 80.000",
             kraftOldPrice: "Rp 100.000",
             kraftNumericPrice: 80000,
             hardboxPrice: "Rp 130.000",
             hardboxOldPrice: "Rp 180.000",
             hardboxNumericPrice: 130000,
-            previewUrl: "/catalog/letter",
             imageSrc: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp"
         },
         voices: {
@@ -372,16 +389,86 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
             desc: "Pesan suara penuh kehangatan yang diputar otomatis bersama kompilasi foto kenangan terbaik kalian berdua.",
             badge: "",
             color: "#a67c52",
+            theme: "voices" as DemoModalTheme,
+            demoUrl: "https://voice.for-you-always.my.id/gift/for-nadin",
+            previewSubtitle: "Dengarkan rekaman suara personal dipadu galeri foto sinematik",
             kraftPrice: "Rp 80.000",
             kraftOldPrice: "Rp 100.000",
             kraftNumericPrice: 80000,
             hardboxPrice: "Rp 130.000",
             hardboxOldPrice: "Rp 180.000",
             hardboxNumericPrice: 130000,
-            previewUrl: "/catalog/voices",
             imageSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp"
         }
     };
+
+    const openDemo = useCallback((key: "memoria" | "birthday" | "letter" | "voices") => {
+        const exp = digitalExperiences[key];
+        demoOpenedAtRef.current = performance.now();
+        void import("posthog-js").then(({ default: posthog }) => {
+            posthog.capture("product_demo_opened", {
+                product_id: "the-gift-box",
+                product_name: "The Gift Box",
+                digital_experience: key,
+                demo_label: exp.title,
+            });
+        }).catch(() => {});
+        setActiveDemo({
+            url: exp.demoUrl,
+            title: `Demo ${exp.title}`,
+            subtitle: exp.previewSubtitle,
+            theme: exp.theme,
+            productKey: key,
+        });
+    }, [digitalExperiences]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        void import("posthog-js").then(({ default: posthog }) => {
+            posthog.capture("product_demo_closed", {
+                product_id: "the-gift-box",
+                product_name: "The Gift Box",
+                digital_experience: activeDemo.productKey,
+                demo_label: activeDemo.title,
+                close_method: reason,
+                open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+            });
+        }).catch(() => {});
+        setActiveDemo(null);
+    }, [activeDemo]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        void import("posthog-js").then(({ default: posthog }) => {
+            posthog.capture("product_demo_loaded", {
+                product_id: "the-gift-box",
+                product_name: "The Gift Box",
+                digital_experience: activeDemo.productKey,
+                demo_label: activeDemo.title,
+                load_time_ms: loadTimeMs,
+            });
+        }).catch(() => {});
+    }, [activeDemo]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            const exp = digitalExperiences[activeDemo.productKey];
+            const price = selectedBoxType === "kraft" ? exp.kraftNumericPrice : exp.hardboxNumericPrice;
+            void import("posthog-js").then(({ default: posthog }) => {
+                posthog.capture("product_demo_cta_clicked", {
+                    product_id: "the-gift-box",
+                    product_name: "The Gift Box",
+                    digital_experience: activeDemo.productKey,
+                    box_type: selectedBoxType,
+                    destination: "checkout",
+                    price,
+                    currency: "IDR",
+                });
+            }).catch(() => {});
+            setSelectedDigitalExperience(activeDemo.productKey);
+            window.location.href = `/catalog/the-gift-box/checkout?boxType=${selectedBoxType}&digital=${activeDemo.productKey}`;
+        }
+    }, [activeDemo, digitalExperiences, selectedBoxType]);
 
 
     const currentBox = BOX_TYPES[selectedBoxType];
@@ -1225,35 +1312,60 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                                 <p style={{ fontSize: "0.93rem", color: "#6e5c53", lineHeight: 1.7, marginBottom: "28px" }}>
                                     {currentExp.desc}
                                 </p>
-                                <Link
-                                    href={currentExp.previewUrl}
+                                <button
+                                    type="button"
+                                    onClick={() => openDemo(selectedDigitalExperience)}
                                     style={{
                                         display: "inline-flex",
                                         alignItems: "center",
                                         gap: "10px",
                                         color: currentExp.color,
                                         fontWeight: 700,
-                                        textDecoration: "none",
-                                        fontSize: "0.95rem"
+                                        background: "transparent",
+                                        border: "none",
+                                        padding: 0,
+                                        cursor: "pointer",
+                                        fontSize: "0.95rem",
+                                        fontFamily: "inherit",
+                                        transition: "transform 0.2s ease, opacity 0.2s ease",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = "translateX(4px)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = "translateX(0)";
                                     }}
                                 >
-                                    <span>Pratinjau Kado Digital Ini</span>
+                                    <span>Buka Live Demo Kado Ini</span>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                         <line x1="5" y1="12" x2="19" y2="12"></line>
                                         <polyline points="12 5 19 12 12 19"></polyline>
                                     </svg>
-                                </Link>
+                                </button>
                             </div>
 
                             {/* DYNAMIC SCREENSHOT PREVIEW MOCKUP */}
-                            <div style={{
-                                position: "relative",
-                                borderRadius: "24px",
-                                overflow: "hidden",
-                                border: "1px solid rgba(205,171,143,0.3)",
-                                backgroundColor: "#1d1816",
-                                boxShadow: "0 15px 35px -10px rgba(56,42,36,0.2)"
-                            }}>
+                            <div
+                                onClick={() => openDemo(selectedDigitalExperience)}
+                                style={{
+                                    position: "relative",
+                                    borderRadius: "24px",
+                                    overflow: "hidden",
+                                    border: "1px solid rgba(205,171,143,0.3)",
+                                    backgroundColor: "#1d1816",
+                                    boxShadow: "0 15px 35px -10px rgba(56,42,36,0.2)",
+                                    cursor: "pointer",
+                                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-4px)";
+                                    e.currentTarget.style.boxShadow = "0 22px 48px -10px rgba(56,42,36,0.3)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.boxShadow = "0 15px 35px -10px rgba(56,42,36,0.2)";
+                                }}
+                            >
                                 <div style={{
                                     height: "260px",
                                     position: "relative",
@@ -1294,10 +1406,10 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                                         textTransform: "uppercase"
                                     }}>
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
-                                        <span>Preview Kado Digital</span>
+                                        <span>Buka Live Demo</span>
                                     </div>
                                 </div>
 
@@ -1309,7 +1421,7 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                                         <span>Tampilan Setelah Dipindai</span>
                                     </p>
                                     <p style={{ fontSize: "0.82rem", color: "rgba(250,247,242,0.65)", marginTop: "4px", lineHeight: 1.5, margin: "4px 0 0 0" }}>
-                                        Saat Kartu Akses QR Custom dipindai, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima.
+                                        Saat Kartu Akses QR Custom dipindai, halaman <strong>{currentExp.title}</strong> ini akan langsung terbuka di HP penerima. Klik untuk mencoba live demo.
                                     </p>
                                 </div>
                             </div>
@@ -1530,6 +1642,23 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                 <UnboxCheckoutModal
                     onClose={() => setShowCheckoutModal(false)}
                     initialDigitalProduct={selectedDigitalExperience}
+                />
+            )}
+
+            {/* LIVE DEMO PREVIEW MODAL */}
+            {activeDemo && (
+                <DemoPreviewModal
+                    isOpen
+                    src={activeDemo.url}
+                    title={activeDemo.title}
+                    subtitle={activeDemo.subtitle}
+                    productName={`The Gift Box • ${digitalExperiences[activeDemo.productKey].title}`}
+                    price={selectedBoxType === "kraft" ? digitalExperiences[activeDemo.productKey].kraftPrice : digitalExperiences[activeDemo.productKey].hardboxPrice}
+                    theme={activeDemo.theme}
+                    orderButtonLabel="Pilih & Lanjut Pesan"
+                    onClose={closeDemo}
+                    onOrder={handleDemoOrder}
+                    onLoaded={handleDemoLoaded}
                 />
             )}
 
