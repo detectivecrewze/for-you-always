@@ -1,19 +1,87 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
+
+interface ActiveDemo {
+    url: string;
+    label: string;
+}
+
+const WRAPPED_CART_ITEM = {
+    id: "wrapped",
+    title: "Wrapped Edition",
+    numericPrice: 25000,
+    oldNumericPrice: 30000,
+    themeColor: "#c9184a",
+};
+
+function captureDemoEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, properties))
+        .catch(() => {});
+}
+
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
+    const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
+    const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         trackViewContent({ id: "wrapped", name: "Wrapped Edition", price: 25000 });
     }, []);
+
+    const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
+        product_id: "wrapped",
+        product_name: "Wrapped Edition",
+        demo_label: demo.label,
+    }), []);
+
+    const openDemo = useCallback((url: string, label: string) => {
+        demoOpenedAtRef.current = performance.now();
+        const demo = { url, label };
+        captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
+        setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_closed", {
+            ...demoAnalyticsProperties(activeDemo),
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_loaded", {
+            ...demoAnalyticsProperties(activeDemo),
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            captureDemoEvent("product_demo_cta_clicked", {
+                ...demoAnalyticsProperties(activeDemo),
+                destination: "cart",
+                price: WRAPPED_CART_ITEM.numericPrice,
+                currency: "IDR",
+            });
+        }
+        addToCart(WRAPPED_CART_ITEM);
+    }, [activeDemo, addToCart, demoAnalyticsProperties]);
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -47,7 +115,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#c9184a"
                             accentGlow="rgba(201,24,74,0.15)"
-                            onAddToCart={() => addToCart({ id: "wrapped", title: "Wrapped Edition", numericPrice: 25000, oldNumericPrice: 30000, themeColor: "#c9184a" })}
+                            onAddToCart={() => addToCart(WRAPPED_CART_ITEM)}
                             themesLabel="Koleksi Halaman"
                             themes={[
                                 { name: "Login", desc: "Halaman masuk", fallbackImgSrc: "https://cdn.for-you-always.my.id/1778015209230-zboaxw.webp" },
@@ -60,7 +128,23 @@ export default function ProductCatalogPage() {
                             delay={450}
                             reverse={false}
                             initialSelectedIndex={3}
+                            onDemoOpen={(url, label) => openDemo(url, label)}
                         />
+
+                        {activeDemo && (
+                            <DemoPreviewModal
+                                isOpen
+                                src={activeDemo.url}
+                                title={activeDemo.label || "Wrapped Edition"}
+                                subtitle="Jelajahi rekap kenangan 6 halaman interaktif"
+                                productName="Wrapped Edition"
+                                price="Rp 25.000"
+                                theme="wrapped"
+                                onClose={closeDemo}
+                                onOrder={handleDemoOrder}
+                                onLoaded={handleDemoLoaded}
+                            />
+                        )}
                     </div>
                 </div>
             </section>
