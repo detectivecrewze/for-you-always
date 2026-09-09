@@ -108,7 +108,7 @@ export default function CollectionSection() {
                             },
                             {
                                 badgeText: "#1 Exclusive",
-                                badgeColor: "#d4af37",
+                                badgeColor: "#581824",
                                 badgeVariant: "solid",
                                 imageSrc: "/assets/opening_gate.png",
                                 price: <DiscountPrice oldPrice="Rp 50.000" newPrice="Rp 40.000" size="sm" layout="inline" />,

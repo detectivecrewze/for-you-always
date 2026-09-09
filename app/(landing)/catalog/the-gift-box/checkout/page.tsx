@@ -54,7 +54,7 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         title: "Memoria",
         tagline: "Kisah Sinematik, Musik Latar & Galeri",
         badge: "Signature",
-        badgeColor: "#b38742",
+        badgeColor: "#581824",
         image: "/assets/opening_gate.png",
         demoUrl: "https://anniv.for-you-always.my.id/",
         kraftPrice: "Rp 90.000",

@@ -3,12 +3,14 @@
 import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import CircleWishesInfoModal from "../../../components/CircleWishesInfoModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
+    const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
     const [memoriaNotice, setMemoriaNotice] = React.useState<{ isActive: boolean; title: string; message: string }>({
         isActive: false,
         title: "Info Khusus Memoria:",
@@ -96,47 +98,149 @@ export default function ProductCatalogPage() {
                                 </div>
                             </div>
                         )}
+
+                        {/* Circle Wishes Info Trigger Button */}
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginBottom: "28px",
+                        }}>
+                            <button
+                                type="button"
+                                onClick={() => setIsInfoModalOpen(true)}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "clamp(6px, 1.8vw, 10px)",
+                                    padding: "8px clamp(14px, 3.5vw, 20px)",
+                                    borderRadius: 999,
+                                    background: "#2D141E",
+                                    border: "1px solid rgba(226, 133, 155, 0.35)",
+                                    boxShadow: "0 6px 20px rgba(45, 20, 30, 0.15)",
+                                    color: "#FDE8E9",
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(11.5px, 2.7vw, 13px)",
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                    maxWidth: "100%",
+                                    boxSizing: "border-box",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                    e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.65)";
+                                    e.currentTarget.style.boxShadow = "0 10px 26px rgba(45, 20, 30, 0.25)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.borderColor = "rgba(226, 133, 155, 0.35)";
+                                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(45, 20, 30, 0.15)";
+                                }}
+                            >
+                                <span style={{
+                                    fontSize: 9.5,
+                                    fontWeight: 800,
+                                    letterSpacing: "0.08em",
+                                    textTransform: "uppercase",
+                                    padding: "2px 8px",
+                                    borderRadius: 999,
+                                    background: "rgba(226, 133, 155, 0.22)",
+                                    color: "#E2859B",
+                                    border: "1px solid rgba(226, 133, 155, 0.4)",
+                                    lineHeight: 1.2,
+                                    whiteSpace: "nowrap",
+                                    flexShrink: 0,
+                                    display: "inline-block",
+                                }}>
+                                    BARU
+                                </span>
+                                <span style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flexWrap: "wrap",
+                                    gap: "4px 8px",
+                                    textAlign: "center",
+                                    lineHeight: 1.35,
+                                }}>
+                                    <span style={{ whiteSpace: "nowrap" }}>
+                                        Circle Wishes: Memoria Edition
+                                    </span>
+                                    <span style={{
+                                        whiteSpace: "nowrap",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: 5,
+                                        color: "#D1A7B1",
+                                    }}>
+                                        <span>— Pelajari Cara Kerja</span>
+                                        <svg
+                                            width="12"
+                                            height="12"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#E2859B"
+                                            strokeWidth={2.5}
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            style={{ flexShrink: 0 }}
+                                        >
+                                            <path d="M7 17L17 7" />
+                                            <path d="M7 7h10v10" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+
                         <LandscapeProductCard
-                        label={
-                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                Done For You <span style={{ opacity: 0.5 }}>•</span> Premium
-                            </div>
-                        }
-                        title="Memoria"
-                        description="Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda."
-                        features={[
-                            "Desain Premium & Eksklusif",
-                            "Bebas Kustomisasi Tema & Teks",
-                            "Animasi Visual Interaktif",
-                            "Kustomisasi Galeri & Musik Audio",
-                            "Dikerjakan Langsung oleh Kami"
-                        ]}
-                        price="Rp 40.000"
-                        oldPrice="Rp 50.000"
-                        demoLink="https://anniv.for-you-always.my.id/"
-                        mediaSrc=""
-                        fallbackImgSrc="/assets/opening_gate.png"
-                        mediaType="image"
-                        accentColor="#faf7f2"
-                        accentGlow="rgba(250,247,242,0.15)"
-                        onAddToCart={() => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })}
-                        themesLabel="Koleksi Pages"
-                        themes={[
-                            { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
-                            { name: "Opening Section", desc: "Sapaan & musik latar", color: "#faf7f2", fallbackImgSrc: "/assets/opening_section.webp" },
-                            { name: "Time Section", desc: "Hitung mundur momen", color: "#faf7f2", fallbackImgSrc: "/assets/time_section.webp" },
-                            { name: "Letter Section", desc: "Pesan menyentuh hati", color: "#faf7f2", fallbackImgSrc: "/assets/letter_section.webp" },
-                            { name: "Reason Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/reason_section.webp" },
-                            { name: "Garden Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/metafora-gardeon_section.webp" },
-                            { name: "Gallery Section", desc: "Koleksi memori indah", color: "#faf7f2", fallbackImgSrc: "/assets/gallery_section.webp" },
-                            { name: "Closing Section", desc: "Penutup yang manis", color: "#faf7f2", fallbackImgSrc: "/assets/closing%20section.webp" }
-                        ]}
-                        delay={100}
-                        reverse={false}
-                        initialSelectedIndex={0}
-                        autoCycle={false}
-                        tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7647125933169675541?is_from_webapp=1&sender_device=pc"
-                    />
+                            label={
+                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                    Done For You <span style={{ opacity: 0.5 }}>•</span> Premium
+                                </div>
+                            }
+                            title="Memoria"
+                            description="Serahkan materinya kepada Digital Atelier kami, dan kami akan menciptakan pengalaman kado digital paling premium untuk orang tersayang Anda."
+                            features={[
+                                "Desain Premium & Eksklusif",
+                                "Bebas Kustomisasi Tema & Teks",
+                                "Animasi Visual Interaktif",
+                                "Kustomisasi Galeri & Musik Audio",
+                                "Dikerjakan Langsung oleh Kami"
+                            ]}
+                            price="Rp 40.000"
+                            oldPrice="Rp 50.000"
+                            demoLink="https://anniv.for-you-always.my.id/"
+                            mediaSrc=""
+                            fallbackImgSrc="/assets/opening_gate.png"
+                            mediaType="image"
+                            accentColor="#faf7f2"
+                            accentGlow="rgba(250,247,242,0.15)"
+                            onAddToCart={() => addToCart({ id: "loves", title: "Memoria Premium", numericPrice: 40000, oldNumericPrice: 50000, themeColor: "#581824" })}
+                            themesLabel="Koleksi Pages"
+                            themes={[
+                                { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
+                                { name: "Opening Section", desc: "Sapaan & musik latar", color: "#faf7f2", fallbackImgSrc: "/assets/opening_section.webp" },
+                                { name: "Time Section", desc: "Hitung mundur momen", color: "#faf7f2", fallbackImgSrc: "/assets/time_section.webp" },
+                                { name: "Letter Section", desc: "Pesan menyentuh hati", color: "#faf7f2", fallbackImgSrc: "/assets/letter_section.webp" },
+                                { name: "Reason Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/reason_section.webp" },
+                                { name: "Garden Section", desc: "Bebas ubah tema/konsep", color: "#faf7f2", fallbackImgSrc: "/assets/metafora-gardeon_section.webp" },
+                                { name: "Gallery Section", desc: "Koleksi memori indah", color: "#faf7f2", fallbackImgSrc: "/assets/gallery_section.webp" },
+                                { name: "Closing Section", desc: "Penutup yang manis", color: "#faf7f2", fallbackImgSrc: "/assets/closing%20section.webp" }
+                            ]}
+                            delay={100}
+                            reverse={false}
+                            initialSelectedIndex={0}
+                            autoCycle={false}
+                            tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7647125933169675541?is_from_webapp=1&sender_device=pc"
+                        />
+
+                        {/* Modal Popup Informatif Circle Wishes */}
+                        <CircleWishesInfoModal
+                            isOpen={isInfoModalOpen}
+                            onClose={() => setIsInfoModalOpen(false)}
+                        />
                     </div>
                 </div>
             </section>
