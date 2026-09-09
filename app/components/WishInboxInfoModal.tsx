@@ -27,7 +27,7 @@ const FEATURE_SLIDES: SlideItem[] = [
         id: "inbox",
         title: "Wish Inbox Interaktif",
         desc: "Pesan harapan dari si dia otomatis tersimpan di Wish Inbox dan langsung bisa kamu baca kapan saja secara privat.",
-        src: "/assets/snoopy-features/wish-card-update-snoopy.webp",
+        src: "https://cdn.for-you-always.my.id/1788948631528-i2oht.webp",
     },
 ];
 
