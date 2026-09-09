@@ -4,6 +4,123 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 export type DemoCloseReason = "button" | "backdrop" | "escape" | "order";
+export type DemoModalTheme = "memoria" | "letter" | "voices";
+
+interface DemoThemeTokens {
+    backdropBg: string;
+    frameBg: string;
+    frameBorder: string;
+    frameShadow: string;
+    headerBg: string;
+    headerBorder: string;
+    footerBg: string;
+    footerBorder: string;
+    titleColor: string;
+    subtitleColor: string;
+    closeBg: string;
+    closeBorder: string;
+    closeColor: string;
+    closeHoverBg: string;
+    closeHoverBorder: string;
+    orderBg: string;
+    orderColor: string;
+    orderShadow: string;
+    orderHoverShadow: string;
+    spinnerTrack: string;
+    spinnerAccent: string;
+    retryBtnBg: string;
+    retryBtnColor: string;
+    retryLinkColor: string;
+    emptyBg: string;
+    emptyText: string;
+}
+
+const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
+    memoria: {
+        backdropBg: "rgba(18, 7, 13, 0.82)",
+        frameBg: "linear-gradient(160deg, #2D141E 0%, #170A10 100%)",
+        frameBorder: "1px solid rgba(226, 133, 155, 0.32)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(226, 133, 155, 0.1)",
+        headerBg: "rgba(45, 20, 30, 0.96)",
+        headerBorder: "1px solid rgba(226, 133, 155, 0.2)",
+        footerBg: "rgba(45, 20, 30, 0.98)",
+        footerBorder: "1px solid rgba(226, 133, 155, 0.2)",
+        titleColor: "#FDE8E9",
+        subtitleColor: "#D1A7B1",
+        closeBg: "rgba(253, 232, 233, 0.08)",
+        closeBorder: "1px solid rgba(226, 133, 155, 0.3)",
+        closeColor: "#FDE8E9",
+        closeHoverBg: "rgba(226, 133, 155, 0.2)",
+        closeHoverBorder: "rgba(226, 133, 155, 0.55)",
+        orderBg: "linear-gradient(135deg, #E99AB0 0%, #D97891 100%)",
+        orderColor: "#2D141E",
+        orderShadow: "0 7px 20px rgba(226, 133, 155, 0.24)",
+        orderHoverShadow: "0 10px 24px rgba(226, 133, 155, 0.34)",
+        spinnerTrack: "rgba(88, 24, 36, 0.15)",
+        spinnerAccent: "#E2859B",
+        retryBtnBg: "#581824",
+        retryBtnColor: "#FDE8E9",
+        retryLinkColor: "#7D4050",
+        emptyBg: "radial-gradient(circle at 50% 40%, #FFF9F5 0%, #F8ECE7 72%)",
+        emptyText: "#581824",
+    },
+    letter: {
+        backdropBg: "rgba(18, 13, 10, 0.82)",
+        frameBg: "linear-gradient(160deg, #241A15 0%, #150F0D 100%)",
+        frameBorder: "1px solid rgba(200, 162, 122, 0.32)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(200, 162, 122, 0.12)",
+        headerBg: "rgba(36, 26, 21, 0.96)",
+        headerBorder: "1px solid rgba(200, 162, 122, 0.2)",
+        footerBg: "rgba(36, 26, 21, 0.98)",
+        footerBorder: "1px solid rgba(200, 162, 122, 0.2)",
+        titleColor: "#F7EFE8",
+        subtitleColor: "#C9B6A8",
+        closeBg: "rgba(247, 239, 232, 0.08)",
+        closeBorder: "1px solid rgba(200, 162, 122, 0.3)",
+        closeColor: "#F7EFE8",
+        closeHoverBg: "rgba(200, 162, 122, 0.2)",
+        closeHoverBorder: "rgba(200, 162, 122, 0.55)",
+        orderBg: "linear-gradient(135deg, #D4AF87 0%, #B88B5E 100%)",
+        orderColor: "#241A15",
+        orderShadow: "0 7px 20px rgba(184, 139, 94, 0.26)",
+        orderHoverShadow: "0 10px 24px rgba(184, 139, 94, 0.36)",
+        spinnerTrack: "rgba(122, 84, 56, 0.18)",
+        spinnerAccent: "#C8A27A",
+        retryBtnBg: "#5A3D29",
+        retryBtnColor: "#F7EFE8",
+        retryLinkColor: "#8C6A4F",
+        emptyBg: "radial-gradient(circle at 50% 40%, #FAF6F1 0%, #EFE5D9 72%)",
+        emptyText: "#5A3D29",
+    },
+    voices: {
+        backdropBg: "rgba(18, 11, 7, 0.82)",
+        frameBg: "linear-gradient(160deg, #231710 0%, #140D09 100%)",
+        frameBorder: "1px solid rgba(212, 155, 106, 0.32)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(212, 155, 106, 0.12)",
+        headerBg: "rgba(35, 23, 16, 0.96)",
+        headerBorder: "1px solid rgba(212, 155, 106, 0.2)",
+        footerBg: "rgba(35, 23, 16, 0.98)",
+        footerBorder: "1px solid rgba(212, 155, 106, 0.2)",
+        titleColor: "#F8EFEA",
+        subtitleColor: "#D1B7A7",
+        closeBg: "rgba(248, 239, 234, 0.08)",
+        closeBorder: "1px solid rgba(212, 155, 106, 0.3)",
+        closeColor: "#F8EFEA",
+        closeHoverBg: "rgba(212, 155, 106, 0.2)",
+        closeHoverBorder: "rgba(212, 155, 106, 0.55)",
+        orderBg: "linear-gradient(135deg, #E0A978 0%, #C2824D 100%)",
+        orderColor: "#231710",
+        orderShadow: "0 7px 20px rgba(194, 130, 77, 0.26)",
+        orderHoverShadow: "0 10px 24px rgba(194, 130, 77, 0.36)",
+        spinnerTrack: "rgba(107, 67, 35, 0.18)",
+        spinnerAccent: "#D49B6A",
+        retryBtnBg: "#5C371B",
+        retryBtnColor: "#F8EFEA",
+        retryLinkColor: "#8E5E36",
+        emptyBg: "radial-gradient(circle at 50% 40%, #FAF5F0 0%, #EDE0D4 72%)",
+        emptyText: "#5C371B",
+    },
+};
 
 interface DemoPreviewModalProps {
     isOpen: boolean;
@@ -12,6 +129,8 @@ interface DemoPreviewModalProps {
     subtitle: string;
     productName: string;
     price: string;
+    theme?: DemoModalTheme;
+    orderButtonLabel?: string;
     onClose: (reason: DemoCloseReason) => void;
     onOrder: () => void;
     onLoaded?: (loadTimeMs: number) => void;
@@ -27,10 +146,13 @@ export default function DemoPreviewModal({
     subtitle,
     productName,
     price,
+    theme = "memoria",
+    orderButtonLabel,
     onClose,
     onOrder,
     onLoaded,
 }: DemoPreviewModalProps) {
+    const t = THEME_CONFIGS[theme] || THEME_CONFIGS.memoria;
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
@@ -218,7 +340,7 @@ export default function DemoPreviewModal({
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "clamp(8px, 2vw, 18px)",
-                background: "rgba(18, 7, 13, 0.82)",
+                background: t.backdropBg,
                 opacity: visible && !closing ? 1 : 0,
                 transition: "opacity 0.2s ease",
             }}
@@ -251,15 +373,15 @@ export default function DemoPreviewModal({
                 }
                 .memoria-demo-close:hover,
                 .memoria-demo-close:focus-visible {
-                    background: rgba(226, 133, 155, 0.2) !important;
-                    border-color: rgba(226, 133, 155, 0.55) !important;
+                    background: ${t.closeHoverBg} !important;
+                    border-color: ${t.closeHoverBorder} !important;
                     outline: none;
                 }
                 .memoria-demo-order:hover,
                 .memoria-demo-order:focus-visible {
                     transform: translateY(-1px);
-                    box-shadow: 0 10px 24px rgba(226, 133, 155, 0.34) !important;
-                    outline: 2px solid rgba(253, 232, 233, 0.65);
+                    box-shadow: ${t.orderHoverShadow} !important;
+                    outline: 2px solid ${t.titleColor}A6;
                     outline-offset: 2px;
                 }
                 @media (min-width: 768px) {
@@ -325,9 +447,9 @@ export default function DemoPreviewModal({
                     gridTemplateRows: "auto minmax(0, 1fr) auto",
                     overflow: "hidden",
                     borderRadius: 26,
-                    border: "1px solid rgba(226, 133, 155, 0.32)",
-                    background: "linear-gradient(160deg, #2D141E 0%, #170A10 100%)",
-                    boxShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(226, 133, 155, 0.1)",
+                    border: t.frameBorder,
+                    background: t.frameBg,
+                    boxShadow: t.frameShadow,
                     transform: visible && !closing ? "translateY(0) scale(1)" : "translateY(16px) scale(0.97)",
                     opacity: visible && !closing ? 1 : 0,
                     transition: "transform 0.24s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.18s ease",
@@ -343,15 +465,15 @@ export default function DemoPreviewModal({
                         justifyContent: "space-between",
                         gap: 12,
                         padding: "10px 14px 10px 18px",
-                        borderBottom: "1px solid rgba(226, 133, 155, 0.2)",
-                        background: "rgba(45, 20, 30, 0.96)",
+                        borderBottom: t.headerBorder,
+                        background: t.headerBg,
                     }}
                 >
                     <div style={{ minWidth: 0 }}>
                         <div
                             id="memoria-demo-title"
                             style={{
-                                color: "#FDE8E9",
+                                color: t.titleColor,
                                 fontFamily: "var(--font-display)",
                                 fontSize: 18,
                                 fontWeight: 600,
@@ -364,7 +486,7 @@ export default function DemoPreviewModal({
                             id="memoria-demo-subtitle"
                             style={{
                                 marginTop: 4,
-                                color: "#D1A7B1",
+                                color: t.subtitleColor,
                                 fontFamily: "var(--font-sans)",
                                 fontSize: 11,
                                 lineHeight: 1.35,
@@ -382,7 +504,7 @@ export default function DemoPreviewModal({
                         type="button"
                         className="memoria-demo-close"
                         onClick={() => requestClose("button")}
-                        aria-label="Tutup demo Memoria"
+                        aria-label={`Tutup demo ${productName}`}
                         style={{
                             width: 44,
                             height: 44,
@@ -391,9 +513,9 @@ export default function DemoPreviewModal({
                             alignItems: "center",
                             justifyContent: "center",
                             borderRadius: 999,
-                            border: "1px solid rgba(226, 133, 155, 0.3)",
-                            background: "rgba(253, 232, 233, 0.08)",
-                            color: "#FDE8E9",
+                            border: t.closeBorder,
+                            background: t.closeBg,
+                            color: t.closeColor,
                             cursor: "pointer",
                             transition: "background 0.18s ease, border-color 0.18s ease",
                         }}
@@ -455,8 +577,8 @@ export default function DemoPreviewModal({
                                 alignItems: "center",
                                 justifyContent: "center",
                                 gap: 13,
-                                color: "#581824",
-                                background: "radial-gradient(circle at 50% 40%, #FFF9F5 0%, #F8ECE7 72%)",
+                                color: t.emptyText,
+                                background: t.emptyBg,
                             }}
                         >
                             <span
@@ -466,13 +588,13 @@ export default function DemoPreviewModal({
                                     width: 30,
                                     height: 30,
                                     borderRadius: 999,
-                                    border: "2px solid rgba(88, 24, 36, 0.15)",
-                                    borderTopColor: "#E2859B",
+                                    border: `2px solid ${t.spinnerTrack}`,
+                                    borderTopColor: t.spinnerAccent,
                                     animation: "memoriaDemoSpin 0.8s linear infinite",
                                 }}
                             />
                             <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, letterSpacing: "0.04em" }}>
-                                Menyiapkan contoh Memoria…
+                                Menyiapkan contoh {productName}…
                             </span>
                         </div>
                     )}
@@ -491,8 +613,8 @@ export default function DemoPreviewModal({
                                 gap: 12,
                                 padding: 28,
                                 textAlign: "center",
-                                color: "#581824",
-                                background: "radial-gradient(circle at 50% 40%, #FFF9F5 0%, #F8ECE7 72%)",
+                                color: t.emptyText,
+                                background: t.emptyBg,
                             }}
                         >
                             <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 600 }}>
@@ -509,8 +631,8 @@ export default function DemoPreviewModal({
                                     padding: "10px 20px",
                                     borderRadius: 999,
                                     border: "none",
-                                    background: "#581824",
-                                    color: "#FDE8E9",
+                                    background: t.retryBtnBg,
+                                    color: t.retryBtnColor,
                                     fontFamily: "var(--font-sans)",
                                     fontWeight: 700,
                                     cursor: "pointer",
@@ -526,7 +648,7 @@ export default function DemoPreviewModal({
                                     minHeight: 44,
                                     display: "inline-flex",
                                     alignItems: "center",
-                                    color: "#7D4050",
+                                    color: t.retryLinkColor,
                                     fontFamily: "var(--font-sans)",
                                     fontSize: 12,
                                     fontWeight: 600,
@@ -548,15 +670,15 @@ export default function DemoPreviewModal({
                         justifyContent: "space-between",
                         gap: 12,
                         padding: "11px 14px 12px 18px",
-                        borderTop: "1px solid rgba(226, 133, 155, 0.2)",
-                        background: "rgba(45, 20, 30, 0.98)",
+                        borderTop: t.footerBorder,
+                        background: t.footerBg,
                     }}
                 >
                     <div style={{ minWidth: 0 }}>
-                        <div style={{ color: "#D1A7B1", fontFamily: "var(--font-sans)", fontSize: 10.5, lineHeight: 1.2 }}>
+                        <div style={{ color: t.subtitleColor, fontFamily: "var(--font-sans)", fontSize: 10.5, lineHeight: 1.2 }}>
                             {productName}
                         </div>
-                        <div style={{ marginTop: 3, color: "#FDE8E9", fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, lineHeight: 1 }}>
+                        <div style={{ marginTop: 3, color: t.titleColor, fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, lineHeight: 1 }}>
                             {price}
                         </div>
                     </div>
@@ -575,9 +697,9 @@ export default function DemoPreviewModal({
                             padding: "11px clamp(16px, 5vw, 24px)",
                             borderRadius: 999,
                             border: "none",
-                            background: "linear-gradient(135deg, #E99AB0 0%, #D97891 100%)",
-                            color: "#2D141E",
-                            boxShadow: "0 7px 20px rgba(226, 133, 155, 0.24)",
+                            background: t.orderBg,
+                            color: t.orderColor,
+                            boxShadow: t.orderShadow,
                             fontFamily: "var(--font-sans)",
                             fontSize: 12.5,
                             fontWeight: 800,
@@ -586,7 +708,7 @@ export default function DemoPreviewModal({
                             whiteSpace: "nowrap",
                         }}
                     >
-                        Pesan Memoria
+                        {orderButtonLabel || `Pesan ${productName}`}
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M13 6l6 6-6 6" />
                         </svg>
