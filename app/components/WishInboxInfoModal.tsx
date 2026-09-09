@@ -20,20 +20,14 @@ const FEATURE_SLIDES: SlideItem[] = [
     {
         id: "write",
         title: "Momen Tiup Lilin & Tulis Harapan",
-        desc: "Penerima kado membuka scrapbook digital, meniup lilin kue ulang tahun interaktif, dan menuliskan pesan balasan serta harapan rahasianya langsung di dalam kado.",
+        desc: "Penerima kado berinteraksi langsung meniup lilin kue ulang tahun digital dan menuliskan pesan balasan serta harapannya di dalam scrapbook.",
         src: "/assets/snoopy-features/wishes-2.webp",
     },
     {
-        id: "save",
-        title: "Tersimpan Aman di Wish Inbox Privat",
-        desc: "Setiap doa dan harapan yang dituliskan penerima langsung terkunci rapi ke dalam Wish Inbox privat, terlindungi tanpa bisa dilihat sembarang orang.",
+        id: "inbox",
+        title: "Wish Inbox Interaktif",
+        desc: "Pesan harapan dari si dia otomatis tersimpan di Wish Inbox dan langsung bisa kamu baca kapan saja secara privat.",
         src: "/assets/snoopy-features/wish-card-update-snoopy.webp",
-    },
-    {
-        id: "read",
-        title: "Dibaca Kapan Saja oleh Pembuat Kado",
-        desc: "Sebagai pembuat kado, kamu memegang akses privat khusus untuk membuka dan membaca seluruh pesan balasan serta isi hati manis si dia kapan saja.",
-        src: "/assets/snoopy-features/letter-7.webp",
     },
 ];
 
@@ -149,7 +143,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "clamp(10px, 3vw, 24px)",
-                background: visible && !closing ? "rgba(10, 6, 4, 0.85)" : "rgba(10, 6, 4, 0)",
+                background: visible && !closing ? "rgba(12, 9, 4, 0.85)" : "rgba(12, 9, 4, 0)",
                 backdropFilter: visible && !closing ? "blur(14px)" : "blur(0px)",
                 WebkitBackdropFilter: visible && !closing ? "blur(14px)" : "blur(0px)",
                 transition: "background 0.28s ease, backdrop-filter 0.28s ease",
@@ -158,13 +152,13 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
             <div
                 onClick={(e) => e.stopPropagation()}
                 style={{
-                    background: "linear-gradient(165deg, #241813 0%, #150D0A 100%)",
+                    background: "linear-gradient(165deg, #231C0E 0%, #141007 100%)",
                     width: "100%",
                     maxWidth: 580,
                     maxHeight: "92dvh",
                     borderRadius: "clamp(20px, 4.5vw, 28px)",
-                    border: "1px solid rgba(212, 151, 59, 0.28)",
-                    boxShadow: "0 32px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(212, 151, 59, 0.12)",
+                    border: "1px solid rgba(245, 183, 56, 0.38)",
+                    boxShadow: "0 32px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(245, 183, 56, 0.16)",
                     overflowY: "auto",
                     WebkitOverflowScrolling: "touch",
                     transform: visible && !closing ? "translateY(0) scale(1)" : "translateY(20px) scale(0.96)",
@@ -189,9 +183,9 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         gap: 6,
                         padding: "4px 12px",
                         borderRadius: 999,
-                        background: "rgba(212, 151, 59, 0.15)",
-                        border: "1px solid rgba(212, 151, 59, 0.35)",
-                        color: "#F6C87C",
+                        background: "rgba(245, 183, 56, 0.16)",
+                        border: "1px solid rgba(245, 183, 56, 0.45)",
+                        color: "#FCD875",
                         fontFamily: "var(--font-sans)",
                         fontSize: "clamp(9.5px, 2.3vw, 10.5px)",
                         fontWeight: 700,
@@ -199,7 +193,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         textTransform: "uppercase",
                         whiteSpace: "nowrap",
                     }}>
-                        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#D4973B", flexShrink: 0 }} />
+                        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#F5B738", flexShrink: 0 }} />
                         Birthday Scrapbook · Wish Inbox
                     </div>
 
@@ -210,8 +204,8 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             width: 32,
                             height: 32,
                             borderRadius: "50%",
-                            border: "1px solid rgba(255, 255, 255, 0.18)",
-                            background: "rgba(60, 36, 25, 0.65)",
+                            border: "1px solid rgba(245, 183, 56, 0.35)",
+                            background: "rgba(45, 36, 18, 0.7)",
                             backdropFilter: "blur(8px)",
                             color: "#FAF7F2",
                             cursor: "pointer",
@@ -222,12 +216,12 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             transition: "all 0.2s ease",
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(212, 151, 59, 0.25)";
-                            e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.6)";
+                            e.currentTarget.style.background = "rgba(245, 183, 56, 0.3)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.7)";
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(60, 36, 25, 0.65)";
-                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
+                            e.currentTarget.style.background = "rgba(45, 36, 18, 0.7)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.35)";
                         }}
                     >
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
@@ -264,10 +258,10 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         flexShrink: 0,
                         borderRadius: "clamp(14px, 3.2vw, 18px)",
                         overflow: "hidden",
-                        border: "1px solid rgba(212, 151, 59, 0.28)",
-                        boxShadow: "0 20px 48px rgba(0, 0, 0, 0.6)",
+                        border: "1px solid rgba(245, 183, 56, 0.35)",
+                        boxShadow: "0 20px 48px rgba(0, 0, 0, 0.65)",
                         marginBottom: 12,
-                        background: "#150D0A",
+                        background: "#141007",
                         touchAction: "pan-y",
                     }}
                 >
@@ -297,9 +291,9 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             width: 32,
                             height: 32,
                             borderRadius: "50%",
-                            background: "rgba(24, 15, 10, 0.85)",
+                            background: "rgba(32, 25, 12, 0.85)",
                             backdropFilter: "blur(6px)",
-                            border: "1px solid rgba(212, 151, 59, 0.35)",
+                            border: "1px solid rgba(245, 183, 56, 0.45)",
                             color: "#FAF7F2",
                             cursor: "pointer",
                             display: "flex",
@@ -308,12 +302,12 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             transition: "all 0.2s ease",
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(212, 151, 59, 0.35)";
-                            e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.7)";
+                            e.currentTarget.style.background = "rgba(245, 183, 56, 0.35)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.8)";
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(24, 15, 10, 0.85)";
-                            e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.35)";
+                            e.currentTarget.style.background = "rgba(32, 25, 12, 0.85)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.45)";
                         }}
                     >
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -334,9 +328,9 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             width: 32,
                             height: 32,
                             borderRadius: "50%",
-                            background: "rgba(24, 15, 10, 0.85)",
+                            background: "rgba(32, 25, 12, 0.85)",
                             backdropFilter: "blur(6px)",
-                            border: "1px solid rgba(212, 151, 59, 0.35)",
+                            border: "1px solid rgba(245, 183, 56, 0.45)",
                             color: "#FAF7F2",
                             cursor: "pointer",
                             display: "flex",
@@ -345,12 +339,12 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             transition: "all 0.2s ease",
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(212, 151, 59, 0.35)";
-                            e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.7)";
+                            e.currentTarget.style.background = "rgba(245, 183, 56, 0.35)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.8)";
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(24, 15, 10, 0.85)";
-                            e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.35)";
+                            e.currentTarget.style.background = "rgba(32, 25, 12, 0.85)";
+                            e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.45)";
                         }}
                     >
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -361,8 +355,8 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
 
                 {/* Integrated Feature Caption & Story Flow Box */}
                 <div style={{
-                    background: "rgba(55, 34, 23, 0.45)",
-                    border: "1px solid rgba(212, 151, 59, 0.2)",
+                    background: "rgba(52, 40, 20, 0.55)",
+                    border: "1px solid rgba(245, 183, 56, 0.28)",
                     borderRadius: 14,
                     padding: "11px 14px",
                     marginBottom: 16,
@@ -386,7 +380,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             <span style={{
                                 fontFamily: "var(--font-sans)",
                                 fontSize: 10.5,
-                                color: "#CBB09C",
+                                color: "#E0CCA9",
                                 letterSpacing: "0.04em",
                                 marginRight: 2,
                             }}>
@@ -402,7 +396,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                                         width: idx === activeSlideIndex ? 16 : 5,
                                         height: 5,
                                         borderRadius: 999,
-                                        background: idx === activeSlideIndex ? "#D4973B" : "rgba(212, 151, 59, 0.25)",
+                                        background: idx === activeSlideIndex ? "#F5B738" : "rgba(245, 183, 56, 0.25)",
                                         border: "none",
                                         padding: 0,
                                         cursor: "pointer",
@@ -416,25 +410,24 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                     <div style={{
                         fontFamily: "var(--font-sans)",
                         fontSize: "clamp(11.5px, 2.8vw, 12.5px)",
-                        color: "#E6D0BE",
+                        color: "#EDE1CB",
                         lineHeight: 1.5,
                     }}>
                         {currentSlide.desc}
                     </div>
                 </div>
 
-                {/* 3-Step Process Flow Cards (Clickable Steps) */}
+                {/* 2-Step Process Flow Cards (Clickable Steps) */}
                 <div style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "clamp(6px, 1.8vw, 10px)",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "clamp(8px, 2.2vw, 12px)",
                     marginBottom: 20,
                     flexShrink: 0,
                 }}>
                     {[
                         { num: "01", title: "Tiup Lilin", sub: "Penerima tulis wish", slideIdx: 0 },
-                        { num: "02", title: "Wish Inbox", sub: "Tersimpan aman", slideIdx: 1 },
-                        { num: "03", title: "Balasan Si Dia", sub: "Dibaca pembuat kado", slideIdx: 2 },
+                        { num: "02", title: "Wish Inbox", sub: "Dibaca pembuat kado", slideIdx: 1 },
                     ].map((step, sIdx) => {
                         const isCurrentActive = activeSlideIndex === step.slideIdx;
                         return (
@@ -447,11 +440,11 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                                     flexDirection: "column",
                                     alignItems: "center",
                                     textAlign: "center",
-                                    padding: "9px 6px",
-                                    borderRadius: 10,
-                                    background: isCurrentActive ? "rgba(212, 151, 59, 0.18)" : "rgba(255, 255, 255, 0.03)",
-                                    border: isCurrentActive ? "1px solid rgba(212, 151, 59, 0.55)" : "1px solid rgba(255, 255, 255, 0.08)",
-                                    boxShadow: isCurrentActive ? "0 4px 14px rgba(212, 151, 59, 0.15)" : "none",
+                                    padding: "10px 8px",
+                                    borderRadius: 12,
+                                    background: isCurrentActive ? "rgba(245, 183, 56, 0.2)" : "rgba(255, 255, 255, 0.03)",
+                                    border: isCurrentActive ? "1px solid rgba(245, 183, 56, 0.65)" : "1px solid rgba(255, 255, 255, 0.08)",
+                                    boxShadow: isCurrentActive ? "0 4px 16px rgba(245, 183, 56, 0.2)" : "none",
                                     cursor: "pointer",
                                     transition: "all 0.2s ease",
                                 }}
@@ -460,26 +453,26 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                                     fontFamily: "var(--font-sans)",
                                     fontSize: 9.5,
                                     fontWeight: 700,
-                                    color: isCurrentActive ? "#F6C87C" : "#9E8170",
+                                    color: isCurrentActive ? "#FCD875" : "#9E8C6A",
                                     letterSpacing: "0.08em",
-                                    marginBottom: 2,
+                                    marginBottom: 3,
                                 }}>
                                     LANGKAH {step.num}
                                 </span>
                                 <span style={{
                                     fontFamily: "var(--font-sans)",
-                                    fontSize: "clamp(10.5px, 2.5vw, 11.5px)",
+                                    fontSize: "clamp(11.5px, 2.7vw, 12.5px)",
                                     fontWeight: 600,
-                                    color: isCurrentActive ? "#FAF7F2" : "#D2BCAC",
+                                    color: isCurrentActive ? "#FAF7F2" : "#C8B99A",
                                     lineHeight: 1.25,
-                                    marginBottom: 2,
+                                    marginBottom: 3,
                                 }}>
                                     {step.title}
                                 </span>
                                 <span style={{
                                     fontFamily: "var(--font-sans)",
-                                    fontSize: "clamp(9px, 2.2vw, 10px)",
-                                    color: isCurrentActive ? "#E6D0BE" : "#8A6E5F",
+                                    fontSize: "clamp(9.5px, 2.3vw, 10.5px)",
+                                    color: isCurrentActive ? "#EDE1CB" : "#807156",
                                     lineHeight: 1.2,
                                 }}>
                                     {step.sub}
@@ -500,25 +493,25 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         type="button"
                         onClick={handleClose}
                         style={{
-                            background: "linear-gradient(135deg, #D4973B 0%, #BF7B19 100%)",
-                            color: "#1C120D",
+                            background: "linear-gradient(135deg, #F5B738 0%, #E2991E 100%)",
+                            color: "#241604",
                             fontFamily: "var(--font-sans)",
                             fontSize: "clamp(12.5px, 2.8vw, 13.5px)",
                             fontWeight: 700,
-                            padding: "10px clamp(24px, 5vw, 36px)",
+                            padding: "10px clamp(28px, 6vw, 40px)",
                             borderRadius: 999,
                             border: "none",
                             cursor: "pointer",
-                            boxShadow: "0 6px 20px rgba(212, 151, 59, 0.3)",
+                            boxShadow: "0 6px 20px rgba(245, 183, 56, 0.35)",
                             transition: "all 0.2s ease",
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = "translateY(-1px)";
-                            e.currentTarget.style.boxShadow = "0 8px 24px rgba(212, 151, 59, 0.45)";
+                            e.currentTarget.style.boxShadow = "0 8px 24px rgba(245, 183, 56, 0.5)";
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "0 6px 20px rgba(212, 151, 59, 0.3)";
+                            e.currentTarget.style.boxShadow = "0 6px 20px rgba(245, 183, 56, 0.35)";
                         }}
                     >
                         Mengerti & Tutup

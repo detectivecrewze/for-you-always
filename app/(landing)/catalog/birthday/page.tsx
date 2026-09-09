@@ -59,47 +59,47 @@ export default function BirthdayCatalogPage() {
                                     display: "inline-flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    gap: "clamp(6px, 1.8vw, 10px)",
+                                    gap: "clamp(6px, 1.8vw, 9px)",
                                     padding: "8px clamp(14px, 3.5vw, 20px)",
                                     borderRadius: 999,
-                                    background: "#241813",
-                                    border: "1px solid rgba(212, 151, 59, 0.4)",
-                                    boxShadow: "0 6px 20px rgba(36, 24, 19, 0.25)",
-                                    color: "#FAF7F2",
+                                    background: "linear-gradient(135deg, #F5B738 0%, #E2991E 100%)",
+                                    border: "1px solid rgba(245, 183, 56, 0.6)",
+                                    boxShadow: "0 6px 20px rgba(226, 153, 30, 0.28)",
+                                    color: "#241604",
                                     fontFamily: "var(--font-sans)",
-                                    fontSize: "clamp(11.5px, 2.7vw, 13px)",
-                                    fontWeight: 600,
+                                    fontSize: "clamp(12px, 2.7vw, 13px)",
+                                    fontWeight: 700,
                                     cursor: "pointer",
                                     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                    whiteSpace: "nowrap",
                                     maxWidth: "100%",
                                     boxSizing: "border-box",
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = "translateY(-2px)";
-                                    e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.75)";
-                                    e.currentTarget.style.boxShadow = "0 10px 26px rgba(36, 24, 19, 0.35)";
+                                    e.currentTarget.style.boxShadow = "0 10px 26px rgba(226, 153, 30, 0.45)";
+                                    e.currentTarget.style.borderColor = "#F5B738";
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.transform = "translateY(0)";
-                                    e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.4)";
-                                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(36, 24, 19, 0.25)";
+                                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(226, 153, 30, 0.28)";
+                                    e.currentTarget.style.borderColor = "rgba(245, 183, 56, 0.6)";
                                 }}
                             >
                                 <span style={{
                                     display: "inline-flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    width: 7,
-                                    height: 7,
+                                    width: 6,
+                                    height: 6,
                                     borderRadius: "50%",
-                                    background: "#D4973B",
-                                    boxShadow: "0 0 8px rgba(212, 151, 59, 0.8)",
+                                    background: "#241604",
                                     flexShrink: 0,
                                 }} />
-                                <span style={{ letterSpacing: "0.01em", lineHeight: 1.3 }}>
-                                    Fitur Eksklusif: Wish Inbox Interaktif &mdash; Baca Pesan Balasan dari Si Dia
+                                <span style={{ letterSpacing: "0.01em" }}>
+                                    Fitur Eksklusif: Wish Inbox
                                 </span>
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D4973B" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: 2 }}>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#241604" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: 1 }}>
                                     <path d="M7 17L17 7" />
                                     <path d="M7 7h10v10" />
                                 </svg>
