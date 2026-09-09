@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 
@@ -37,52 +37,83 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
     const [closing, setClosing] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [zoomScale, setZoomScale] = useState(1);
     const closingRef = useRef(false);
     const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const originalOverflowRef = useRef<string>("");
+    const onCloseRef = useRef(onClose);
+
+    useEffect(() => {
+        onCloseRef.current = onClose;
+    }, [onClose]);
 
     useEffect(() => {
         setMounted(true);
         return () => {
             if (closeTimerRef.current) {
                 clearTimeout(closeTimerRef.current);
+                closeTimerRef.current = null;
             }
-            document.body.style.overflow = "";
+            document.body.style.overflow = originalOverflowRef.current;
         };
     }, []);
 
-    useEffect(() => {
-        if (isOpen) {
-            closingRef.current = false;
-            setClosing(false);
-            setActiveSlideIndex(0);
-            const timer = setTimeout(() => setVisible(true), 15);
-            document.body.style.overflow = "hidden";
-            return () => clearTimeout(timer);
-        } else {
-            setVisible(false);
-            document.body.style.overflow = "";
-        }
-    }, [isOpen]);
-
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         if (closingRef.current) return;
         closingRef.current = true;
         setClosing(true);
         setVisible(false);
+        setIsZoomed(false);
+        setZoomScale(1);
+        if (closeTimerRef.current) {
+            clearTimeout(closeTimerRef.current);
+        }
         closeTimerRef.current = setTimeout(() => {
             setClosing(false);
             closingRef.current = false;
-            onClose();
+            document.body.style.overflow = originalOverflowRef.current;
+            onCloseRef.current();
         }, 260);
-    };
+    }, []);
 
-    const goToPrev = () => {
+    const goToPrev = useCallback(() => {
         setActiveSlideIndex((prev) => (prev > 0 ? prev - 1 : FEATURE_SLIDES.length - 1));
-    };
+    }, []);
 
-    const goToNext = () => {
+    const goToNext = useCallback(() => {
         setActiveSlideIndex((prev) => (prev < FEATURE_SLIDES.length - 1 ? prev + 1 : 0));
-    };
+    }, []);
+
+    useEffect(() => {
+        if (isOpen) {
+            if (closeTimerRef.current) {
+                clearTimeout(closeTimerRef.current);
+                closeTimerRef.current = null;
+            }
+            originalOverflowRef.current = document.body.style.overflow || "";
+            closingRef.current = false;
+            setClosing(false);
+            setActiveSlideIndex(0);
+            setIsZoomed(false);
+            setZoomScale(1);
+            const timer = setTimeout(() => setVisible(true), 15);
+            document.body.style.overflow = "hidden";
+            return () => {
+                clearTimeout(timer);
+                document.body.style.overflow = originalOverflowRef.current;
+            };
+        } else {
+            if (closeTimerRef.current) {
+                clearTimeout(closeTimerRef.current);
+                closeTimerRef.current = null;
+            }
+            setVisible(false);
+            setIsZoomed(false);
+            setZoomScale(1);
+            document.body.style.overflow = originalOverflowRef.current;
+        }
+    }, [isOpen]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
         if (e.touches && e.touches.length > 0) {
@@ -111,19 +142,28 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
     };
 
     useEffect(() => {
+        if (!isOpen) return;
+
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (!isOpen) return;
             if (e.key === "Escape") {
-                handleClose();
+                if (isZoomed) {
+                    setIsZoomed(false);
+                    setZoomScale(1);
+                } else {
+                    handleClose();
+                }
             } else if (e.key === "ArrowLeft") {
                 goToPrev();
             } else if (e.key === "ArrowRight") {
                 goToNext();
             }
         };
+
         window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen]);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [isOpen, isZoomed, handleClose, goToPrev, goToNext]);
 
     if (!mounted || (!isOpen && !closing)) return null;
 
@@ -245,16 +285,20 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                     Cara Kerja Fitur Eksklusif Wish Inbox
                 </h3>
 
-                {/* Hero Screenshot (Swipeable & Prominent) */}
+                {/* Hero Screenshot (Click to Zoom & Swipeable) */}
                 <div
+                    onClick={() => {
+                        setIsZoomed(true);
+                        setZoomScale(1);
+                    }}
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                     onTouchCancel={handleTouchCancel}
                     style={{
                         position: "relative",
                         width: "100%",
-                        aspectRatio: "1.29 / 1",
-                        minHeight: "clamp(240px, 54vw, 420px)",
+                        aspectRatio: "1.4 / 1",
+                        minHeight: "clamp(230px, 54vw, 380px)",
                         flexShrink: 0,
                         borderRadius: "clamp(14px, 3.2vw, 18px)",
                         overflow: "hidden",
@@ -263,6 +307,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         marginBottom: 12,
                         background: "#141007",
                         touchAction: "pan-y",
+                        cursor: "zoom-in",
                     }}
                 >
                     <Image
@@ -278,10 +323,44 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                         priority
                     />
 
+                    {/* Tap to Zoom Badge Hint */}
+                    <div style={{
+                        position: "absolute",
+                        bottom: 10,
+                        right: 10,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        padding: "5px 11px",
+                        borderRadius: 999,
+                        background: "rgba(18, 14, 7, 0.85)",
+                        backdropFilter: "blur(8px)",
+                        border: "1px solid rgba(245, 183, 56, 0.45)",
+                        color: "#FCD875",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(10px, 2.4vw, 11px)",
+                        fontWeight: 600,
+                        pointerEvents: "none",
+                        boxShadow: "0 4px 14px rgba(0, 0, 0, 0.5)",
+                    }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            <line x1="11" y1="8" x2="11" y2="14" />
+                            <line x1="8" y1="11" x2="14" y2="11" />
+                        </svg>
+                        <span>Ketuk untuk memperbesar</span>
+                    </div>
+
                     {/* Prev Navigation Arrow */}
                     <button
                         type="button"
-                        onClick={goToPrev}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            goToPrev();
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        onTouchEnd={(e) => e.stopPropagation()}
                         aria-label="Foto sebelumnya"
                         style={{
                             position: "absolute",
@@ -300,6 +379,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             alignItems: "center",
                             justifyContent: "center",
                             transition: "all 0.2s ease",
+                            zIndex: 2,
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(245, 183, 56, 0.35)";
@@ -318,7 +398,12 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                     {/* Next Navigation Arrow */}
                     <button
                         type="button"
-                        onClick={goToNext}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            goToNext();
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        onTouchEnd={(e) => e.stopPropagation()}
                         aria-label="Foto berikutnya"
                         style={{
                             position: "absolute",
@@ -337,6 +422,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                             alignItems: "center",
                             justifyContent: "center",
                             transition: "all 0.2s ease",
+                            zIndex: 2,
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(245, 183, 56, 0.35)";
@@ -518,6 +604,198 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                     </button>
                 </div>
             </div>
+
+            {/* Fullscreen Interactive Lightbox Modal */}
+            {isZoomed && (
+                <div
+                    role="dialog"
+                    aria-label="Tinjauan Foto Perbesar"
+                    onClick={() => {
+                        setIsZoomed(false);
+                        setZoomScale(1);
+                    }}
+                    style={{
+                        position: "fixed",
+                        inset: 0,
+                        zIndex: 100005,
+                        background: "rgba(10, 8, 4, 0.96)",
+                        backdropFilter: "blur(14px)",
+                        WebkitBackdropFilter: "blur(14px)",
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "16px clamp(12px, 3vw, 24px)",
+                        boxSizing: "border-box",
+                    }}
+                >
+                    {/* Top Control Bar */}
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: 12,
+                            marginBottom: 10,
+                            flexShrink: 0,
+                        }}
+                    >
+                        <div style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 8,
+                            fontFamily: "var(--font-sans)",
+                            fontSize: "clamp(11.5px, 2.7vw, 13px)",
+                            color: "#FAF7F2",
+                            fontWeight: 600,
+                        }}>
+                            <span style={{
+                                padding: "3px 10px",
+                                borderRadius: 999,
+                                background: "rgba(245, 183, 56, 0.2)",
+                                border: "1px solid rgba(245, 183, 56, 0.45)",
+                                color: "#FCD875",
+                                fontSize: 11,
+                                fontWeight: 700,
+                                textTransform: "uppercase",
+                                letterSpacing: "0.06em",
+                            }}>
+                                Langkah {activeSlideIndex + 1}/2
+                            </span>
+                            <span style={{ opacity: 0.9 }}>{currentSlide.title}</span>
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            {/* Toggle Zoom Scale Button */}
+                            <button
+                                type="button"
+                                onClick={() => setZoomScale((prev) => (prev > 1 ? 1 : 2))}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: 5,
+                                    padding: "6px 12px",
+                                    borderRadius: 999,
+                                    background: zoomScale > 1 ? "rgba(245, 183, 56, 0.25)" : "rgba(255, 255, 255, 0.1)",
+                                    border: "1px solid " + (zoomScale > 1 ? "rgba(245, 183, 56, 0.6)" : "rgba(255, 255, 255, 0.2)"),
+                                    color: zoomScale > 1 ? "#FCD875" : "#FAF7F2",
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: 11.5,
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                    transition: "all 0.2s ease",
+                                }}
+                            >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                    {zoomScale > 1 ? (
+                                        <line x1="8" y1="11" x2="14" y2="11" />
+                                    ) : (
+                                        <>
+                                            <line x1="11" y1="8" x2="11" y2="14" />
+                                            <line x1="8" y1="11" x2="14" y2="11" />
+                                        </>
+                                    )}
+                                </svg>
+                                <span>{zoomScale > 1 ? "Perkecil (1x)" : "Perbesar (2x)"}</span>
+                            </button>
+
+                            {/* Close Button */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsZoomed(false);
+                                    setZoomScale(1);
+                                }}
+                                aria-label="Tutup zoom"
+                                style={{
+                                    width: 36,
+                                    height: 36,
+                                    borderRadius: "50%",
+                                    background: "rgba(255, 255, 255, 0.12)",
+                                    border: "1px solid rgba(255, 255, 255, 0.25)",
+                                    color: "#FAF7F2",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    transition: "all 0.2s ease",
+                                }}
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18" />
+                                    <line x1="6" y1="6" x2="18" y2="18" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Scrollable & Pinch/Pan Friendly Viewport */}
+                    <div
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) {
+                                setIsZoomed(false);
+                                setZoomScale(1);
+                            }
+                        }}
+                        style={{
+                            flex: 1,
+                            overflow: "auto",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            touchAction: "pan-x pan-y pinch-zoom",
+                            WebkitOverflowScrolling: "touch",
+                            padding: "8px 0",
+                        }}
+                    >
+                        <div
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setZoomScale((prev) => (prev > 1 ? 1 : 2));
+                            }}
+                            style={{
+                                position: "relative",
+                                width: zoomScale > 1 ? "clamp(680px, 160vw, 1200px)" : "min(95vw, 920px)",
+                                aspectRatio: "1.48 / 1",
+                                minHeight: zoomScale > 1 ? 460 : 250,
+                                transition: "width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s ease",
+                                cursor: zoomScale > 1 ? "zoom-out" : "zoom-in",
+                                borderRadius: 14,
+                                overflow: "hidden",
+                                boxShadow: "0 24px 64px rgba(0, 0, 0, 0.9)",
+                                border: "1px solid rgba(245, 183, 56, 0.35)",
+                                margin: "auto",
+                                flexShrink: 0,
+                            }}
+                        >
+                            <Image
+                                key={currentSlide.src}
+                                src={currentSlide.src}
+                                alt={currentSlide.title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 1200px"
+                                style={{
+                                    objectFit: "contain",
+                                }}
+                                priority
+                            />
+                        </div>
+                    </div>
+
+                    {/* Bottom Helper Hint */}
+                    <div style={{
+                        textAlign: "center",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: 11,
+                        color: "#E0CCA9",
+                        paddingTop: 8,
+                        flexShrink: 0,
+                    }}>
+                        Ketuk foto untuk memperbesar 2x &middot; Geser layar untuk membaca teks secara jelas
+                    </div>
+                </div>
+            )}
         </div>,
         document.body
     );

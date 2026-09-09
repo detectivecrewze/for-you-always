@@ -96,7 +96,7 @@ export default function BirthdayCatalogPage() {
                                     background: "#241604",
                                     flexShrink: 0,
                                 }} />
-                                <span style={{ letterSpacing: "0.01em" }}>
+                                <span style={{ letterSpacing: "0.01em", whiteSpace: "nowrap" }}>
                                     Fitur Eksklusif: Wish Inbox
                                 </span>
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#241604" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: 1 }}>

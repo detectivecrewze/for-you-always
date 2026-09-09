@@ -90,6 +90,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             return [...prev, itemWithUniqueId];
         });
         setLastAdded(itemWithUniqueId);
+        setIsDrawerOpen(true);
+        void import("posthog-js").then(({ default: posthog }) => {
+            posthog.capture('cart_opened', { source: 'add_to_cart', product_id: item.id });
+        });
         
         if (typeof window !== 'undefined' && (window as any).ttq) {
             (window as any).ttq.track('AddToCart', {
