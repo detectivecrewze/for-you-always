@@ -1,19 +1,87 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
+
+interface ActiveDemo {
+    url: string;
+    label: string;
+}
+
+const RETRO_CART_ITEM = {
+    id: "retro",
+    title: "Retro Edition",
+    numericPrice: 20000,
+    oldNumericPrice: 30000,
+    themeColor: "#008689",
+};
+
+function captureDemoEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, properties))
+        .catch(() => {});
+}
+
 export default function ProductCatalogPage() {
     const { addToCart } = useCart();
+    const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
+    const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         trackViewContent({ id: "retro", name: "Retro Edition", price: 20000 });
     }, []);
+
+    const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
+        product_id: "retro",
+        product_name: "Retro Edition",
+        demo_label: demo.label,
+    }), []);
+
+    const openDemo = useCallback((url: string, label: string) => {
+        demoOpenedAtRef.current = performance.now();
+        const demo = { url, label };
+        captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
+        setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_closed", {
+            ...demoAnalyticsProperties(activeDemo),
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_loaded", {
+            ...demoAnalyticsProperties(activeDemo),
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            captureDemoEvent("product_demo_cta_clicked", {
+                ...demoAnalyticsProperties(activeDemo),
+                destination: "cart",
+                price: RETRO_CART_ITEM.numericPrice,
+                currency: "IDR",
+            });
+        }
+        addToCart(RETRO_CART_ITEM);
+    }, [activeDemo, addToCart, demoAnalyticsProperties]);
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -52,7 +120,7 @@ export default function ProductCatalogPage() {
                             mediaType="image"
                             accentColor="#008689"
                             accentGlow="rgba(0,134,137,0.2)"
-                            onAddToCart={() => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#008689" })}
+                            onAddToCart={() => addToCart(RETRO_CART_ITEM)}
                             onAddThreeSlotToCart={() => addToCart({ id: "retro", title: "Retro Edition (3 Gift)", numericPrice: 25000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Koleksi Halaman"
                             themes={[
@@ -66,7 +134,23 @@ export default function ProductCatalogPage() {
                             initialSelectedIndex={0}
                             autoCycle={false}
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7641893530503351573?is_from_webapp=1&sender_device=pc"
+                            onDemoOpen={(url, label) => openDemo(url, label)}
                         />
+
+                        {activeDemo && (
+                            <DemoPreviewModal
+                                isOpen
+                                src={activeDemo.url}
+                                title={activeDemo.label || "Retro Edition"}
+                                subtitle="Rasakan kejutan nostalgia bernuansa Windows 98 klasik"
+                                productName="Retro Edition"
+                                price="Rp 20.000"
+                                theme="retro"
+                                onClose={closeDemo}
+                                onOrder={handleDemoOrder}
+                                onLoaded={handleDemoLoaded}
+                            />
+                        )}
                     </div>
                 </div>
             </section>
