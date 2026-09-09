@@ -373,7 +373,7 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
             badge: "Best Seller",
             color: "#a67c52",
             theme: "letter" as DemoModalTheme,
-            demoUrl: "https://letter.for-you-always.my.id/letter-test",
+            demoUrl: "https://letter.for-you-always.my.id/vintage/letter-test",
             previewSubtitle: "Buka amplop digital berbalut animasi typewriter dan musik latar",
             kraftPrice: "Rp 80.000",
             kraftOldPrice: "Rp 100.000",

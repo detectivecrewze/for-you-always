@@ -96,7 +96,7 @@ const DIGITAL_OPTIONS: DigitalOption[] = [
         badge: "Best Seller",
         badgeColor: "#a67c52",
         image: "https://cdn.for-you-always.my.id/1783163306081-l92p1h.webp",
-        demoUrl: "https://letter.for-you-always.my.id/letter-test",
+        demoUrl: "https://letter.for-you-always.my.id/vintage/letter-test",
         theme: "letter",
         previewSubtitle: "Buka amplop digital berbalut animasi typewriter dan musik latar",
         kraftPrice: "Rp 80.000",
