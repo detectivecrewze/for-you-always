@@ -43,7 +43,7 @@ const FEATURE_SLIDES: SlideItem[] = [
                 Cukup bagikan link khusus (contoh: <code style={{ color: "#E2859B", background: "rgba(226, 133, 155, 0.15)", padding: "1px 6px", borderRadius: 4, whiteSpace: "nowrap" }}>for-you-always.my.id/c/nama</code>) secara perorangan atau ke grup WhatsApp tanpa perlu login atau instal aplikasi.
             </span>
         ),
-        src: "/assets/auto-circle/auto-circle4.webp",
+        src: "/assets/auto-circle/auto-circle5.webp",
     },
 ];
 
