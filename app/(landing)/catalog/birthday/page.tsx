@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
+import WishInboxInfoModal from "../../../components/WishInboxInfoModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
 export default function BirthdayCatalogPage() {
     const { addToCart } = useCart();
+    const [isWishInboxModalOpen, setIsWishInboxModalOpen] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -44,6 +46,66 @@ export default function BirthdayCatalogPage() {
             <section style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                        {/* Wish Inbox Exclusive Feature Info Trigger Button */}
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginBottom: "28px",
+                        }}>
+                            <button
+                                type="button"
+                                onClick={() => setIsWishInboxModalOpen(true)}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "clamp(6px, 1.8vw, 10px)",
+                                    padding: "8px clamp(14px, 3.5vw, 20px)",
+                                    borderRadius: 999,
+                                    background: "#241813",
+                                    border: "1px solid rgba(212, 151, 59, 0.4)",
+                                    boxShadow: "0 6px 20px rgba(36, 24, 19, 0.25)",
+                                    color: "#FAF7F2",
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "clamp(11.5px, 2.7vw, 13px)",
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                    maxWidth: "100%",
+                                    boxSizing: "border-box",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                    e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.75)";
+                                    e.currentTarget.style.boxShadow = "0 10px 26px rgba(36, 24, 19, 0.35)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.borderColor = "rgba(212, 151, 59, 0.4)";
+                                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(36, 24, 19, 0.25)";
+                                }}
+                            >
+                                <span style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: 7,
+                                    height: 7,
+                                    borderRadius: "50%",
+                                    background: "#D4973B",
+                                    boxShadow: "0 0 8px rgba(212, 151, 59, 0.8)",
+                                    flexShrink: 0,
+                                }} />
+                                <span style={{ letterSpacing: "0.01em", lineHeight: 1.3 }}>
+                                    Fitur Eksklusif: Wish Inbox Interaktif &mdash; Baca Pesan Balasan dari Si Dia
+                                </span>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D4973B" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: 2 }}>
+                                    <path d="M7 17L17 7" />
+                                    <path d="M7 7h10v10" />
+                                </svg>
+                            </button>
+                        </div>
+
                         <LandscapeProductCard
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -162,6 +224,12 @@ export default function BirthdayCatalogPage() {
                             reverse={false}
                             initialSelectedIndex={0}
                             autoCycle={false}
+                        />
+
+                        {/* Wish Inbox Info Walkthrough Modal */}
+                        <WishInboxInfoModal
+                            isOpen={isWishInboxModalOpen}
+                            onClose={() => setIsWishInboxModalOpen(false)}
                         />
                     </div>
                 </div>
