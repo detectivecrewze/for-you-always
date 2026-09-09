@@ -300,12 +300,42 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                     fontWeight: 600,
                     color: "#FDE8E9",
                     lineHeight: 1.25,
-                    margin: "0 0 12px",
+                    margin: "0 0 8px",
                     textAlign: "center",
                     letterSpacing: "-0.01em",
                 }}>
                     Cara Kerja Circle Wishes: Memoria Edition
                 </h3>
+
+                {/* Sleek Minimalist Subtitle Capsule */}
+                <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    marginBottom: 14,
+                }}>
+                    <span style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 6,
+                        padding: "4px 12px",
+                        borderRadius: 999,
+                        background: "rgba(226, 133, 155, 0.1)",
+                        border: "1px solid rgba(226, 133, 155, 0.22)",
+                        color: "#D1A7B1",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(10.5px, 2.5vw, 11.5px)",
+                        lineHeight: 1.4,
+                        maxWidth: "100%",
+                    }}>
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#E2859B", flexShrink: 0 }} />
+                        <span>
+                            Fitur baru opsional — format kado <strong style={{ color: "#FDE8E9" }}>Personal Edition</strong> tetap tersedia.
+                        </span>
+                    </span>
+                </div>
 
                 {/* Large Hero Screenshot (Swipeable & Click to Zoom) */}
                 <div
@@ -803,6 +833,20 @@ export default function CircleWishesInfoModal({ isOpen, onClose }: CircleWishesI
                                     Seluruh ucapan tersusun rapi di Bento Grid kado Memoria dengan kontrol audio/video cerdas tanpa mengganggu musik latar kado.
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Personal Edition Reassurance Note */}
+                        <div style={{
+                            padding: "9px 12px",
+                            borderRadius: 11,
+                            background: "rgba(255, 255, 255, 0.04)",
+                            border: "1px solid rgba(226, 133, 155, 0.15)",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: "clamp(10.5px, 2.5vw, 11px)",
+                            color: "#D1A7B1",
+                            lineHeight: 1.45,
+                        }}>
+                            <strong style={{ color: "#FDE8E9" }}>Ingin kado berdua saja?</strong> Pilih opsi <strong>Personal Edition</strong> di formulir pesanan. Langkah pengumpulan ini otomatis dilewati dan kado sepenuhnya berfokus pada ungkapan perasaan pribadimu.
                         </div>
                     </div>
                 </div>
