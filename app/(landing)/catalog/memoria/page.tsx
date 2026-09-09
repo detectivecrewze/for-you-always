@@ -22,7 +22,7 @@ interface ActiveDemo {
     label: string;
 }
 
-const PERSONAL_DEMO_URL = "https://anniv.for-you-always.my.id/untuk-nadia";
+const PERSONAL_DEMO_URL = "https://anniv.for-you-always.my.id/untuk-nadia?preview=personal";
 const MEMORIA_CART_ITEM = {
     id: "loves",
     title: "Memoria Premium",
