@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 export type DemoCloseReason = "button" | "backdrop" | "escape" | "order";
-export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped";
+export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped" | "birthday";
 
 interface DemoThemeTokens {
     backdropBg: string;
@@ -259,6 +259,34 @@ const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
         retryLinkColor: "#C9184A",
         emptyBg: "radial-gradient(circle at 50% 40%, #FFF5F7 0%, #F9DEE5 72%)",
         emptyText: "#680D27",
+    },
+    birthday: {
+        backdropBg: "rgba(24, 15, 4, 0.82)",
+        frameBg: "linear-gradient(160deg, #241604 0%, #120A02 100%)",
+        frameBorder: "1px solid rgba(245, 183, 56, 0.35)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 40px rgba(245, 183, 56, 0.14)",
+        headerBg: "rgba(36, 22, 4, 0.96)",
+        headerBorder: "1px solid rgba(245, 183, 56, 0.22)",
+        footerBg: "rgba(36, 22, 4, 0.98)",
+        footerBorder: "1px solid rgba(245, 183, 56, 0.22)",
+        titleColor: "#FFF8EE",
+        subtitleColor: "#D8B88C",
+        closeBg: "rgba(255, 248, 238, 0.08)",
+        closeBorder: "1px solid rgba(245, 183, 56, 0.3)",
+        closeColor: "#FFF8EE",
+        closeHoverBg: "rgba(245, 183, 56, 0.2)",
+        closeHoverBorder: "rgba(245, 183, 56, 0.55)",
+        orderBg: "linear-gradient(135deg, #F5B738 0%, #E2991E 100%)",
+        orderColor: "#241604",
+        orderShadow: "0 7px 20px rgba(226, 153, 30, 0.28)",
+        orderHoverShadow: "0 10px 24px rgba(226, 153, 30, 0.38)",
+        spinnerTrack: "rgba(245, 183, 56, 0.18)",
+        spinnerAccent: "#F5B738",
+        retryBtnBg: "#5E3D0A",
+        retryBtnColor: "#FFF8EE",
+        retryLinkColor: "#E2991E",
+        emptyBg: "radial-gradient(circle at 50% 40%, #FFFDF8 0%, #F6ECE0 72%)",
+        emptyText: "#5E3D0A",
     },
 };
 

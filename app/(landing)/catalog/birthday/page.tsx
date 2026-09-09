@@ -1,21 +1,89 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import WishInboxInfoModal from "../../../components/WishInboxInfoModal";
+import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
+const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
+
+interface ActiveDemo {
+    url: string;
+    label: string;
+}
+
+const BIRTHDAY_CART_ITEM = {
+    id: "birthday",
+    title: "Birthday Scrapbook",
+    numericPrice: 25000,
+    oldNumericPrice: 35000,
+    themeColor: "#bf7b19",
+};
+
+function captureDemoEvent(event: string, properties: Record<string, unknown>) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, properties))
+        .catch(() => {});
+}
+
 export default function BirthdayCatalogPage() {
     const { addToCart } = useCart();
     const [isWishInboxModalOpen, setIsWishInboxModalOpen] = useState(false);
+    const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
+    const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         trackViewContent({ id: "birthday", name: "Birthday Scrapbook", price: 25000 });
     }, []);
+
+    const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
+        product_id: "birthday",
+        product_name: "Birthday Scrapbook",
+        demo_label: demo.label,
+    }), []);
+
+    const openDemo = useCallback((url: string, label: string) => {
+        demoOpenedAtRef.current = performance.now();
+        const demo = { url, label };
+        captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
+        setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_closed", {
+            ...demoAnalyticsProperties(activeDemo),
+            close_method: reason,
+            open_duration_ms: Math.max(0, Math.round(performance.now() - demoOpenedAtRef.current)),
+        });
+        setActiveDemo(null);
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoLoaded = useCallback((loadTimeMs: number) => {
+        if (!activeDemo) return;
+        captureDemoEvent("product_demo_loaded", {
+            ...demoAnalyticsProperties(activeDemo),
+            load_time_ms: loadTimeMs,
+        });
+    }, [activeDemo, demoAnalyticsProperties]);
+
+    const handleDemoOrder = useCallback(() => {
+        if (activeDemo) {
+            captureDemoEvent("product_demo_cta_clicked", {
+                ...demoAnalyticsProperties(activeDemo),
+                destination: "cart",
+                price: BIRTHDAY_CART_ITEM.numericPrice,
+                currency: "IDR",
+            });
+        }
+        addToCart(BIRTHDAY_CART_ITEM);
+    }, [activeDemo, addToCart, demoAnalyticsProperties]);
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
@@ -224,6 +292,7 @@ export default function BirthdayCatalogPage() {
                             reverse={false}
                             initialSelectedIndex={0}
                             autoCycle={false}
+                            onDemoOpen={(url, label) => openDemo(url, label)}
                         />
 
                         {/* Wish Inbox Info Walkthrough Modal */}
@@ -231,6 +300,21 @@ export default function BirthdayCatalogPage() {
                             isOpen={isWishInboxModalOpen}
                             onClose={() => setIsWishInboxModalOpen(false)}
                         />
+
+                        {activeDemo && (
+                            <DemoPreviewModal
+                                isOpen
+                                src={activeDemo.url}
+                                title={activeDemo.label ? `Demo ${activeDemo.label}` : "Birthday Scrapbook"}
+                                subtitle="Jelajahi scrapbook digital interaktif dengan 4 ruangan kejutan"
+                                productName="Birthday Scrapbook"
+                                price="Rp 25.000"
+                                theme="birthday"
+                                onClose={closeDemo}
+                                onOrder={handleDemoOrder}
+                                onLoaded={handleDemoLoaded}
+                            />
+                        )}
                     </div>
                 </div>
             </section>
