@@ -10,7 +10,7 @@ import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
-type DemoVariant = "personal" | "circle";
+type DemoVariant = "personal" | "gift-opening" | "circle";
 type DemoSource = "product_card" | "circle_wishes_info";
 
 interface ActiveDemo {
@@ -21,8 +21,10 @@ interface ActiveDemo {
     switchCount: number;
 }
 
+const GIFT_OPENING_DEMO_URL = "https://anniv.for-you-always.my.id/auto-kvoggmb";
 const PERSONAL_DEMO_URL = "https://anniv.for-you-always.my.id/untuk-nadia?preview=personal";
 const MEMORIA_DEMO_VARIANTS = [
+    { id: "gift-opening", label: "Gift Opening", src: GIFT_OPENING_DEMO_URL, subtitle: "Lihat transisi pembuka dengan animasi kado" },
     { id: "personal", label: "Personal Edition", src: PERSONAL_DEMO_URL, subtitle: "Jelajahi contoh Personal Edition" },
     { id: "circle", label: "Circle Wishes", src: "https://anniv.for-you-always.my.id/auto-circle?preview=circle#circle-wishes-section", subtitle: "Lihat bagaimana ucapan teman hadir di dalam kado" },
 ] as const satisfies readonly DemoPreviewVariant[];
@@ -88,7 +90,7 @@ export default function ProductCatalogPage() {
 
     const handleVariantChange = React.useCallback((previousVariant: DemoPreviewVariant, nextVariant: DemoPreviewVariant) => {
         setActiveDemo((current) => {
-            if (!current || (nextVariant.id !== "personal" && nextVariant.id !== "circle")) return current;
+            if (!current || (nextVariant.id !== "personal" && nextVariant.id !== "gift-opening" && nextVariant.id !== "circle")) return current;
             const switchCount = current.switchCount + 1;
             captureDemoEvent("product_demo_variant_changed", {
                 ...demoAnalyticsProperties(current),
@@ -319,8 +321,8 @@ export default function ProductCatalogPage() {
                             ]}
                             price="Rp 40.000"
                             oldPrice="Rp 50.000"
-                            demoLink={PERSONAL_DEMO_URL}
-                            onDemoOpen={(url, label) => openDemo("personal", "product_card", url, label)}
+                            demoLink={GIFT_OPENING_DEMO_URL}
+                            onDemoOpen={(url, label) => openDemo("gift-opening", "product_card", url, label)}
                             mediaSrc=""
                             fallbackImgSrc="/assets/opening_gate.png"
                             mediaType="image"
@@ -329,7 +331,7 @@ export default function ProductCatalogPage() {
                             onAddToCart={() => addToCart(MEMORIA_CART_ITEM)}
                             themesLabel="Koleksi Pages"
                             themes={[
-                                { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png" },
+                                { name: "Opening Gate", desc: "Animasi kado pembuka", color: "#faf7f2", fallbackImgSrc: "/assets/opening_gate.png", demoLink: GIFT_OPENING_DEMO_URL, demoVariantId: "gift-opening" },
                                 { name: "Opening Section", desc: "Sapaan & musik latar", color: "#faf7f2", fallbackImgSrc: "/assets/opening_section.webp" },
                                 { name: "Time Section", desc: "Hitung mundur momen", color: "#faf7f2", fallbackImgSrc: "/assets/time_section.webp" },
                                 { name: "Letter Section", desc: "Pesan menyentuh hati", color: "#faf7f2", fallbackImgSrc: "/assets/letter_section.webp" },

@@ -346,6 +346,12 @@ export default function DemoPreviewModal({
             : variants?.[0]?.id ?? "default"
     ));
 
+    useEffect(() => {
+        if (initialVariantId && variants?.some((variant) => variant.id === initialVariantId)) {
+            setSelectedVariantId(initialVariantId);
+        }
+    }, [initialVariantId, variants]);
+
     const fallbackVariant = useMemo<DemoPreviewVariant>(() => ({
         id: "default",
         label: title,
@@ -788,6 +794,15 @@ export default function DemoPreviewModal({
                     .memoria-demo-segmented-track.has-2-variants .memoria-demo-segmented-btn {
                         width: 100% !important;
                     }
+                    .memoria-demo-segmented-track.has-many-variants {
+                        display: grid !important;
+                        grid-auto-flow: column !important;
+                        grid-auto-columns: minmax(120px, 1fr) !important;
+                        width: clamp(360px, 46vw, 620px) !important;
+                    }
+                    .memoria-demo-segmented-track.has-many-variants .memoria-demo-segmented-btn {
+                        width: 100% !important;
+                    }
                     .memoria-demo-close {
                         justify-self: end !important;
                         width: 44px !important;
@@ -809,6 +824,19 @@ export default function DemoPreviewModal({
                     .memoria-demo-viewport {
                         overflow-y: hidden !important;
                         overflow-x: hidden !important;
+                    }
+                    .memoria-demo-segmented-track.variant-count-3 {
+                        display: grid !important;
+                        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                        gap: 3px !important;
+                        overflow: hidden !important;
+                        scroll-snap-type: none !important;
+                    }
+                    .memoria-demo-segmented-track.variant-count-3 .memoria-demo-segmented-btn {
+                        width: 100% !important;
+                        min-width: 0 !important;
+                        padding-inline: 4px !important;
+                        font-size: 10.5px !important;
                     }
                 }
                 @media (prefers-reduced-motion: reduce) {
@@ -885,7 +913,7 @@ export default function DemoPreviewModal({
                         <div
                             role="tablist"
                             aria-label={`Pilih tema demo ${productName}`}
-                            className={`memoria-demo-segmented-track ${availableVariants.length === 2 ? "has-2-variants" : "has-many-variants"}`}
+                            className={`memoria-demo-segmented-track ${availableVariants.length === 2 ? "has-2-variants" : "has-many-variants"} variant-count-${availableVariants.length}`}
                         >
                             {availableVariants.map((variant, index) => {
                                 const isSelected = variant.id === selectedVariant.id;
@@ -906,7 +934,9 @@ export default function DemoPreviewModal({
                                             boxShadow: isSelected ? "0 2px 8px rgba(0, 0, 0, 0.25)" : "none",
                                         }}
                                     >
-                                        {variant.label}
+                                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%", display: "block", textAlign: "center" }}>
+                                            {variant.label}
+                                        </span>
                                     </button>
                                 );
                             })}
