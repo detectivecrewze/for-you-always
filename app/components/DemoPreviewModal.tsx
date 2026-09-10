@@ -425,6 +425,8 @@ export default function DemoPreviewModal({
         const revealTimer = window.setTimeout(() => {
             setVisible(true);
             closeButtonRef.current?.focus({ preventScroll: true });
+            const button = variantButtonRefs.current[selectedVariant.id];
+            button?.scrollIntoView({ behavior: "auto", block: "nearest", inline: "center" });
         }, 16);
 
         return () => {
@@ -685,6 +687,16 @@ export default function DemoPreviewModal({
                 .memoria-demo-segmented-track.has-many-variants::-webkit-scrollbar {
                     display: none;
                 }
+                .memoria-demo-segmented-track.has-many-variants .memoria-demo-segmented-btn {
+                    flex: 0 0 auto;
+                    width: auto;
+                    min-width: fit-content;
+                    scroll-snap-align: center;
+                }
+                .memoria-demo-segmented-label {
+                    white-space: nowrap;
+                    display: inline-block;
+                }
                 .memoria-demo-segmented-btn {
                     min-height: 44px;
                     padding: 0 12px;
@@ -795,12 +807,25 @@ export default function DemoPreviewModal({
                         width: 100% !important;
                     }
                     .memoria-demo-segmented-track.has-many-variants {
-                        display: grid !important;
-                        grid-auto-flow: column !important;
-                        grid-auto-columns: minmax(120px, 1fr) !important;
-                        width: clamp(360px, 46vw, 620px) !important;
+                        display: inline-flex !important;
+                        gap: 4px !important;
+                        width: auto !important;
+                        max-width: min(620px, 46vw) !important;
+                        justify-content: center !important;
                     }
                     .memoria-demo-segmented-track.has-many-variants .memoria-demo-segmented-btn {
+                        flex: 0 0 auto !important;
+                        width: auto !important;
+                        min-width: 0 !important;
+                        padding: 0 12px !important;
+                    }
+                    .memoria-demo-segmented-track.theme-memoria.variant-count-3 {
+                        display: grid !important;
+                        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                        width: clamp(380px, 34vw, 480px) !important;
+                        gap: 3px !important;
+                    }
+                    .memoria-demo-segmented-track.theme-memoria.variant-count-3 .memoria-demo-segmented-btn {
                         width: 100% !important;
                     }
                     .memoria-demo-close {
@@ -825,18 +850,54 @@ export default function DemoPreviewModal({
                         overflow-y: hidden !important;
                         overflow-x: hidden !important;
                     }
-                    .memoria-demo-segmented-track.variant-count-3 {
+                    .memoria-demo-segmented-track.variant-count-3:not(.theme-letter) {
                         display: grid !important;
                         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
                         gap: 3px !important;
                         overflow: hidden !important;
                         scroll-snap-type: none !important;
                     }
-                    .memoria-demo-segmented-track.variant-count-3 .memoria-demo-segmented-btn {
+                    .memoria-demo-segmented-track.variant-count-3:not(.theme-letter) .memoria-demo-segmented-btn {
                         width: 100% !important;
                         min-width: 0 !important;
                         padding-inline: 4px !important;
                         font-size: 10.5px !important;
+                    }
+                    .memoria-demo-segmented-track.variant-count-3:not(.theme-letter) .memoria-demo-segmented-label {
+                        overflow: hidden !important;
+                        text-overflow: ellipsis !important;
+                        white-space: nowrap !important;
+                        display: block !important;
+                        width: 100% !important;
+                        text-align: center !important;
+                    }
+                    .memoria-demo-segmented-track.theme-letter {
+                        display: flex !important;
+                        gap: 5px !important;
+                        overflow-x: auto !important;
+                        overflow-y: hidden !important;
+                        scrollbar-width: none !important;
+                        -webkit-overflow-scrolling: touch !important;
+                        scroll-snap-type: x proximity !important;
+                        padding: 3px 4px !important;
+                    }
+                    .memoria-demo-segmented-track.theme-letter::-webkit-scrollbar {
+                        display: none !important;
+                    }
+                    .memoria-demo-segmented-track.theme-letter .memoria-demo-segmented-btn {
+                        flex: 0 0 auto !important;
+                        width: auto !important;
+                        min-width: fit-content !important;
+                        padding: 0 13px !important;
+                        font-size: 11px !important;
+                        scroll-snap-align: center !important;
+                    }
+                    .memoria-demo-segmented-track.theme-letter .memoria-demo-segmented-label {
+                        white-space: nowrap !important;
+                        display: inline-block !important;
+                        overflow: visible !important;
+                        text-overflow: clip !important;
+                        width: auto !important;
                     }
                 }
                 @media (prefers-reduced-motion: reduce) {
@@ -913,7 +974,7 @@ export default function DemoPreviewModal({
                         <div
                             role="tablist"
                             aria-label={`Pilih tema demo ${productName}`}
-                            className={`memoria-demo-segmented-track ${availableVariants.length === 2 ? "has-2-variants" : "has-many-variants"} variant-count-${availableVariants.length}`}
+                            className={`memoria-demo-segmented-track ${availableVariants.length === 2 ? "has-2-variants" : "has-many-variants"} variant-count-${availableVariants.length} theme-${theme}`}
                         >
                             {availableVariants.map((variant, index) => {
                                 const isSelected = variant.id === selectedVariant.id;
@@ -934,7 +995,7 @@ export default function DemoPreviewModal({
                                             boxShadow: isSelected ? "0 2px 8px rgba(0, 0, 0, 0.25)" : "none",
                                         }}
                                     >
-                                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%", display: "block", textAlign: "center" }}>
+                                        <span className="memoria-demo-segmented-label">
                                             {variant.label}
                                         </span>
                                     </button>
