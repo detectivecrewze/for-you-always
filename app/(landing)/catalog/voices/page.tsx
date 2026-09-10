@@ -1,20 +1,26 @@
 "use client";
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
+import DemoPreviewModal, { scheduleDemoPreviewPreload } from "../../../components/LazyDemoPreviewModal";
+import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
-const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
-
 interface ActiveDemo {
     url: string;
     label: string;
+    variant: string;
+    source: "product_card";
+    switchCount: number;
 }
+
+const VOICES_DEMO_VARIANTS = [
+    { id: "music-box", label: "Music Box", src: "https://voice.for-you-always.my.id/gift/for-nadin", subtitle: "Rekaman suara dalam nuansa kotak musik klasik" },
+    { id: "camera", label: "Camera", src: "https://voice.for-you-always.my.id/camera/silver/for-nadin", subtitle: "Rekaman suara dengan tampilan kamera retro" },
+] as const satisfies readonly DemoPreviewVariant[];
 
 const VOICES_CART_ITEM = {
     id: "voices",
@@ -36,21 +42,41 @@ export default function ProductCatalogPage() {
     const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
+        const cancelDemoPreload = scheduleDemoPreviewPreload();
         window.scrollTo(0, 0);
         trackViewContent({ id: "voices", name: "Voices Gift", price: 20000 });
+        return cancelDemoPreload;
     }, []);
 
     const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
         product_id: "voices",
         product_name: "Voices Gift",
         demo_label: demo.label,
+        demo_variant: demo.variant,
+        source: demo.source,
+        variant_switch_count: demo.switchCount,
     }), []);
 
-    const openDemo = useCallback((url: string, label: string) => {
+    const openDemo = useCallback((url: string, label: string, variantId?: string) => {
         demoOpenedAtRef.current = performance.now();
-        const demo = { url, label };
+        const variant = VOICES_DEMO_VARIANTS.find((item) => item.id === variantId || item.src === url) ?? VOICES_DEMO_VARIANTS[0];
+        const demo: ActiveDemo = { url: variant.src, label: variant.label || label, variant: variant.id, source: "product_card", switchCount: 0 };
         captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
         setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const handleVariantChange = useCallback((previousVariant: DemoPreviewVariant, nextVariant: DemoPreviewVariant) => {
+        setActiveDemo((current) => {
+            if (!current) return current;
+            const switchCount = current.switchCount + 1;
+            captureDemoEvent("product_demo_variant_changed", {
+                ...demoAnalyticsProperties(current),
+                from_variant: previousVariant.id,
+                to_variant: nextVariant.id,
+                switch_index: switchCount,
+            });
+            return { ...current, url: nextVariant.src, label: nextVariant.label, variant: nextVariant.id, switchCount };
+        });
     }, [demoAnalyticsProperties]);
 
     const closeDemo = useCallback((reason: DemoCloseReason) => {
@@ -117,28 +143,31 @@ export default function ProductCatalogPage() {
                             onAddToCart={() => addToCart(VOICES_CART_ITEM)}
                             onAddThreeSlotToCart={() => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 25000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })}
                             themes={[
-                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp" },
-                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin" }
+                                { name: "Music Box", desc: "Nuansa kotak musik klasik", color: "#a67c52", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777881039502-bav595.webp", demoVariantId: "music-box" },
+                                { name: "Camera", desc: "Tampilan bergaya retro camera", color: "#9ca3af", fallbackImgSrc: "https://cdn.for-you-always.my.id/1777882686448-bkvu14.png", demoLink: "https://voice.for-you-always.my.id/camera/silver/for-nadin", demoVariantId: "camera" }
                             ]}
                             delay={100}
                             initialSelectedIndex={0}
                             autoCycle={true}
                             tiktokHref="https://www.tiktok.com/@foryoualways.id/video/7608960116141886740?is_from_webapp=1&sender_device=pc"
-                            onDemoOpen={(url, label) => openDemo(url, label)}
+                            onDemoOpen={(url, label, metadata) => openDemo(url, label, metadata?.variantId)}
                         />
 
                         {activeDemo && (
                             <DemoPreviewModal
                                 isOpen
                                 src={activeDemo.url}
-                                title={activeDemo.label || "Voices Gift"}
+                                title="Demo Voices Gift"
                                 subtitle="Dengarkan rekaman suara berpadu memori foto & musik latar"
                                 productName="Voices Gift"
                                 price="Rp 20.000"
                                 theme="voices"
+                                variants={VOICES_DEMO_VARIANTS}
+                                initialVariantId={activeDemo.variant}
                                 onClose={closeDemo}
                                 onOrder={handleDemoOrder}
                                 onLoaded={handleDemoLoaded}
+                                onVariantChange={handleVariantChange}
                             />
                         )}
                     </div>

@@ -74,7 +74,6 @@ export function LandscapeProductCard({
     features,
     mediaSrc,
     fallbackImgSrc,
-    mediaType,
     accentColor,
     accentGlow,
     href,
@@ -87,7 +86,6 @@ export function LandscapeProductCard({
     delay = 0,
     reverse = false,
     addonText,
-    tiktokHref,
     demoLink,
     demoLabel,
     onDemoOpen,
@@ -108,7 +106,7 @@ export function LandscapeProductCard({
     onAddToCart?: () => void;
     onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
-    themes?: { name: string, desc: string, color?: string, title?: string, description?: string, features?: string[], videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string }[] }[];
+    themes?: { name: string, desc: string, color?: string, title?: string, description?: string, features?: string[], videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, demoVariantId?: string, demoDisabled?: boolean, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, demoVariantId?: string, demoDisabled?: boolean }[] }[];
     initialSelectedIndex?: number;
     autoCycle?: boolean;
     delay?: number;
@@ -117,7 +115,7 @@ export function LandscapeProductCard({
     tiktokHref?: string;
     demoLink?: string;
     demoLabel?: string;
-    onDemoOpen?: (url: string, label: string) => void;
+    onDemoOpen?: (url: string, label: string, metadata?: { variantId?: string }) => void;
     priority?: boolean;
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
@@ -130,25 +128,7 @@ export function LandscapeProductCard({
         return themes?.[initIdx]?.defaultSubThemeIndex || 0;
     });
 
-    // Reset sub-theme saat tema utama berubah — BENAR: pakai useEffect, bukan setState di body render
-    useEffect(() => {
-        if (selectedIndex !== null && themes && themes[selectedIndex]) {
-            setSelectedSubThemeIndex(themes[selectedIndex].defaultSubThemeIndex || 0);
-        }
-    }, [selectedIndex, themes]);
-
-    const [isTikTok, setIsTikTok] = useState(false);
     const [isInView, setIsInView] = useState(false);
-
-    useEffect(() => {
-        if (typeof navigator !== 'undefined') {
-            const ua = navigator.userAgent || navigator.vendor;
-            if (/Bytedance|musical_ly|TikTok/i.test(ua)) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect
-                setIsTikTok(true);
-            }
-        }
-    }, []);
 
     // Derived state for media and colors — di-memoize agar tidak dihitung ulang setiap render
     const activeValues = useMemo(() => {
@@ -158,6 +138,7 @@ export function LandscapeProductCard({
         let imgSrc = fallbackImgSrc;
         let dLink = demoLink;
         let dLabel = demoLabel || "Lihat Demo";
+        let dVariantId: string | undefined;
         let activeTitle = title;
         let activeDesc = description;
         let activeFeats = features;
@@ -185,19 +166,22 @@ export function LandscapeProductCard({
             else if (theme.fallbackImgSrc) imgSrc = theme.fallbackImgSrc;
             else imgSrc = fallbackImgSrc;
 
-            if (activeTheme.demoLink) dLink = activeTheme.demoLink;
+            if (activeTheme.demoDisabled || theme.demoDisabled) dLink = undefined;
+            else if (activeTheme.demoLink) dLink = activeTheme.demoLink;
             else if (theme.demoLink) dLink = theme.demoLink;
             else dLink = demoLink;
 
             if (activeTheme.demoLabel) dLabel = activeTheme.demoLabel;
             else if (theme.demoLabel) dLabel = theme.demoLabel;
             else dLabel = demoLabel || "Lihat Demo";
+
+            dVariantId = activeTheme.demoVariantId || theme.demoVariantId;
         }
 
-        return { activeAccent: accent, activeGlow: glow, activeVideoSrc: videoSrc, activeFallbackImgSrc: imgSrc, activeDemoLink: dLink, activeDemoLabel: dLabel, activeTitle, activeDescription: activeDesc, activeFeatures: activeFeats };
+        return { activeAccent: accent, activeGlow: glow, activeVideoSrc: videoSrc, activeFallbackImgSrc: imgSrc, activeDemoLink: dLink, activeDemoLabel: dLabel, activeDemoVariantId: dVariantId, activeTitle, activeDescription: activeDesc, activeFeatures: activeFeats };
     }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel, title, description, features]);
 
-    const { activeAccent, activeGlow, activeFallbackImgSrc, activeDemoLink, activeDemoLabel, activeTitle, activeDescription, activeFeatures } = activeValues;
+    const { activeAccent, activeGlow, activeFallbackImgSrc, activeDemoLink, activeDemoLabel, activeDemoVariantId, activeTitle, activeDescription, activeFeatures } = activeValues;
 
     // Sub-theme panel — di-memoize agar IIFE tidak dieksekusi ulang setiap render
     const subThemePanelData = useMemo(() => {
@@ -281,19 +265,24 @@ export function LandscapeProductCard({
         (e.currentTarget as HTMLElement).style.transform = "scale(1)";
     }, []);
 
+    const selectTheme = useCallback((index: number) => {
+        setSelectedIndex(index);
+        setSelectedSubThemeIndex(themes?.[index]?.defaultSubThemeIndex ?? 0);
+    }, [themes]);
+
     const handlePrevTheme = useCallback(() => {
         const prevIndex = selectedIndex === null ? 0 : selectedIndex;
         const newIndex = prevIndex === 0 ? (themes?.length ?? 1) - 1 : prevIndex - 1;
-        setSelectedIndex(newIndex);
+        selectTheme(newIndex);
         captureProductEvent('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'prev' });
-    }, [selectedIndex, themes, title]);
+    }, [selectedIndex, themes, title, selectTheme]);
 
     const handleNextTheme = useCallback(() => {
         const prevIndex = selectedIndex === null ? 0 : selectedIndex;
         const newIndex = prevIndex === (themes?.length ?? 1) - 1 ? 0 : prevIndex + 1;
-        setSelectedIndex(newIndex);
+        selectTheme(newIndex);
         captureProductEvent('selected_theme', { product: title, theme: themes?.[newIndex]?.name, direction: 'next' });
-    }, [selectedIndex, themes, title]);
+    }, [selectedIndex, themes, title, selectTheme]);
 
     const handlePrevSubTheme = useCallback(() => {
         const len = subThemePanelData.currentTheme?.subThemes?.length ?? 1;
@@ -355,10 +344,11 @@ export function LandscapeProductCard({
     useEffect(() => {
         if (!autoCycle || !themes || themes.length <= 1 || !isInView) return;
         const interval = setInterval(() => {
-            setSelectedIndex(prev => (prev === null ? 0 : prev + 1) % themes.length);
+            const currentIndex = selectedIndex ?? 0;
+            selectTheme((currentIndex + 1) % themes.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, [autoCycle, themes, isInView]);
+    }, [autoCycle, themes, isInView, selectedIndex, selectTheme]);
 
     // (Video logic removed as per request to use static images only)
 
@@ -449,7 +439,7 @@ export function LandscapeProductCard({
                             return onDemoOpen ? (
                                 <button
                                     type="button"
-                                    onClick={() => onDemoOpen(activeDemoLink, activeDemoLabel)}
+                                    onClick={() => onDemoOpen(activeDemoLink, activeDemoLabel, { variantId: activeDemoVariantId })}
                                     style={demoControlStyle}
                                     onMouseEnter={handleDemoMouseEnter}
                                     onMouseLeave={handleDemoMouseLeave}
@@ -496,7 +486,7 @@ export function LandscapeProductCard({
                                     <button
                                         onClick={handlePrevTheme}
                                         style={{
-                                            width: 36, height: 36, borderRadius: "50%",
+                                            width: 44, height: 44, borderRadius: "50%",
                                             background: "#fff", border: `1px solid ${activeAccent}22`,
                                             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
                                             color: activeAccent, flexShrink: 0,
@@ -525,7 +515,7 @@ export function LandscapeProductCard({
                                     <button
                                         onClick={handleNextTheme}
                                         style={{
-                                            width: 36, height: 36, borderRadius: "50%",
+                                            width: 44, height: 44, borderRadius: "50%",
                                             background: "#fff", border: `1px solid ${activeAccent}22`,
                                             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
                                             color: activeAccent, flexShrink: 0,
@@ -549,7 +539,7 @@ export function LandscapeProductCard({
                                         return (
                                             <div
                                                 key={i}
-                                                onClick={() => setSelectedIndex(i)}
+                                                onClick={() => selectTheme(i)}
                                                 style={{
                                                     width: 10, height: 10, borderRadius: "50%",
                                                     background: dotColor,

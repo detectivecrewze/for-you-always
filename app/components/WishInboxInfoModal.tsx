@@ -32,7 +32,6 @@ const FEATURE_SLIDES: SlideItem[] = [
 ];
 
 export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoModalProps) {
-    const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -50,7 +49,6 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
     }, [onClose]);
 
     useEffect(() => {
-        setMounted(true);
         return () => {
             if (closeTimerRef.current) {
                 clearTimeout(closeTimerRef.current);
@@ -94,12 +92,14 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
             }
             originalOverflowRef.current = document.body.style.overflow || "";
             closingRef.current = false;
-            setClosing(false);
-            setActiveSlideIndex(0);
-            setIsZoomed(false);
-            setZoomScale(1);
-            const timer = setTimeout(() => setVisible(true), 15);
             document.body.style.overflow = "hidden";
+            const timer = setTimeout(() => {
+                setClosing(false);
+                setActiveSlideIndex(0);
+                setIsZoomed(false);
+                setZoomScale(1);
+                setVisible(true);
+            }, 15);
             return () => {
                 clearTimeout(timer);
                 document.body.style.overflow = originalOverflowRef.current;
@@ -109,10 +109,13 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
                 clearTimeout(closeTimerRef.current);
                 closeTimerRef.current = null;
             }
-            setVisible(false);
-            setIsZoomed(false);
-            setZoomScale(1);
             document.body.style.overflow = originalOverflowRef.current;
+            const resetTimer = setTimeout(() => {
+                setVisible(false);
+                setIsZoomed(false);
+                setZoomScale(1);
+            }, 0);
+            return () => clearTimeout(resetTimer);
         }
     }, [isOpen]);
 
@@ -168,7 +171,7 @@ export default function WishInboxInfoModal({ isOpen, onClose }: WishInboxInfoMod
         };
     }, [isOpen, isZoomed, handleClose, goToPrev, goToNext]);
 
-    if (!mounted || (!isOpen && !closing)) return null;
+    if (typeof document === "undefined" || (!isOpen && !closing)) return null;
 
     const currentSlide = FEATURE_SLIDES[activeSlideIndex];
 

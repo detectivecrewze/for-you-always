@@ -12,8 +12,10 @@ function LandingCartUi() {
     const [hasMountedDrawer, setHasMountedDrawer] = useState(false);
 
     useEffect(() => {
-        if (isDrawerOpen) setHasMountedDrawer(true);
-    }, [isDrawerOpen]);
+        if (!isDrawerOpen || hasMountedDrawer) return;
+        const mountTimer = window.setTimeout(() => setHasMountedDrawer(true), 0);
+        return () => window.clearTimeout(mountTimer);
+    }, [isDrawerOpen, hasMountedDrawer]);
 
     return (
         <>

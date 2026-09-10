@@ -105,13 +105,14 @@ export default function CartDrawer() {
                             background: "rgba(205,171,143,0.1)",
                             border: "1px solid rgba(205,171,143,0.25)",
                             borderRadius: "50%",
-                            width: 36, height: 36,
+                            width: 44, height: 44,
                             display: "flex", alignItems: "center", justifyContent: "center",
                             cursor: "pointer", color: "#6e5c53",
                             transition: "all 0.2s ease",
                         }}
                         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.2)"; }}
                         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(205,171,143,0.1)"; }}
+                        aria-label="Tutup keranjang"
                     >
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

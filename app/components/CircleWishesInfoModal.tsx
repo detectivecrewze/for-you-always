@@ -52,7 +52,6 @@ const FEATURE_SLIDES: SlideItem[] = [
 ];
 
 export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: CircleWishesInfoModalProps) {
-    const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -71,7 +70,6 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
     }, [onClose]);
 
     useEffect(() => {
-        setMounted(true);
         return () => {
             if (closeTimerRef.current) {
                 clearTimeout(closeTimerRef.current);
@@ -124,13 +122,15 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
             }
             originalOverflowRef.current = document.body.style.overflow || "";
             closingRef.current = false;
-            setClosing(false);
-            setActiveSlideIndex(0);
-            setIsZoomed(false);
-            setZoomScale(1);
-            setIsStepsOpen(false);
-            const timer = setTimeout(() => setVisible(true), 15);
             document.body.style.overflow = "hidden";
+            const timer = setTimeout(() => {
+                setClosing(false);
+                setActiveSlideIndex(0);
+                setIsZoomed(false);
+                setZoomScale(1);
+                setIsStepsOpen(false);
+                setVisible(true);
+            }, 15);
             return () => {
                 clearTimeout(timer);
                 document.body.style.overflow = originalOverflowRef.current;
@@ -140,11 +140,14 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
                 clearTimeout(closeTimerRef.current);
                 closeTimerRef.current = null;
             }
-            setVisible(false);
-            setIsZoomed(false);
-            setZoomScale(1);
-            setIsStepsOpen(false);
             document.body.style.overflow = originalOverflowRef.current;
+            const resetTimer = setTimeout(() => {
+                setVisible(false);
+                setIsZoomed(false);
+                setZoomScale(1);
+                setIsStepsOpen(false);
+            }, 0);
+            return () => clearTimeout(resetTimer);
         }
     }, [isOpen]);
 
@@ -198,7 +201,7 @@ export default function CircleWishesInfoModal({ isOpen, onClose, onDemoOpen }: C
         };
     }, [isOpen, isZoomed, handleClose, goToPrev, goToNext]);
 
-    if (!mounted || (!isOpen && !closing)) return null;
+    if (typeof document === "undefined" || (!isOpen && !closing)) return null;
 
     const currentSlide = FEATURE_SLIDES[activeSlideIndex];
 

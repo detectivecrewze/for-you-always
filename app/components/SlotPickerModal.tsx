@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 export interface SlotPickerConfig {
@@ -24,17 +24,37 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const onCloseRef = useRef(onClose);
 
     useEffect(() => {
-        setMounted(true);
-        const t = setTimeout(() => setVisible(true), 10);
-        return () => clearTimeout(t);
+        onCloseRef.current = onClose;
+    }, [onClose]);
+
+    const handleClose = useCallback(() => {
+        if (closeTimerRef.current) return;
+        setClosing(true);
+        closeTimerRef.current = setTimeout(() => onCloseRef.current(), 220);
     }, []);
 
-    const handleClose = () => {
-        setClosing(true);
-        setTimeout(() => onClose(), 220);
-    };
+    useEffect(() => {
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        const mountTimer = setTimeout(() => {
+            setMounted(true);
+            setVisible(true);
+        }, 0);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") handleClose();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            clearTimeout(mountTimer);
+            if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+            document.body.style.overflow = originalOverflow;
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleClose]);
 
     const handleSelect = (fn: () => void) => {
         fn();
@@ -83,7 +103,7 @@ export default function SlotPickerModal({ config, onClose }: SlotPickerModalProp
                         onClick={handleClose}
                         style={{
                             position: "absolute", top: 16, right: 16,
-                            width: 30, height: 30, borderRadius: "50%",
+                            width: 44, height: 44, borderRadius: "50%",
                             border: "none", background: "rgba(0,0,0,0.06)",
                             cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
                             transition: "background 0.2s ease",

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import posthog from 'posthog-js';
 import { trackInitiateCheckout } from "@/lib/pixel";
 import { JABODETABEK_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
@@ -52,12 +52,32 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
     const boxPrice = selectedDigitalObj.price;
     const boxOldPrice = selectedDigitalObj.oldPrice;
     const totalAmount = boxPrice + shippingCost;
+    const initialCheckoutRef = useRef({
+        selectedDigital,
+        selectedDigitalTitle: selectedDigitalObj.title,
+        totalAmount,
+    });
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const onCloseRef = useRef(onClose);
 
     useEffect(() => {
+        onCloseRef.current = onClose;
+    }, [onClose]);
+
+    useEffect(() => {
+        const initialCheckout = initialCheckoutRef.current;
         trackInitiateCheckout(
-            [{ id: `unbox_${selectedDigital}`, title: `The Gift Box (${selectedDigitalObj.title})`, numericPrice: totalAmount }],
-            totalAmount
+            [{
+                id: `unbox_${initialCheckout.selectedDigital}`,
+                title: `The Gift Box (${initialCheckout.selectedDigitalTitle})`,
+                numericPrice: initialCheckout.totalAmount,
+            }],
+            initialCheckout.totalAmount
         );
+    }, []);
+
+    useEffect(() => () => {
+        if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     }, []);
 
     const handleProvinceChange = (newProv: string) => {
@@ -70,13 +90,11 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
         }));
     };
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
+        if (closeTimerRef.current) return;
         setClosing(true);
-        setTimeout(() => {
-            setClosing(false);
-            onClose();
-        }, 180);
-    };
+        closeTimerRef.current = setTimeout(() => onCloseRef.current(), 180);
+    }, []);
 
     const handleNext = (e: React.FormEvent) => {
         e.preventDefault();
@@ -139,15 +157,6 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                     shipping_province: shippingDetails.province,
                     shipping_cost: shippingCost,
                 });
-                if (typeof window !== 'undefined' && (window as any).ttq) {
-                    (window as any).ttq.track('CompletePayment', {
-                        content_type: 'product',
-                        content_id: `unbox_${selectedDigital}`,
-                        content_name: `The Gift Box - ${selectedDigitalObj.title}`,
-                        value: totalAmount,
-                        currency: 'IDR'
-                    });
-                }
                 handleClose();
                 setIsLoading(false);
                 window.location.href = data.redirectUrl;
@@ -309,8 +318,8 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
                             background: "#ffffff",
                             border: "1px solid #dcd1c6",
                             borderRadius: "50%",
-                            width: 30,
-                            height: 30,
+                            width: 44,
+                            height: 44,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",

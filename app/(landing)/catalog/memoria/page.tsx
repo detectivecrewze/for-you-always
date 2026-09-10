@@ -1,16 +1,14 @@
 "use client";
 
 import React, { useEffect } from "react";
-import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import CircleWishesInfoModal from "../../../components/CircleWishesInfoModal";
-import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
+import DemoPreviewModal, { scheduleDemoPreviewPreload } from "../../../components/LazyDemoPreviewModal";
+import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
-
-const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
 
 type DemoVariant = "personal" | "circle";
 type DemoSource = "product_card" | "circle_wishes_info";
@@ -20,9 +18,14 @@ interface ActiveDemo {
     source: DemoSource;
     url: string;
     label: string;
+    switchCount: number;
 }
 
 const PERSONAL_DEMO_URL = "https://anniv.for-you-always.my.id/untuk-nadia?preview=personal";
+const MEMORIA_DEMO_VARIANTS = [
+    { id: "personal", label: "Personal Edition", src: PERSONAL_DEMO_URL, subtitle: "Jelajahi contoh Personal Edition" },
+    { id: "circle", label: "Circle Wishes", src: "https://anniv.for-you-always.my.id/auto-circle?preview=circle#circle-wishes-section", subtitle: "Lihat bagaimana ucapan teman hadir di dalam kado" },
+] as const satisfies readonly DemoPreviewVariant[];
 const MEMORIA_CART_ITEM = {
     id: "loves",
     title: "Memoria Premium",
@@ -49,6 +52,7 @@ export default function ProductCatalogPage() {
     });
 
     useEffect(() => {
+        const cancelDemoPreload = scheduleDemoPreviewPreload();
         window.scrollTo(0, 0);
         trackViewContent({ id: "loves", name: "Memoria Premium", price: 40000 });
         fetch("/api/public/memoria-notice")
@@ -57,6 +61,7 @@ export default function ProductCatalogPage() {
                 if (data?.notice) setMemoriaNotice(data.notice);
             })
             .catch(() => {});
+        return cancelDemoPreload;
     }, []);
 
     const demoAnalyticsProperties = React.useCallback((demo: ActiveDemo) => ({
@@ -64,6 +69,7 @@ export default function ProductCatalogPage() {
         product_name: "Memoria Premium",
         demo_variant: demo.variant,
         source: demo.source,
+        variant_switch_count: demo.switchCount,
     }), []);
 
     const openDemo = React.useCallback((
@@ -74,9 +80,30 @@ export default function ProductCatalogPage() {
     ) => {
         setIsInfoModalOpen(false);
         demoOpenedAtRef.current = performance.now();
-        const demo = { variant, source, url, label };
+        const configuredVariant = MEMORIA_DEMO_VARIANTS.find((item) => item.id === variant) ?? MEMORIA_DEMO_VARIANTS[0];
+        const demo: ActiveDemo = { variant, source, url: configuredVariant.src || url, label: configuredVariant.label || label, switchCount: 0 };
         captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
         setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const handleVariantChange = React.useCallback((previousVariant: DemoPreviewVariant, nextVariant: DemoPreviewVariant) => {
+        setActiveDemo((current) => {
+            if (!current || (nextVariant.id !== "personal" && nextVariant.id !== "circle")) return current;
+            const switchCount = current.switchCount + 1;
+            captureDemoEvent("product_demo_variant_changed", {
+                ...demoAnalyticsProperties(current),
+                from_variant: previousVariant.id,
+                to_variant: nextVariant.id,
+                switch_index: switchCount,
+            });
+            return {
+                ...current,
+                variant: nextVariant.id,
+                url: nextVariant.src,
+                label: nextVariant.label,
+                switchCount,
+            };
+        });
     }, [demoAnalyticsProperties]);
 
     const closeDemo = React.useCallback((reason: DemoCloseReason) => {
@@ -329,15 +356,16 @@ export default function ProductCatalogPage() {
                             <DemoPreviewModal
                                 isOpen
                                 src={activeDemo.url}
-                                title={activeDemo.variant === "circle" ? "Circle Wishes Preview" : "Memoria Preview"}
-                                subtitle={activeDemo.variant === "circle"
-                                    ? "Lihat bagaimana ucapan teman hadir di dalam kado"
-                                    : "Jelajahi contoh Personal Edition"}
+                                title="Demo Memoria Premium"
+                                subtitle="Jelajahi pengalaman Memoria"
                                 productName="Memoria Premium"
                                 price="Rp 40.000"
+                                variants={MEMORIA_DEMO_VARIANTS}
+                                initialVariantId={activeDemo.variant}
                                 onClose={closeDemo}
                                 onOrder={handleDemoOrder}
                                 onLoaded={handleDemoLoaded}
+                                onVariantChange={handleVariantChange}
                             />
                         )}
                     </div>

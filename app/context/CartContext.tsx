@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 
 export interface CartItem {
     id: string;
@@ -27,6 +27,10 @@ interface CartContextValue {
     lastAdded: CartItem | null;
 }
 
+interface TikTokPixel {
+    track: (event: string, properties: Record<string, unknown>) => void;
+}
+
 const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "fya_cart";
@@ -36,6 +40,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [lastAdded, setLastAdded] = useState<CartItem | null>(null);
     const [hydrated, setHydrated] = useState(false);
+    const itemsRef = useRef<CartItem[]>([]);
+    const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Load from localStorage on mount
     useEffect(() => {
@@ -44,7 +50,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             if (stored) {
                 const parsed = JSON.parse(stored);
                 if (Array.isArray(parsed)) {
-                    // eslint-disable-next-line
+                    itemsRef.current = parsed;
                     setItems(parsed);
                 }
             }
@@ -57,12 +63,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // Persist to localStorage when items change
     useEffect(() => {
         if (!hydrated) return;
+        itemsRef.current = items;
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
         } catch {
             // ignore
         }
     }, [items, hydrated]);
+
+    useEffect(() => () => {
+        if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    }, []);
 
     const addToCart = useCallback((item: CartItem) => {
         const DEFAULT_IMAGES: Record<string, string> = {
@@ -77,26 +88,45 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             birthday: "/assets/snoopy-features/main-card-updatesnoopy.webp",
         };
 
-        const itemWithUniqueId = { 
+        if (item.id === 'birthday' && itemsRef.current.some(existing => existing.id === 'birthday')) {
+            setIsDrawerOpen(true);
+            return;
+        }
+
+        const itemWithUniqueId = {
             ...item, 
             cartItemId: item.cartItemId || Math.random().toString(36).substring(2, 9),
             themeImgSrc: item.themeImgSrc || DEFAULT_IMAGES[item.id]
         };
-        setItems(prev => {
-            // Guard: birthday hanya boleh 1 per cart
-            if (item.id === 'birthday' && prev.some(i => i.id === 'birthday')) {
-                return prev;
-            }
-            return [...prev, itemWithUniqueId];
-        });
+        const nextItems = [...itemsRef.current, itemWithUniqueId];
+        itemsRef.current = nextItems;
+        setItems(nextItems);
         setLastAdded(itemWithUniqueId);
         setIsDrawerOpen(true);
         void import("posthog-js").then(({ default: posthog }) => {
-            posthog.capture('cart_opened', { source: 'add_to_cart', product_id: item.id });
-        });
+            const packageType = item.isThreeSlot ? "3_gift" : "regular";
+            posthog.capture('product_added_to_cart', {
+                product_id: item.id,
+                product_name: item.title,
+                package: packageType,
+                price: item.numericPrice,
+                currency: 'IDR',
+            });
+            posthog.capture('cart_opened', {
+                source: 'add_to_cart',
+                product_id: item.id,
+                product_name: item.title,
+                package: packageType,
+                price: item.numericPrice,
+                currency: 'IDR',
+            });
+        }).catch(() => {});
         
-        if (typeof window !== 'undefined' && (window as any).ttq) {
-            (window as any).ttq.track('AddToCart', {
+        const ttq = typeof window !== "undefined"
+            ? (window as Window & { ttq?: TikTokPixel }).ttq
+            : undefined;
+        if (ttq) {
+            ttq.track('AddToCart', {
                 content_type: 'product',
                 content_id: item.id,
                 content_name: item.title,
@@ -106,23 +136,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
 
         // Clear lastAdded after toast duration
-        setTimeout(() => setLastAdded(null), 3500);
+        if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+        toastTimerRef.current = setTimeout(() => setLastAdded(null), 3500);
     }, []);
 
     const removeFromCart = useCallback((identifier: string) => {
-        setItems(prev => prev.filter(i => i.cartItemId !== identifier && i.id !== identifier));
+        const nextItems = itemsRef.current.filter(i => i.cartItemId !== identifier && i.id !== identifier);
+        itemsRef.current = nextItems;
+        setItems(nextItems);
     }, []);
 
     const clearCart = useCallback(() => {
+        itemsRef.current = [];
         setItems([]);
     }, []);
 
     const openDrawer = useCallback(() => {
         setIsDrawerOpen(true);
         void import("posthog-js").then(({ default: posthog }) => {
-            posthog.capture('cart_opened', { item_count: items.length });
-        });
-    }, [items.length]);
+            const currentItems = itemsRef.current;
+            posthog.capture('cart_opened', {
+                source: 'navbar',
+                item_count: currentItems.length,
+                cart_value: currentItems.reduce((sum, item) => sum + item.numericPrice, 0),
+                currency: 'IDR',
+                products: currentItems.map(item => ({
+                    product_id: item.id,
+                    product_name: item.title,
+                    package: item.isThreeSlot ? '3_gift' : 'regular',
+                    price: item.numericPrice,
+                })),
+            });
+        }).catch(() => {});
+    }, []);
     const closeDrawer = useCallback(() => setIsDrawerOpen(false), []);
 
     const cartCount = items.length;

@@ -1,20 +1,26 @@
 "use client";
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
-import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
+import DemoPreviewModal, { scheduleDemoPreviewPreload } from "../../../components/LazyDemoPreviewModal";
+import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
-const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
-
 interface ActiveDemo {
     url: string;
     label: string;
+    variant: string;
+    source: "product_card";
+    switchCount: number;
 }
+
+const INVITATION_DEMO_VARIANTS = [
+    { id: "invitation-date", label: "Invitation Date", src: "https://invitation.for-you-always.my.id/WRcVb-mY0f", subtitle: "Undangan kencan dengan date picker dan dress code" },
+    { id: "rundown-date", label: "Rundown Date", src: "https://invitation.for-you-always.my.id/rundown-tqthew7", subtitle: "Susunan acara kencan yang rapi dan interaktif" },
+] as const satisfies readonly DemoPreviewVariant[];
 
 const INVITATION_CART_ITEM = {
     id: "invitation",
@@ -36,21 +42,41 @@ export default function InvitationCatalogPage() {
     const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
+        const cancelDemoPreload = scheduleDemoPreviewPreload();
         window.scrollTo(0, 0);
         trackViewContent({ id: "invitation", name: "Invitation Edition", price: 20000 });
+        return cancelDemoPreload;
     }, []);
 
     const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
         product_id: "invitation",
         product_name: "Invitation Edition",
         demo_label: demo.label,
+        demo_variant: demo.variant,
+        source: demo.source,
+        variant_switch_count: demo.switchCount,
     }), []);
 
-    const openDemo = useCallback((url: string, label: string) => {
+    const openDemo = useCallback((url: string, label: string, variantId?: string) => {
         demoOpenedAtRef.current = performance.now();
-        const demo = { url, label };
+        const variant = INVITATION_DEMO_VARIANTS.find((item) => item.id === variantId || item.src === url) ?? INVITATION_DEMO_VARIANTS[0];
+        const demo: ActiveDemo = { url: variant.src, label: variant.label || label, variant: variant.id, source: "product_card", switchCount: 0 };
         captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
         setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const handleVariantChange = useCallback((previousVariant: DemoPreviewVariant, nextVariant: DemoPreviewVariant) => {
+        setActiveDemo((current) => {
+            if (!current) return current;
+            const switchCount = current.switchCount + 1;
+            captureDemoEvent("product_demo_variant_changed", {
+                ...demoAnalyticsProperties(current),
+                from_variant: previousVariant.id,
+                to_variant: nextVariant.id,
+                switch_index: switchCount,
+            });
+            return { ...current, url: nextVariant.src, label: nextVariant.label, variant: nextVariant.id, switchCount };
+        });
     }, [demoAnalyticsProperties]);
 
     const closeDemo = useCallback((reason: DemoCloseReason) => {
@@ -113,9 +139,9 @@ export default function InvitationCatalogPage() {
                         <LandscapeProductCard
                             label="Invitation Edition"
                             title="Undangan Kencan Interaktif"
-                            description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Setiap pembelian sudah termasuk paket 3 gift — bisa buat 3 undangan berbeda."
+                            description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih paket reguler untuk 1 undangan atau paket 3 Gift untuk membuat 3 undangan berbeda."
                             features={[
-                                "3 Gift Bundle Otomatis",
+                                "Pilihan Paket 1 atau 3 Gift",
                                 "Amplop Digital Interaktif",
                                 "Pilih Tanggal Kencan Berdua",
                                 "Pilih Aktivitas & Dress Code",
@@ -137,10 +163,10 @@ export default function InvitationCatalogPage() {
                                     name: "Invitation Date",
                                     desc: "Kartu undangan kencan interaktif dengan date picker & dress code",
                                     title: "Undangan Kencan Interaktif",
-                                    description: "Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Setiap pembelian sudah termasuk paket 3 gift — bisa buat 3 undangan berbeda.",
+                                    description: "Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih paket reguler untuk 1 undangan atau paket 3 Gift untuk membuat 3 undangan berbeda.",
                                     color: "#e8789a",
                                     features: [
-                                        "3 Gift Bundle Otomatis",
+                                        "Pilihan Paket 1 atau 3 Gift",
                                         "Amplop Digital Interaktif",
                                         "Pilih Tanggal Kencan Berdua",
                                         "Pilih Aktivitas & Dress Code",
@@ -148,6 +174,7 @@ export default function InvitationCatalogPage() {
                                     ],
                                     demoLink: "https://invitation.for-you-always.my.id/WRcVb-mY0f",
                                     demoLabel: "Lihat Demo Invitation",
+                                    demoVariantId: "invitation-date",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
                                         { name: "Opening", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781210841269-q6ybib.webp" },
@@ -166,7 +193,7 @@ export default function InvitationCatalogPage() {
                                     description: "Buat susunan acara kencan yang rapi dan estetik untuk hari spesialmu. Pasanganmu bisa melihat jadwal kencan, dress code, dan catatan manis secara interaktif.",
                                     color: "#2b5c8f",
                                     features: [
-                                        "3 Gift Bundle Otomatis",
+                                        "Pilihan Paket 1 atau 3 Gift",
                                         "Amplop Digital Interaktif",
                                         "Kartu Rundown & Susunan Acara",
                                         "Pilih Dress Code & Catatan",
@@ -174,6 +201,7 @@ export default function InvitationCatalogPage() {
                                     ],
                                     demoLink: "https://invitation.for-you-always.my.id/rundown-tqthew7",
                                     demoLabel: "Lihat Demo Rundown",
+                                    demoVariantId: "rundown-date",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
                                         { name: "Opening", fallbackImgSrc: "/assets/rundown-photo/1-ticket-card-opening.webp" },
@@ -190,21 +218,24 @@ export default function InvitationCatalogPage() {
                             reverse={false}
                             initialSelectedIndex={0}
                             autoCycle={false}
-                            onDemoOpen={(url, label) => openDemo(url, label)}
+                            onDemoOpen={(url, label, metadata) => openDemo(url, label, metadata?.variantId)}
                         />
 
                         {activeDemo && (
                             <DemoPreviewModal
                                 isOpen
                                 src={activeDemo.url}
-                                title={activeDemo.label || "Invitation Edition"}
+                                title="Demo Invitation Edition"
                                 subtitle="Rasakan pengalaman tiket kencan digital interaktif"
                                 productName="Invitation Edition"
                                 price="Rp 20.000"
                                 theme="invitation"
+                                variants={INVITATION_DEMO_VARIANTS}
+                                initialVariantId={activeDemo.variant}
                                 onClose={closeDemo}
                                 onOrder={handleDemoOrder}
                                 onLoaded={handleDemoLoaded}
+                                onVariantChange={handleVariantChange}
                             />
                         )}
                     </div>

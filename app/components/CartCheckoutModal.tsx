@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useCart } from "../context/CartContext";
 import posthog from 'posthog-js';
 import { trackInitiateCheckout } from "@/lib/pixel";
@@ -20,25 +20,42 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
         title: "Info Khusus Memoria:",
         message: "",
     });
+    const initialCheckoutRef = useRef({ items, cartTotal });
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const onCloseRef = useRef(onClose);
 
     useEffect(() => {
-        if (items.length > 0) {
-            trackInitiateCheckout(items, cartTotal);
+        onCloseRef.current = onClose;
+    }, [onClose]);
+
+    useEffect(() => {
+        const initialCheckout = initialCheckoutRef.current;
+        if (initialCheckout.items.length > 0) {
+            trackInitiateCheckout(initialCheckout.items, initialCheckout.cartTotal);
         }
-        fetch("/api/public/memoria-notice")
+        const controller = new AbortController();
+        fetch("/api/public/memoria-notice", { signal: controller.signal })
             .then(res => res.ok ? res.json() : null)
             .then(data => {
                 if (data?.notice) setMemoriaNotice(data.notice);
             })
-            .catch(() => {});
+            .catch((error: unknown) => {
+                if (error instanceof DOMException && error.name === "AbortError") return;
+            });
+        return () => controller.abort();
+    }, []);
+
+    useEffect(() => () => {
+        if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     }, []);
     
     const hasMemoria = items.some(item => item.id === "loves");
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
+        if (closeTimerRef.current) return;
         setClosing(true);
-        setTimeout(() => { setClosing(false); onClose(); }, 180);
-    };
+        closeTimerRef.current = setTimeout(() => onCloseRef.current(), 180);
+    }, []);
 
     const handleNext = (e: React.FormEvent) => {
         e.preventDefault();
@@ -81,15 +98,6 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                     item_count: items.length,
                     products: items.map(i => i.title),
                 });
-                if (typeof window !== 'undefined' && (window as any).ttq) {
-                    (window as any).ttq.track('CompletePayment', {
-                        content_type: 'product_group',
-                        content_id: items.map(i => i.id).join(', '),
-                        content_name: items.map(i => i.title).join(', '),
-                        value: cartTotal,
-                        currency: 'IDR'
-                    });
-                }
                 handleClose();
                 clearCart();
                 setIsLoading(false);
@@ -150,7 +158,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                         background: "white",
                         border: "1px solid #e0d4cc",
                         borderRadius: "50%",
-                        width: 34, height: 34,
+                        width: 44, height: 44,
                         display: "flex", alignItems: "center", justifyContent: "center",
                         cursor: "pointer", color: "#8b7e75",
                         transition: "all 0.2s ease",

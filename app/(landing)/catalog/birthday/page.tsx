@@ -1,21 +1,27 @@
 "use client";
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import WishInboxInfoModal from "../../../components/WishInboxInfoModal";
-import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
+import DemoPreviewModal, { scheduleDemoPreviewPreload } from "../../../components/LazyDemoPreviewModal";
+import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
 
-const DemoPreviewModal = dynamic(() => import("../../../components/DemoPreviewModal"), { ssr: false });
-
 interface ActiveDemo {
     url: string;
     label: string;
+    variant: string;
+    source: "product_card";
+    switchCount: number;
 }
+
+const BIRTHDAY_DEMO_VARIANTS = [
+    { id: "snoopy", label: "Snoopy Comic", src: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62", subtitle: "Scrapbook komik retro bersama Snoopy & Woodstock" },
+    { id: "dubu-dudu", label: "Dubu & Dudu", src: "https://snoopy.for-you-always.my.id/gift/index.html?project=gift-ab79b22216982751", subtitle: "Scrapbook hangat dengan nuansa pastel" },
+] as const satisfies readonly DemoPreviewVariant[];
 
 const BIRTHDAY_CART_ITEM = {
     id: "birthday",
@@ -38,21 +44,41 @@ export default function BirthdayCatalogPage() {
     const demoOpenedAtRef = useRef(0);
 
     useEffect(() => {
+        const cancelDemoPreload = scheduleDemoPreviewPreload();
         window.scrollTo(0, 0);
         trackViewContent({ id: "birthday", name: "Birthday Scrapbook", price: 25000 });
+        return cancelDemoPreload;
     }, []);
 
     const demoAnalyticsProperties = useCallback((demo: ActiveDemo) => ({
         product_id: "birthday",
         product_name: "Birthday Scrapbook",
         demo_label: demo.label,
+        demo_variant: demo.variant,
+        source: demo.source,
+        variant_switch_count: demo.switchCount,
     }), []);
 
-    const openDemo = useCallback((url: string, label: string) => {
+    const openDemo = useCallback((url: string, label: string, variantId?: string) => {
         demoOpenedAtRef.current = performance.now();
-        const demo = { url, label };
+        const variant = BIRTHDAY_DEMO_VARIANTS.find((item) => item.id === variantId || item.src === url) ?? BIRTHDAY_DEMO_VARIANTS[0];
+        const demo: ActiveDemo = { url: variant.src, label: variant.label || label, variant: variant.id, source: "product_card", switchCount: 0 };
         captureDemoEvent("product_demo_opened", demoAnalyticsProperties(demo));
         setActiveDemo(demo);
+    }, [demoAnalyticsProperties]);
+
+    const handleVariantChange = useCallback((previousVariant: DemoPreviewVariant, nextVariant: DemoPreviewVariant) => {
+        setActiveDemo((current) => {
+            if (!current) return current;
+            const switchCount = current.switchCount + 1;
+            captureDemoEvent("product_demo_variant_changed", {
+                ...demoAnalyticsProperties(current),
+                from_variant: previousVariant.id,
+                to_variant: nextVariant.id,
+                switch_index: switchCount,
+            });
+            return { ...current, url: nextVariant.src, label: nextVariant.label, variant: nextVariant.id, switchCount };
+        });
     }, [demoAnalyticsProperties]);
 
     const closeDemo = useCallback((reason: DemoCloseReason) => {
@@ -221,6 +247,7 @@ export default function BirthdayCatalogPage() {
                                     ],
                                     demoLink: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62",
                                     demoLabel: "Lihat",
+                                    demoVariantId: "snoopy",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
                                         { name: "Opening", fallbackImgSrc: "/assets/snoopy-features/opening-1.webp" },
@@ -248,6 +275,7 @@ export default function BirthdayCatalogPage() {
                                     ],
                                     demoLink: "https://snoopy.for-you-always.my.id/gift/index.html?project=gift-ab79b22216982751",
                                     demoLabel: "Lihat",
+                                    demoVariantId: "dubu-dudu",
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
                                         { name: "Opening", fallbackImgSrc: "/assets/dubu-features/opening-dubu-1.webp" },
@@ -273,8 +301,7 @@ export default function BirthdayCatalogPage() {
                                         "Surat Digital & Wish Inbox",
                                         "Akses Instan & Custom Studio"
                                     ],
-                                    demoLink: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62",
-                                    demoLabel: "Lihat",
+                                    demoDisabled: true,
                                     defaultSubThemeIndex: 0,
                                     subThemes: [
                                         { name: "Opening", fallbackImgSrc: "/assets/nailong-features/opening.webp" },
@@ -292,7 +319,7 @@ export default function BirthdayCatalogPage() {
                             reverse={false}
                             initialSelectedIndex={0}
                             autoCycle={false}
-                            onDemoOpen={(url, label) => openDemo(url, label)}
+                            onDemoOpen={(url, label, metadata) => openDemo(url, label, metadata?.variantId)}
                         />
 
                         {/* Wish Inbox Info Walkthrough Modal */}
@@ -305,14 +332,17 @@ export default function BirthdayCatalogPage() {
                             <DemoPreviewModal
                                 isOpen
                                 src={activeDemo.url}
-                                title={activeDemo.label ? `Demo ${activeDemo.label}` : "Birthday Scrapbook"}
+                                title="Demo Birthday Scrapbook"
                                 subtitle="Jelajahi scrapbook digital interaktif dengan 4 ruangan kejutan"
                                 productName="Birthday Scrapbook"
                                 price="Rp 25.000"
                                 theme="birthday"
+                                variants={BIRTHDAY_DEMO_VARIANTS}
+                                initialVariantId={activeDemo.variant}
                                 onClose={closeDemo}
                                 onOrder={handleDemoOrder}
                                 onLoaded={handleDemoLoaded}
+                                onVariantChange={handleVariantChange}
                             />
                         )}
                     </div>

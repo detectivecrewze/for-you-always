@@ -1,10 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 
 export type DemoCloseReason = "button" | "backdrop" | "escape" | "order";
 export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped" | "birthday";
+
+export interface DemoPreviewVariant {
+    id: string;
+    label: string;
+    src: string;
+    subtitle?: string;
+}
 
 interface DemoThemeTokens {
     backdropBg: string;
@@ -290,7 +297,7 @@ const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
     },
 };
 
-interface DemoPreviewModalProps {
+export interface DemoPreviewModalProps {
     isOpen: boolean;
     src: string;
     title: string;
@@ -298,10 +305,13 @@ interface DemoPreviewModalProps {
     productName: string;
     price: string;
     theme?: DemoModalTheme;
+    variants?: readonly DemoPreviewVariant[];
+    initialVariantId?: string;
     orderButtonLabel?: string;
     onClose: (reason: DemoCloseReason) => void;
     onOrder: () => void;
     onLoaded?: (loadTimeMs: number) => void;
+    onVariantChange?: (previousVariant: DemoPreviewVariant, nextVariant: DemoPreviewVariant) => void;
 }
 
 const CLOSE_DURATION_MS = 220;
@@ -315,23 +325,48 @@ export default function DemoPreviewModal({
     productName,
     price,
     theme = "memoria",
+    variants,
+    initialVariantId,
     orderButtonLabel,
     onClose,
     onOrder,
     onLoaded,
+    onVariantChange,
 }: DemoPreviewModalProps) {
     const t = THEME_CONFIGS[theme] || THEME_CONFIGS.memoria;
-    const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [timedOut, setTimedOut] = useState(false);
     const [iframeKey, setIframeKey] = useState(0);
     const [showIframe, setShowIframe] = useState(true);
+    const [selectedVariantId, setSelectedVariantId] = useState(() => (
+        variants?.some((variant) => variant.id === initialVariantId)
+            ? initialVariantId!
+            : variants?.[0]?.id ?? "default"
+    ));
+
+    const fallbackVariant = useMemo<DemoPreviewVariant>(() => ({
+        id: "default",
+        label: title,
+        src,
+        subtitle,
+    }), [src, subtitle, title]);
+    const availableVariants = useMemo<readonly DemoPreviewVariant[]>(
+        () => variants && variants.length > 0 ? variants : [fallbackVariant],
+        [fallbackVariant, variants]
+    );
+    const selectedVariant = availableVariants.find((variant) => variant.id === selectedVariantId)
+        ?? availableVariants[0]
+        ?? fallbackVariant;
+    const hasVariantSwitcher = availableVariants.length > 1;
+    const displayTitle = hasVariantSwitcher ? `Demo ${productName}` : title;
+    const displaySubtitle = selectedVariant.subtitle ?? subtitle;
 
     const dialogRef = useRef<HTMLDivElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const closeButtonRef = useRef<HTMLButtonElement>(null);
+    const variantButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
     const previousFocusRef = useRef<HTMLElement | null>(null);
     const originalOverflowRef = useRef("");
     const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -342,12 +377,14 @@ export default function DemoPreviewModal({
     const onCloseRef = useRef(onClose);
     const onOrderRef = useRef(onOrder);
     const onLoadedRef = useRef(onLoaded);
+    const onVariantChangeRef = useRef(onVariantChange);
 
     useEffect(() => {
         onCloseRef.current = onClose;
         onOrderRef.current = onOrder;
         onLoadedRef.current = onLoaded;
-    }, [onClose, onOrder, onLoaded]);
+        onVariantChangeRef.current = onVariantChange;
+    }, [onClose, onOrder, onLoaded, onVariantChange]);
 
     const clearTimers = useCallback(() => {
         if (closeTimerRef.current) {
@@ -361,7 +398,6 @@ export default function DemoPreviewModal({
     }, []);
 
     useEffect(() => {
-        setMounted(true);
         return () => {
             clearTimers();
             document.body.style.overflow = originalOverflowRef.current;
@@ -377,10 +413,7 @@ export default function DemoPreviewModal({
         originalOverflowRef.current = document.body.style.overflow;
         document.body.style.overflow = "hidden";
         hasClosedRef.current = false;
-        setClosing(false);
-        setLoading(true);
-        setTimedOut(false);
-        setShowIframe(true);
+        hasReportedLoadRef.current = false;
         loadStartedAtRef.current = performance.now();
 
         const revealTimer = window.setTimeout(() => {
@@ -388,13 +421,14 @@ export default function DemoPreviewModal({
             closeButtonRef.current?.focus({ preventScroll: true });
         }, 16);
 
-        return () => window.clearTimeout(revealTimer);
+        return () => {
+            window.clearTimeout(revealTimer);
+            document.body.style.overflow = originalOverflowRef.current;
+        };
     }, [isOpen]);
 
     useEffect(() => {
         if (!isOpen || !showIframe) return;
-
-        if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
         loadStartedAtRef.current = performance.now();
         loadTimerRef.current = setTimeout(() => {
             setTimedOut(true);
@@ -407,7 +441,7 @@ export default function DemoPreviewModal({
                 loadTimerRef.current = null;
             }
         };
-    }, [iframeKey, isOpen, showIframe]);
+    }, [iframeKey, isOpen, selectedVariant.id, showIframe]);
 
     const finishClose = useCallback((reason: DemoCloseReason) => {
         if (hasClosedRef.current) return;
@@ -488,7 +522,42 @@ export default function DemoPreviewModal({
         setIframeKey((current) => current + 1);
     }, []);
 
-    if (!mounted || (!isOpen && !closing)) return null;
+    const selectVariant = useCallback((nextVariant: DemoPreviewVariant, focusButton = false) => {
+        if (nextVariant.id === selectedVariant.id) return;
+
+        const previousVariant = selectedVariant;
+        if (loadTimerRef.current) {
+            clearTimeout(loadTimerRef.current);
+            loadTimerRef.current = null;
+        }
+        hasReportedLoadRef.current = false;
+        setLoading(true);
+        setTimedOut(false);
+        setShowIframe(true);
+        setSelectedVariantId(nextVariant.id);
+        setIframeKey((current) => current + 1);
+        onVariantChangeRef.current?.(previousVariant, nextVariant);
+
+        window.requestAnimationFrame(() => {
+            const button = variantButtonRefs.current[nextVariant.id];
+            button?.scrollIntoView({ behavior: "auto", block: "nearest", inline: "center" });
+            if (focusButton) button?.focus({ preventScroll: true });
+        });
+    }, [selectedVariant]);
+
+    const handleVariantKeyDown = useCallback((event: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+        let nextIndex: number | null = null;
+        if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % availableVariants.length;
+        if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + availableVariants.length) % availableVariants.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = availableVariants.length - 1;
+        if (nextIndex === null) return;
+
+        event.preventDefault();
+        selectVariant(availableVariants[nextIndex], true);
+    }, [availableVariants, selectVariant]);
+
+    if (!isOpen && !closing) return null;
 
     return createPortal(
         <div
@@ -519,7 +588,7 @@ export default function DemoPreviewModal({
                     pointer-events: auto;
                 }
                 .memoria-demo-frame {
-                    height: min(88dvh, 840px);
+                    height: min(90dvh, 880px);
                     pointer-events: auto;
                 }
                 .memoria-demo-viewport {
@@ -533,11 +602,138 @@ export default function DemoPreviewModal({
                     border: 0;
                     pointer-events: auto !important;
                 }
+                .memoria-demo-header {
+                    display: grid;
+                    grid-template-columns: 1fr auto;
+                    grid-template-areas:
+                        "title close"
+                        "switcher switcher";
+                    gap: 8px 10px;
+                    padding: 9px 12px 9px 14px;
+                    border-bottom: ${t.headerBorder};
+                    background: ${t.headerBg};
+                    flex-shrink: 0;
+                }
+                .memoria-demo-header:not(.has-switcher) {
+                    grid-template-areas: "title close";
+                    padding: 10px 14px;
+                }
+                .memoria-demo-title-group {
+                    grid-area: title;
+                    min-width: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+                .memoria-demo-close {
+                    grid-area: close;
+                    justify-self: end;
+                    align-self: center;
+                    width: 44px;
+                    height: 44px;
+                    flex-shrink: 0;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 999px;
+                    border: ${t.closeBorder};
+                    background: ${t.closeBg};
+                    color: ${t.closeColor};
+                    cursor: pointer;
+                    transition: background 0.18s ease, border-color 0.18s ease;
+                }
                 .memoria-demo-close:hover,
                 .memoria-demo-close:focus-visible {
                     background: ${t.closeHoverBg} !important;
                     border-color: ${t.closeHoverBorder} !important;
                     outline: none;
+                }
+                .memoria-demo-segmented-track {
+                    grid-area: switcher;
+                    display: flex;
+                    align-items: center;
+                    background: rgba(255, 255, 255, 0.08);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    border-radius: 999px;
+                    padding: 2.5px;
+                    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                .memoria-demo-segmented-track.has-2-variants {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 3px;
+                }
+                .memoria-demo-segmented-track.has-many-variants {
+                    display: flex;
+                    gap: 4px;
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    scrollbar-width: none;
+                    -webkit-overflow-scrolling: touch;
+                    scroll-snap-type: x proximity;
+                }
+                .memoria-demo-segmented-track.has-many-variants::-webkit-scrollbar {
+                    display: none;
+                }
+                .memoria-demo-segmented-btn {
+                    min-height: 44px;
+                    padding: 0 12px;
+                    border-radius: 999px;
+                    border: none;
+                    font-family: var(--font-sans);
+                    font-size: 11px;
+                    font-weight: 700;
+                    line-height: 1;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    -webkit-tap-highlight-color: transparent;
+                }
+                .memoria-demo-segmented-btn:hover:not([aria-selected="true"]) {
+                    color: ${t.titleColor} !important;
+                    background: rgba(255, 255, 255, 0.06) !important;
+                }
+                .memoria-demo-segmented-btn:focus-visible {
+                    outline: 2px solid ${t.titleColor}8F;
+                    outline-offset: 1px;
+                }
+                .memoria-demo-footer {
+                    min-height: 52px;
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    padding: 8px 16px;
+                    border-top: ${t.footerBorder};
+                    background: ${t.footerBg};
+                }
+                .memoria-demo-order {
+                    min-height: 44px;
+                    flex: 0 0 auto;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    padding: 0 16px;
+                    border-radius: 999px;
+                    border: none;
+                    background: ${t.orderBg};
+                    color: ${t.orderColor};
+                    box-shadow: ${t.orderShadow};
+                    font-family: var(--font-sans);
+                    font-size: 11.5px;
+                    font-weight: 800;
+                    cursor: pointer;
+                    transition: transform 0.18s ease, box-shadow 0.18s ease;
+                    white-space: nowrap;
                 }
                 .memoria-demo-order:hover,
                 .memoria-demo-order:focus-visible {
@@ -557,20 +753,58 @@ export default function DemoPreviewModal({
                         max-width: none !important;
                         max-height: 960px !important;
                     }
+                    .memoria-demo-header {
+                        padding: 10px 20px !important;
+                        gap: 20px !important;
+                        min-height: 64px !important;
+                    }
+                    .memoria-demo-header.has-switcher {
+                        display: grid !important;
+                        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+                        grid-template-areas: "title switcher close" !important;
+                        align-items: center !important;
+                    }
+                    .memoria-demo-header:not(.has-switcher) {
+                        display: grid !important;
+                        grid-template-columns: minmax(0, 1fr) auto !important;
+                        grid-template-areas: "title close" !important;
+                    }
+                    .memoria-demo-title-group {
+                        justify-self: start !important;
+                        width: 100% !important;
+                        max-width: 360px !important;
+                    }
+                    .memoria-demo-segmented-track {
+                        justify-self: center !important;
+                        width: auto !important;
+                        max-width: min(620px, 46vw) !important;
+                    }
+                    .memoria-demo-segmented-track.has-2-variants {
+                        display: grid !important;
+                        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                        width: clamp(320px, 28vw, 400px) !important;
+                        min-width: 0 !important;
+                    }
+                    .memoria-demo-segmented-track.has-2-variants .memoria-demo-segmented-btn {
+                        width: 100% !important;
+                    }
+                    .memoria-demo-close {
+                        justify-self: end !important;
+                        width: 44px !important;
+                        height: 44px !important;
+                    }
                 }
                 @media (max-width: 767px) {
                     .memoria-demo-frame {
-                        height: calc(100dvh - 16px);
-                        max-height: 880px;
-                        border-radius: 22px !important;
+                        height: calc(100dvh - 12px) !important;
+                        max-height: 96dvh !important;
+                        border-radius: 20px !important;
                         transform: none !important;
                         transition: opacity 0.18s ease !important;
                     }
-                    .memoria-demo-header {
-                        padding: 10px 12px !important;
-                    }
                     .memoria-demo-footer {
-                        padding: 10px 12px max(10px, env(safe-area-inset-bottom)) !important;
+                        padding: 8px 12px max(8px, env(safe-area-inset-bottom)) !important;
+                        min-height: 50px !important;
                     }
                     .memoria-demo-viewport {
                         overflow-y: hidden !important;
@@ -581,6 +815,9 @@ export default function DemoPreviewModal({
                     .memoria-demo-backdrop,
                     .memoria-demo-frame,
                     .memoria-demo-order {
+                        transition: none !important;
+                    }
+                    .memoria-demo-segmented-btn {
                         transition: none !important;
                     }
                     .memoria-demo-spinner {
@@ -595,7 +832,7 @@ export default function DemoPreviewModal({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="memoria-demo-title"
-                aria-describedby="memoria-demo-subtitle"
+                aria-describedby={displaySubtitle ? "memoria-demo-subtitle" : undefined}
                 style={{
                     width: "min(470px, 100%)",
                     maxHeight: 840,
@@ -611,49 +848,70 @@ export default function DemoPreviewModal({
                     transition: "transform 0.24s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.18s ease",
                 }}
             >
-                <div
-                    className="memoria-demo-header"
-                    style={{
-                        minHeight: 66,
-                        flexShrink: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: 12,
-                        padding: "10px 14px 10px 18px",
-                        borderBottom: t.headerBorder,
-                        background: t.headerBg,
-                    }}
-                >
-                    <div style={{ minWidth: 0 }}>
+                <div className={`memoria-demo-header ${hasVariantSwitcher ? "has-switcher" : ""}`}>
+                    <div className="memoria-demo-title-group">
                         <div
                             id="memoria-demo-title"
                             style={{
                                 color: t.titleColor,
                                 fontFamily: "var(--font-display)",
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: 600,
                                 lineHeight: 1.1,
                             }}
                         >
-                            {title}
+                            {displayTitle}
                         </div>
-                        <div
-                            id="memoria-demo-subtitle"
-                            style={{
-                                marginTop: 4,
-                                color: t.subtitleColor,
-                                fontFamily: "var(--font-sans)",
-                                fontSize: 11,
-                                lineHeight: 1.35,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                            }}
-                        >
-                            {subtitle}
-                        </div>
+                        {displaySubtitle && (
+                            <div
+                                id="memoria-demo-subtitle"
+                                style={{
+                                    marginTop: 3,
+                                    color: t.subtitleColor,
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: 10.5,
+                                    lineHeight: 1.3,
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                }}
+                            >
+                                {displaySubtitle}
+                            </div>
+                        )}
                     </div>
+
+                    {hasVariantSwitcher && (
+                        <div
+                            role="tablist"
+                            aria-label={`Pilih tema demo ${productName}`}
+                            className={`memoria-demo-segmented-track ${availableVariants.length === 2 ? "has-2-variants" : "has-many-variants"}`}
+                        >
+                            {availableVariants.map((variant, index) => {
+                                const isSelected = variant.id === selectedVariant.id;
+                                return (
+                                    <button
+                                        key={variant.id}
+                                        ref={(node) => { variantButtonRefs.current[variant.id] = node; }}
+                                        type="button"
+                                        role="tab"
+                                        aria-selected={isSelected}
+                                        tabIndex={isSelected ? 0 : -1}
+                                        className="memoria-demo-segmented-btn"
+                                        onClick={() => selectVariant(variant)}
+                                        onKeyDown={(event) => handleVariantKeyDown(event, index)}
+                                        style={{
+                                            background: isSelected ? t.orderBg : "transparent",
+                                            color: isSelected ? t.orderColor : t.subtitleColor,
+                                            boxShadow: isSelected ? "0 2px 8px rgba(0, 0, 0, 0.25)" : "none",
+                                        }}
+                                    >
+                                        {variant.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
 
                     <button
                         ref={closeButtonRef}
@@ -661,22 +919,8 @@ export default function DemoPreviewModal({
                         className="memoria-demo-close"
                         onClick={() => requestClose("button")}
                         aria-label={`Tutup demo ${productName}`}
-                        style={{
-                            width: 44,
-                            height: 44,
-                            flexShrink: 0,
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            borderRadius: 999,
-                            border: t.closeBorder,
-                            background: t.closeBg,
-                            color: t.closeColor,
-                            cursor: "pointer",
-                            transition: "background 0.18s ease, border-color 0.18s ease",
-                        }}
                     >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
                             <path d="M6 6l12 12M18 6L6 18" />
                         </svg>
                     </button>
@@ -696,9 +940,8 @@ export default function DemoPreviewModal({
                             ref={iframeRef}
                             key={iframeKey}
                             className="memoria-demo-iframe"
-                            src={src}
-                            title={title}
-                            loading="lazy"
+                            src={selectedVariant.src}
+                            title={`${productName} — ${selectedVariant.label}`}
                             scrolling="yes"
                             allow="autoplay; fullscreen"
                             allowFullScreen
@@ -748,7 +991,7 @@ export default function DemoPreviewModal({
                                 }}
                             />
                             <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, letterSpacing: "0.04em" }}>
-                                Menyiapkan contoh {productName}…
+                                Menyiapkan {selectedVariant.label}…
                             </span>
                         </div>
                     )}
@@ -795,7 +1038,7 @@ export default function DemoPreviewModal({
                                 Coba Lagi
                             </button>
                             <a
-                                href={src}
+                                href={selectedVariant.src}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
@@ -814,25 +1057,12 @@ export default function DemoPreviewModal({
                     )}
                 </div>
 
-                <div
-                    className="memoria-demo-footer"
-                    style={{
-                        minHeight: 74,
-                        flexShrink: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: 12,
-                        padding: "11px 14px 12px 18px",
-                        borderTop: t.footerBorder,
-                        background: t.footerBg,
-                    }}
-                >
-                    <div style={{ minWidth: 0 }}>
-                        <div style={{ color: t.subtitleColor, fontFamily: "var(--font-sans)", fontSize: 10.5, lineHeight: 1.2 }}>
+                <div className="memoria-demo-footer">
+                    <div style={{ minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
+                        <div style={{ color: t.subtitleColor, fontFamily: "var(--font-sans)", fontSize: 10, lineHeight: 1.1 }}>
                             {productName}
                         </div>
-                        <div style={{ marginTop: 3, color: t.titleColor, fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, lineHeight: 1 }}>
+                        <div style={{ color: t.titleColor, fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 600, lineHeight: 1 }}>
                             {price}
                         </div>
                     </div>
@@ -841,29 +1071,9 @@ export default function DemoPreviewModal({
                         type="button"
                         className="memoria-demo-order"
                         onClick={() => requestClose("order")}
-                        style={{
-                            minHeight: 48,
-                            flex: "0 0 auto",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: 8,
-                            padding: "11px clamp(16px, 5vw, 24px)",
-                            borderRadius: 999,
-                            border: "none",
-                            background: t.orderBg,
-                            color: t.orderColor,
-                            boxShadow: t.orderShadow,
-                            fontFamily: "var(--font-sans)",
-                            fontSize: 12.5,
-                            fontWeight: 800,
-                            cursor: "pointer",
-                            transition: "transform 0.18s ease, box-shadow 0.18s ease",
-                            whiteSpace: "nowrap",
-                        }}
                     >
                         {orderButtonLabel || `Pesan ${productName}`}
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M13 6l6 6-6 6" />
                         </svg>
                     </button>
