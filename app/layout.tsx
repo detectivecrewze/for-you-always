@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
+import MetaPixelPageView from "./components/MetaPixelPageView";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -94,7 +95,26 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         {children}
+        <MetaPixelPageView />
         <Analytics />
+        <Script
+          id="meta-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1625587662526924');fbq('track','PageView');`,
+          }}
+        />
+        <noscript>
+          {/* Meta's no-JavaScript fallback must remain a plain tracking pixel. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=1625587662526924&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
         {/* Google Analytics GA4 — afterInteractive agar tidak blokir LCP */}
         <Script
           id="google-analytics"
