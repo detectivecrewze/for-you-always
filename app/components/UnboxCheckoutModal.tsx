@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import posthog from 'posthog-js';
-import { trackInitiateCheckout } from "@/lib/pixel";
+import { rememberMetaCheckout, trackInitiateCheckout } from "@/lib/pixel";
 import { JABODETABEK_SHIPPING_DATA, getShippingRate } from "@/lib/indonesiaShipping";
 
 interface UnboxCheckoutModalProps {
@@ -149,6 +149,7 @@ export default function UnboxCheckoutModal({ onClose, initialDigitalProduct = "l
 
             const data = await res.json();
             if (data.redirectUrl) {
+                rememberMetaCheckout(orderId, totalAmount, [selectedDigital]);
                 posthog.capture('unbox_payment_submitted', {
                     order_id: orderId,
                     total: totalAmount,

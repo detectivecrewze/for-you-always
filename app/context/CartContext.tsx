@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import { trackAddToCart } from "@/lib/pixel";
 
 export interface CartItem {
     id: string;
@@ -134,6 +135,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 currency: 'IDR'
             });
         }
+        trackAddToCart({ id: item.id, name: item.title, price: item.numericPrice });
 
         // Clear lastAdded after toast duration
         if (toastTimerRef.current) clearTimeout(toastTimerRef.current);

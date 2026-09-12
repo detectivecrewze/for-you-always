@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import Navbar from "../../../../components/Navbar";
 import { JABODETABEK_SHIPPING_DATA } from "@/lib/indonesiaShipping";
 import posthog from "posthog-js";
-import { trackInitiateCheckout } from "@/lib/pixel";
+import { rememberMetaCheckout, trackInitiateCheckout } from "@/lib/pixel";
 import type { DemoCloseReason, DemoModalTheme } from "../../../../components/DemoPreviewModal";
 
 const DemoPreviewModal = dynamic(() => import("../../../../components/DemoPreviewModal"), { ssr: false });
@@ -605,6 +605,7 @@ export default function GiftBoxCheckoutWizardPage() {
 
             const data = await res.json();
             if (data.redirectUrl) {
+                rememberMetaCheckout(orderId, totalAmount, [selectedDigital]);
                 posthog.capture("unbox_payment_submitted", {
                     order_id: orderId,
                     total: totalAmount,

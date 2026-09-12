@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useCart } from "../context/CartContext";
 import posthog from 'posthog-js';
-import { trackInitiateCheckout } from "@/lib/pixel";
+import { rememberMetaCheckout, trackInitiateCheckout } from "@/lib/pixel";
 
 interface CartCheckoutModalProps {
     onClose: () => void;
@@ -92,6 +92,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
 
             const data = await res.json();
             if (data.redirectUrl) {
+                rememberMetaCheckout(orderId, cartTotal, items.map(i => i.id));
                 posthog.capture('payment_submitted', {
                     order_id: orderId,
                     total: cartTotal,

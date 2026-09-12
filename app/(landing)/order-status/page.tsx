@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
+import { trackMetaPurchase } from "@/lib/pixel";
 
 // ── Product metadata (mirrors gateway) ───────────────────────────────────
 const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color: string; desc: string }> = {
@@ -202,6 +203,7 @@ export default function OrderStatusPage() {
             }
 
             if (data.status === "paid" || data.status === "success") {
+                trackMetaPurchase(id, data.product_id);
                 setStatus("paid");
                 if (data.magic_link) {
                     let linksData = data.magic_link;
