@@ -297,6 +297,13 @@ const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
     },
 };
 
+export interface MemoriaThemeSwatch {
+    id: string;
+    name: string;
+    color: string;
+    bgColor: string;
+}
+
 export interface DemoPreviewModalProps {
     isOpen: boolean;
     src: string;
@@ -307,6 +314,8 @@ export interface DemoPreviewModalProps {
     theme?: DemoModalTheme;
     variants?: readonly DemoPreviewVariant[];
     initialVariantId?: string;
+    themeSwatches?: readonly MemoriaThemeSwatch[];
+    initialSwatchId?: string;
     orderButtonLabel?: string;
     onClose: (reason: DemoCloseReason) => void;
     onOrder: () => void;
@@ -327,6 +336,8 @@ export default function DemoPreviewModal({
     theme = "memoria",
     variants,
     initialVariantId,
+    themeSwatches,
+    initialSwatchId,
     orderButtonLabel,
     onClose,
     onOrder,
@@ -368,6 +379,47 @@ export default function DemoPreviewModal({
     const hasVariantSwitcher = availableVariants.length > 1;
     const displayTitle = hasVariantSwitcher ? `Demo ${productName}` : title;
     const displaySubtitle = selectedVariant.subtitle ?? subtitle;
+
+    // Theme swatch state — only active when themeSwatches prop is provided
+    const [selectedSwatchId, setSelectedSwatchId] = useState<string>(() =>
+        (initialSwatchId && themeSwatches?.some((s) => s.id === initialSwatchId))
+            ? initialSwatchId
+            : themeSwatches?.[0]?.id ?? ""
+    );
+
+    // Append ?theme=xxx to iframe src when a swatch is selected
+    const effectiveSrc = useMemo(() => {
+        if (!themeSwatches?.length || !selectedSwatchId) return selectedVariant.src;
+        try {
+            const url = new URL(selectedVariant.src);
+            url.searchParams.set("theme", selectedSwatchId);
+            return url.toString();
+        } catch {
+            return selectedVariant.src;
+        }
+    }, [selectedVariant.src, selectedSwatchId, themeSwatches]);
+
+    const activeSwatch = useMemo(() => {
+        return themeSwatches?.find((s) => s.id === selectedSwatchId) ?? themeSwatches?.[0];
+    }, [selectedSwatchId, themeSwatches]);
+
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
+    const pickerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!isPickerOpen) return;
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+                setIsPickerOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [isPickerOpen]);
 
     const dialogRef = useRef<HTMLDivElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -469,6 +521,7 @@ export default function DemoPreviewModal({
         setClosing(true);
         setVisible(false);
         setShowIframe(false);
+        setIsPickerOpen(false);
         if (loadTimerRef.current) {
             clearTimeout(loadTimerRef.current);
             loadTimerRef.current = null;
@@ -482,6 +535,10 @@ export default function DemoPreviewModal({
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
                 event.preventDefault();
+                if (isPickerOpen) {
+                    setIsPickerOpen(false);
+                    return;
+                }
                 requestClose("escape");
                 return;
             }
@@ -507,7 +564,7 @@ export default function DemoPreviewModal({
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, requestClose]);
+    }, [isOpen, isPickerOpen, requestClose]);
 
     const handleIframeLoad = useCallback(() => {
         if (loadTimerRef.current) {
@@ -530,9 +587,24 @@ export default function DemoPreviewModal({
         setIframeKey((current) => current + 1);
     }, []);
 
+    const selectSwatch = useCallback((swatchId: string) => {
+        if (swatchId === selectedSwatchId) return;
+        if (loadTimerRef.current) {
+            clearTimeout(loadTimerRef.current);
+            loadTimerRef.current = null;
+        }
+        hasReportedLoadRef.current = false;
+        setLoading(true);
+        setTimedOut(false);
+        setShowIframe(true);
+        setSelectedSwatchId(swatchId);
+        setIframeKey((current) => current + 1);
+    }, [selectedSwatchId]);
+
     const selectVariant = useCallback((nextVariant: DemoPreviewVariant, focusButton = false) => {
         if (nextVariant.id === selectedVariant.id) return;
 
+        setIsPickerOpen(false);
         const previousVariant = selectedVariant;
         if (loadTimerRef.current) {
             clearTimeout(loadTimerRef.current);
@@ -732,10 +804,163 @@ export default function DemoPreviewModal({
                     padding: 8px 16px;
                     border-top: ${t.footerBorder};
                     background: ${t.footerBg};
+                    position: relative;
+                    z-index: 40;
+                }
+                .memoria-demo-footer.has-theme-picker {
+                    display: grid;
+                    grid-template-columns: 1fr auto 1fr;
+                    align-items: center;
+                    gap: 16px;
+                    padding: 10px 20px;
+                    min-height: 60px;
+                }
+                .memoria-demo-footer-left {
+                    justify-self: start;
+                    min-width: 0;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                }
+                .memoria-theme-dropdown-wrapper {
+                    position: relative;
+                    justify-self: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .memoria-theme-dropdown-btn {
+                    min-height: 42px;
+                    padding: 0 16px 0 12px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(255, 255, 255, 0.18);
+                    background: rgba(255, 255, 255, 0.08);
+                    color: ${t.titleColor};
+                    font-family: var(--font-sans);
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    -webkit-tap-highlight-color: transparent;
+                }
+                .memoria-theme-dropdown-btn:hover {
+                    background: rgba(255, 255, 255, 0.14);
+                    border-color: rgba(255, 255, 255, 0.28);
+                    transform: translateY(-1px);
+                }
+                .memoria-theme-dropdown-btn[aria-expanded="true"] {
+                    background: rgba(255, 255, 255, 0.16);
+                    border-color: rgba(255, 255, 255, 0.35);
+                    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+                }
+                .memoria-theme-dropdown-dot {
+                    width: 14px;
+                    height: 14px;
+                    border-radius: 999px;
+                    flex-shrink: 0;
+                    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.45), 0 2px 5px rgba(0, 0, 0, 0.3);
+                    transition: transform 0.2s ease;
+                }
+                .memoria-theme-dropdown-btn:hover .memoria-theme-dropdown-dot {
+                    transform: scale(1.1);
+                }
+                .memoria-theme-dropdown-name {
+                    line-height: 1;
+                    letter-spacing: 0.01em;
+                }
+                .memoria-theme-dropdown-chevron {
+                    flex-shrink: 0;
+                    opacity: 0.65;
+                    transition: transform 0.2s ease;
+                }
+                .memoria-theme-dropdown-btn[aria-expanded="true"] .memoria-theme-dropdown-chevron {
+                    transform: rotate(180deg);
+                }
+                .memoria-theme-dropdown-menu {
+                    position: absolute;
+                    bottom: calc(100% + 10px);
+                    left: 50%;
+                    transform: translateX(-50%);
+                    min-width: 220px;
+                    background: #1C0E14EE;
+                    border: 1px solid rgba(255, 255, 255, 0.16);
+                    border-radius: 18px;
+                    padding: 7px;
+                    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+                    backdrop-filter: blur(24px);
+                    -webkit-backdrop-filter: blur(24px);
+                    z-index: 100;
+                    animation: memoriaThemePopupIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+                }
+                @keyframes memoriaThemePopupIn {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-50%) translateY(8px) scale(0.96);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(0) scale(1);
+                    }
+                }
+                .memoria-theme-dropdown-header {
+                    padding: 6px 10px 4px;
+                    font-family: var(--font-sans);
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: rgba(255, 255, 255, 0.5);
+                }
+                .memoria-theme-dropdown-item {
+                    width: 100%;
+                    min-height: 38px;
+                    padding: 6px 10px;
+                    border-radius: 11px;
+                    border: none;
+                    background: transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 10px;
+                    cursor: pointer;
+                    font-family: var(--font-sans);
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: #FFFFFF;
+                    transition: background 0.15s ease, transform 0.1s ease;
+                    text-align: left;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                .memoria-theme-dropdown-item:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                }
+                .memoria-theme-dropdown-item.is-active {
+                    background: rgba(255, 255, 255, 0.14);
+                    font-weight: 700;
+                }
+                .memoria-theme-item-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    min-width: 0;
+                }
+                .memoria-theme-item-dot {
+                    width: 14px;
+                    height: 14px;
+                    border-radius: 999px;
+                    flex-shrink: 0;
+                    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
                 }
                 .memoria-demo-order {
                     min-height: 44px;
                     flex: 0 0 auto;
+                    justify-self: end;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
@@ -752,6 +977,9 @@ export default function DemoPreviewModal({
                     cursor: pointer;
                     transition: transform 0.18s ease, box-shadow 0.18s ease;
                     white-space: nowrap;
+                }
+                .memoria-demo-order-short {
+                    display: none;
                 }
                 .memoria-demo-order:hover,
                 .memoria-demo-order:focus-visible {
@@ -845,6 +1073,43 @@ export default function DemoPreviewModal({
                     .memoria-demo-footer {
                         padding: 8px 12px max(8px, env(safe-area-inset-bottom)) !important;
                         min-height: 50px !important;
+                    }
+                    .memoria-demo-footer.has-theme-picker {
+                        display: grid !important;
+                        grid-template-columns: 1fr auto 1fr !important;
+                        gap: 8px !important;
+                        min-height: 56px !important;
+                    }
+                    .memoria-demo-footer.has-theme-picker .memoria-demo-order {
+                        padding: 0 12px !important;
+                        font-size: 11px !important;
+                        min-height: 40px !important;
+                        justify-self: end !important;
+                    }
+                    .memoria-demo-footer.has-theme-picker .memoria-demo-order-full {
+                        display: none !important;
+                    }
+                    .memoria-demo-footer.has-theme-picker .memoria-demo-order-short {
+                        display: inline !important;
+                    }
+                    .memoria-theme-dropdown-btn {
+                        min-height: 40px !important;
+                        font-size: 12px !important;
+                        padding: 0 12px 0 9px !important;
+                        gap: 6px !important;
+                    }
+                    .memoria-theme-dropdown-dot {
+                        width: 12px !important;
+                        height: 12px !important;
+                    }
+                    .memoria-theme-dropdown-name {
+                        max-width: 105px !important;
+                        overflow: hidden !important;
+                        text-overflow: ellipsis !important;
+                        white-space: nowrap !important;
+                    }
+                    .memoria-theme-dropdown-menu {
+                        min-width: 200px !important;
                     }
                     .memoria-demo-viewport {
                         overflow-y: hidden !important;
@@ -1031,7 +1296,7 @@ export default function DemoPreviewModal({
                             ref={iframeRef}
                             key={iframeKey}
                             className="memoria-demo-iframe"
-                            src={selectedVariant.src}
+                            src={effectiveSrc}
                             title={`${productName} — ${selectedVariant.label}`}
                             scrolling="yes"
                             allow="autoplay; fullscreen"
@@ -1129,7 +1394,7 @@ export default function DemoPreviewModal({
                                 Coba Lagi
                             </button>
                             <a
-                                href={selectedVariant.src}
+                                href={effectiveSrc}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
@@ -1148,8 +1413,8 @@ export default function DemoPreviewModal({
                     )}
                 </div>
 
-                <div className="memoria-demo-footer">
-                    <div style={{ minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
+                <div className={`memoria-demo-footer ${themeSwatches && themeSwatches.length > 0 ? "has-theme-picker" : ""}`}>
+                    <div className="memoria-demo-footer-left">
                         <div style={{ color: t.subtitleColor, fontFamily: "var(--font-sans)", fontSize: 10, lineHeight: 1.1 }}>
                             {productName}
                         </div>
@@ -1158,12 +1423,104 @@ export default function DemoPreviewModal({
                         </div>
                     </div>
 
+                    {themeSwatches && themeSwatches.length > 0 && (
+                        <div className="memoria-theme-dropdown-wrapper" ref={pickerRef}>
+                            <button
+                                type="button"
+                                className="memoria-theme-dropdown-btn"
+                                onClick={() => setIsPickerOpen((prev) => !prev)}
+                                aria-expanded={isPickerOpen}
+                                aria-haspopup="listbox"
+                                aria-label="Pilih tema warna"
+                            >
+                                <span
+                                    className="memoria-theme-dropdown-dot"
+                                    style={{ background: activeSwatch?.color ?? "#9E2A47" }}
+                                    aria-hidden="true"
+                                />
+                                <span className="memoria-theme-dropdown-name">
+                                    {activeSwatch?.name ?? "Tema Warna"}
+                                </span>
+                                <svg
+                                    className="memoria-theme-dropdown-chevron"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.4"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </button>
+
+                            {isPickerOpen && (
+                                <div
+                                    className="memoria-theme-dropdown-menu"
+                                    role="listbox"
+                                    aria-label="Pilihan tema warna"
+                                >
+                                    <div className="memoria-theme-dropdown-header">
+                                        PILIH WARNA TEMA
+                                    </div>
+                                    {themeSwatches.map((swatch) => {
+                                        const isSelected = swatch.id === selectedSwatchId;
+                                        return (
+                                            <button
+                                                key={swatch.id}
+                                                type="button"
+                                                role="option"
+                                                aria-selected={isSelected}
+                                                className={`memoria-theme-dropdown-item ${isSelected ? "is-active" : ""}`}
+                                                onClick={() => {
+                                                    selectSwatch(swatch.id);
+                                                    setIsPickerOpen(false);
+                                                }}
+                                            >
+                                                <span className="memoria-theme-item-left">
+                                                    <span
+                                                        className="memoria-theme-item-dot"
+                                                        style={{ background: swatch.color }}
+                                                        aria-hidden="true"
+                                                    />
+                                                    <span>{swatch.name}</span>
+                                                </span>
+                                                {isSelected && (
+                                                    <svg
+                                                        width="14"
+                                                        height="14"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2.6"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <path d="M20 6L9 17l-5-5" />
+                                                    </svg>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <button
                         type="button"
                         className="memoria-demo-order"
-                        onClick={() => requestClose("order")}
+                        onClick={() => {
+                            setIsPickerOpen(false);
+                            requestClose("order");
+                        }}
                     >
-                        {orderButtonLabel || `Pesan ${productName}`}
+                        <span className="memoria-demo-order-full">{orderButtonLabel || `Pesan ${productName}`}</span>
+                        <span className="memoria-demo-order-short">Pesan</span>
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M13 6l6 6-6 6" />
                         </svg>
