@@ -35,7 +35,10 @@ const MEMORIA_THEME_SWATCHES = [
     { id: "ocean-breeze",      name: "Ocean Breeze",     color: "#38B4D8", bgColor: "#071520" },
     { id: "blush-pink",        name: "Blush Pink",       color: "#F0789E", bgColor: "#FFE4E8" },
     { id: "midnight-blue",     name: "Midnight Blue",    color: "#3B82F6", bgColor: "#050C1A" },
-    { id: "velvet-purple",     name: "Velvet Purple",    color: "#A855F7", bgColor: "#120818" },
+    { id: "velvet-purple",          name: "Velvet Purple",          color: "#A855F7", bgColor: "#120818" },
+    { id: "antique-rose-diary",     name: "Antique Rose Diary",     color: "#8B4854", bgColor: "#EFE4D2" },
+    { id: "sage-botanical-letter",  name: "Sage Botanical Letter",  color: "#68745B", bgColor: "#F1EDDF" },
+    { id: "espresso-love-letter",   name: "Espresso Love Letter",   color: "#724C40", bgColor: "#E6D5C2" },
 ] as const satisfies readonly MemoriaThemeSwatch[];
 const MEMORIA_CART_ITEM = {
     id: "loves",

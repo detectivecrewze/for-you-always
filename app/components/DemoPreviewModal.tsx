@@ -892,6 +892,11 @@ export default function DemoPreviewModal({
                     border: 1px solid rgba(255, 255, 255, 0.16);
                     border-radius: 18px;
                     padding: 7px;
+                    max-height: min(55dvh, 430px);
+                    overflow-y: auto;
+                    overscroll-behavior: contain;
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
                     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
                     backdrop-filter: blur(24px);
                     -webkit-backdrop-filter: blur(24px);
@@ -919,8 +924,8 @@ export default function DemoPreviewModal({
                 }
                 .memoria-theme-dropdown-item {
                     width: 100%;
-                    min-height: 38px;
-                    padding: 6px 10px;
+                    min-height: 44px;
+                    padding: 7px 10px;
                     border-radius: 11px;
                     border: none;
                     background: transparent;
