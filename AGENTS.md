@@ -237,18 +237,17 @@ mixtape-love/
 
 ---
 
-### [loves-edition/] — PRODUK: Wrapped Edition (Next.js)
-> Recap interaktif ala Spotify Wrapped — 6 halaman kenangan.
+### [loves-edition/] — PRODUK: Memoria (Loves Edition & Circle Edition) (Next.js)
+> Surat dan rekapan kado interaktif premium — amplop & PIN gate, timeline kenangan, reason cards, seasons metafora, galeri visual, secret media, serta **Circle Wishes** (7 slot ucapan/klip video kenangan). Mendukung mode ucapan bersama teman (Group Wishes) dan vault video/catatan personal pasangan (Personal Vault).
 
-Deploy : wrapped.for-you-always.my.id
-Stack  : Next.js (Pages Router)
+Deploy : anniv.for-you-always.my.id
+Stack  : Next.js (App Router), Framer Motion, Cloudflare KV
 
 ```
 loves-edition/
-├── src/            <- Source code Next.js
-├── data/           <- Data konten per project
-├── public/         <- Aset statis
-└── updateKV.mjs    <- Script update Cloudflare KV storage
+├── src/            <- Source code Next.js (GiftPage, CircleWishesSection, Studio)
+├── public/         <- Aset statis & audio preview
+└── .agents/        <- Dokumen pedoman detail (AGENTS.md)
 ```
 
 ---
