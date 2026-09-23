@@ -197,11 +197,11 @@ export function LandscapeProductCard({
         return {
             feat,
             isToggleFeature: f.includes("turn on / off") || f.includes("animasi interaktif") || f.includes("animasi visual"),
-            isMusicFeature: f.includes("music pilihan") || f.includes("lagu") || f.includes("playlist"),
+            isMusicFeature: f.includes("music pilihan") || f.includes("lagu") || f.includes("playlist") || f.includes("soundtrack"),
             isPageFeature: f.includes("berbeda") || f.includes("multi-tema") || f.includes("kustomisasi tema"),
             isVoiceFeature: f.includes("rekam suara"),
             isGalleryFeature: f.includes("galeri foto") || f.includes("kustomisasi galeri"),
-            isEnvelopeFeature: f.includes("amplop") || f.includes("diurus tim") || f.includes("dikerjakan langsung"),
+            isEnvelopeFeature: f.includes("amplop") || f.includes("surat") || f.includes("finale") || f.includes("diurus tim") || f.includes("dikerjakan langsung"),
             isTypewriterFeature: f.includes("typewriter"),
             isPremiumFeature: f.includes("premium & eksklusif") || f.includes("kuota"),
             isPhotoVideoFeature: f.includes("foto / video") || f.includes("foto/video") || f.includes("gif"),
@@ -210,12 +210,13 @@ export function LandscapeProductCard({
             isRetroFeature: f.includes("retro windows") || (f.includes("retro") && !f.includes("kaset")),
             isNostalgiaGallery: f.includes("nostalgia"),
             isMobileFeature: f.includes("mobile"),
-            isQuotesFeature: f.includes("quotes") || f.includes("pesan personal"),
+            isQuotesFeature: f.includes("quote") || f.includes("pesan personal"),
             isDateFeature: f.includes("tanggal") || f.includes("waktu"),
             isActivityFeature: f.includes("aktivitas") || f.includes("dress code"),
             isTicketFeature: f.includes("tiket"),
             isNicknameFeature: f.includes("nama") || f.includes("nickname"),
-            isRoomsFeature: f.includes("10 ruang") || f.includes("ruangan"),
+            isRoomsFeature: f.includes("room") || f.includes("ruangan"),
+            isAtlasFeature: f.includes("atlas") || f.includes("peta kenangan"),
             isGameFeature: f.includes("game") || f.includes("permainan"),
             isPixelFeature: f.includes("12 karakter") || f.includes("pixel"),
             isSurpriseFeature: f.includes("surprise") || f.includes("kejutan"),
@@ -726,7 +727,7 @@ export function LandscapeProductCard({
                                 isEnvelopeFeature, isTypewriterFeature, isPremiumFeature, isPhotoVideoFeature,
                                 isAnonymousFeature, isCassetteFeature, isRetroFeature, isNostalgiaGallery, isMobileFeature,
                                 isQuotesFeature, isDateFeature, isActivityFeature, isTicketFeature, isNicknameFeature,
-                                isRoomsFeature, isGameFeature, isPixelFeature, isSurpriseFeature } = flags;
+                                isRoomsFeature, isAtlasFeature, isGameFeature, isPixelFeature, isSurpriseFeature } = flags;
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
@@ -994,6 +995,17 @@ export function LandscapeProductCard({
                                                 <rect x="14" y="3" width="7" height="7" />
                                                 <rect x="14" y="14" width="7" height="7" />
                                                 <rect x="3" y="14" width="7" height="7" />
+                                            </svg>
+                                        </div>
+                                    )}
+
+                                    {/* Animation: Atlas route */}
+                                    {isAtlasFeature && (
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                                            <svg className="feature-atlas-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.5s ease" }} aria-hidden="true">
+                                                <path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z" />
+                                                <path d="M9 3v15M15 6v15" />
+                                                <circle className="feature-atlas-dot" cx="15" cy="10" r="2.1" fill={activeAccent} stroke="none" />
                                             </svg>
                                         </div>
                                     )}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 
 /* ─────────────────────────────────────────────
    AnimatedSection — identical to page.tsx
@@ -1203,7 +1204,7 @@ export default function BundleSalesPage() {
                     textAlign: "center",
                 }}
             >
-                <a
+                <Link
                     href="/"
                     style={{
                         display: "inline-flex",
@@ -1240,7 +1241,7 @@ export default function BundleSalesPage() {
                     >
                         For you, Always.
                     </span>
-                </a>
+                </Link>
                 <p
                     style={{
                         fontSize: 10,

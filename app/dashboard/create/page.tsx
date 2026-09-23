@@ -25,13 +25,31 @@ const PAGE_TYPES = [
     { id: "page-10", type: "infinity", name: "Infinity Scroll", icon: "all_inclusive" },
 ];
 
+interface WizardStep {
+    id: string;
+    name: string;
+    icon: string;
+    title: string;
+    type?: string;
+}
+
+interface WizardConfig {
+    theme: Record<string, string>;
+    login: Record<string, string>;
+    metadata: { customerName: string; [key: string]: unknown };
+    greeting: Record<string, string>;
+    enabledPages: string[];
+    pages: unknown[];
+    [key: string]: Record<string, unknown> | string[] | unknown[];
+}
+
 export default function WizardEditor() {
     const router = useRouter();
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
     const [currentStepIdx, setCurrentStepIdx] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [config, setConfig] = useState<any>({
+    const [config, setConfig] = useState<WizardConfig>({
         theme: {
             backgroundColor: "#F5E6D3",
             fontDisplay: "Playfair Display, serif",
@@ -46,12 +64,16 @@ export default function WizardEditor() {
         metadata: {
             customerName: "Recipient Name"
         },
+        greeting: {
+            title: "Untuk Kamu, Selamanya",
+            message: "",
+        },
         enabledPages: ["page-1", "page-2"], // Default pages
         pages: []
     });
 
     // Handle Wizard Steps based on Enabled Pages
-    const wizardSteps: any[] = [
+    const wizardSteps: WizardStep[] = [
         ...BASE_STEPS,
         ...PAGE_TYPES.filter(p => config.enabledPages.includes(p.id))
             .map(p => ({ id: p.id, name: p.name, icon: p.icon, title: p.name, type: p.type }))
@@ -82,18 +104,24 @@ export default function WizardEditor() {
         return () => clearTimeout(timeoutId);
     }, [config, currentStepIdx]);
 
-    const handleFieldChange = (category: string, field: string, value: any) => {
-        setConfig((prev: any) => ({
-            ...prev,
-            [category]: {
-                ...prev[category],
-                [field]: value
-            }
-        }));
+    const handleFieldChange = (category: string, field: string, value: string) => {
+        setConfig((prev) => {
+            const currentSection = prev[category];
+            const section = currentSection && typeof currentSection === "object" && !Array.isArray(currentSection)
+                ? currentSection
+                : {};
+            return {
+                ...prev,
+                [category]: {
+                    ...section,
+                    [field]: value,
+                },
+            };
+        });
     };
 
     const togglePage = (pageId: string) => {
-        setConfig((prev: any) => {
+        setConfig((prev) => {
             const enabled = prev.enabledPages.includes(pageId);
             return {
                 ...prev,
@@ -110,8 +138,8 @@ export default function WizardEditor() {
             // Save project config locally / navigate to dashboard
             alert("Project saved successfully!");
             router.push("/dashboard");
-        } catch (err: any) {
-            alert("Error saving: " + err.message);
+        } catch (err: unknown) {
+            alert("Error saving: " + (err instanceof Error ? err.message : String(err)));
         } finally {
             setLoading(false);
         }

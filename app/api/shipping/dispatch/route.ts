@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
         const collectionMethod = (body.collection_method === "drop_off" || body.origin_collection_method === "drop_off") ? "drop_off" : "pickup";
 
         // 1. Construct Biteship Create Order payload
-        const biteshipPayload: Record<string, any> = {
+        const biteshipPayload: Record<string, unknown> = {
             shipper_contact_name: "For you, Always.",
             shipper_contact_phone: originContactPhone,
             shipper_contact_email: "support@for-you-always.my.id",

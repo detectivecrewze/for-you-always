@@ -55,6 +55,17 @@ video::-webkit-media-controls {
 @keyframes typewriter-blink { 0%, 100% { border-color: transparent; } 50% { border-color: inherit; } }
 @keyframes typewriter-text { 0%, 15% { width: 0; } 40%, 65% { width: 17ch; } 85%, 100% { width: 0; } }
 @keyframes envelope-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes atlas-route-drift { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-2px) rotate(2deg); } }
+@keyframes atlas-route-pulse { 0%, 100% { opacity: 0.45; transform: scale(0.75); transform-origin: center; } 50% { opacity: 1; transform: scale(1.2); transform-origin: center; } }
+.feature-atlas-icon { animation: atlas-route-drift 2.8s ease-in-out infinite; }
+.feature-atlas-dot { animation: atlas-route-pulse 1.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-atlas-icon,
+  .feature-atlas-dot {
+    animation: none;
+  }
+}
 
 /* Gradient Border Card */
 .gradient-border-card {

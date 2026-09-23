@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent a
 import { createPortal } from "react-dom";
 
 export type DemoCloseReason = "button" | "backdrop" | "escape" | "order";
-export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped" | "birthday";
+export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped" | "birthday" | "storybook";
 
 export interface DemoPreviewVariant {
     id: string;
@@ -267,6 +267,34 @@ const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
         emptyBg: "radial-gradient(circle at 50% 40%, #FFF5F7 0%, #F9DEE5 72%)",
         emptyText: "#680D27",
     },
+    storybook: {
+        backdropBg: "rgba(10, 11, 18, 0.88)",
+        frameBg: "linear-gradient(160deg, #17191F 0%, #240C13 100%)",
+        frameBorder: "1px solid rgba(217, 171, 54, 0.42)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.68), 0 0 44px rgba(139, 29, 44, 0.18)",
+        headerBg: "rgba(23, 25, 31, 0.97)",
+        headerBorder: "1px solid rgba(217, 171, 54, 0.24)",
+        footerBg: "rgba(23, 25, 31, 0.98)",
+        footerBorder: "1px solid rgba(217, 171, 54, 0.24)",
+        titleColor: "#FFFAF0",
+        subtitleColor: "#D7C6A4",
+        closeBg: "rgba(255, 250, 240, 0.08)",
+        closeBorder: "1px solid rgba(217, 171, 54, 0.34)",
+        closeColor: "#FFFAF0",
+        closeHoverBg: "rgba(139, 29, 44, 0.42)",
+        closeHoverBorder: "rgba(217, 171, 54, 0.7)",
+        orderBg: "linear-gradient(135deg, #D9AB36 0%, #B88618 100%)",
+        orderColor: "#17191F",
+        orderShadow: "0 7px 20px rgba(217, 171, 54, 0.25)",
+        orderHoverShadow: "0 10px 28px rgba(217, 171, 54, 0.38)",
+        spinnerTrack: "rgba(255, 250, 240, 0.15)",
+        spinnerAccent: "#D9AB36",
+        retryBtnBg: "#8B1D2C",
+        retryBtnColor: "#FFFAF0",
+        retryLinkColor: "#D9AB36",
+        emptyBg: "radial-gradient(circle at 50% 38%, #FFFAF0 0%, #EEE1CC 74%)",
+        emptyText: "#17191F",
+    },
     birthday: {
         backdropBg: "rgba(24, 15, 4, 0.82)",
         frameBg: "linear-gradient(160deg, #241604 0%, #120A02 100%)",
@@ -357,11 +385,6 @@ export default function DemoPreviewModal({
             : variants?.[0]?.id ?? "default"
     ));
 
-    useEffect(() => {
-        if (initialVariantId && variants?.some((variant) => variant.id === initialVariantId)) {
-            setSelectedVariantId(initialVariantId);
-        }
-    }, [initialVariantId, variants]);
 
     const fallbackVariant = useMemo<DemoPreviewVariant>(() => ({
         id: "default",
@@ -374,6 +397,7 @@ export default function DemoPreviewModal({
         [fallbackVariant, variants]
     );
     const selectedVariant = availableVariants.find((variant) => variant.id === selectedVariantId)
+        ?? availableVariants.find((variant) => variant.id === initialVariantId)
         ?? availableVariants[0]
         ?? fallbackVariant;
     const hasVariantSwitcher = availableVariants.length > 1;

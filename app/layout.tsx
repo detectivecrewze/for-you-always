@@ -22,10 +22,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://for-you-always.my.id"),
   alternates: { canonical: '/' },
   title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
-  description: "Delapan kado unik untuk mengabadikan satu cerita. Memoria, Letter, Voices, Mixtape, Invitation, Arcade, Retro, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
+  description: "Koleksi kado digital premium dan interaktif untuk merayakan cerita, suara, foto, lagu, dan momen yang berarti.",
   openGraph: {
     title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
-    description: "Delapan kado unik untuk mengabadikan satu cerita. Memoria, Letter, Voices, Mixtape, Invitation, Arcade, Retro, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
+    description: "Koleksi kado digital premium dan interaktif untuk merayakan cerita, suara, foto, lagu, dan momen yang berarti.",
     url: "https://for-you-always.my.id",
     siteName: "For you, Always.",
     images: [
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "For you, Always. — Digital Atelier | Kado & Surat Interaktif",
-    description: "Delapan kado unik untuk mengabadikan satu cerita. Memoria, Letter, Voices, Mixtape, Invitation, Arcade, Retro, dan Wrapped — kado digital premium yang bisa kamu buat sendiri.",
+    description: "Koleksi kado digital premium dan interaktif untuk merayakan cerita, suara, foto, lagu, dan momen yang berarti.",
     images: ["https://for-you-always.my.id/assets/opening_gate.png"],
   },
   icons: {

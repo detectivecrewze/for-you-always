@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import "./letter.css";
 
 const THEMES = {
@@ -253,7 +254,7 @@ function FeatureShowcase({ activeTheme }: { activeTheme: ThemeKey }) {
                     {hasVideo ? (
                         <video
                             ref={(el) => {
-                                (videoRef as any).current = el;
+                                videoRef.current = el;
                                 if (el) {
                                     el.defaultMuted = true;
                                     el.muted = true;
@@ -1008,7 +1009,7 @@ export default function LetterLandingPage() {
                     textAlign: "center",
                 }}
             >
-                <a
+                <Link
                     href="/"
                     style={{
                         display: "inline-flex",
@@ -1045,7 +1046,7 @@ export default function LetterLandingPage() {
                     >
                         For you, Always.
                     </span>
-                </a>
+                </Link>
 
                 <p
                     style={{

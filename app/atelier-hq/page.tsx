@@ -6,6 +6,58 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+interface TrackingHistoryItem {
+    updated_at?: string;
+    status?: string;
+    note?: string;
+}
+
+interface LiveTrackingData {
+    status_color?: string;
+    status_display?: string;
+    status_desc?: string;
+    tracking_link?: string;
+    history?: TrackingHistoryItem[];
+}
+
+interface InventoryItem {
+    id: string;
+    product_id: string;
+    stock: number;
+    low_stock_threshold: number;
+}
+
+interface OriginDetails {
+    contact_name: string;
+    contact_phone: string;
+    address: string;
+    village?: string;
+    district?: string;
+    city?: string;
+    province?: string;
+    postal_code: string;
+    note: string;
+    latitude?: string;
+    longitude?: string;
+}
+
+interface ParsedMeta {
+    first_name?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    recipient_name?: string;
+    recipient_phone?: string;
+    address?: string;
+    village?: string;
+    district?: string;
+    city?: string;
+    province?: string;
+    postal_code?: string;
+    courier?: string;
+    box_type?: "kraft" | "hardbox";
+}
+
 interface OrderItem {
     order_id: string;
     gross_amount: number;
@@ -59,7 +111,7 @@ export default function Dashboard() {
         pendingCount: number;
         physicalCount: number;
     }>({ totalRevenue: 0, paidCount: 0, pendingCount: 0, physicalCount: 0 });
-    const [recentOrders, setRecentOrders] = useState<any[]>([]);
+    const [recentOrders, setRecentOrders] = useState<OrderItem[]>([]);
     const [loadingStats, setLoadingStats] = useState(false);
     const [orders, setOrders] = useState<OrderItem[]>([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
@@ -152,7 +204,7 @@ export default function Dashboard() {
         tracking_number: string;
         courier: string;
         loading: boolean;
-        data: any;
+        data: LiveTrackingData | null;
         error: string | null;
     } | null>(null);
 
@@ -254,16 +306,17 @@ export default function Dashboard() {
             const res = await fetch("/api/admin/inventory");
             const data = await res.json();
             if (res.ok && data.success && data.inventory?.length > 0) {
-                const item = data.inventory.find((i: any) => i.product_id === "the-gift-box")
-                    || data.inventory.find((i: any) => i.product_id === "the-gift-box-hardbox")
-                    || data.inventory.find((i: any) => i.id === "inv_the-gift-box")
-                    || data.inventory.find((i: any) => i.id === "inv_unbox")
-                    || data.inventory[0];
+                const inventory = data.inventory as InventoryItem[];
+                const item = inventory.find((i) => i.product_id === "the-gift-box")
+                    || inventory.find((i) => i.product_id === "the-gift-box-hardbox")
+                    || inventory.find((i) => i.id === "inv_the-gift-box")
+                    || inventory.find((i) => i.id === "inv_unbox")
+                    || inventory[0];
                 setInventoryStock(item.stock);
                 setStockInputVal(String(item.stock));
                 setInventoryThreshold(item.low_stock_threshold || 3);
 
-                const kraftItem = data.inventory.find((i: any) => i.product_id === "the-gift-box-kraft");
+                const kraftItem = inventory.find((i) => i.product_id === "the-gift-box-kraft");
                 if (kraftItem) {
                     setKraftStock(kraftItem.stock);
                     setKraftInputVal(String(kraftItem.stock));
@@ -523,11 +576,13 @@ export default function Dashboard() {
     }, [debouncedSearch, productFilter, statusFilter]);
 
     // Helpers
-    const parseMeta = (val: any) => {
+    const parseMeta = (val: unknown): ParsedMeta => {
         if (!val) return {};
-        if (typeof val === "object") return val;
+        if (typeof val === "object") return val as ParsedMeta;
+        if (typeof val !== "string") return {};
         try {
-            return JSON.parse(val);
+            const parsed: unknown = JSON.parse(val);
+            return parsed && typeof parsed === "object" ? parsed as ParsedMeta : {};
         } catch {
             return {};
         }
@@ -613,7 +668,7 @@ export default function Dashboard() {
         }
     };
 
-    const getCustomer = (order: any) => {
+    const getCustomer = (order: OrderItem) => {
         const meta = parseMeta(order.customer_details);
         return {
             name: order.customer_name || meta.first_name || meta.name || "-",
@@ -622,7 +677,7 @@ export default function Dashboard() {
         };
     };
 
-    const getProductType = (order: any) => {
+    const getProductType = (order: OrderItem) => {
         return order.product_type || order.product_id || "Digital Gift";
     };
 
@@ -638,6 +693,7 @@ export default function Dashboard() {
             mixtape: "Mixtape",
             invitation: "Invitation",
             birthday: "Birthday Scrapbook",
+            storybook: "Storybook Edition",
         };
         return map[raw] || raw || "Memoria";
     };
@@ -659,7 +715,7 @@ export default function Dashboard() {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
-    const buildCustomerWhatsAppUrl = (order: any, customResi?: string, customCourier?: string) => {
+    const buildCustomerWhatsAppUrl = (order: OrderItem, customResi?: string, customCourier?: string) => {
         const cust = getCustomer(order);
         let phone = String(cust.phone || "").replace(/\D/g, "");
         if (!phone) return null;
@@ -818,7 +874,7 @@ export default function Dashboard() {
         setDispatchConfirmOrder(order);
     };
 
-    const handleExecuteDispatch = async (order: OrderItem, originDetails: any, collectionMethod: "drop_off" | "pickup" = dispatchCollectionMethod) => {
+    const handleExecuteDispatch = async (order: OrderItem, originDetails: OriginDetails, collectionMethod: "drop_off" | "pickup" = dispatchCollectionMethod) => {
         setDispatchingOrderId(order.order_id);
         try {
             const res = await fetch("/api/shipping/dispatch", {
@@ -1375,7 +1431,7 @@ export default function Dashboard() {
                                                 <button
                                                     key={tab.id}
                                                     type="button"
-                                                    onClick={() => setTimeRangeFilter(tab.id as any)}
+                                                    onClick={() => setTimeRangeFilter(tab.id as typeof timeRangeFilter)}
                                                     style={{
                                                         padding: "6px 12px",
                                                         borderRadius: "8px",
@@ -2022,7 +2078,7 @@ export default function Dashboard() {
                                                                     <div style={{ fontSize: 10, fontWeight: 700, color: "#7a685e" }}>Status Kustomisasi:</div>
                                                                     <select
                                                                         value={customizationStatusInput}
-                                                                        onChange={(e) => setCustomizationStatusInput(e.target.value as any)}
+                                                                        onChange={(e) => setCustomizationStatusInput(e.target.value as typeof customizationStatusInput)}
                                                                         style={{ padding: "4px", borderRadius: 6, border: "1px solid #dcd1c6", fontSize: 10.5 }}
                                                                     >
                                                                         <option value="draft">Menunggu Pengisian</option>
@@ -3707,7 +3763,7 @@ export default function Dashboard() {
                                 {liveTrackingModal.data.history && liveTrackingModal.data.history.length > 0 ? (
                                     <div style={{ display: "flex", flexDirection: "column", gap: 14, position: "relative", paddingLeft: 16, marginBottom: 20 }}>
                                         <div style={{ position: "absolute", left: 5, top: 4, bottom: 4, width: 2, background: "#ebdcd0" }} />
-                                        {liveTrackingModal.data.history.map((item: any, idx: number) => {
+                                        {liveTrackingModal.data.history.map((item: TrackingHistoryItem, idx: number) => {
                                             const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) : "-";
                                             return (
                                                 <div key={idx} style={{ position: "relative" }}>

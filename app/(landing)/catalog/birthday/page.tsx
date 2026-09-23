@@ -9,6 +9,7 @@ import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/De
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
+import { BIRTHDAY_DEMO_VARIANTS } from "@/lib/storefront-demo-config";
 
 interface ActiveDemo {
     url: string;
@@ -18,10 +19,6 @@ interface ActiveDemo {
     switchCount: number;
 }
 
-const BIRTHDAY_DEMO_VARIANTS = [
-    { id: "snoopy", label: "Snoopy Comic", src: "https://snoopy.for-you-always.my.id/gift?project=gift-f0d02efd7edcbf62", subtitle: "Scrapbook komik retro bersama Snoopy & Woodstock" },
-    { id: "dubu-dudu", label: "Dubu & Dudu", src: "https://snoopy.for-you-always.my.id/gift/index.html?project=gift-ab79b22216982751", subtitle: "Scrapbook hangat dengan nuansa pastel" },
-] as const satisfies readonly DemoPreviewVariant[];
 
 const BIRTHDAY_CART_ITEM = {
     id: "birthday",

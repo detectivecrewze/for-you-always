@@ -5,10 +5,11 @@ import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import CircleWishesInfoModal from "../../../components/CircleWishesInfoModal";
 import DemoPreviewModal, { scheduleDemoPreviewPreload } from "../../../components/LazyDemoPreviewModal";
-import type { DemoCloseReason, DemoPreviewVariant, MemoriaThemeSwatch } from "../../../components/DemoPreviewModal";
+import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/DemoPreviewModal";
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
+import { GIFT_OPENING_DEMO_URL, MEMORIA_DEMO_VARIANTS, MEMORIA_THEME_SWATCHES } from "@/lib/storefront-demo-config";
 
 type DemoVariant = "personal" | "gift-opening" | "circle";
 type DemoSource = "product_card" | "circle_wishes_info";
@@ -21,25 +22,6 @@ interface ActiveDemo {
     switchCount: number;
 }
 
-const GIFT_OPENING_DEMO_URL = "https://anniv.for-you-always.my.id/auto-kvoggmb";
-const PERSONAL_DEMO_URL = "https://anniv.for-you-always.my.id/untuk-nadia?preview=personal";
-const MEMORIA_DEMO_VARIANTS = [
-    { id: "gift-opening", label: "Gift Opening", src: GIFT_OPENING_DEMO_URL, subtitle: "Lihat transisi pembuka dengan animasi kado" },
-    { id: "personal", label: "Personal Edition", src: PERSONAL_DEMO_URL, subtitle: "Jelajahi contoh Personal Edition" },
-    { id: "circle", label: "Circle Wishes", src: "https://anniv.for-you-always.my.id/auto-circle?preview=circle#circle-wishes-section", subtitle: "Lihat bagaimana ucapan teman hadir di dalam kado" },
-] as const satisfies readonly DemoPreviewVariant[];
-const MEMORIA_THEME_SWATCHES = [
-    { id: "vintage-burgundy",  name: "Vintage Burgundy", color: "#9E2A47", bgColor: "#2D141E" },
-    { id: "classic-light",     name: "Classic Light",    color: "#C99B6D", bgColor: "#FDFAF5" },
-    { id: "midnight-rose",     name: "Midnight Rose",    color: "#E84D72", bgColor: "#0A0408" },
-    { id: "ocean-breeze",      name: "Ocean Breeze",     color: "#38B4D8", bgColor: "#071520" },
-    { id: "blush-pink",        name: "Blush Pink",       color: "#F0789E", bgColor: "#FFE4E8" },
-    { id: "midnight-blue",     name: "Midnight Blue",    color: "#3B82F6", bgColor: "#050C1A" },
-    { id: "velvet-purple",          name: "Velvet Purple",          color: "#A855F7", bgColor: "#120818" },
-    { id: "antique-rose-diary",     name: "Antique Rose Diary",     color: "#8B4854", bgColor: "#EFE4D2" },
-    { id: "sage-botanical-letter",  name: "Sage Botanical Letter",  color: "#68745B", bgColor: "#F1EDDF" },
-    { id: "espresso-love-letter",   name: "Espresso Love Letter",   color: "#724C40", bgColor: "#E6D5C2" },
-] as const satisfies readonly MemoriaThemeSwatch[];
 const MEMORIA_CART_ITEM = {
     id: "loves",
     title: "Memoria Premium",

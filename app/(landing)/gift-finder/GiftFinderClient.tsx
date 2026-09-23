@@ -1,272 +1,437 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
-import { STOREFRONT_CATALOG, type StorefrontCatalogItem } from "@/lib/storefront-catalog";
+import DemoPreviewModal from "../../components/LazyDemoPreviewModal";
+import type { DemoCloseReason, DemoPreviewVariant } from "../../components/DemoPreviewModal";
+import SlotPickerModal, { type SlotPickerConfig } from "../../components/SlotPickerModal";
+import { useCart } from "../../context/CartContext";
+import {
+    FINDER_QUESTIONS,
+    INITIAL_FINDER_ANSWERS,
+    budgetHasExactMatches,
+    getFinderSteps,
+    getRecommendations,
+    getRecommendedPhysicalInsert,
+    type FinderAnswers,
+    type FinderBudget,
+    type FinderExperience,
+    type FinderRecommendation,
+    type FinderStepKey,
+} from "@/lib/gift-finder";
+import { STOREFRONT_DEMO_CONFIGS, type DemoProductId } from "@/lib/storefront-demo-config";
+import type { StorefrontCatalogItem } from "@/lib/storefront-catalog";
 import styles from "./GiftFinderClient.module.css";
 
-type Occasion = "Birthday" | "Anniversary" | "LDR" | "Apology" | "Just Because";
-type Recipient = "Pasangan" | "Crush" | "Teman" | "Keluarga";
-type Format = "Digital" | "Fisik" | "Bebas";
-type Budget = "25" | "50" | "50+";
-type StepKey = "occasion" | "recipient" | "format" | "budget";
-type Answers = { occasion: Occasion | null; recipient: Recipient | null; format: Format | null; budget: Budget | null };
-type QuestionOption = { value: string; label: string; description: string };
-type QuestionConfig = { key: StepKey; eyebrow: string; title: string; helper: string; options: QuestionOption[] };
+const FINDER_VERSION = "v2";
+const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
+const DEMO_PRODUCT_IDS = new Set<DemoProductId>(["loves", "letter", "voices", "mixtape", "invitation", "retro", "wrapped", "birthday", "arcade", "storybook"]);
 
-const QUESTIONS: QuestionConfig[] = [
-    {
-        key: "occasion", eyebrow: "Tentang momennya", title: "Momen apa yang ingin kamu buat lebih berkesan?",
-        helper: "Pilih suasana yang paling mendekati alasanmu memberi kado.",
-        options: [
-            { value: "Birthday", label: "Birthday", description: "Hari spesial yang layak terasa lebih personal." },
-            { value: "Anniversary", label: "Anniversary", description: "Rayakan perjalanan dan cerita yang sudah dibangun." },
-            { value: "LDR", label: "LDR", description: "Kirim rasa dekat meski sedang berjauhan." },
-            { value: "Apology", label: "Apology", description: "Sampaikan maaf dengan cara yang lebih tulus." },
-            { value: "Just Because", label: "Just Because", description: "Kejutan kecil tanpa menunggu tanggal tertentu." },
-        ],
-    },
-    {
-        key: "recipient", eyebrow: "Tentang penerimanya", title: "Untuk siapa kado ini kamu siapkan?",
-        helper: "Hubunganmu dengan penerima membantu kami menentukan rasa yang tepat.",
-        options: [
-            { value: "Pasangan", label: "Pasangan", description: "Untuk seseorang yang menjadi rumah." },
-            { value: "Crush", label: "Crush", description: "Isyarat manis tanpa terasa berlebihan." },
-            { value: "Teman", label: "Teman", description: "Apresiasi hangat untuk teman terbaik." },
-            { value: "Keluarga", label: "Keluarga", description: "Kado personal untuk orang terdekat." },
-        ],
-    },
-    {
-        key: "format", eyebrow: "Tentang pengalamannya", title: "Pengalaman seperti apa yang kamu bayangkan?",
-        helper: "Pilih format yang paling nyaman untuk diberikan dan dinikmati.",
-        options: [
-            { value: "Digital", label: "Digital", description: "Langsung dikirim, interaktif, dan bisa dibuka kapan saja." },
-            { value: "Fisik", label: "Fisik", description: "Pengalaman unboxing dengan kejutan digital di dalamnya." },
-            { value: "Bebas", label: "Bebas", description: "Biarkan kami memilih format yang paling cocok." },
-        ],
-    },
-    {
-        key: "budget", eyebrow: "Tentang anggarannya", title: "Berapa budget yang nyaman untukmu?",
-        helper: "Kami hanya akan menampilkan koleksi dalam rentang pilihanmu.",
-        options: [
-            { value: "25", label: "Sampai Rp25.000", description: "Pilihan digital personal dengan harga paling ringan." },
-            { value: "50", label: "Rp26.000–Rp50.000", description: "Koleksi premium digital untuk momen yang lebih spesial." },
-            { value: "50+", label: "Di atas Rp50.000", description: "Kado fisik dan pengalaman hybrid yang lebih lengkap." },
-        ],
-    },
-];
-
-const INITIAL_ANSWERS: Answers = { occasion: null, recipient: null, format: null, budget: null };
-const RECIPIENT_MATCHES: Record<Recipient, string[]> = {
-    Pasangan: ["the-gift-box", "loves", "letter", "voices", "wrapped"],
-    Crush: ["invitation", "mixtape", "letter"],
-    Teman: ["birthday", "arcade", "retro", "wrapped"],
-    Keluarga: ["birthday", "letter", "voices", "loves"],
+const ROLE_LABELS: Record<FinderRecommendation["role"], string> = {
+    primary: "Paling sesuai dengan jawabanmu",
+    simpler: "Lebih ringkas untuk disiapkan",
+    immersive: "Lebih banyak untuk dijelajahi",
 };
 
-function inBudget(item: StorefrontCatalogItem, budget: Budget) {
-    if (budget === "25") return item.numericPrice <= 25000;
-    if (budget === "50") return item.numericPrice > 25000 && item.numericPrice <= 50000;
-    return item.numericPrice > 50000;
+const BUDGET_OPTIONS: Array<{ value: FinderBudget; label: string }> = [
+    { value: "all", label: "Semua harga" },
+    { value: "up25", label: "Sampai Rp25.000" },
+    { value: "26to50", label: "Rp26.000–Rp50.000" },
+    { value: "above50", label: "Di atas Rp50.000" },
+];
+
+interface ActiveDemo {
+    productId: DemoProductId;
+    recommendationRank: number;
+    initialVariantId: string;
+    switchCount: number;
+    openedAt: number;
 }
 
-function occasionScore(item: StorefrontCatalogItem, occasion: Occasion) {
-    if (occasion === "Just Because") {
-        return item.occasions.includes("Any Occasion") || ["letter", "voices", "mixtape"].includes(item.id) ? 3 : 0;
-    }
-    return item.occasions.some((entry) => entry.toLowerCase().includes(occasion.toLowerCase())) ? 4 : 0;
+function captureFinderEvent(event: string, properties: Record<string, unknown> = {}) {
+    void import("posthog-js")
+        .then(({ default: posthog }) => posthog.capture(event, { finder_version: FINDER_VERSION, ...properties }))
+        .catch(() => {});
 }
 
-function recommendationReason(item: StorefrontCatalogItem, occasion: Occasion, recipient: Recipient) {
-    const format = item.id === "the-gift-box" ? "kado fisik dengan kejutan digital" : "pengalaman digital interaktif";
-    return `Cocok untuk ${occasion.toLowerCase()} bersama ${recipient.toLowerCase()}, dengan ${format} yang terasa personal.`;
+function answerSnapshot(answers: FinderAnswers) {
+    return {
+        finder_recipient: answers.recipient,
+        finder_intent: answers.intent,
+        finder_format: answers.format,
+        finder_experiences: answers.experiences,
+        finder_material: answers.material,
+    };
 }
 
 function CheckIcon() {
     return <svg className={styles.checkIcon} viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" /><path d="m6 10 2.4 2.5L14 7.4" /></svg>;
 }
 
-function WizardProgress({ currentStep }: { currentStep: number }) {
+function WizardProgress({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
+    const percentage = Math.round(((currentStep + 1) / totalSteps) * 100);
     return (
-        <div className={styles.progress} aria-label={`Pertanyaan ${currentStep + 1} dari ${QUESTIONS.length}`}>
-            <div className={styles.progressMeta}><span>Pertanyaan {currentStep + 1} dari {QUESTIONS.length}</span><span>{Math.round(((currentStep + 1) / QUESTIONS.length) * 100)}%</span></div>
-            <div className={styles.progressTrack} aria-hidden="true"><span className={styles.progressFill} style={{ width: `${((currentStep + 1) / QUESTIONS.length) * 100}%` }} /></div>
+        <div className={styles.progress} aria-label={`Pertanyaan ${currentStep + 1} dari ${totalSteps}`}>
+            <div className={styles.progressMeta}><span>Pertanyaan {currentStep + 1} dari {totalSteps}</span><span>{percentage}%</span></div>
+            <div className={styles.progressTrack} aria-hidden="true"><span className={styles.progressFill} style={{ width: `${percentage}%` }} /></div>
         </div>
     );
 }
 
-function AnswerCard({ option, name, selected, onSelect }: { option: QuestionOption; name: string; selected: boolean; onSelect: (value: string) => void }) {
+function AnswerCard({ label, description, name, selected, multiple, disabled, onSelect }: {
+    label: string;
+    description: string;
+    name: string;
+    selected: boolean;
+    multiple: boolean;
+    disabled?: boolean;
+    onSelect: () => void;
+}) {
     return (
-        <label className={`${styles.answerCard} ${selected ? styles.answerCardSelected : ""}`}>
-            <input className={styles.answerInput} type="radio" name={name} value={option.value} checked={selected} onChange={() => onSelect(option.value)} />
-            <span className={styles.answerText}><strong>{option.label}</strong><span>{option.description}</span></span>
+        <label className={`${styles.answerCard} ${selected ? styles.answerCardSelected : ""} ${disabled ? styles.answerCardDisabled : ""}`}>
+            <input className={styles.answerInput} type={multiple ? "checkbox" : "radio"} name={name} checked={selected} disabled={disabled} onChange={onSelect} />
+            <span className={styles.answerText}><strong>{label}</strong><span>{description}</span></span>
             <CheckIcon />
         </label>
     );
 }
 
-function QuestionStep({ question, selectedValue, currentStep, onSelect, onBack, onContinue }: {
-    question: QuestionConfig; selectedValue: string | null; currentStep: number; onSelect: (value: string) => void; onBack: () => void; onContinue: () => void;
+function QuestionStep({ stepKey, answers, currentStep, totalSteps, onSingleSelect, onExperienceSelect, onBack, onContinue }: {
+    stepKey: FinderStepKey;
+    answers: FinderAnswers;
+    currentStep: number;
+    totalSteps: number;
+    onSingleSelect: (key: Exclude<FinderStepKey, "experiences">, value: string) => void;
+    onExperienceSelect: (value: FinderExperience) => void;
+    onBack: () => void;
+    onContinue: () => void;
 }) {
+    const question = FINDER_QUESTIONS[stepKey];
+    const selectedValues = stepKey === "experiences" ? answers.experiences : [answers[stepKey] as string | null].filter(Boolean);
+    const canContinue = selectedValues.length > 0;
     return (
         <div className={styles.questionStep}>
             <div className={styles.questionHeader}>
                 <span className={styles.questionEyebrow}>{question.eyebrow}</span>
-                <h2 id={`${question.key}-title`} className={styles.questionTitle}>{question.title}</h2>
+                <h2 id={`${stepKey}-title`} className={styles.questionTitle}>{question.title}</h2>
                 <p>{question.helper}</p>
             </div>
-            <fieldset className={styles.answerFieldset} aria-labelledby={`${question.key}-title`}>
+            <fieldset className={styles.answerFieldset} aria-labelledby={`${stepKey}-title`}>
                 <legend className={styles.srOnly}>{question.title}</legend>
                 <div className={styles.answersGrid}>
-                    {question.options.map((option) => <AnswerCard key={option.value} option={option} name={question.key} selected={selectedValue === option.value} onSelect={onSelect} />)}
+                    {question.options.map((option) => {
+                        const selected = selectedValues.includes(option.value);
+                        const disabled = stepKey === "experiences" && !selected && answers.experiences.length >= 2;
+                        return (
+                            <AnswerCard
+                                key={option.value}
+                                label={option.label}
+                                description={option.description}
+                                name={stepKey}
+                                selected={selected}
+                                multiple={stepKey === "experiences"}
+                                disabled={disabled}
+                                onSelect={() => stepKey === "experiences"
+                                    ? onExperienceSelect(option.value as FinderExperience)
+                                    : onSingleSelect(stepKey as Exclude<FinderStepKey, "experiences">, option.value)}
+                            />
+                        );
+                    })}
                 </div>
             </fieldset>
             <div className={styles.wizardActions}>
                 {currentStep > 0 ? <button className={styles.backButton} type="button" onClick={onBack}>Kembali</button> : <span aria-hidden="true" />}
-                <button className={styles.continueButton} type="button" onClick={onContinue} disabled={!selectedValue}>
-                    {currentStep === QUESTIONS.length - 1 ? "Lihat Rekomendasi" : "Lanjutkan"}<span aria-hidden="true">→</span>
+                <button className={styles.continueButton} type="button" onClick={onContinue} disabled={!canContinue}>
+                    {currentStep === totalSteps - 1 ? "Lihat Rekomendasi" : "Lanjutkan"}<span aria-hidden="true">→</span>
                 </button>
             </div>
         </div>
     );
 }
 
-type Recommendation = { item: StorefrontCatalogItem; index: number; score: number };
-
-function RecommendationResults({ recommendations, occasion, recipient, answers, onEdit, onReset }: {
-    recommendations: Recommendation[]; occasion: Occasion; recipient: Recipient; answers: Answers; onEdit: () => void; onReset: () => void;
+function RecommendationCard({ recommendation, rank, physicalMode, onDemo, onOrder }: {
+    recommendation: FinderRecommendation;
+    rank: number;
+    physicalMode: boolean;
+    onDemo: (recommendation: FinderRecommendation, rank: number) => void;
+    onOrder: (recommendation: FinderRecommendation, rank: number) => void;
 }) {
-    const [primary, ...secondary] = recommendations;
-    const answerLabels = QUESTIONS.map((question) => {
-        const answer = answers[question.key];
-        return question.options.find((option) => option.value === answer)?.label;
-    }).filter(Boolean) as string[];
+    const { item } = recommendation;
+    const isPrimary = recommendation.role === "primary";
+    const price = recommendation.physicalInsert ? "Termasuk dalam Gift Box" : item.newPrice;
+    const demoLabel = item.id === "arcade" ? "Buka Demo Arcade" : recommendation.physicalInsert ? "Lihat Demo Isi Digital" : "Lihat Demo";
+    return (
+        <article className={`${styles.resultCard} ${isPrimary ? styles.primaryCard : styles.secondaryCard}`}>
+            <div className={styles.resultMedia}>
+                <Image src={item.imageSrc} alt={item.title} fill sizes={isPrimary ? "(max-width: 720px) calc(100vw - 48px), 350px" : "(max-width: 720px) calc(100vw - 48px), 430px"} quality={90} priority={isPrimary} style={{ objectFit: "contain", padding: isPrimary ? 16 : 12 }} />
+                <span className={styles.resultRole}>{recommendation.physicalInsert ? "Pilihan isi digital" : ROLE_LABELS[recommendation.role]}</span>
+            </div>
+            <div className={styles.resultContent}>
+                <span className={styles.collectionLabel}>{item.badgeText}</span>
+                <h3>{item.title}</h3>
+                <strong className={styles.resultPrice}>{price}</strong>
+                <p>{recommendation.reason}</p>
+                <div className={styles.resultActions}>
+                    <button className={styles.demoButton} type="button" onClick={() => onDemo(recommendation, rank)}>{demoLabel}</button>
+                    <button className={styles.orderButton} type="button" onClick={() => onOrder(recommendation, rank)}>
+                        {physicalMode ? "Pilih Gift Box" : "Pesan Sekarang"}<span aria-hidden="true">→</span>
+                    </button>
+                </div>
+            </div>
+        </article>
+    );
+}
 
-    if (!primary) {
-        return (
-            <section className={styles.emptyResults} aria-live="polite">
-                <span className={styles.resultEyebrow}>Kurasi untukmu</span><h2>Belum ada koleksi dalam kombinasi ini.</h2>
-                <p>Coba ubah format atau rentang budget agar kami dapat menampilkan pilihan yang paling mendekati.</p>
-                <button className={styles.continueButton} type="button" onClick={onEdit}>Ubah Jawaban</button>
-            </section>
-        );
-    }
-
+function ResultView({ answers, budget, recommendations, exactBudgetMatch, onBudgetChange, onDemo, onOrder, onEdit, onReset }: {
+    answers: FinderAnswers;
+    budget: FinderBudget;
+    recommendations: FinderRecommendation[];
+    exactBudgetMatch: boolean;
+    onBudgetChange: (budget: FinderBudget) => void;
+    onDemo: (recommendation: FinderRecommendation, rank: number) => void;
+    onOrder: (recommendation: FinderRecommendation, rank: number) => void;
+    onEdit: () => void;
+    onReset: () => void;
+}) {
+    const physicalMode = answers.format === "physical";
     return (
         <section className={styles.results} aria-live="polite">
             <div className={styles.resultsHeader}>
-                <span className={styles.resultEyebrow}>Kurasi untukmu</span><h2>Pilihan yang terasa paling tepat.</h2>
-                <p>Berdasarkan momen, penerima, format, dan budget yang kamu pilih.</p>
-                <div className={styles.answerSummary} aria-label="Ringkasan jawaban">{answerLabels.map((label) => <span key={label}>{label}</span>)}</div>
+                <span className={styles.resultEyebrow}>Pilihan untukmu</span>
+                <h2>Kado yang paling dekat dengan keinginanmu.</h2>
+                <p>{physicalMode ? "Kami memilih Gift Box beserta pengalaman digital yang paling sesuai untuk kartu aksesnya." : "Dipilih dari momen, penerima, dan pengalaman yang ingin kamu berikan."}</p>
             </div>
 
-            <article className={`${styles.primaryCard} ${recommendations.length === 1 ? styles.singlePrimaryCard : ""}`}>
-                <div className={styles.primaryMedia}>
-                    <Image src={primary.item.imageSrc} alt={primary.item.title} fill sizes="(max-width: 720px) calc(100vw - 56px), 360px" quality={90} priority style={{ objectFit: "cover" }} />
-                    <span className={styles.topPick}>Pilihan utama</span>
-                </div>
-                <div className={styles.primaryContent}>
-                    <span className={styles.collectionLabel}>{primary.item.badgeText}</span><h3>{primary.item.title}</h3>
-                    <strong className={styles.primaryPrice}>{primary.item.newPrice}</strong>
-                    <p>{recommendationReason(primary.item, occasion, recipient)}</p>
-                    <div className={styles.primaryActions}>
-                        <Link className={styles.collectionLink} href={primary.item.href}>Lihat Koleksi</Link>
-                        <button className={styles.editButton} type="button" onClick={onEdit}>Ubah Jawaban</button>
-                    </div>
-                </div>
-            </article>
-
-            {secondary.length > 0 && (
-                <div className={styles.secondarySection}>
-                    <div className={styles.secondaryHeading}><span>Pilihan lain yang juga sesuai</span><i aria-hidden="true" /></div>
-                    <div className={styles.secondaryGrid}>
-                        {secondary.map(({ item }) => (
-                            <article className={styles.secondaryCard} key={item.id}>
-                                <div className={styles.secondaryMedia}><Image src={item.imageSrc} alt={item.title} fill sizes="(max-width: 720px) 112px, 180px" quality={90} style={{ objectFit: "cover" }} /></div>
-                                <div className={styles.secondaryContent}>
-                                    <span>{item.badgeText}</span><h3>{item.title}</h3><strong>{item.newPrice}</strong>
-                                    <p>{recommendationReason(item, occasion, recipient)}</p><Link href={item.href}>Lihat Koleksi <span aria-hidden="true">→</span></Link>
-                                </div>
-                            </article>
+            {!physicalMode && (
+                <div className={styles.budgetFilter}>
+                    <span>Sesuaikan budget</span>
+                    <div className={styles.budgetChips} role="group" aria-label="Filter budget">
+                        {BUDGET_OPTIONS.map((option) => (
+                            <button key={option.value} type="button" className={budget === option.value ? styles.budgetChipActive : ""} aria-pressed={budget === option.value} onClick={() => onBudgetChange(option.value)}>{option.label}</button>
                         ))}
                     </div>
+                    {!exactBudgetMatch && budget !== "all" && <p className={styles.budgetNotice}>Belum ada kado digital di rentang ini. Kami tetap menampilkan pilihan terdekat agar kamu tidak kehilangan rekomendasi terbaik.</p>}
                 </div>
             )}
-            <button className={styles.resetButton} type="button" onClick={onReset}>Mulai Ulang</button>
+
+            <div className={styles.resultList}>
+                {recommendations.map((recommendation, index) => (
+                    <RecommendationCard key={`${recommendation.item.id}-${recommendation.role}`} recommendation={recommendation} rank={index + 1} physicalMode={physicalMode} onDemo={onDemo} onOrder={onOrder} />
+                ))}
+            </div>
+            <div className={styles.resultFooterActions}>
+                <button className={styles.editButton} type="button" onClick={onEdit}>Ubah jawaban</button>
+                <button className={styles.resetButton} type="button" onClick={onReset}>Mulai ulang</button>
+            </div>
         </section>
     );
 }
 
 export default function GiftFinderClient() {
-    const [answers, setAnswers] = useState<Answers>(INITIAL_ANSWERS);
+    const router = useRouter();
+    const { addToCart } = useCart();
+    const [answers, setAnswers] = useState<FinderAnswers>(INITIAL_FINDER_ANSWERS);
     const [currentStep, setCurrentStep] = useState(0);
     const [showResults, setShowResults] = useState(false);
+    const [budget, setBudget] = useState<FinderBudget>("all");
+    const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
+    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const focusTargetRef = useRef<HTMLHeadingElement>(null);
-    const question = QUESTIONS[currentStep];
-    const selectedValue = answers[question.key];
+    const startedRef = useRef(false);
+    const resultSignatureRef = useRef("");
+    const reactSessionId = useId();
+    const finderSessionIdRef = useRef(`gift-finder-${reactSessionId}`);
+
+    const steps = useMemo(() => getFinderSteps(answers), [answers]);
+    const safeCurrentStep = Math.min(currentStep, steps.length - 1);
+    const stepKey = steps[safeCurrentStep];
+    const recommendations = useMemo(() => getRecommendations(answers, budget), [answers, budget]);
+    const exactBudgetMatch = useMemo(() => budgetHasExactMatches(answers, budget), [answers, budget]);
+
+    const analyticsBase = useCallback(() => ({ finder_session_id: finderSessionIdRef.current, ...answerSnapshot(answers) }), [answers]);
+
+    useEffect(() => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        captureFinderEvent("gift_finder_started", { finder_session_id: finderSessionIdRef.current, source: "catalog" });
+    }, []);
+
+    useEffect(() => {
+        if (showResults) return;
+        captureFinderEvent("gift_finder_step_viewed", { finder_session_id: finderSessionIdRef.current, step_key: stepKey, step_number: safeCurrentStep + 1, total_steps: steps.length });
+    }, [safeCurrentStep, showResults, stepKey, steps.length]);
 
     useEffect(() => {
         const frame = window.requestAnimationFrame(() => {
             focusTargetRef.current?.focus({ preventScroll: true });
-            window.scrollTo({
-                top: 0,
-                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-            });
+            window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
         });
         return () => window.cancelAnimationFrame(frame);
-    }, [currentStep, showResults]);
+    }, [safeCurrentStep, showResults]);
 
-    const recommendations = useMemo(() => {
-        const { occasion, recipient, format, budget } = answers;
-        if (!occasion || !recipient || !format || !budget) return [];
-        const rankedItems = STOREFRONT_CATALOG
-            .map((item, index) => ({ item, index, score: occasionScore(item, occasion) + (RECIPIENT_MATCHES[recipient].includes(item.id) ? 3 : 0) }))
-            .sort((a, b) => b.score - a.score || a.index - b.index);
-        const matchedItems = rankedItems
-            .filter(({ item }) => inBudget(item, budget))
-            .filter(({ item }) => format === "Bebas" || (format === "Fisik" ? item.id === "the-gift-box" : item.id !== "the-gift-box"))
-            .slice(0, 3);
+    useEffect(() => {
+        if (!showResults || recommendations.length === 0) return;
+        const signature = `${budget}:${recommendations.map((entry) => entry.item.id).join(",")}`;
+        if (resultSignatureRef.current === signature) return;
+        resultSignatureRef.current = signature;
+        captureFinderEvent("gift_finder_result_viewed", {
+            ...analyticsBase(), budget_filter: budget,
+            recommended_products: recommendations.map((entry, index) => ({ product_id: entry.item.id, rank: index + 1, role: entry.role, score: entry.score })),
+        });
+    }, [analyticsBase, budget, recommendations, showResults]);
 
-        if (matchedItems.length > 0) return matchedItems;
+    const selectSingle = useCallback((key: Exclude<FinderStepKey, "experiences">, value: string) => {
+        setAnswers((current) => ({ ...current, [key]: value } as FinderAnswers));
+        captureFinderEvent("gift_finder_answered", { finder_session_id: finderSessionIdRef.current, step_key: key, answer_value: value });
+    }, []);
 
-        // Tetap beri satu pilihan saat kombinasi format dan budget belum memiliki produk persis.
-        // Memoria adalah fallback digital premium; The Gift Box adalah satu-satunya pilihan fisik.
-        const fallbackId = format === "Fisik" ? "the-gift-box" : "loves";
-        const fallback = rankedItems.find(({ item }) => item.id === fallbackId);
-        return fallback ? [fallback] : rankedItems.slice(0, 1);
+    const selectExperience = useCallback((value: FinderExperience) => {
+        setAnswers((current) => {
+            const selected = current.experiences.includes(value);
+            const experiences = selected ? current.experiences.filter((entry) => entry !== value) : current.experiences.length < 2 ? [...current.experiences, value] : current.experiences;
+            captureFinderEvent("gift_finder_answered", { finder_session_id: finderSessionIdRef.current, step_key: "experiences", answer_value: experiences });
+            return { ...current, experiences };
+        });
+    }, []);
+
+    const continueWizard = useCallback(() => {
+        if (safeCurrentStep < steps.length - 1) {
+            setCurrentStep((step) => step + 1);
+            return;
+        }
+        const completedAnswers = steps.includes("material") ? answers : { ...answers, material: null };
+        setAnswers(completedAnswers);
+        setShowResults(true);
+        setBudget("all");
+        resultSignatureRef.current = "";
+        captureFinderEvent("gift_finder_completed", { finder_session_id: finderSessionIdRef.current, total_steps: steps.length, ...answerSnapshot(completedAnswers) });
+    }, [answers, safeCurrentStep, steps]);
+
+    const handleBudgetChange = useCallback((nextBudget: FinderBudget) => {
+        setBudget(nextBudget);
+        resultSignatureRef.current = "";
+        captureFinderEvent("gift_finder_budget_filtered", { ...analyticsBase(), previous_budget: budget, budget_filter: nextBudget });
+    }, [analyticsBase, budget]);
+
+    const resolveDemoProductId = useCallback((recommendation: FinderRecommendation): DemoProductId | null => {
+        if (recommendation.item.id === "the-gift-box") {
+            const insert = getRecommendedPhysicalInsert(answers);
+            return DEMO_PRODUCT_IDS.has(insert as DemoProductId) ? insert as DemoProductId : "letter";
+        }
+        return DEMO_PRODUCT_IDS.has(recommendation.item.id as DemoProductId) ? recommendation.item.id as DemoProductId : null;
     }, [answers]);
 
-    const selectAnswer = (value: string) => setAnswers((current) => ({ ...current, [question.key]: value } as Answers));
-    const continueWizard = () => {
-        if (!selectedValue) return;
-        if (currentStep === QUESTIONS.length - 1) setShowResults(true);
-        else setCurrentStep((step) => step + 1);
-    };
-    const editAnswers = () => { setShowResults(false); setCurrentStep(0); };
-    const resetWizard = () => { setAnswers(INITIAL_ANSWERS); setCurrentStep(0); setShowResults(false); };
-    const complete = answers.occasion && answers.recipient && answers.format && answers.budget;
+    const handleDemo = useCallback((recommendation: FinderRecommendation, rank: number) => {
+        const productId = resolveDemoProductId(recommendation);
+        if (!productId) return;
+        const config = STOREFRONT_DEMO_CONFIGS[productId];
+        captureFinderEvent("gift_finder_demo_clicked", { ...analyticsBase(), product_id: productId, displayed_product_id: recommendation.item.id, recommendation_rank: rank, recommendation_role: recommendation.role });
+        captureFinderEvent("product_demo_opened", { product_id: productId, demo_variant: config.initialVariantId, source: "gift_finder", recommendation_rank: rank });
+        if (config.opensInNewTab) {
+            window.open(config.variants[0].src, "_blank", "noopener,noreferrer");
+            return;
+        }
+        setActiveDemo({ productId, recommendationRank: rank, initialVariantId: config.initialVariantId, switchCount: 0, openedAt: performance.now() });
+    }, [analyticsBase, resolveDemoProductId]);
+
+    const cartItemFor = useCallback((item: StorefrontCatalogItem) => ({
+        id: item.id,
+        title: item.title,
+        numericPrice: item.numericPrice,
+        oldNumericPrice: item.oldPrice ? Number(item.oldPrice.replace(/\D/g, "")) : undefined,
+        themeColor: item.titleColor,
+    }), []);
+
+    const orderRecommendation = useCallback((recommendation: FinderRecommendation, rank: number) => {
+        const displayedItem = recommendation.item;
+        captureFinderEvent("gift_finder_order_clicked", { ...analyticsBase(), product_id: displayedItem.id, recommendation_rank: rank, recommendation_role: recommendation.role, source: "gift_finder" });
+        if (answers.format === "physical" || displayedItem.id === "the-gift-box" || recommendation.physicalInsert) {
+            const insertId = displayedItem.id === "the-gift-box" ? getRecommendedPhysicalInsert(answers) : displayedItem.id;
+            const digital = ["loves", "birthday", "letter", "voices"].includes(insertId) ? (insertId === "loves" ? "memoria" : insertId) : "letter";
+            router.push(`/catalog/the-gift-box?digital=${digital}`);
+            return;
+        }
+        const item = cartItemFor(displayedItem);
+        if (THREE_SLOT_IDS.has(item.id)) {
+            setSlotPickerConfig({
+                productId: item.id, productTitle: item.title, themeColor: item.themeColor,
+                singlePriceText: "Rp 20.000", singleOldPriceText: "Rp 30.000", threeSlotPriceText: "Rp 25.000",
+                onSelectSingle: () => addToCart(item),
+                onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Gift)`, numericPrice: 25000, themeColor: item.themeColor, isThreeSlot: true, slotCount: 3 }),
+            });
+            return;
+        }
+        addToCart(item);
+    }, [addToCart, analyticsBase, answers, cartItemFor, router]);
+
+    const closeDemo = useCallback((reason: DemoCloseReason) => {
+        setActiveDemo((current) => {
+            if (current) {
+                captureFinderEvent("product_demo_closed", { product_id: current.productId, demo_variant: current.initialVariantId, source: "gift_finder", recommendation_rank: current.recommendationRank, variant_switch_count: current.switchCount, close_method: reason, open_duration_ms: Math.max(0, Math.round(performance.now() - current.openedAt)) });
+            }
+            return null;
+        });
+    }, []);
+
+    const orderFromDemo = useCallback(() => {
+        if (!activeDemo) return;
+        const recommendation = recommendations.find((entry) => resolveDemoProductId(entry) === activeDemo.productId) ?? recommendations[0];
+        if (!recommendation) return;
+        captureFinderEvent("product_demo_cta_clicked", { product_id: activeDemo.productId, demo_variant: activeDemo.initialVariantId, source: "gift_finder", recommendation_rank: activeDemo.recommendationRank, destination: answers.format === "physical" ? "gift_box" : "cart" });
+        orderRecommendation(recommendation, activeDemo.recommendationRank);
+    }, [activeDemo, answers.format, orderRecommendation, recommendations, resolveDemoProductId]);
+
+    const activeConfig = activeDemo ? STOREFRONT_DEMO_CONFIGS[activeDemo.productId] : null;
 
     return (
         <main className={styles.page}>
-            <Navbar /><div className={styles.ambient} aria-hidden="true" />
+            <Navbar />
+            <div className={styles.ambient} aria-hidden="true" />
             <section className={styles.shell}>
                 <header className={styles.intro}>
-                    <span>Gift Finder</span>
-                    <h1 ref={focusTargetRef} tabIndex={-1}>{showResults ? "Kurasi kecil, dipilih khusus untukmu." : "Temukan kado yang terasa paling tepat."}</h1>
-                    <p>{showResults ? "Pilihan yang lebih sedikit, dengan alasan yang lebih jelas." : "Empat pilihan singkat untuk menemukan koleksi yang paling sesuai."}</p>
+                    <span>Bantu Pilih Kado</span>
+                    <h1 ref={focusTargetRef} tabIndex={-1}>{showResults ? "Pilihan yang terasa lebih dekat dengan keinginanmu." : "Ceritakan sedikit tentang kado yang kamu bayangkan."}</h1>
+                    <p>{showResults ? "Kami merangkumnya menjadi beberapa pilihan dengan alasan yang jelas." : "Empat sampai lima pertanyaan singkat untuk menemukan pengalaman yang paling sesuai."}</p>
                 </header>
 
                 {!showResults ? (
-                    <section className={styles.wizardPanel} aria-label="Gift Finder">
-                        <span className={styles.panelAccent} aria-hidden="true" /><WizardProgress currentStep={currentStep} />
-                        <QuestionStep key={question.key} question={question} selectedValue={selectedValue} currentStep={currentStep} onSelect={selectAnswer} onBack={() => setCurrentStep((step) => Math.max(0, step - 1))} onContinue={continueWizard} />
+                    <section className={styles.wizardPanel} aria-label="Bantu Pilih Kado">
+                        <span className={styles.panelAccent} aria-hidden="true" />
+                        <WizardProgress currentStep={safeCurrentStep} totalSteps={steps.length} />
+                        <QuestionStep key={stepKey} stepKey={stepKey} answers={answers} currentStep={safeCurrentStep} totalSteps={steps.length} onSingleSelect={selectSingle} onExperienceSelect={selectExperience} onBack={() => setCurrentStep((step) => Math.max(0, step - 1))} onContinue={continueWizard} />
                     </section>
-                ) : complete ? (
-                    <RecommendationResults recommendations={recommendations} occasion={answers.occasion!} recipient={answers.recipient!} answers={answers} onEdit={editAnswers} onReset={resetWizard} />
-                ) : null}
+                ) : (
+                    <ResultView answers={answers} budget={budget} recommendations={recommendations} exactBudgetMatch={exactBudgetMatch} onBudgetChange={handleBudgetChange} onDemo={handleDemo} onOrder={orderRecommendation} onEdit={() => { setShowResults(false); setCurrentStep(0); }} onReset={() => { setAnswers(INITIAL_FINDER_ANSWERS); setCurrentStep(0); setShowResults(false); setBudget("all"); resultSignatureRef.current = ""; }} />
+                )}
             </section>
+
+            {activeDemo && activeConfig && (
+                <DemoPreviewModal
+                    isOpen
+                    src={activeConfig.variants[0].src}
+                    title={activeConfig.title}
+                    subtitle={activeConfig.subtitle}
+                    productName={activeConfig.productName}
+                    price={activeConfig.price}
+                    theme={activeConfig.theme}
+                    variants={activeConfig.variants}
+                    initialVariantId={activeDemo.initialVariantId}
+                    themeSwatches={activeConfig.themeSwatches}
+                    onClose={closeDemo}
+                    onOrder={orderFromDemo}
+                    onLoaded={(loadTimeMs) => captureFinderEvent("product_demo_loaded", { product_id: activeDemo.productId, source: "gift_finder", demo_variant: activeDemo.initialVariantId, load_time_ms: loadTimeMs, recommendation_rank: activeDemo.recommendationRank })}
+                    onVariantChange={(previous: DemoPreviewVariant, next: DemoPreviewVariant) => setActiveDemo((current) => {
+                        if (!current) return current;
+                        const switchCount = current.switchCount + 1;
+                        captureFinderEvent("product_demo_variant_changed", { product_id: current.productId, source: "gift_finder", from_variant: previous.id, to_variant: next.id, switch_index: switchCount });
+                        return { ...current, initialVariantId: next.id, switchCount };
+                    })}
+                />
+            )}
+
+            {slotPickerConfig && <SlotPickerModal config={slotPickerConfig} onClose={() => setSlotPickerConfig(null)} />}
         </main>
     );
 }

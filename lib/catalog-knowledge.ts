@@ -259,6 +259,39 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
             }
         ]
     },
+    "storybook-edition": {
+        id: "storybook-edition",
+        name: "Storybook Edition",
+        type: "digital_interactive",
+        singlePrice: "Rp 25.000",
+        numericPrice: 25000,
+        badge: "New Release",
+        tagline: "Kado digital berbentuk buku cerita komik yang dapat dijelajahi melalui lima room personal.",
+        coreFeatures: [
+            "Lima room personal: Why You Matter, Memory Archive, Atlas of Us, Our Soundtrack, dan A Letter",
+            "Finale personal serta menu chapter interaktif",
+            "Studio mandiri dengan autosave, crop media, dan live preview",
+            "Pilihan tema Spider-Man dan Batman"
+        ],
+        digitalExperience: {
+            interactiveMechanism: "Penerima membuka kado, memilih chapter, lalu menjelajahi alasan personal, galeri kenangan, peta lokasi, soundtrack, surat, dan finale.",
+            themesAvailable: ["Spider-Man Comic", "Batman Gotham Noir"],
+            customizationOptions: ["Judul dan pesan", "Foto/video", "Lokasi Atlas", "Artwork dan quote lagu", "Urutan chapter", "Finale"]
+        },
+        targetOccasions: ["Anniversary", "Birthday", "LDR", "Any Occasion"],
+        emotionalHooks: [
+            "Satu cerita utuh yang menghubungkan foto, tempat, lagu, dan surat personal.",
+            "Penerima bebas membuka chapter dan berinteraksi seperti membaca komik digital buatan khusus."
+        ],
+        faqs: [
+            { q: "Kapan saya menerima akses Studio?", a: "Setelah pembayaran terkonfirmasi, link Studio personal dikirim melalui email dan tersedia di halaman status pesanan." },
+            { q: "Apakah tema bisa diganti?", a: "Bisa. Kamu dapat memilih tema Spider-Man atau Batman di Studio tanpa menghapus tulisan dan media yang sudah diisi." },
+            { q: "Media apa yang didukung?", a: "Studio mendukung foto, video, artwork lagu, audio MP3, dan lokasi peta sesuai batas ukuran yang ditampilkan pada setiap form." },
+            { q: "Apakah perubahan tersimpan otomatis?", a: "Ya. Studio menyimpan draft otomatis dan live preview menampilkan perubahan terbaru." },
+            { q: "Bagaimana penerima membuka kadonya?", a: "Setelah kamu publish, Studio menyediakan link gift dan QR yang dapat langsung dibagikan." }
+        ]
+    },
+
     "invitation-edition": {
         id: "invitation-edition",
         name: "Invitation Edition",

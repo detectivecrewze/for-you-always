@@ -124,7 +124,7 @@ export async function GET(req: NextRequest) {
             tracking_link: data.link,
             weight: data.weight
         });
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("Error fetching Biteship tracking:", err);
         return NextResponse.json({
             success: false,

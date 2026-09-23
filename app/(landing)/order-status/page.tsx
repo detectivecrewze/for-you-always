@@ -15,11 +15,33 @@ const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color:
     mixtape:    { name: "Mixtape Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>, color: "#6a8a9a", desc: "Kaset retro dengan playlist personal" },
     invitation: { name: "Invitation Edition",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>, color: "#9a8a6a", desc: "Tiket undangan kencan digital" },
     loves:      { name: "Memoria Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>, color: "#8b2252", desc: "Kado premium penuh kenangan" },
+    storybook:  { name: "Storybook Edition",   icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg>, color: "#8b1d2c", desc: "Buku cerita komik dengan lima room personal" },
     birthday:   { name: "Birthday Scrapbook",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2"/><path d="M12 8v2"/><path d="M17 8v2"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>, color: "#bf7b19", desc: "Scrapbook ulang tahun interaktif" },
 };
 
 
 type MagicLinks = string | Record<string, string>;
+
+interface TrackingHistoryItem {
+    updated_at?: string;
+    status?: string;
+    note?: string;
+}
+
+interface LiveTrackingData {
+    status_color?: string;
+    status_display?: string;
+    status_desc?: string;
+    tracking_link?: string;
+    history?: TrackingHistoryItem[];
+}
+
+interface LiveTrackingState {
+    loading: boolean;
+    data: LiveTrackingData | null;
+    error: string | null;
+    showHistory: boolean;
+}
 
 function parseMagicLinks(raw: string): MagicLinks {
     try {
@@ -54,10 +76,11 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
 
     const isLoves = baseKey === "loves";
     const isBirthday = baseKey === "birthday";
-    if (isBirthday) {
+    const isStorybook = baseKey === "storybook";
+    if (isBirthday || isStorybook) {
         token = "";
     }
-    const label = isLoves ? "Isi Form Kreasi" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
+    const label = isLoves ? "Isi Form Kreasi" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -163,12 +186,7 @@ export default function OrderStatusPage() {
     const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
     const [courier, setCourier] = useState<string | null>(null);
     const [copiedResi, setCopiedResi] = useState(false);
-    const [liveTracking, setLiveTracking] = useState<{
-        loading: boolean;
-        data: any;
-        error: string | null;
-        showHistory: boolean;
-    } | null>(null);
+    const [liveTracking, setLiveTracking] = useState<LiveTrackingState | null>(null);
 
     const handleFetchLiveTracking = async (waybill: string, courierName: string) => {
         if (liveTracking?.data) {
@@ -245,12 +263,11 @@ export default function OrderStatusPage() {
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get("order_id") || urlParams.get("invoice_number");
 
-        if (!id) {
-            setStatus("search");
-            return;
-        }
-
-        fetchOrder(id);
+        const timer = window.setTimeout(() => {
+            if (!id) setStatus("search");
+            else void fetchOrder(id);
+        }, 0);
+        return () => window.clearTimeout(timer);
     }, []);
 
     const handleSearchSubmit = (e: React.FormEvent) => {
@@ -624,7 +641,7 @@ export default function OrderStatusPage() {
                                                                             {liveTracking.data.history && liveTracking.data.history.length > 0 ? (
                                                                                 <div style={{ display: "flex", flexDirection: "column", gap: 10, position: "relative", paddingLeft: 12 }}>
                                                                                     <div style={{ position: "absolute", left: 3, top: 4, bottom: 4, width: 2, background: "#ebdcd0" }} />
-                                                                                    {liveTracking.data.history.map((item: any, idx: number) => {
+                                                                                    {liveTracking.data.history.map((item: TrackingHistoryItem, idx: number) => {
                                                                                         const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) : "-";
                                                                                         return (
                                                                                             <div key={idx} style={{ position: "relative" }}>

@@ -8,6 +8,7 @@ import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/De
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
+import { LETTER_DEMO_VARIANTS } from "@/lib/storefront-demo-config";
 
 interface ActiveDemo {
     url: string;
@@ -17,12 +18,6 @@ interface ActiveDemo {
     switchCount: number;
 }
 
-const LETTER_DEMO_VARIANTS = [
-    { id: "classic-wax", label: "Classic Wax Seal", src: "https://letter.for-you-always.my.id/letter-test", subtitle: "Surat klasik dengan amplop dan segel wax" },
-    { id: "vintage-airmail", label: "Vintage Airmail", src: "https://letter.for-you-always.my.id/airmail/letter-test", subtitle: "Surat pos udara bernuansa vintage" },
-    { id: "ribbon-seal", label: "Ribbon & Seal", src: "https://letter.for-you-always.my.id/ribbon/letter-test", subtitle: "Surat elegan dengan pita dan segel" },
-    { id: "vintage", label: "Vintage", src: "https://letter.for-you-always.my.id/vintage/letter-test", subtitle: "Surat vintage dengan amplop interaktif" },
-] as const satisfies readonly DemoPreviewVariant[];
 
 const LETTER_CART_ITEM = {
     id: "letter",

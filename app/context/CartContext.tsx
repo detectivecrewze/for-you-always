@@ -87,9 +87,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             invitation: "https://cdn.for-you-always.my.id/1782232677562-8sosah.webp",
             loves: "/assets/opening_gate.png",
             birthday: "/assets/snoopy-features/main-card-updatesnoopy.webp",
+            storybook: "/assets/storybook-features/spiderman-box.jpg",
         };
 
-        if (item.id === 'birthday' && itemsRef.current.some(existing => existing.id === 'birthday')) {
+        if (['birthday', 'storybook'].includes(item.id) && itemsRef.current.some(existing => existing.id === item.id)) {
             setIsDrawerOpen(true);
             return;
         }

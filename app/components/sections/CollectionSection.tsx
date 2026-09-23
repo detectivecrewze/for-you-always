@@ -130,6 +130,18 @@ export default function CollectionSection() {
                                 href: "/catalog/birthday",
                                 onAddToCart: () => addToCart({ id: "birthday", title: "Birthday Scrapbook", numericPrice: 25000, oldNumericPrice: 35000, themeColor: "#bf7b19" })
                             },
+                            {
+                                badgeText: "New Release",
+                                badgeColor: "#8b1d2c",
+                                badgeVariant: "solid",
+                                imageSrc: "/assets/storybook-features/spiderman-box.jpg",
+                                price: "Rp 25.000",
+                                title: "Storybook Edition",
+                                titleColor: "#8b1d2c",
+                                description: "Buku cerita komik digital dengan lima room personal, peta kenangan, soundtrack, surat, dan finale.",
+                                href: "/catalog/storybook",
+                                onAddToCart: () => addToCart({ id: "storybook", title: "Storybook Edition", numericPrice: 25000, themeColor: "#8b1d2c" })
+                            },
 
                             {
                                 badgeText: "Popular",

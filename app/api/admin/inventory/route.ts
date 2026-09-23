@@ -7,6 +7,16 @@ const CF_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 const CF_D1_DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID;
 const CF_API_KEY = process.env.CLOUDFLARE_D1_API_KEY;
 
+interface InventoryRecord {
+    id: string;
+    product_id: string;
+    product_name: string;
+    stock: number;
+    low_stock_threshold: number;
+    is_active: number;
+    updated_at?: string;
+}
+
 export async function GET(req: NextRequest) {
     const sessionCookie = req.cookies.get(COOKIE_NAME);
     if (!sessionCookie || sessionCookie.value !== "authenticated_session_valid") {
@@ -44,7 +54,7 @@ export async function GET(req: NextRequest) {
 
             if (queryRes.ok) {
                 const data = await queryRes.json();
-                let results: any[] = [];
+                let results: InventoryRecord[] = [];
                 if (Array.isArray(data.result)) {
                     for (const r of data.result) {
                         if (Array.isArray(r.results) && r.results.length > 0) {

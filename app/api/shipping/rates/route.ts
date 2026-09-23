@@ -19,6 +19,19 @@ export interface CourierOption {
     description?: string;
 }
 
+interface BiteshipPricing {
+    type?: string;
+    service_type?: string;
+    courier_service_code?: string;
+    courier_service_name?: string;
+    courier_name?: string;
+    courier_code?: string;
+    price: number;
+    duration?: string;
+    etd?: string;
+    description?: string;
+}
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
@@ -76,7 +89,7 @@ export async function POST(req: NextRequest) {
 
                 if (biteshipRes.ok && biteshipData.success && Array.isArray(biteshipData.pricing)) {
                     const mappedOptions: CourierOption[] = biteshipData.pricing
-                        .filter((p: any) => {
+                        .filter((p: BiteshipPricing) => {
                             const combined = `${p.type || ""} ${p.service_type || ""} ${p.courier_service_code || ""} ${p.courier_service_name || ""} ${p.courier_name || ""} ${p.courier_code || ""}`.toLowerCase();
                             // Filter out SiCepat, cargo, heavy trucking, and same-day/instant
                             if (
@@ -95,7 +108,7 @@ export async function POST(req: NextRequest) {
                             }
                             return true;
                         })
-                        .map((p: any) => {
+                        .map((p: BiteshipPricing) => {
                             const typeLower = (p.type || p.service_type || p.courier_service_code || "").toLowerCase();
                             const serviceNameLower = (p.courier_service_name || "").toLowerCase();
 
@@ -113,7 +126,7 @@ export async function POST(req: NextRequest) {
                             }
 
                             const courier = p.courier_name || p.courier_code?.toUpperCase() || "Ekspedisi";
-                            const service = p.courier_service_name || p.type;
+                            const service = p.courier_service_name || p.type || p.service_type || "Reguler";
                             
                             // Clean professional name: e.g. "JNE — Reguler" or "J&T — EZ"
                             const cleanDisplayName = service.toLowerCase().includes(courier.toLowerCase())
@@ -122,8 +135,8 @@ export async function POST(req: NextRequest) {
 
                             return {
                                 courier_name: courier,
-                                courier_code: p.courier_code,
-                                service_type: p.courier_service_code || p.type,
+                                courier_code: p.courier_code || "",
+                                service_type: p.courier_service_code || p.type || p.service_type || "regular",
                                 service_name: cleanDisplayName,
                                 category,
                                 price: p.price,

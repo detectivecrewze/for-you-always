@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import "./voices.css";
 
 /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
@@ -249,7 +250,7 @@ function FeatureShowcase() {
                         <video
                             ref={(el) => {
                                 // Assign both React ref and do the forced defaults
-                                (videoRef as any).current = el;
+                                videoRef.current = el;
                                 if (el) {
                                     el.defaultMuted = true;
                                     el.muted = true;
@@ -1915,7 +1916,7 @@ export default function VoicesLandingPage() {
                     textAlign: "center",
                 }}
             >
-                <a
+                <Link
                     href="/"
                     style={{
                         display: "inline-flex",
@@ -1954,7 +1955,7 @@ export default function VoicesLandingPage() {
                     >
                         For you, Always.
                     </span>
-                </a>
+                </Link>
 
                 <p
                     style={{

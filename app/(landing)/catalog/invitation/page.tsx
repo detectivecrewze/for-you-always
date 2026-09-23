@@ -8,6 +8,7 @@ import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/De
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
+import { INVITATION_DEMO_VARIANTS } from "@/lib/storefront-demo-config";
 
 interface ActiveDemo {
     url: string;
@@ -17,10 +18,6 @@ interface ActiveDemo {
     switchCount: number;
 }
 
-const INVITATION_DEMO_VARIANTS = [
-    { id: "invitation-date", label: "Invitation Date", src: "https://invitation.for-you-always.my.id/WRcVb-mY0f", subtitle: "Undangan kencan dengan date picker dan dress code" },
-    { id: "rundown-date", label: "Rundown Date", src: "https://invitation.for-you-always.my.id/rundown-tqthew7", subtitle: "Susunan acara kencan yang rapi dan interaktif" },
-] as const satisfies readonly DemoPreviewVariant[];
 
 const INVITATION_CART_ITEM = {
     id: "invitation",

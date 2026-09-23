@@ -168,6 +168,13 @@ type GiftBoxClientProps = {
 
 export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
     const [selectedDigitalExperience, setSelectedDigitalExperience] = useState<"memoria" | "birthday" | "letter" | "voices">("letter");
+
+    useEffect(() => {
+        const requestedDigital = new URLSearchParams(window.location.search).get("digital");
+        if (requestedDigital === "memoria" || requestedDigital === "birthday" || requestedDigital === "letter" || requestedDigital === "voices") {
+            setSelectedDigitalExperience(requestedDigital);
+        }
+    }, []);
     const [selectedBoxType, setSelectedBoxType] = useState<"kraft" | "hardbox">("kraft");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);

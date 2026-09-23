@@ -8,6 +8,7 @@ import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/De
 import { useCart } from "../../../context/CartContext";
 import Link from "next/link";
 import { trackViewContent } from "@/lib/pixel";
+import { VOICES_DEMO_VARIANTS } from "@/lib/storefront-demo-config";
 
 interface ActiveDemo {
     url: string;
@@ -17,10 +18,6 @@ interface ActiveDemo {
     switchCount: number;
 }
 
-const VOICES_DEMO_VARIANTS = [
-    { id: "music-box", label: "Music Box", src: "https://voice.for-you-always.my.id/gift/for-nadin", subtitle: "Rekaman suara dalam nuansa kotak musik klasik" },
-    { id: "camera", label: "Camera", src: "https://voice.for-you-always.my.id/camera/silver/for-nadin", subtitle: "Rekaman suara dengan tampilan kamera retro" },
-] as const satisfies readonly DemoPreviewVariant[];
 
 const VOICES_CART_ITEM = {
     id: "voices",

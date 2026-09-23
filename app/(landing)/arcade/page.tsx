@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Animated Section (Intersection Observer)
@@ -1311,7 +1312,7 @@ export default function ArcadeLandingPage() {
                     zIndex: 1,
                 }}
             >
-                <a
+                <Link
                     href="/"
                     style={{
                         display: "inline-flex",
@@ -1351,7 +1352,7 @@ export default function ArcadeLandingPage() {
                     >
                         For you, Always.
                     </span>
-                </a>
+                </Link>
 
                 <p
                     style={{
