@@ -134,6 +134,7 @@ export default function InvitationCatalogPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
+                            productId="invitation"
                             label="Invitation Edition"
                             title="Undangan Kencan Interaktif"
                             description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih paket reguler untuk 1 undangan atau paket 3 Gift untuk membuat 3 undangan berbeda."

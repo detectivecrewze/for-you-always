@@ -30,6 +30,7 @@ export default function ProductCatalogPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
+                            productId="arcade"
                             label="Arcade Edition"
                             title="10 Rooms of Memories"
                             description="Bawa dia ke dalam petualangan menyusuri 10 ruangan interaktif yang menceritakan perjalanan hubungan kalian."

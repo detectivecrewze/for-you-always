@@ -5,10 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import type { SlotPickerConfig } from "./SlotPickerModal";
+import SalesCountBadge from "./SalesCountBadge";
 
 const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
 
 interface LoopCard {
+    productId?: string;
     badgeText?: string;
     badgeColor?: string;
     badgeVariant?: "solid" | "soft";
@@ -245,6 +247,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
                 }}>
                     {card.title}
                 </h3>
+                <SalesCountBadge productId={card.productId} color={card.titleColor || "#8a7060"} compact />
                 <p style={{
                     fontFamily: "var(--font-sans)",
                     fontSize: 13, fontWeight: 400,

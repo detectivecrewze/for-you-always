@@ -12,7 +12,7 @@ interface UnboxCheckoutModalProps {
 
 const DIGITAL_OPTIONS = [
     { id: "loves", title: "Memoria", subtitle: "Kisah Sinematik & Galeri", color: "#581824", badge: "Signature", price: 150000, oldPrice: 200000 },
-    { id: "birthday", title: "Birthday Scrapbook", subtitle: "Scrapbook Komik & Galeri", color: "#bf7b19", badge: "New Release", price: 135000, oldPrice: 180000 },
+    { id: "birthday", title: "Birthday Scrapbook", subtitle: "Scrapbook Komik & Galeri", color: "#bf7b19", badge: "Birthday Pick", price: 135000, oldPrice: 180000 },
     { id: "letter", title: "Letter Edition", subtitle: "Surat Digital & Typewriter", color: "#a67c52", badge: "Best Seller", price: 135000, oldPrice: 180000 },
     { id: "voices", title: "Voices Gift", subtitle: "Pesan Suara & Galeri Foto", color: "#e91e63", badge: "", price: 135000, oldPrice: 180000 },
 ];

@@ -4,6 +4,7 @@ import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DiscountPrice from "./DiscountPrice";
+import SalesCountBadge from "./SalesCountBadge";
 
 interface CompactProductCardProps {
     badgeText?: string;
@@ -15,7 +16,7 @@ interface CompactProductCardProps {
     oldPrice?: string;
     newPrice: string;
     hashtag?: string;
-    soldCount?: string;
+    productId?: string;
     href: string;
     features?: string[];
     occasions?: string[];
@@ -35,7 +36,7 @@ export default function CompactProductCard({
     oldPrice,
     newPrice,
     hashtag,
-    soldCount,
+    productId,
     href,
     features,
     occasions,
@@ -269,6 +270,7 @@ export default function CompactProductCard({
                                 </>
                             ) : title}
                         </h3>
+                        <SalesCountBadge productId={productId} color={titleColor} compact />
                         
                         {/* Occasions Tags */}
                         {occasions && occasions.length > 0 && (

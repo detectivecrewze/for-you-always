@@ -198,9 +198,10 @@ export default function BirthdayCatalogPage() {
                         </div>
 
                         <LandscapeProductCard
+                            productId="birthday"
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    Birthday Scrapbook <span style={{ opacity: 0.5 }}>•</span> New Release
+                                    Birthday Scrapbook <span style={{ opacity: 0.5 }}>•</span> Birthday Pick
                                 </div>
                             }
                             title="Birthday Scrapbook"

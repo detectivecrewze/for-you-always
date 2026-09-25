@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { CartProvider, useCart } from "../context/CartContext";
+import { SalesCountsProvider } from "../context/SalesCountsContext";
 
 const CartDrawer = dynamic(() => import("./CartDrawer"), { ssr: false });
 const CartToast = dynamic(() => import("./CartToast"), { ssr: false });
@@ -28,8 +29,10 @@ function LandingCartUi() {
 export default function LandingClientShell({ children }: { children: React.ReactNode }) {
     return (
         <CartProvider>
-            {children}
-            <LandingCartUi />
+            <SalesCountsProvider>
+                {children}
+                <LandingCartUi />
+            </SalesCountsProvider>
         </CartProvider>
     );
 }

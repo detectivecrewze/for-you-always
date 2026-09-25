@@ -132,6 +132,7 @@ export default function CatalogPage() {
                         <AnimatedSection key={item.id} delay={0} priority={idx === 0} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
                             <CompactProductCard
                                 {...item}
+                                productId={item.id}
                                 slotBadgeText={slotText}
                                 priority={idx === 0}
                                 onAddToCart={() => handlePesan(item)}

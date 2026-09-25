@@ -299,6 +299,7 @@ export default function ProductCatalogPage() {
                         </div>
 
                         <LandscapeProductCard
+                            productId="loves"
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                     Done For You <span style={{ opacity: 0.5 }}>•</span> Premium

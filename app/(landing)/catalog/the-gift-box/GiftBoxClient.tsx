@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import Navbar from "../../../components/Navbar";
+import SalesCountBadge from "../../../components/SalesCountBadge";
 
 import { trackViewContent } from "@/lib/pixel";
 import type { DemoCloseReason, DemoModalTheme } from "../../../components/DemoPreviewModal";
@@ -747,6 +748,7 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                             </span>
                         </div>
 
+
                         {/* H1 HEADLINE */}
                         <h1 className="gift-box-hero-title" style={{
                             fontFamily: "var(--font-display, Cormorant Garamond, Georgia, serif)",
@@ -804,6 +806,8 @@ export default function TheGiftBoxPage({ children }: GiftBoxClientProps) {
                                     </span>
                                 )}
                             </div>
+
+                            <SalesCountBadge productId="the-gift-box" color="#8a5f72" />
 
                             {/* Row 2: Meta info — badge + stock */}
                             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

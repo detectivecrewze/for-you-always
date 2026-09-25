@@ -98,6 +98,7 @@ export default function ProductCatalogPage() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <LandscapeProductCard
+                            productId="retro"
                             label={
                                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                     Retro Edition

@@ -264,6 +264,7 @@ export default function StorybookCatalogPage() {
       <section style={{ position: "relative", zIndex: 1, padding: "0 0 120px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
           <LandscapeProductCard
+                            productId="storybook"
             label={
               <span>
                 Storybook Edition <span style={{ opacity: 0.55 }}>•</span> New Release

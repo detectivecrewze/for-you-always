@@ -5,6 +5,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import type { SlotPickerConfig } from "./SlotPickerModal";
 import DiscountPrice from "./DiscountPrice";
+import SalesCountBadge from "./SalesCountBadge";
 
 const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
 
@@ -66,6 +67,7 @@ export function AnimatedSection({
    Landscape Product Card — New alternating design
    ───────────────────────────────────────────── */
 export function LandscapeProductCard({
+    productId,
     label,
     title,
     description,
@@ -91,6 +93,7 @@ export function LandscapeProductCard({
     onDemoOpen,
     priority = false,
 }: {
+    productId: string;
     label: React.ReactNode;
     title: string;
     description: string;
@@ -1064,6 +1067,8 @@ export function LandscapeProductCard({
                                 : price
                             }
                         </div>
+
+                        <SalesCountBadge productId={productId} color={activeAccent} />
 
                         {/* Add to Cart Button */}
                         {onAddToCart && (
