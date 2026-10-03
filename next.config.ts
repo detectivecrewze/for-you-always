@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Emergency fallback for the Vercel Hobby transformation quota. Keep the
+    // Next.js Image component's layout and lazy-loading behavior while serving
+    // each source file directly instead of routing it through /_next/image.
+    unoptimized: true,
     qualities: [75, 90],
     remotePatterns: [
       {
