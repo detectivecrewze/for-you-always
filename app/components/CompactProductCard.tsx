@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import DiscountPrice from "./DiscountPrice";
 import SalesCountBadge from "./SalesCountBadge";
 import ProductFeatureMotionIcon from "./ProductFeatureMotionIcon";
 import styles from "./CompactProductCard.module.css";
@@ -47,7 +46,6 @@ export default function CompactProductCard({
     imageSrc,
     title,
     titleColor = "#382a24",
-    oldPrice,
     newPrice,
     productId,
     href,
@@ -139,30 +137,6 @@ export default function CompactProductCard({
                         )}
                     </div>
 
-                    <div className={styles.priceColumn}>
-                        {oldPrice ? (
-                            <div className={styles.priceBadge}>
-                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c0392b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                    <line x1="7" y1="7" x2="7.01" y2="7" />
-                                </svg>
-                                <DiscountPrice oldPrice={oldPrice} newPrice={newPrice} size="sm" />
-                            </div>
-                        ) : (
-                            <div className={styles.regularPrice}>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#cdab8f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                    <line x1="7" y1="7" x2="7.01" y2="7" />
-                                </svg>
-                                <span>{newPrice.includes("Rp") ? <><span className={styles.currency}>Rp</span>{newPrice.replace("Rp ", "")}</> : newPrice}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className={styles.mobilePrice} aria-label={`Harga ${newPrice}${oldPrice ? `, sebelumnya ${oldPrice}` : ""}`}>
-                        <strong>{newPrice}</strong>
-                        {oldPrice && <del>{oldPrice}</del>}
-                    </div>
                 </div>
 
                 {features && features.length > 0 && (
@@ -182,15 +156,26 @@ export default function CompactProductCard({
                     </div>
                 )}
 
-                <div className={styles.desktopActions}>
-                    <Link href={href} prefetch onClick={() => setIsNavigating(true)} className={styles.secondaryAction} aria-label={`Lihat detail ${title}`}>
-                        {isNavigating ? <><span className={styles.spinner} aria-hidden="true" /> Memuat...</> : <><ExternalIcon /> Lihat</>}
-                    </Link>
-                    {onAddToCart && (
-                        <button type="button" onClick={onAddToCart} className={styles.primaryAction} aria-label={`Pesan ${title}`}>
-                            <CartIcon /> Pesan
-                        </button>
-                    )}
+                <div className={styles.purchaseBlock}>
+                    <div className={styles.purchaseRail} aria-label={`Harga ${newPrice}`}>
+                        <span className={styles.purchaseLabel}>Harga</span>
+                        <div className={styles.priceColumn}>
+                            <div className={styles.regularPrice}>
+                                <span>{newPrice}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.desktopActions}>
+                        <Link href={href} prefetch onClick={() => setIsNavigating(true)} className={styles.secondaryAction} aria-label={`Lihat detail ${title}`}>
+                            {isNavigating ? <><span className={styles.spinner} aria-hidden="true" /> Memuat...</> : <><ExternalIcon /> Lihat</>}
+                        </Link>
+                        {onAddToCart && (
+                            <button type="button" onClick={onAddToCart} className={styles.primaryAction} aria-label={`Pesan ${title}`}>
+                                <CartIcon /> Pesan
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className={styles.mobileActions}>

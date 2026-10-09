@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Cormorant_Garamond } from "next/font/google";
+import { DM_Sans, Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import MetaPixelPageView from "./components/MetaPixelPageView";
@@ -16,6 +16,12 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   weight: ["400", "600"],
   style: ["normal", "italic"],
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
+  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -70,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${dmSans.variable} ${cormorant.variable}`}>
+    <html lang="id" className={`${dmSans.variable} ${cormorant.variable} ${plusJakarta.variable}`}>
       <head>
         <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
         <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
