@@ -1,0 +1,678 @@
+.card {
+  display: flex;
+  height: 100%;
+  padding: 12px;
+  flex-direction: column;
+  border-radius: 1.6rem;
+  background: #fff;
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(205, 171, 143, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.14), 0 0 0 1px rgba(205, 171, 143, 0.18);
+  }
+
+  .imageLink:hover .image {
+    transform: scale(1.05);
+  }
+}
+
+.media {
+  position: relative;
+  z-index: 1;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  background: #1d1816;
+}
+
+.imageLink {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.upcomingImage {
+  filter: blur(14px) contrast(1.05) brightness(0.9);
+  transform: scale(1.06);
+}
+
+.badge,
+.slotBadge,
+.lockBadge {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge {
+  top: 12px;
+  left: 12px;
+  max-width: calc(100% - 24px);
+  padding: 4px 12px;
+  overflow: hidden;
+  color: var(--badge-color);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-overflow: ellipsis;
+}
+
+.slotBadge {
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  gap: 5px;
+  border: 1px solid rgba(205, 171, 143, 0.35);
+  color: #fff;
+  background: rgba(29, 24, 22, 0.82);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.slotDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2e7d32;
+}
+
+.lockBadge {
+  top: 50%;
+  left: 50%;
+  padding: 6px 14px;
+  gap: 5px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(205, 171, 143, 0.4);
+  color: #cdab8f;
+  background: rgba(29, 24, 22, 0.88);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  padding: 16px 4px 4px;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.headingRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.metaColumn {
+  display: flex;
+  min-width: 0;
+  padding-right: 8px;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.title {
+  margin: 0;
+  color: var(--product-color);
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.longTitle {
+  font-size: 20px;
+}
+
+.titleSuffix {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.salesRow {
+  min-height: 20px;
+}
+
+.occasions {
+  display: flex;
+  margin-top: 4px;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.occasionHeading,
+.occasionList {
+  display: inline-flex;
+  align-items: center;
+}
+
+.occasionHeading {
+  gap: 4px;
+}
+
+.occasionList {
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.occasionLabel {
+  margin-right: 2px;
+  color: #a6968c;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.occasionChip {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--product-color);
+  background: color-mix(in srgb, var(--product-color) 7%, transparent);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.priceColumn {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mobilePrice {
+  display: none;
+}
+
+.mobileSalesOverlay {
+  display: none;
+}
+
+.priceBadge {
+  display: flex;
+  padding: 6px 10px;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(192, 57, 43, 0.18);
+  border-radius: 10px;
+  background: #faf7f2;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+}
+
+.regularPrice {
+  display: flex;
+  padding: 6px 10px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(205, 171, 143, 0.3);
+  border-radius: 8px;
+  color: #1d1816;
+  background: #faf7f2;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.currency {
+  margin-right: 2px;
+  color: #8b7e75;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.features {
+  display: flex;
+  margin: -4px 0 4px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.feature > svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.feature span {
+  color: #6e5c53;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.desktopActions,
+.mobileActions {
+  gap: 8px;
+}
+
+.desktopActions {
+  display: flex;
+}
+
+.mobileActions {
+  display: none;
+}
+
+.secondaryAction,
+.primaryAction {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  padding: 12px 10px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  touch-action: manipulation;
+}
+
+.secondaryAction {
+  border: 1px solid rgba(205, 171, 143, 0.2);
+  color: #382a24;
+  background: #faf7f2;
+}
+
+.primaryAction {
+  border: 0;
+  color: #faf7f2;
+  background: var(--product-color);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--product-color) 20%, transparent);
+}
+
+.secondaryAction:focus-visible,
+.primaryAction:focus-visible,
+.titleLink:focus-visible,
+.imageLink:focus-visible {
+  outline: 2px solid #a67c52;
+  outline-offset: 3px;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(166, 124, 82, 0.3);
+  border-top-color: #a67c52;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 639px) {
+  .card {
+    min-width: 0;
+    padding: 7px;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px -12px rgba(56, 42, 36, 0.22), 0 0 0 1px rgba(166, 124, 82, 0.13);
+  }
+
+  .media {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 13px;
+  }
+
+  .badge {
+    top: 7px;
+    left: 7px;
+    max-width: calc(100% - 14px);
+    padding: 4px 7px;
+    font-size: 7px;
+    letter-spacing: 0.065em;
+  }
+
+  .slotBadge,
+  .desktopActions {
+    display: none;
+  }
+
+  .lockBadge {
+    max-width: calc(100% - 16px);
+    padding: 5px 8px;
+    overflow: hidden;
+    font-size: 7px;
+    letter-spacing: 0.06em;
+    text-overflow: ellipsis;
+  }
+
+  .content {
+    padding: 8px 2px 2px;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .headingRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+
+  .metaColumn {
+    display: contents;
+  }
+
+  .titleLink {
+    min-width: 0;
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .title,
+  .longTitle {
+    display: -webkit-box;
+    min-height: 18px;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .titleSuffix {
+    font-size: 11px;
+  }
+
+  .priceColumn {
+    display: none;
+  }
+
+  .mobilePrice {
+    display: flex;
+    min-width: 0;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .mobilePrice strong {
+    color: #1d1816;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .mobilePrice del {
+    color: #a6968c;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .priceBadge,
+  .regularPrice {
+    max-width: 100%;
+    padding: 4px 7px;
+    border-radius: 8px;
+    font-size: 11px;
+  }
+
+  .priceBadge svg,
+  .regularPrice svg {
+    display: none;
+  }
+
+  .currency {
+    font-size: 8px;
+  }
+
+  .salesRow {
+    display: none;
+  }
+
+  .mobileSalesOverlay {
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
+    z-index: 3;
+    display: block;
+    max-width: calc(100% - 14px);
+  }
+
+  .mobileSalesOverlay > span {
+    max-width: 100%;
+    min-height: 0 !important;
+    padding: 6px 8px;
+    gap: 4px !important;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.58);
+    border-radius: 999px;
+    color: var(--product-color) !important;
+    background: rgba(255, 253, 250, 0.92);
+    box-shadow: 0 5px 16px rgba(29, 24, 22, 0.16);
+    backdrop-filter: blur(8px);
+    font-size: 8.5px !important;
+    text-overflow: ellipsis;
+  }
+
+  .mobileSalesOverlay svg {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 auto;
+  }
+
+  .occasions {
+    width: 100%;
+    height: 28px;
+    min-height: 28px;
+    padding: 0;
+    margin-top: 0;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .occasionHeading {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .occasionLabel {
+    margin: 0;
+    color: #a6968c;
+    font-size: 8px;
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .occasionList {
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    touch-action: pan-x;
+    mask-image: linear-gradient(to right, #000 88%, transparent);
+  }
+
+  .occasionList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .occasionList:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--product-color) 48%, transparent);
+    outline-offset: 2px;
+    border-radius: 5px;
+  }
+
+  .occasionChip {
+    max-width: none;
+    padding: 3px 5px;
+    flex: 0 0 auto;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--product-color) 7%, #fff);
+    font-size: 8px;
+    letter-spacing: 0.025em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .features {
+    display: flex;
+    min-height: 90px;
+    margin: 0;
+    padding: 7px 6px;
+    gap: 4px;
+    border-top: 1px solid rgba(166, 124, 82, 0.13);
+    border-bottom: 1px solid rgba(166, 124, 82, 0.13);
+  }
+
+  .feature {
+    min-width: 0;
+    min-height: 22px;
+    gap: 5px;
+  }
+
+  .feature > svg,
+  .feature > :first-child {
+    width: 11px;
+    height: 11px;
+    margin-top: 1px;
+    flex: 0 0 11px;
+  }
+
+  .feature span {
+    display: -webkit-box;
+    min-width: 0;
+    overflow: hidden;
+    color: #74645b;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 1.3;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .mobileActions {
+    display: grid;
+    margin-top: auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 5px;
+  }
+
+  .mobileActions .secondaryAction,
+  .mobileActions .primaryAction {
+    min-height: 42px;
+    padding: 8px 4px;
+    gap: 4px;
+    border-radius: 11px;
+    font-size: 8.5px;
+    letter-spacing: 0.025em;
+  }
+
+  .mobileActions svg {
+    width: 11px;
+    height: 11px;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 340px) {
+  .card {
+    padding: 6px;
+  }
+
+  .title,
+  .longTitle {
+    font-size: 13px;
+  }
+
+  .mobileActions .secondaryAction,
+  .mobileActions .primaryAction {
+    font-size: 8px;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 639px) {
+  .feature span {
+    font-size: 9.5px;
+  }
+
+  .occasionChip {
+    font-size: 8.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .image,
+  .secondaryAction,
+  .primaryAction {
+    transition: none;
+  }
+
+  .spinner {
+    animation-duration: 1.5s;
+  }
+}

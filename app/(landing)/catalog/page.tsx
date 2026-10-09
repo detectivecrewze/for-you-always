@@ -1,42 +1,78 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/AnimatedSection";
 import { useCart, type CartItem } from "../../context/CartContext";
 import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
 import CartCheckoutModal from "../../components/CartCheckoutModal";
-import { STOREFRONT_CATALOG } from "@/lib/storefront-catalog";
+import { STOREFRONT_CATALOG, type StorefrontCatalogItem } from "@/lib/storefront-catalog";
+import styles from "./catalog.module.css";
 
 const CATALOG_ITEMS = STOREFRONT_CATALOG;
-
 const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
+const PREFERRED_OCCASION_ORDER = ["birthday", "anniversary", "ldr", "apology", "bestie", "crush"];
 
-const SHOPEE_URL = "https://shopee.co.id";
+function normalizeOccasion(value: string) {
+    return value.trim().toLocaleLowerCase("id-ID");
+}
+
+function formatOccasion(value: string) {
+    if (value === "ldr") return "LDR";
+    return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+const occasionValues = Array.from(new Set(CATALOG_ITEMS.flatMap((item) => item.occasions.map(normalizeOccasion))));
+const OCCASION_FILTERS = [
+    ...PREFERRED_OCCASION_ORDER.filter((occasion) => occasionValues.includes(occasion)),
+    ...occasionValues.filter((occasion) => !PREFERRED_OCCASION_ORDER.includes(occasion)).sort(),
+];
 
 export default function CatalogPage() {
+    const router = useRouter();
     const { addToCart } = useCart();
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [unboxStock, setUnboxStock] = useState<number | null>(null);
     const [directCheckoutItem, setDirectCheckoutItem] = useState<CartItem | null>(null);
+    const [activeOccasion, setActiveOccasion] = useState("all");
 
     useEffect(() => {
+        const syncFilterFromUrl = () => {
+            const requested = normalizeOccasion(new URLSearchParams(window.location.search).get("occasion") || "all");
+            setActiveOccasion(requested === "all" || OCCASION_FILTERS.includes(requested) ? requested : "all");
+        };
+
+        syncFilterFromUrl();
+        window.addEventListener("popstate", syncFilterFromUrl);
         window.scrollTo(0, 0);
         fetch("/api/inventory?product_id=the-gift-box-kraft")
-            .then((res) => res.json())
+            .then((response) => response.json())
             .then((data) => {
-                if (data && typeof data.stock === "number") {
-                    setUnboxStock(data.stock);
-                }
+                if (data && typeof data.stock === "number") setUnboxStock(data.stock);
             })
             .catch(() => {});
+        return () => window.removeEventListener("popstate", syncFilterFromUrl);
     }, []);
 
-    const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string; oldPrice?: string }) => {
+    const selectOccasion = useCallback((occasion: string) => {
+        setActiveOccasion(occasion);
+        const nextUrl = new URL(window.location.href);
+        if (occasion === "all") nextUrl.searchParams.delete("occasion");
+        else nextUrl.searchParams.set("occasion", occasion);
+        window.history.pushState({}, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+    }, []);
+
+    const visibleItems = useMemo(() => {
+        if (activeOccasion === "all") return CATALOG_ITEMS;
+        return CATALOG_ITEMS.filter((item) => item.occasions.some((occasion) => normalizeOccasion(occasion) === activeOccasion));
+    }, [activeOccasion]);
+
+    const handlePesan = useCallback((item: Pick<StorefrontCatalogItem, "id" | "title" | "numericPrice" | "titleColor" | "oldPrice">) => {
         if (item.id === "the-gift-box" || item.id === "unbox-the-memory") {
-            window.location.href = "/catalog/the-gift-box";
+            router.push("/catalog/the-gift-box");
             return;
         }
 
@@ -51,11 +87,10 @@ export default function CatalogPage() {
             return;
         }
 
-        // Map oldPrice string ke oldNumericPrice number
-        const parseOldPrice = (s?: string) => {
-            if (!s) return undefined;
-            const match = s.replace(/\./g, "").match(/\d+/);
-            return match ? parseInt(match[0]) : undefined;
+        const parseOldPrice = (value?: string) => {
+            if (!value) return undefined;
+            const match = value.replace(/\./g, "").match(/\d+/);
+            return match ? Number.parseInt(match[0], 10) : undefined;
         };
         const oldNumericPrice = parseOldPrice(item.oldPrice);
 
@@ -67,160 +102,78 @@ export default function CatalogPage() {
                 singlePriceText: "Rp 20.000",
                 singleOldPriceText: "Rp 30.000",
                 threeSlotPriceText: "Rp 25.000",
-                onSelectSingle: () => addToCart({
-                    id: item.id,
-                    title: item.title,
-                    numericPrice: item.numericPrice,
-                    oldNumericPrice,
-                    themeColor: item.titleColor,
-                }),
-                onSelectThreeSlot: () => addToCart({
-                    id: item.id,
-                    title: `${item.title} (3 Gift)`,
-                    numericPrice: 25000,
-                    themeColor: item.titleColor,
-                    isThreeSlot: true,
-                    slotCount: 3,
-                }),
+                onSelectSingle: () => addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, oldNumericPrice, themeColor: item.titleColor }),
+                onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Gift)`, numericPrice: 25000, themeColor: item.titleColor, isThreeSlot: true, slotCount: 3 }),
             });
-        } else {
-            addToCart({
-                id: item.id,
-                title: item.title,
-                numericPrice: item.numericPrice,
-                oldNumericPrice,
-                themeColor: item.titleColor,
-            });
+            return;
         }
-    }, [addToCart]);
+
+        addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, oldNumericPrice, themeColor: item.titleColor });
+    }, [addToCart, router]);
 
     return (
-        <div style={{ minHeight: "100vh", background: "#faf7f2" }}>
+        <main className={styles.page}>
             <Navbar />
 
-            <div style={{ 
-                maxWidth: 1100, 
-                margin: "0 auto", 
-                padding: "160px clamp(16px, 4vw, 40px) 100px",
-                position: "relative",
-                zIndex: 1
-            }}>
-                <div style={{ textAlign: "center", marginBottom: 60 }}>
-                    <h1 style={{ 
-                        fontFamily: "var(--font-display)", 
-                        fontSize: "clamp(2.5rem, 6vw, 4rem)", 
-                        fontWeight: 400, 
-                        color: "#382a24", 
-                        lineHeight: 1.1, 
-                        letterSpacing: "-0.03em",
-                        marginBottom: 16
-                    }}>
-                        Semua <span style={{ fontStyle: "italic", color: "#b58c6d" }}>Koleksi.</span>
-                    </h1>
-                    <p style={{
-                        fontFamily: "var(--font-sans)",
-                        fontSize: "1.1rem",
-                        color: "#6e5c53",
-                        maxWidth: 540,
-                        margin: "0 auto"
-                    }}>
-                        Jelajahi koleksi kado digital eksklusif kami. Temukan kanvas terbaik untuk merangkai kenanganmu.
-                    </p>
-                    <Link href="/gift-finder" style={{ display: "inline-flex", marginTop: 22, padding: "11px 20px", borderRadius: 999, background: "#382a24", color: "#faf7f2", textDecoration: "none", fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase" }}>
-                        Bantu Pilihkan Kado
-                    </Link>
-                </div>
+            <div className={styles.shell}>
+                <header className={styles.header}>
+                    <h1>Semua <span>Koleksi.</span></h1>
+                    <p>Jelajahi koleksi kado digital eksklusif kami. Temukan kanvas terbaik untuk merangkai kenanganmu.</p>
+                    <Link href="/gift-finder" className={styles.finderLink}>Bantu Pilihkan Kado</Link>
+                </header>
 
-                <div style={{ 
-                    display: "grid", 
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", 
-                    gap: 32 
-                }}>
-                {CATALOG_ITEMS.map((item, idx) => {
-                    const slotText = (item.id === "the-gift-box" || item.id === "unbox-the-memory")
-                        ? (unboxStock !== null ? `Sisa ${unboxStock} Box` : (item.slotBadgeText || "Sisa 5 Box"))
-                        : item.slotBadgeText;
+                <section className={styles.filterRegion} aria-label="Filter katalog berdasarkan occasion">
+                    <div className={styles.filterScroller} role="group" aria-label="Pilihan occasion">
+                        <button type="button" className={styles.filterChip} aria-pressed={activeOccasion === "all"} onClick={() => selectOccasion("all")}>Semua</button>
+                        {OCCASION_FILTERS.map((occasion) => (
+                            <button key={occasion} type="button" className={styles.filterChip} aria-pressed={activeOccasion === occasion} onClick={() => selectOccasion(occasion)}>
+                                {formatOccasion(occasion)}
+                            </button>
+                        ))}
+                    </div>
+                    <p className={styles.resultMeta} aria-live="polite">{visibleItems.length} produk ditemukan</p>
+                </section>
 
-                    return (
-                        <AnimatedSection key={item.id} delay={0} priority={idx === 0} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                            <CompactProductCard
-                                {...item}
-                                productId={item.id}
-                                slotBadgeText={slotText}
-                                priority={idx === 0}
-                                onAddToCart={() => handlePesan(item)}
-                            />
-                        </AnimatedSection>
-                    );
-                })}
-                </div>
+                <section className={styles.grid} aria-label="Daftar produk">
+                    {visibleItems.map((item, index) => {
+                        const slotText = item.id === "the-gift-box" || item.id === "unbox-the-memory"
+                            ? (unboxStock !== null ? `Sisa ${unboxStock} Box` : (item.slotBadgeText || "Sisa 5 Box"))
+                            : item.slotBadgeText;
+                        return (
+                            <AnimatedSection key={item.id} delay={0} priority={index < 2} className={styles.gridItem}>
+                                <CompactProductCard
+                                    {...item}
+                                    productId={item.id}
+                                    slotBadgeText={slotText}
+                                    priority={index < 2}
+                                    onAddToCart={() => handlePesan(item)}
+                                />
+                            </AnimatedSection>
+                        );
+                    })}
+
+                    {visibleItems.length === 0 && (
+                        <div className={styles.emptyState}>
+                            <h2>Belum ada koleksi di kategori ini.</h2>
+                            <p>Coba pilih occasion lain atau tampilkan kembali seluruh koleksi.</p>
+                            <button type="button" className={styles.resetButton} onClick={() => selectOccasion("all")}>Lihat semua produk</button>
+                        </div>
+                    )}
+                </section>
             </div>
 
-            {/* Slot Picker Modal */}
-            {slotPickerConfig && (
-                <SlotPickerModal
-                    config={slotPickerConfig}
-                    onClose={() => setSlotPickerConfig(null)}
-                />
-            )}
+            {slotPickerConfig && <SlotPickerModal config={slotPickerConfig} onClose={() => setSlotPickerConfig(null)} />}
+            {directCheckoutItem && <CartCheckoutModal directItem={directCheckoutItem} onClose={() => setDirectCheckoutItem(null)} />}
 
-            {directCheckoutItem && (
-                <CartCheckoutModal
-                    directItem={directCheckoutItem}
-                    onClose={() => setDirectCheckoutItem(null)}
-                />
-            )}
-
-            {/* Floating WhatsApp with label */}
-            <a href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-                style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100, display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
-                onMouseEnter={e => { 
-                    const btn = e.currentTarget.children[1] as HTMLElement;
-                    if (btn) { btn.style.background = "#cdab8f"; btn.style.transform = "scale(1.05)"; }
-                    const bubble = e.currentTarget.children[0] as HTMLElement;
-                    if (bubble) { bubble.style.transform = "translateY(-2px)"; bubble.style.boxShadow = "0 12px 28px -4px rgba(29, 24, 22, 0.15)"; }
-                }}
-                onMouseLeave={e => { 
-                    const btn = e.currentTarget.children[1] as HTMLElement;
-                    if (btn) { btn.style.background = "#1d1816"; btn.style.transform = "scale(1)"; }
-                    const bubble = e.currentTarget.children[0] as HTMLElement;
-                    if (bubble) { bubble.style.transform = "translateY(0)"; bubble.style.boxShadow = "0 8px 24px -4px rgba(29, 24, 22, 0.12)"; }
-                }}
-            >
-                {/* Text Bubble */}
-                <div className="hidden md:flex items-center gap-[6px]" style={{
-                    background: "rgba(255, 255, 255, 0.95)",
-                    backdropFilter: "blur(10px)",
-                    padding: "10px 20px",
-                    borderRadius: "999px",
-                    boxShadow: "0 8px 24px -4px rgba(29, 24, 22, 0.12)",
-                    border: "1px solid rgba(205, 171, 143, 0.2)",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}>
-                    <span style={{ fontSize: 12.5, fontWeight: 500, color: "#6e5c53", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
-                        Butuh bantuan? <strong style={{ color: "#382a24", fontWeight: 700 }}>Chat Admin</strong>
-                    </span>
-                </div>
-
-                {/* WA Icon */}
-                <div
-                    style={{ width: 48, height: 48, borderRadius: "50%", background: "#1d1816", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -4px rgba(29,24,22,0.25)", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", flexShrink: 0 }}
-                >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf7f2">
+            <a className={styles.whatsApp} href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp">
+                <span className={styles.whatsAppLabel}>Butuh bantuan?&nbsp; <strong>Chat Admin</strong></span>
+                <span className={styles.whatsAppIcon}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf7f2" aria-hidden="true">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                         <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.486 3.53 1.337 5.006L2.001 22l5.13-1.322A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.065-1.112l-.292-.174-3.046.784.813-2.934-.19-.302A7.965 7.965 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
                     </svg>
-                </div>
+                </span>
             </a>
-
-            <style>{`
-                @keyframes fade-in-up {
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `}</style>
-        </div>
+        </main>
     );
 }
