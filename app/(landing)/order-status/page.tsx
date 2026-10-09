@@ -16,6 +16,7 @@ const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color:
     invitation: { name: "Invitation Edition",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>, color: "#9a8a6a", desc: "Tiket undangan kencan digital" },
     loves:      { name: "Memoria Edition",     icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>, color: "#8b2252", desc: "Kado premium penuh kenangan" },
     storybook:  { name: "Storybook Edition",   icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg>, color: "#8b1d2c", desc: "Buku cerita komik dengan lima room personal" },
+    sorry:      { name: "Sorry Letter",        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/><path d="M12 16h.01"/></svg>, color: "#8b1d2c", desc: "Surat permintaan maaf interaktif" },
     birthday:   { name: "Birthday Scrapbook",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2"/><path d="M12 8v2"/><path d="M17 8v2"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>, color: "#bf7b19", desc: "Scrapbook ulang tahun interaktif" },
 };
 
@@ -77,10 +78,11 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
     const isLoves = baseKey === "loves";
     const isBirthday = baseKey === "birthday";
     const isStorybook = baseKey === "storybook";
-    if (isBirthday || isStorybook) {
+    const isSorry = baseKey === "sorry";
+    if (isBirthday || isStorybook || isSorry) {
         token = "";
     }
-    const label = isLoves ? "Isi Form Kreasi" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
+    const label = isLoves ? "Isi Form Kreasi" : isSorry ? "Buka Studio Sorry Letter" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -222,6 +224,17 @@ export default function OrderStatusPage() {
 
             if (data.status === "paid" || data.status === "success") {
                 trackMetaPurchase(id, data.product_id);
+                const purchaseMarker = `fya_posthog_purchase_${id}`;
+                if (!window.localStorage.getItem(purchaseMarker)) {
+                    void import("posthog-js").then(({ default: posthog }) => {
+                        posthog.capture("purchase", {
+                            product_id: data.product_id,
+                            price: Number(data.gross_amount) || 0,
+                            currency: "IDR",
+                        });
+                        window.localStorage.setItem(purchaseMarker, "1");
+                    }).catch(() => {});
+                }
                 setStatus("paid");
                 if (data.magic_link) {
                     let linksData = data.magic_link;
@@ -311,6 +324,8 @@ export default function OrderStatusPage() {
         : 1;
     const isBundle = productCount > 1;
     const isUnbox = Boolean(productId?.startsWith("unbox_") || productId?.startsWith("giftbox_") || productId?.includes("gift-box") || orderId?.startsWith("ORDER-UNBOX") || orderId?.startsWith("ORDER-GIFTBOX"));
+    const isSorry = productId.split(",").some((item) => item.trim() === "sorry") || Boolean(orderId?.startsWith("ORDER-SORRY-"));
+    const isSorryStudioPending = isSorry && !magicLinks;
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
@@ -376,8 +391,10 @@ export default function OrderStatusPage() {
                                 }}>
                                     {isBundle
                                         ? `Terima kasih atas pesanan bundle-mu! Berikut akses ke ${productCount} kado digital yang kamu beli.`
-                                        : "Terima kasih atas pesananmu! Berikut akses ke kado digital kamu."}
-                                    {" "}<strong>Link juga sudah dikirimkan ke email kamu.</strong>
+                                        : isSorryStudioPending
+                                            ? "Pembayaranmu sudah berhasil. Studio personal sedang kami siapkan."
+                                            : "Terima kasih atas pesananmu! Berikut akses ke kado digital kamu."}
+                                    {!isSorryStudioPending && <> <strong>Link juga sudah dikirimkan ke email kamu.</strong></>}
                                 </p>
                             </div>
 
@@ -406,6 +423,27 @@ export default function OrderStatusPage() {
 
                             {/* Product Cards */}
                             {renderProductCards()}
+
+                            {isSorryStudioPending && (
+                                <div style={{
+                                    width: "100%",
+                                    marginBottom: 32,
+                                    padding: "18px 20px",
+                                    borderRadius: 16,
+                                    border: "1px solid rgba(139,29,44,0.18)",
+                                    background: "rgba(139,29,44,0.06)",
+                                    color: "#6d2430",
+                                    fontFamily: "var(--font-sans)",
+                                    textAlign: "left",
+                                }}>
+                                    <strong style={{ display: "block", marginBottom: 6, fontSize: 14 }}>
+                                        Studio Sorry Letter sedang disiapkan
+                                    </strong>
+                                    <span style={{ fontSize: 12.5, lineHeight: 1.6 }}>
+                                        Pembayaran sudah tercatat. Halaman ini akan menampilkan tombol Buka Studio setelah proses persiapan selesai.
+                                    </span>
+                                </div>
+                            )}
 
                             {/* Unbox Physical Delivery Stepper */}
                             {isUnbox && (() => {

@@ -1,16 +1,19 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useCart } from "../context/CartContext";
+import { useCart, type CartItem } from "../context/CartContext";
 import posthog from 'posthog-js';
 import { rememberMetaCheckout, trackInitiateCheckout } from "@/lib/pixel";
 
 interface CartCheckoutModalProps {
     onClose: () => void;
+    directItem?: CartItem;
 }
 
-export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
-    const { items, cartTotal, clearCart } = useCart();
+export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutModalProps) {
+    const { items: cartItems, cartTotal: cartContextTotal, clearCart } = useCart();
+    const items = directItem ? [directItem] : cartItems;
+    const cartTotal = directItem ? directItem.numericPrice : cartContextTotal;
     const [step, setStep] = useState<"form" | "review">("form");
     const [isLoading, setIsLoading] = useState(false);
     const [customerDetails, setCustomerDetails] = useState({ firstName: "", email: "", phone: "" });
@@ -20,7 +23,7 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
         title: "Info Khusus Memoria:",
         message: "",
     });
-    const initialCheckoutRef = useRef({ items, cartTotal });
+    const initialCheckoutRef = useRef({ items, cartTotal, source: directItem ? "direct_checkout" : "cart" });
     const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const onCloseRef = useRef(onClose);
 
@@ -32,6 +35,13 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
         const initialCheckout = initialCheckoutRef.current;
         if (initialCheckout.items.length > 0) {
             trackInitiateCheckout(initialCheckout.items, initialCheckout.cartTotal);
+            void import("posthog-js").then(({ default: posthog }) => posthog.capture("checkout_started", {
+                product_ids: initialCheckout.items.map((item) => item.id),
+                product_id: initialCheckout.items.length === 1 ? initialCheckout.items[0].id : undefined,
+                price: initialCheckout.cartTotal,
+                currency: "IDR",
+                source: initialCheckout.source,
+            })).catch(() => {});
         }
         const controller = new AbortController();
         fetch("/api/public/memoria-notice", { signal: controller.signal })
@@ -96,11 +106,16 @@ export default function CartCheckoutModal({ onClose }: CartCheckoutModalProps) {
                 posthog.capture('payment_submitted', {
                     order_id: orderId,
                     total: cartTotal,
+                    price: cartTotal,
                     item_count: items.length,
                     products: items.map(i => i.title),
+                    product_ids: items.map(i => i.id),
+                    product_id: items.length === 1 ? items[0].id : undefined,
+                    currency: 'IDR',
+                    source: directItem ? 'direct_checkout' : 'cart',
                 });
                 handleClose();
-                clearCart();
+                if (!directItem) clearCart();
                 setIsLoading(false);
                 window.location.href = data.redirectUrl;
             } else {

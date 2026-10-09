@@ -1,6 +1,6 @@
 import type { DemoModalTheme, DemoPreviewVariant, MemoriaThemeSwatch } from "@/app/components/DemoPreviewModal";
 
-export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook";
+export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook" | "sorry";
 
 export interface StorefrontDemoConfig {
     productName: string;
@@ -61,6 +61,17 @@ export const STORYBOOK_DEMO_VARIANTS = [
     { id: "batman", label: "Batman", src: STORYBOOK_BATMAN_DEMO_URL, subtitle: "Storybook noir Gotham dengan aksen navy dan emas" },
 ] as const satisfies readonly DemoPreviewVariant[];
 
+export const SORRY_DEMO_VARIANTS = [
+    { id: "default", label: "Sorry Letter", src: "https://sorry.for-you-always.my.id/", subtitle: "Surat permintaan maaf interaktif dengan musik dan respons personal" },
+] as const satisfies readonly DemoPreviewVariant[];
+export const SORRY_THEME_SWATCHES = [
+    { id: "burgundy", name: "Burgundy", color: "#8b1d2c", bgColor: "#2D141E" },
+    { id: "midnight", name: "Midnight", color: "#0b1730", bgColor: "#050C1A" },
+    { id: "forest", name: "Forest", color: "#103d32", bgColor: "#081F19" },
+    { id: "dusty-purple", name: "Dusty Purple", color: "#4b2b55", bgColor: "#1F1024" },
+] as const satisfies readonly MemoriaThemeSwatch[];
+
+
 export const INVITATION_DEMO_VARIANTS = [
     { id: "invitation-date", label: "Invitation Date", src: "https://invitation.for-you-always.my.id/WRcVb-mY0f", subtitle: "Undangan kencan dengan date picker dan dress code" },
     { id: "rundown-date", label: "Rundown Date", src: "https://invitation.for-you-always.my.id/rundown-tqthew7", subtitle: "Susunan acara kencan yang rapi dan interaktif" },
@@ -77,4 +88,5 @@ export const STOREFRONT_DEMO_CONFIGS: Record<DemoProductId, StorefrontDemoConfig
     birthday: { productName: "Birthday Scrapbook", title: "Demo Birthday Scrapbook", subtitle: "Pilih scrapbook yang ingin dijelajahi", price: "Rp 25.000", theme: "birthday", variants: BIRTHDAY_DEMO_VARIANTS, initialVariantId: "snoopy" },
     arcade: { productName: "Arcade Edition", title: "Demo Arcade Edition", subtitle: "Jelajahi sepuluh ruangan permainan", price: "Rp 25.000", theme: "arcade", variants: [{ id: "default", label: "Arcade", src: "https://arcade.for-you-always.my.id/?to=arcade-test", subtitle: "Petualangan game dengan sepuluh ruangan kenangan" }], initialVariantId: "default", opensInNewTab: true },
     storybook: { productName: "Storybook Edition", title: "Demo Storybook Edition", subtitle: "Pilih tema cerita yang ingin dijelajahi", price: "Rp 25.000", theme: "storybook", variants: STORYBOOK_DEMO_VARIANTS, initialVariantId: "spiderman" },
+    sorry: { productName: "Sorry Letter", title: "Demo Sorry Letter", subtitle: "Jelajahi pengalaman surat permintaan maaf interaktif", price: "Rp 15.000", theme: "memoria", variants: SORRY_DEMO_VARIANTS, initialVariantId: "default", themeSwatches: SORRY_THEME_SWATCHES },
 };

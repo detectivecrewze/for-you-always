@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import type { SlotPickerConfig } from "./SlotPickerModal";
 import DiscountPrice from "./DiscountPrice";
 import SalesCountBadge from "./SalesCountBadge";
+import ProductFeatureMotionIcon from "./ProductFeatureMotionIcon";
 
 const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
 
@@ -74,6 +75,8 @@ export function LandscapeProductCard({
     price,
     oldPrice,
     features,
+    occasions,
+    animatedFeatureIcons = false,
     mediaSrc,
     fallbackImgSrc,
     accentColor,
@@ -100,6 +103,8 @@ export function LandscapeProductCard({
     price: React.ReactNode;
     oldPrice?: string;  // harga asli sebelum diskon (untuk display coret premium)
     features: string[];
+    occasions?: string[];
+    animatedFeatureIcons?: boolean;
     mediaSrc?: string;
     fallbackImgSrc?: string;
     mediaType: "video" | "gif" | "image" | "placeholder";
@@ -132,6 +137,7 @@ export function LandscapeProductCard({
     });
 
     const [isInView, setIsInView] = useState(false);
+
 
     // Derived state for media and colors — di-memoize agar tidak dihitung ulang setiap render
     const activeValues = useMemo(() => {
@@ -723,6 +729,39 @@ export function LandscapeProductCard({
                         {activeDescription}
                     </p>
 
+                    {occasions && occasions.length > 0 && (
+                        <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 7, marginTop: -14, marginBottom: 24 }}>
+                            <span style={{
+                                fontFamily: "var(--font-sans)",
+                                fontSize: 9,
+                                fontWeight: 600,
+                                color: "#9a8a80",
+                                letterSpacing: "0.05em",
+                                textTransform: "uppercase",
+                            }}>
+                                Occasion
+                            </span>
+                            {occasions.map((occasion) => (
+                                <span key={occasion} style={{
+                                    padding: "4px 9px",
+                                    borderRadius: 999,
+                                    background: `${activeAccent}12`,
+                                    border: `1px solid ${activeAccent}24`,
+                                    color: activeAccent,
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: 9,
+                                    fontWeight: 800,
+                                    letterSpacing: "0.08em",
+                                    textTransform: "uppercase",
+                                    transition: "all 0.4s ease",
+                                }}>
+                                    {occasion}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+
+                    
                     {/* Features List */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
                         {featureFlags.map((flags) => {
@@ -734,13 +773,18 @@ export function LandscapeProductCard({
 
                             return (
                                 <div key={feat} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#6e5c53", fontWeight: 500 }}>
-                                    <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${activeAccent}22`, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.5s ease" }}>
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth={3} style={{ transition: "stroke 0.5s ease" }}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
+                                    {animatedFeatureIcons ? (
+                                        <ProductFeatureMotionIcon feature={feat} color={activeAccent} />
+                                    ) : (
+                                        <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${activeAccent}22`, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.5s ease" }}>
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth={3} style={{ transition: "stroke 0.5s ease" }}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                    )}
                                     <span style={{ marginRight: 8 }}>{feat}</span>
 
+                                    {!animatedFeatureIcons && (<>
                                     {/* Animation: Toggle */}
                                     {isToggleFeature && (
                                         <div style={{
@@ -1041,6 +1085,7 @@ export function LandscapeProductCard({
                                             </svg>
                                         </div>
                                     )}
+                                    </>)}
                                 </div>
                             );
                         })}

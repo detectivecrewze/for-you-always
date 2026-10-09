@@ -78,6 +78,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/catalog/sorry`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/catalog/the-gift-box`,
       lastModified,
       changeFrequency: 'weekly',

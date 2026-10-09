@@ -114,6 +114,7 @@ export const FINDER_QUESTIONS: Record<FinderStepKey, FinderQuestion> = {
 };
 
 const PROFILES: Record<string, ProductProfile> = {
+    sorry: { recipients: ["partner", "crush"], directIntents: ["support"], intents: ["affection", "anniversary"], experiences: ["heartfelt", "audio"], materials: ["message", "song", "low-effort", "unsure"], depth: 1 },
     letter: { recipients: ["partner", "crush", "friend", "family"], directIntents: ["support", "achievement"], intents: ["anniversary", "affection"], experiences: ["heartfelt"], materials: ["message", "low-effort", "unsure"], depth: 1 },
     loves: { recipients: ["partner", "crush", "friend", "family"], directIntents: [], intents: ["birthday", "anniversary", "date", "affection", "support", "achievement"], experiences: ["heartfelt", "memories", "surprises", "invitation", "audio"], materials: ["message", "few-media", "story", "song", "voice", "low-effort", "unsure"], depth: 3 },
     birthday: { recipients: ["partner", "crush", "friend", "family"], directIntents: ["birthday"], intents: ["affection"], experiences: ["surprises", "memories"], materials: ["few-media", "story", "song", "voice", "unsure"], depth: 2 },
@@ -169,6 +170,7 @@ function scoreProduct(item: StorefrontCatalogItem, answers: FinderAnswers) {
 function productReason(productId: string, answers: FinderAnswers) {
     const recipient = answers.recipient ? RECIPIENT_LABELS[answers.recipient] : "orang tersayang";
     const reasons: Record<string, string> = {
+        sorry: `Kamu ingin meminta maaf kepada ${recipient} dengan kata-kata yang lebih terarah. Sorry Letter memadukan surat, lagu, dan respons personal tanpa membutuhkan banyak bahan.`,
         letter: `Kamu ingin menyampaikan sesuatu yang tulus kepada ${recipient}. Letter menjadikan kata-katamu sebagai pengalaman utama yang hangat dan mudah dinikmati.`,
         loves: `Memoria adalah pilihan paling fleksibel untuk ${recipient}. Foto, lagu, tulisan, ajakan, dan kejutan dapat dirangkai menjadi satu pengalaman premium yang terasa utuh.`,
         birthday: `Kamu ingin hari ulang tahunnya berisi beberapa kejutan personal. Birthday Scrapbook membuka foto, pesan, dan ucapan satu per satu seperti scrapbook yang hidup.`,

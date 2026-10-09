@@ -292,6 +292,37 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
         ]
     },
 
+    "sorry-letter": {
+        id: "sorry-letter",
+        name: "Sorry Letter",
+        type: "digital_interactive",
+        singlePrice: "Rp 15.000",
+        numericPrice: 15000,
+        badge: "New Release",
+        tagline: "Surat permintaan maaf interaktif dengan amplop vintage, musik pilihan, maskot, dan respons personal.",
+        coreFeatures: [
+            "Surat maaf dengan efek typewriter dan tombol Skip",
+            "Pilihan Bunny atau Brown Bear serta empat palet warna",
+            "Katalog musik atau upload MP3 dan thumbnail sendiri",
+            "Pertanyaan serta ending interaktif berdasarkan respons penerima",
+            "Studio mandiri dengan autosave dan live preview"
+        ],
+        digitalExperience: {
+            interactiveMechanism: "Penerima membuka amplop, membaca surat sambil mendengarkan lagu, lalu memilih respons yang membuka ending personal.",
+            themesAvailable: ["Burgundy", "Midnight", "Forest", "Dusty Purple"],
+            customizationOptions: ["Bahasa", "Pembuka", "Isi surat", "Musik", "Maskot", "Palet", "Pertanyaan", "Ending"]
+        },
+        targetOccasions: ["APOLOGY"],
+        emotionalHooks: [
+            "Membantu menyampaikan permintaan maaf yang sulit diucapkan langsung.",
+            "Memberi ruang bagi penerima untuk membaca dan merespons tanpa tekanan."
+        ],
+        faqs: [
+            { q: "Apakah saya mengisi suratnya sendiri?", a: "Ya. Setelah pembayaran, Studio personal memungkinkan kamu mengatur seluruh isi gift." },
+            { q: "Apakah musik bisa diganti?", a: "Bisa. Pilih dari katalog atau upload MP3 dan thumbnail sendiri." }
+        ]
+    },
+
     "invitation-edition": {
         id: "invitation-edition",
         name: "Invitation Edition",

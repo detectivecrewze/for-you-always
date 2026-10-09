@@ -5,8 +5,9 @@ import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/AnimatedSection";
-import { useCart } from "../../context/CartContext";
+import { useCart, type CartItem } from "../../context/CartContext";
 import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
+import CartCheckoutModal from "../../components/CartCheckoutModal";
 import { STOREFRONT_CATALOG } from "@/lib/storefront-catalog";
 
 const CATALOG_ITEMS = STOREFRONT_CATALOG;
@@ -19,6 +20,7 @@ export default function CatalogPage() {
     const { addToCart } = useCart();
     const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
     const [unboxStock, setUnboxStock] = useState<number | null>(null);
+    const [directCheckoutItem, setDirectCheckoutItem] = useState<CartItem | null>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -35,6 +37,17 @@ export default function CatalogPage() {
     const handlePesan = useCallback((item: { id: string; title: string; numericPrice: number; titleColor: string; oldPrice?: string }) => {
         if (item.id === "the-gift-box" || item.id === "unbox-the-memory") {
             window.location.href = "/catalog/the-gift-box";
+            return;
+        }
+
+        if (item.id === "sorry") {
+            setDirectCheckoutItem({
+                id: item.id,
+                title: item.title,
+                numericPrice: item.numericPrice,
+                themeColor: item.titleColor,
+                themeImgSrc: "/assets/sorry-features/sorry-envelope.webp",
+            });
             return;
         }
 
@@ -148,6 +161,13 @@ export default function CatalogPage() {
                 <SlotPickerModal
                     config={slotPickerConfig}
                     onClose={() => setSlotPickerConfig(null)}
+                />
+            )}
+
+            {directCheckoutItem && (
+                <CartCheckoutModal
+                    directItem={directCheckoutItem}
+                    onClose={() => setDirectCheckoutItem(null)}
                 />
             )}
 

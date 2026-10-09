@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import DiscountPrice from "./DiscountPrice";
 import SalesCountBadge from "./SalesCountBadge";
+import ProductFeatureMotionIcon from "./ProductFeatureMotionIcon";
 
 interface CompactProductCardProps {
     badgeText?: string;
@@ -20,7 +21,9 @@ interface CompactProductCardProps {
     href: string;
     features?: string[];
     occasions?: string[];
+    animatedFeatureIcons?: boolean;
     demoLink?: string;
+    onDemoOpen?: () => void;
     addonText?: string;
     onAddToCart?: () => void;
     priority?: boolean;
@@ -40,7 +43,9 @@ export default function CompactProductCard({
     href,
     features,
     occasions,
+    animatedFeatureIcons = false,
     demoLink,
+    onDemoOpen,
     onAddToCart,
     priority = false,
 }: CompactProductCardProps) {
@@ -65,12 +70,12 @@ export default function CompactProductCard({
         (e.currentTarget as HTMLElement).style.transform = "scale(1)";
     }, []);
 
-    const handleDemoMouseEnter = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleDemoMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         (e.currentTarget as HTMLElement).style.background = "rgba(250, 247, 242, 0.95)";
         (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
     }, []);
 
-    const handleDemoMouseLeave = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleDemoMouseLeave = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         (e.currentTarget as HTMLElement).style.background = "rgba(250, 247, 242, 0.85)";
         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
     }, []);
@@ -110,22 +115,24 @@ export default function CompactProductCard({
         onMouseLeave={handleCardMouseLeave}>
             {/* Image Container */}
             <div style={{ position: "relative", height: 260, overflow: "hidden", borderRadius: "1.2rem", zIndex: 1, backgroundColor: "#1d1816" }}>
-                <Image
-                    src={imageSrc}
-                    alt={title}
-                    fill
-                    sizes="(max-width: 768px) calc(100vw - 32px), 360px"
-                    priority={priority}
-                    loading={priority ? undefined : "lazy"}
-                    style={{ 
-                        objectFit: "cover", 
-                        transition: "transform 0.5s ease",
-                        filter: badgeText === "UPCOMING" ? "blur(14px) contrast(1.05) brightness(0.9)" : "none",
-                        transform: badgeText === "UPCOMING" ? "scale(1.06)" : "scale(1)"
-                    }}
-                    onMouseEnter={handleImageMouseEnter}
-                    onMouseLeave={handleImageMouseLeave}
-                />
+                <Link href={href} aria-label={`Lihat detail ${title}`} style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+                    <Image
+                        src={imageSrc}
+                        alt={title}
+                        fill
+                        sizes="(max-width: 768px) calc(100vw - 32px), 360px"
+                        priority={priority}
+                        loading={priority ? undefined : "lazy"}
+                        style={{ 
+                            objectFit: "cover", 
+                            transition: "transform 0.5s ease",
+                            filter: badgeText === "UPCOMING" ? "blur(14px) contrast(1.05) brightness(0.9)" : "none",
+                            transform: badgeText === "UPCOMING" ? "scale(1.06)" : "scale(1)"
+                        }}
+                        onMouseEnter={handleImageMouseEnter}
+                        onMouseLeave={handleImageMouseLeave}
+                    />
+                </Link>
                 
                 {/* Central Lock Badge for UPCOMING items */}
                 {badgeText === "UPCOMING" && (
@@ -216,7 +223,10 @@ export default function CompactProductCard({
 
                 {/* Bottom Left Demo Button */}
                 {demoLink && (
-                    <a href={demoLink} target="_blank" rel="noopener noreferrer" style={{
+                    <button type="button" aria-label={`Lihat demo ${title}`} onClick={() => {
+                        if (onDemoOpen) onDemoOpen();
+                        else window.open(demoLink, "_blank", "noopener,noreferrer");
+                    }} style={{
                         position: "absolute",
                         bottom: 12,
                         left: 12,
@@ -235,7 +245,9 @@ export default function CompactProductCard({
                         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                         letterSpacing: "0.02em",
                         textDecoration: "none",
-                        transition: "all 0.2s ease"
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
+                        zIndex: 3
                     }}
                     onMouseEnter={handleDemoMouseEnter}
                     onMouseLeave={handleDemoMouseLeave}>
@@ -244,7 +256,7 @@ export default function CompactProductCard({
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                         Lihat Demo
-                    </a>
+                    </button>
                 )}
             </div>
 
@@ -350,9 +362,13 @@ export default function CompactProductCard({
                     <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: -4, marginBottom: 4 }}>
                         {features.map((feature, i) => (
                             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={titleColor} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2, opacity: 0.7 }}>
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
+                                {animatedFeatureIcons ? (
+                                    <ProductFeatureMotionIcon feature={feature} color={titleColor} />
+                                ) : (
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={titleColor} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2, opacity: 0.7 }}>
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                )}
                                 <span style={{
                                     fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 500,
                                     color: "#6e5c53", lineHeight: 1.4
