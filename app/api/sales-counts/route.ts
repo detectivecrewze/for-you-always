@@ -5,14 +5,18 @@ export const revalidate = 300;
 
 const PRODUCT_IDS = new Set([
     "letter", "voices", "arcade", "retro", "wrapped", "mixtape",
-    "invitation", "loves", "birthday", "storybook", "the-gift-box",
+    "invitation", "loves", "birthday", "storybook", "sorry", "the-gift-box",
 ]);
+
+const PRODUCTION_GATEWAY_URL = "https://pakasir-gateway.aldoramadhan16.workers.dev";
 
 export async function GET() {
     const gatewayBase = (
-        process.env.PAYMENT_GATEWAY_URL ||
-        process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_URL ||
-        "https://pakasir-gateway.aldoramadhan16.workers.dev"
+        // Sales counts are public production social proof. Keep this source
+        // separate from NEXT_PUBLIC_PAYMENT_GATEWAY_URL so local checkout can
+        // safely use the sandbox without replacing factual purchase totals.
+        process.env.SALES_COUNTS_GATEWAY_URL ||
+        PRODUCTION_GATEWAY_URL
     ).replace(/\/$/, "");
 
     try {
