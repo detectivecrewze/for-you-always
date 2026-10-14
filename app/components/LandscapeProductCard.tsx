@@ -14,6 +14,18 @@ function captureProductEvent(event: string, properties: Record<string, unknown>)
     void import("posthog-js").then(({ default: posthog }) => posthog.capture(event, properties));
 }
 
+function getSalesOverlayColor(color: string) {
+    const hex = color.trim().replace("#", "");
+    if (!/^[\da-f]{6}$/i.test(hex)) return color;
+
+    const red = parseInt(hex.slice(0, 2), 16);
+    const green = parseInt(hex.slice(2, 4), 16);
+    const blue = parseInt(hex.slice(4, 6), 16);
+    const luminance = (red * 0.299 + green * 0.587 + blue * 0.114) / 255;
+
+    return luminance > 0.7 ? "#382a24" : color;
+}
+
 export function AnimatedSection({
     children,
     delay = 0,
@@ -193,6 +205,7 @@ export function LandscapeProductCard({
     }, [selectedIndex, selectedSubThemeIndex, themes, accentColor, accentGlow, mediaSrc, fallbackImgSrc, demoLink, demoLabel, title, description, features]);
 
     const { activeAccent, activeGlow, activeFallbackImgSrc, activeDemoLink, activeDemoLabel, activeDemoVariantId, activeTitle, activeDescription, activeFeatures } = activeValues;
+    const salesOverlayColor = getSalesOverlayColor(activeAccent);
 
     // Sub-theme panel — di-memoize agar IIFE tidak dieksekusi ulang setiap render
     const subThemePanelData = useMemo(() => {
@@ -422,7 +435,7 @@ export function LandscapeProductCard({
                                     pointerEvents: "none",
                                 }}
                             >
-                                <SalesCountBadge productId={productId} color={activeAccent} compact overlay />
+                                <SalesCountBadge productId={productId} color={salesOverlayColor} compact overlay />
                             </div>
                         )}
 
