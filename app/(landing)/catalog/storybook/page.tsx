@@ -267,7 +267,7 @@ export default function StorybookCatalogPage() {
                             productId="storybook"
             label={
               <span>
-                Storybook Edition <span style={{ opacity: 0.55 }}>•</span> New Release
+                Storybook Edition <span style={{ opacity: 0.55 }}>•</span> Storytelling
               </span>
             }
             title="Storybook Edition"
