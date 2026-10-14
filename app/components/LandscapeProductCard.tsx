@@ -77,6 +77,7 @@ export function LandscapeProductCard({
     features,
     occasions,
     animatedFeatureIcons = false,
+    salesCountPlacement = "actions",
     mediaSrc,
     fallbackImgSrc,
     accentColor,
@@ -105,6 +106,7 @@ export function LandscapeProductCard({
     features: string[];
     occasions?: string[];
     animatedFeatureIcons?: boolean;
+    salesCountPlacement?: "actions" | "media";
     mediaSrc?: string;
     fallbackImgSrc?: string;
     mediaType: "video" | "gif" | "image" | "placeholder";
@@ -407,6 +409,20 @@ export function LandscapeProductCard({
                                 <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: `${activeAccent}99` }}>
                                     Coming Soon
                                 </span>
+                            </div>
+                        )}
+
+                        {salesCountPlacement === "media" && (
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    top: "clamp(10px, 2vw, 16px)",
+                                    right: "clamp(10px, 2vw, 16px)",
+                                    zIndex: 3,
+                                    pointerEvents: "none",
+                                }}
+                            >
+                                <SalesCountBadge productId={productId} color={activeAccent} compact overlay />
                             </div>
                         )}
 
@@ -1113,7 +1129,9 @@ export function LandscapeProductCard({
                             }
                         </div>
 
-                        <SalesCountBadge productId={productId} color={activeAccent} />
+                        {salesCountPlacement === "actions" && (
+                            <SalesCountBadge productId={productId} color={activeAccent} />
+                        )}
 
                         {/* Add to Cart Button */}
                         {onAddToCart && (

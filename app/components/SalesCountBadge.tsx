@@ -7,10 +7,12 @@ export default function SalesCountBadge({
     productId,
     color = "#9a7180",
     compact = false,
+    overlay = false,
 }: {
     productId?: string;
     color?: string;
     compact?: boolean;
+    overlay?: boolean;
 }) {
     const count = useSalesCount(productId);
     if (count === null || count <= 0) return null;
@@ -24,10 +26,17 @@ export default function SalesCountBadge({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: compact ? 4 : 6,
-                minHeight: compact ? 20 : 26,
+                minHeight: overlay ? 32 : compact ? 20 : 26,
+                padding: overlay ? "8px 11px" : undefined,
+                border: overlay ? "1px solid rgba(255, 255, 255, 0.68)" : undefined,
+                borderRadius: overlay ? 999 : undefined,
+                background: overlay ? "rgba(255, 253, 250, 0.92)" : undefined,
+                boxShadow: overlay ? "0 8px 24px rgba(45, 27, 29, 0.16)" : undefined,
+                backdropFilter: overlay ? "blur(10px)" : undefined,
+                WebkitBackdropFilter: overlay ? "blur(10px)" : undefined,
                 color,
                 fontFamily: "var(--font-sans)",
-                fontSize: compact ? 10 : 12,
+                fontSize: overlay ? 11 : compact ? 10 : 12,
                 fontWeight: 700,
                 lineHeight: 1,
                 whiteSpace: "nowrap",

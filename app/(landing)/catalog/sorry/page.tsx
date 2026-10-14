@@ -166,6 +166,8 @@ export default function SorryCatalogPage() {
               "Ending Interaktif",
               "Studio Editor & Live Preview",
             ]}
+            animatedFeatureIcons
+            salesCountPlacement="media"
             price="Rp 15.000"
             demoLink="https://sorry.for-you-always.my.id/"
             demoLabel="Lihat Demo"
