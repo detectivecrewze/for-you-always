@@ -77,7 +77,7 @@ export function LandscapeProductCard({
     features,
     occasions,
     animatedFeatureIcons = false,
-    salesCountPlacement = "actions",
+    salesCountPlacement = "media",
     mediaSrc,
     fallbackImgSrc,
     accentColor,
