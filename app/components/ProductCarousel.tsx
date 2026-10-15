@@ -3,11 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import type { SlotPickerConfig } from "./SlotPickerModal";
 import SalesCountBadge from "./SalesCountBadge";
-
-const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
+import PurchaseModeModal, { type PurchaseModeConfig } from "./PurchaseModeModal";
+import CartCheckoutModal from "./CartCheckoutModal";
+import type { CartItem } from "../context/CartContext";
+import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 
 interface LoopCard {
     productId?: string;
@@ -23,8 +23,6 @@ interface LoopCard {
     href: string;
     price?: string | React.ReactNode;
     onAddToCart?: () => void;
-    isThreeSlotEligible?: boolean;
-    onAddThreeSlotToCart?: () => void;
 }
 
 interface AutoScrollCarouselProps {
@@ -35,7 +33,8 @@ interface AutoScrollCarouselProps {
 export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCarouselProps) {
     const singleSetWidth = cards.length * 380;
     const duration = singleSetWidth / speed;
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const [purchaseModeConfig, setPurchaseModeConfig] = useState<PurchaseModeConfig | null>(null);
+    const [directCheckoutItem, setDirectCheckoutItem] = useState<CartItem | null>(null);
     const [navigatingKey, setNavigatingKey] = useState<string | null>(null);
     const [isInViewport, setIsInViewport] = useState(false);
     const [isPageVisible, setIsPageVisible] = useState(true);
@@ -62,19 +61,23 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     }, []);
 
     const handlePesanClick = (card: LoopCard) => {
-        if (card.isThreeSlotEligible && card.onAddThreeSlotToCart && card.onAddToCart) {
-            setSlotPickerConfig({
-                productId: card.title,
-                productTitle: card.title,
-                themeColor: card.titleColor || "#a67c52",
-                singlePriceText: "Rp 20.000",
-                threeSlotPriceText: "Rp 25.000",
-                onSelectSingle: card.onAddToCart,
-                onSelectThreeSlot: card.onAddThreeSlotToCart,
-            });
-        } else {
+        const option = card.productId ? getDigitalPurchaseOption(card.productId) : null;
+        if (!option || !card.onAddToCart) {
             card.onAddToCart?.();
+            return;
         }
+        setPurchaseModeConfig({
+            productId: option.id,
+            productTitle: option.title,
+            themeColor: card.titleColor || option.themeColor,
+            selfServicePrice: option.basePrice,
+            doneForYouPrice: option.doneForYouPrice,
+            onSelectSelfService: card.onAddToCart,
+            onSelectDoneForYou: () => {
+                const item = createDoneForYouItem(option.id);
+                if (item) setDirectCheckoutItem(item);
+            },
+        });
     };
 
     // Render a single card
@@ -403,13 +406,8 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
 
             </div>
 
-            {/* Slot Picker Modal */}
-            {slotPickerConfig && (
-                <SlotPickerModal
-                    config={slotPickerConfig}
-                    onClose={() => setSlotPickerConfig(null)}
-                />
-            )}
+            {purchaseModeConfig && <PurchaseModeModal config={purchaseModeConfig} onClose={() => setPurchaseModeConfig(null)} />}
+            {directCheckoutItem && <CartCheckoutModal directItem={directCheckoutItem} onClose={() => setDirectCheckoutItem(null)} />}
 
         </>
     );

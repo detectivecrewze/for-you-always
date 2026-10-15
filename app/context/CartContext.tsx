@@ -13,6 +13,7 @@ export interface CartItem {
     themeImgSrc?: string;
     isThreeSlot?: boolean;   // true = user membeli 3 slot (bundle code)
     slotCount?: number;       // jumlah slot, default 1
+    fulfillmentMode?: "self_service" | "done_for_you";
 }
 
 interface CartContextValue {
@@ -107,7 +108,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setLastAdded(itemWithUniqueId);
         setIsDrawerOpen(true);
         void import("posthog-js").then(({ default: posthog }) => {
-            const packageType = item.isThreeSlot ? "3_gift" : "regular";
+            const packageType = item.fulfillmentMode === "done_for_you" ? "done_for_you" : item.isThreeSlot ? "3_gift" : "self_service";
             posthog.capture('product_added_to_cart', {
                 product_id: item.id,
                 product_name: item.title,
@@ -167,7 +168,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 products: currentItems.map(item => ({
                     product_id: item.id,
                     product_name: item.title,
-                    package: item.isThreeSlot ? '3_gift' : 'regular',
+                    package: item.fulfillmentMode === 'done_for_you' ? 'done_for_you' : item.isThreeSlot ? '3_gift' : 'self_service',
                     price: item.numericPrice,
                 })),
             });

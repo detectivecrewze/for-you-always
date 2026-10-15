@@ -7,13 +7,13 @@ import Navbar from "../../components/Navbar";
 import CompactProductCard from "../../components/CompactProductCard";
 import { AnimatedSection } from "../../components/AnimatedSection";
 import { useCart, type CartItem } from "../../context/CartContext";
-import SlotPickerModal, { SlotPickerConfig } from "../../components/SlotPickerModal";
+import PurchaseModeModal, { type PurchaseModeConfig } from "../../components/PurchaseModeModal";
 import CartCheckoutModal from "../../components/CartCheckoutModal";
 import { STOREFRONT_CATALOG, type StorefrontCatalogItem } from "@/lib/storefront-catalog";
+import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 import styles from "./catalog.module.css";
 
 const CATALOG_ITEMS = STOREFRONT_CATALOG;
-const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
 const PREFERRED_OCCASION_ORDER = ["birthday", "anniversary", "ldr", "apology", "bestie", "crush"];
 
 function normalizeOccasion(value: string) {
@@ -34,7 +34,7 @@ const OCCASION_FILTERS = [
 export default function CatalogPage() {
     const router = useRouter();
     const { addToCart } = useCart();
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const [purchaseModeConfig, setPurchaseModeConfig] = useState<PurchaseModeConfig | null>(null);
     const [unboxStock, setUnboxStock] = useState<number | null>(null);
     const [directCheckoutItem, setDirectCheckoutItem] = useState<CartItem | null>(null);
     const [activeOccasion, setActiveOccasion] = useState("all");
@@ -76,39 +76,32 @@ export default function CatalogPage() {
             return;
         }
 
-        if (item.id === "sorry") {
-            setDirectCheckoutItem({
-                id: item.id,
-                title: item.title,
-                numericPrice: item.numericPrice,
-                themeColor: item.titleColor,
-                themeImgSrc: "/assets/sorry-features/sorry-envelope.webp",
-            });
-            return;
-        }
+        const oldNumericPrice = item.oldPrice ? Number.parseInt(item.oldPrice.replace(/\D/g, ""), 10) : undefined;
+        const selfServiceItem: CartItem = { id: item.id, title: item.title, numericPrice: item.numericPrice, oldNumericPrice, themeColor: item.titleColor };
+        const option = getDigitalPurchaseOption(item.id);
 
-        const parseOldPrice = (value?: string) => {
-            if (!value) return undefined;
-            const match = value.replace(/\./g, "").match(/\d+/);
-            return match ? Number.parseInt(match[0], 10) : undefined;
+        const selectSelfService = () => {
+            if (item.id === "sorry") setDirectCheckoutItem({ ...selfServiceItem, themeImgSrc: "/assets/sorry-features/sorry-envelope.webp", fulfillmentMode: "self_service" });
+            else addToCart({ ...selfServiceItem, fulfillmentMode: "self_service" });
         };
-        const oldNumericPrice = parseOldPrice(item.oldPrice);
 
-        if (THREE_SLOT_IDS.has(item.id)) {
-            setSlotPickerConfig({
-                productId: item.id,
-                productTitle: item.title,
-                themeColor: item.titleColor,
-                singlePriceText: "Rp 20.000",
-                singleOldPriceText: "Rp 30.000",
-                threeSlotPriceText: "Rp 25.000",
-                onSelectSingle: () => addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, oldNumericPrice, themeColor: item.titleColor }),
-                onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Gift)`, numericPrice: 25000, themeColor: item.titleColor, isThreeSlot: true, slotCount: 3 }),
-            });
+        if (!option) {
+            selectSelfService();
             return;
         }
 
-        addToCart({ id: item.id, title: item.title, numericPrice: item.numericPrice, oldNumericPrice, themeColor: item.titleColor });
+        setPurchaseModeConfig({
+            productId: option.id,
+            productTitle: option.title,
+            themeColor: option.themeColor,
+            selfServicePrice: option.basePrice,
+            doneForYouPrice: option.doneForYouPrice,
+            onSelectSelfService: selectSelfService,
+            onSelectDoneForYou: () => {
+                const doneForYouItem = createDoneForYouItem(item.id);
+                if (doneForYouItem) setDirectCheckoutItem(doneForYouItem);
+            },
+        });
     }, [addToCart, router]);
 
     return (
@@ -162,7 +155,7 @@ export default function CatalogPage() {
                 </section>
             </div>
 
-            {slotPickerConfig && <SlotPickerModal config={slotPickerConfig} onClose={() => setSlotPickerConfig(null)} />}
+            {purchaseModeConfig && <PurchaseModeModal config={purchaseModeConfig} onClose={() => setPurchaseModeConfig(null)} />}
             {directCheckoutItem && <CartCheckoutModal directItem={directCheckoutItem} onClose={() => setDirectCheckoutItem(null)} />}
 
             <a className={styles.whatsApp} href="https://wa.me/6281936109076?text=Halo%20Digital%20Atelier!%20Saya%20ingin%20bertanya%20tentang%20produk%20kalian." target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp">

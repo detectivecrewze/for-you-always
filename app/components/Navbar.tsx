@@ -54,7 +54,7 @@ export default function Navbar() {
     return (
         <>
             {/* ── Wrapper: full width container, centers the pill ── */}
-            <div style={{
+            <div className="site-navbar-shell" style={{
                 position: "fixed", top: 0, left: 0, right: 0, zIndex: 10000,
                 display: "flex", justifyContent: "center",
                 padding: scrolled ? "10px 20px 0" : "16px 20px 0",
@@ -233,7 +233,7 @@ export default function Navbar() {
             </div>
 
             {/* Mobile dropdown menu */}
-            <div style={{
+            <div className="site-navbar-dropdown nav-mobile-dropdown" style={{
                 position: "fixed", top: scrolled ? 74 : 80, left: 20, right: 20, zIndex: 998,
                 background: "rgba(250,247,242,0.98)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)",
                 border: mobileOpen ? "1px solid rgba(205,171,143,0.25)" : "none",
@@ -245,7 +245,7 @@ export default function Navbar() {
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 boxShadow: mobileOpen ? "0 12px 40px -8px rgba(29,24,22,0.16)" : "none",
                 pointerEvents: mobileOpen ? "auto" : "none",
-            }} className="nav-mobile-dropdown">
+            }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                     {mobileLinks.map(l => (
                         <Link key={l.href} href={l.href}

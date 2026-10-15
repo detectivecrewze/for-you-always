@@ -91,8 +91,6 @@ export default function CollectionSection() {
                                 description: "Amplop digital interaktif dengan efek typewriter sinematik dan foto/video di akhir surat.",
                                 href: "/catalog/letter",
                                 onAddToCart: () => addToCart({ id: "letter", title: "Letter Edition", numericPrice: 20000, themeColor: "#7a5438" }),
-                                isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "letter", title: "Letter Edition (3 Gift)", numericPrice: 25000, themeColor: "#7a5438", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "PHYSICAL GIFT",
@@ -161,8 +159,6 @@ export default function CollectionSection() {
                                 description: "Website kado romantis dengan rekaman suaramu, galeri foto sinematik, dan musik latar pilihan.",
                                 href: "/catalog/voices",
                                 onAddToCart: () => addToCart({ id: "voices", title: "Voices Gift", numericPrice: 20000, themeColor: "#a67c52" }),
-                                isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "voices", title: "Voices Gift (3 Gift)", numericPrice: 25000, themeColor: "#a67c52", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "Premium Bundle",
@@ -176,8 +172,6 @@ export default function CollectionSection() {
                                 description: "Desain kaset klasik dengan galeri foto & video untuk momen yang tak terlupakan.",
                                 href: "/catalog/mixtape",
                                 onAddToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition", numericPrice: 20000, themeColor: "#5a8d9e" }),
-                                isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 25000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "New",
@@ -191,8 +185,6 @@ export default function CollectionSection() {
                                 description: "Undangan kencan interaktif — pilih tanggal, aktivitas, dan kirim tiket kencan digital.",
                                 href: "/catalog/invitation",
                                 onAddToCart: () => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 20000, themeColor: "#8a3050" }),
-                                isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "invitation", title: "Invitation Edition (3 Gift)", numericPrice: 25000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "10 Rooms",
@@ -219,8 +211,6 @@ export default function CollectionSection() {
                                 description: "Tampilan retro Windows 98 dengan 5 stages of surprises dan custom GIF pilihan.",
                                 href: "/catalog/retro",
                                 onAddToCart: () => addToCart({ id: "retro", title: "Retro Edition", numericPrice: 20000, themeColor: "#008689" }),
-                                isThreeSlotEligible: true,
-                                onAddThreeSlotToCart: () => addToCart({ id: "retro", title: "Retro Edition (3 Gift)", numericPrice: 25000, themeColor: "#008689", isThreeSlot: true, slotCount: 3 })
                             },
                             {
                                 badgeText: "Storytelling",

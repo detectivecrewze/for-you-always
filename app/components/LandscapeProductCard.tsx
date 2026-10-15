@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import type { SlotPickerConfig } from "./SlotPickerModal";
 import DiscountPrice from "./DiscountPrice";
 import SalesCountBadge from "./SalesCountBadge";
 import ProductFeatureMotionIcon from "./ProductFeatureMotionIcon";
-
-const SlotPickerModal = dynamic(() => import("./SlotPickerModal"), { ssr: false });
+import PurchaseModeModal, { type PurchaseModeConfig } from "./PurchaseModeModal";
+import CartCheckoutModal from "./CartCheckoutModal";
+import type { CartItem } from "../context/CartContext";
+import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 
 function captureProductEvent(event: string, properties: Record<string, unknown>) {
     void import("posthog-js").then(({ default: posthog }) => posthog.capture(event, properties));
@@ -96,7 +96,6 @@ export function LandscapeProductCard({
     accentGlow,
     href,
     onAddToCart,
-    onAddThreeSlotToCart,
     themesLabel = "Koleksi Tema",
     themes,
     initialSelectedIndex,
@@ -126,7 +125,6 @@ export function LandscapeProductCard({
     accentGlow: string;
     href?: string;
     onAddToCart?: () => void;
-    onAddThreeSlotToCart?: () => void;
     themesLabel?: string;
     themes?: { name: string, desc: string, color?: string, title?: string, description?: string, features?: string[], videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, demoVariantId?: string, demoDisabled?: boolean, defaultSubThemeIndex?: number, subThemes?: { name: string, color?: string, videoSrc?: string, fallbackImgSrc?: string, demoLink?: string, demoLabel?: string, demoVariantId?: string, demoDisabled?: boolean }[] }[];
     initialSelectedIndex?: number;
@@ -141,7 +139,8 @@ export function LandscapeProductCard({
     priority?: boolean;
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex ?? null);
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const [purchaseModeConfig, setPurchaseModeConfig] = useState<PurchaseModeConfig | null>(null);
+    const [directCheckoutItem, setDirectCheckoutItem] = useState<CartItem | null>(null);
     const showcaseRef = useRef<HTMLDivElement>(null);
     
     // Track selected sub-theme per tema
@@ -320,21 +319,25 @@ export function LandscapeProductCard({
     }, [subThemePanelData.currentTheme]);
 
     const handlePesanClick = useCallback(() => {
-        captureProductEvent('clicked_pesan', { product: title });
-        if (onAddThreeSlotToCart && onAddToCart) {
-            setSlotPickerConfig({
-                productId: title,
-                productTitle: title,
-                themeColor: accentColor,
-                singlePriceText: "Rp 20.000",
-                threeSlotPriceText: "Rp 25.000",
-                onSelectSingle: onAddToCart,
-                onSelectThreeSlot: onAddThreeSlotToCart,
-            });
-        } else {
+        captureProductEvent('clicked_pesan', { product: title, product_id: productId });
+        const option = getDigitalPurchaseOption(productId);
+        if (!option || !onAddToCart) {
             onAddToCart?.();
+            return;
         }
-    }, [title, onAddToCart, onAddThreeSlotToCart, accentColor]);
+        setPurchaseModeConfig({
+            productId: option.id,
+            productTitle: option.title,
+            themeColor: activeAccent || option.themeColor,
+            selfServicePrice: option.basePrice,
+            doneForYouPrice: option.doneForYouPrice,
+            onSelectSelfService: onAddToCart,
+            onSelectDoneForYou: () => {
+                const item = createDoneForYouItem(productId);
+                if (item) setDirectCheckoutItem({ ...item, themeColor: activeAccent || item.themeColor });
+            },
+        });
+    }, [title, productId, onAddToCart, activeAccent]);
 
     const handlePesanBtnMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
@@ -1209,12 +1212,11 @@ export function LandscapeProductCard({
             </div>
         </AnimatedSection>
 
-        {/* Slot Picker Modal */}
-        {slotPickerConfig && (
-            <SlotPickerModal
-                config={slotPickerConfig}
-                onClose={() => setSlotPickerConfig(null)}
-            />
+        {purchaseModeConfig && (
+            <PurchaseModeModal config={purchaseModeConfig} onClose={() => setPurchaseModeConfig(null)} />
+        )}
+        {directCheckoutItem && (
+            <CartCheckoutModal directItem={directCheckoutItem} onClose={() => setDirectCheckoutItem(null)} />
         )}
         </>
     );

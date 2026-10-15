@@ -6,8 +6,9 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import Navbar from "../../components/Navbar";
 import DemoPreviewModal from "../../components/LazyDemoPreviewModal";
 import type { DemoCloseReason, DemoPreviewVariant } from "../../components/DemoPreviewModal";
-import SlotPickerModal, { type SlotPickerConfig } from "../../components/SlotPickerModal";
-import { useCart } from "../../context/CartContext";
+import PurchaseModeModal, { type PurchaseModeConfig } from "../../components/PurchaseModeModal";
+import CartCheckoutModal from "../../components/CartCheckoutModal";
+import { useCart, type CartItem } from "../../context/CartContext";
 import {
     FINDER_QUESTIONS,
     INITIAL_FINDER_ANSWERS,
@@ -23,10 +24,10 @@ import {
 } from "@/lib/gift-finder";
 import { STOREFRONT_DEMO_CONFIGS, type DemoProductId } from "@/lib/storefront-demo-config";
 import type { StorefrontCatalogItem } from "@/lib/storefront-catalog";
+import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 import styles from "./GiftFinderClient.module.css";
 
 const FINDER_VERSION = "v2";
-const THREE_SLOT_IDS = new Set(["letter", "voices", "retro", "mixtape", "invitation"]);
 const DEMO_PRODUCT_IDS = new Set<DemoProductId>(["loves", "letter", "voices", "mixtape", "invitation", "retro", "wrapped", "birthday", "arcade", "storybook"]);
 
 const ROLE_LABELS: Record<FinderRecommendation["role"], string> = {
@@ -237,7 +238,8 @@ export default function GiftFinderClient() {
     const [showResults, setShowResults] = useState(false);
     const [budget, setBudget] = useState<FinderBudget>("all");
     const [activeDemo, setActiveDemo] = useState<ActiveDemo | null>(null);
-    const [slotPickerConfig, setSlotPickerConfig] = useState<SlotPickerConfig | null>(null);
+    const [purchaseModeConfig, setPurchaseModeConfig] = useState<PurchaseModeConfig | null>(null);
+    const [directCheckoutItem, setDirectCheckoutItem] = useState<CartItem | null>(null);
     const focusTargetRef = useRef<HTMLHeadingElement>(null);
     const startedRef = useRef(false);
     const resultSignatureRef = useRef("");
@@ -354,16 +356,23 @@ export default function GiftFinderClient() {
             return;
         }
         const item = cartItemFor(displayedItem);
-        if (THREE_SLOT_IDS.has(item.id)) {
-            setSlotPickerConfig({
-                productId: item.id, productTitle: item.title, themeColor: item.themeColor,
-                singlePriceText: "Rp 20.000", singleOldPriceText: "Rp 30.000", threeSlotPriceText: "Rp 25.000",
-                onSelectSingle: () => addToCart(item),
-                onSelectThreeSlot: () => addToCart({ id: item.id, title: `${item.title} (3 Gift)`, numericPrice: 25000, themeColor: item.themeColor, isThreeSlot: true, slotCount: 3 }),
-            });
+        const option = getDigitalPurchaseOption(item.id);
+        if (!option) {
+            addToCart({ ...item, fulfillmentMode: "self_service" });
             return;
         }
-        addToCart(item);
+        setPurchaseModeConfig({
+            productId: option.id,
+            productTitle: option.title,
+            themeColor: option.themeColor,
+            selfServicePrice: option.basePrice,
+            doneForYouPrice: option.doneForYouPrice,
+            onSelectSelfService: () => addToCart({ ...item, fulfillmentMode: "self_service" }),
+            onSelectDoneForYou: () => {
+                const doneForYouItem = createDoneForYouItem(option.id);
+                if (doneForYouItem) setDirectCheckoutItem(doneForYouItem);
+            },
+        });
     }, [addToCart, analyticsBase, answers, cartItemFor, router]);
 
     const closeDemo = useCallback((reason: DemoCloseReason) => {
@@ -431,7 +440,8 @@ export default function GiftFinderClient() {
                 />
             )}
 
-            {slotPickerConfig && <SlotPickerModal config={slotPickerConfig} onClose={() => setSlotPickerConfig(null)} />}
+            {purchaseModeConfig && <PurchaseModeModal config={purchaseModeConfig} onClose={() => setPurchaseModeConfig(null)} />}
+            {directCheckoutItem && <CartCheckoutModal directItem={directCheckoutItem} onClose={() => setDirectCheckoutItem(null)} />}
         </main>
     );
 }

@@ -10,6 +10,10 @@ interface CartCheckoutModalProps {
     directItem?: CartItem;
 }
 
+const getReviewItemTitle = (item: CartItem) => item.fulfillmentMode === "done_for_you"
+    ? item.title.replace(/\s*\(Terima Jadi\)\s*$/i, "")
+    : item.title;
+
 export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutModalProps) {
     const { items: cartItems, cartTotal: cartContextTotal, clearCart } = useCart();
     const items = directItem ? [directItem] : cartItems;
@@ -41,6 +45,7 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                 price: initialCheckout.cartTotal,
                 currency: "IDR",
                 source: initialCheckout.source,
+                fulfillment_mode: initialCheckout.items.length === 1 ? (initialCheckout.items[0].fulfillmentMode || "self_service") : "mixed",
             })).catch(() => {});
         }
         const controller = new AbortController();
@@ -58,8 +63,17 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
     useEffect(() => () => {
         if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     }, []);
+
+    useEffect(() => {
+        document.body.classList.add("checkout-modal-open");
+
+        return () => {
+            document.body.classList.remove("checkout-modal-open");
+        };
+    }, []);
     
     const hasMemoria = items.some(item => item.id === "loves");
+    const isDoneForYou = items.length === 1 && items[0]?.fulfillmentMode === "done_for_you";
 
     const handleClose = useCallback(() => {
         if (closeTimerRef.current) return;
@@ -85,7 +99,7 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                 body: JSON.stringify({
                     order_id: orderId,
                     gross_amount: cartTotal,
-                    product_type: items.map(i => i.isThreeSlot ? `${i.id}_3slot` : i.id).join(","),
+                    product_type: items.map(i => i.fulfillmentMode === "done_for_you" ? `${i.id}_dfy` : i.isThreeSlot ? `${i.id}_3slot` : i.id).join(","),
                     customer_details: {
                         first_name: customerDetails.firstName,
                         email: customerDetails.email,
@@ -113,6 +127,7 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                     product_id: items.length === 1 ? items[0].id : undefined,
                     currency: 'IDR',
                     source: directItem ? 'direct_checkout' : 'cart',
+                    fulfillment_mode: items.length === 1 ? (items[0].fulfillmentMode || 'self_service') : 'mixed',
                 });
                 handleClose();
                 if (!directItem) clearCart();
@@ -144,19 +159,20 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
     };
 
     return (
-        <div style={{
+        <div className="checkout-modal-backdrop" style={{
             position: "fixed", inset: 0,
-            background: "rgba(0,0,0,0.5)",
-            backdropFilter: "blur(4px)",
-            zIndex: 999999,
+            background: "rgba(29,24,22,0.68)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            zIndex: 2000000,
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: 20,
             opacity: closing ? 0 : 1,
             transition: "opacity 0.2s ease",
         }}>
-            <div style={{
+            <div className="checkout-modal-panel" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title" style={{
                 background: "#fff",
-                width: "100%", maxWidth: 460,
+                width: "100%", maxWidth: 520,
                 borderRadius: 28,
                 padding: "36px 32px",
                 position: "relative",
@@ -178,7 +194,9 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                         display: "flex", alignItems: "center", justifyContent: "center",
                         cursor: "pointer", color: "#8b7e75",
                         transition: "all 0.2s ease",
+                        zIndex: 2,
                     }}
+                    aria-label="Tutup checkout"
                 >
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -187,19 +205,23 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
 
                 {step === "form" ? (
                     <>
-                        <h3 style={{
+                        <h3 id="checkout-modal-title" className="checkout-modal-title" style={{
                             fontFamily: "var(--font-display)",
                             fontSize: 30, color: "#1d1816",
-                            margin: "0 0 6px", letterSpacing: "-0.02em", lineHeight: 1,
+                            margin: "0 0 8px", paddingRight: 64,
+                            letterSpacing: "-0.02em", lineHeight: 1.08,
+                            overflowWrap: "anywhere",
                         }}>
                             Checkout <span style={{ fontStyle: "italic", color: items.length > 1 ? "#a67c52" : items[0]?.themeColor || "#a67c52" }}>
                                 {items.length > 1 ? "Bundle" : items[0]?.title || "Kado"}
                             </span>
                         </h3>
                         <p style={{ fontSize: 13, color: "#8b7e75", margin: "0 0 28px", lineHeight: 1.6, fontFamily: "var(--font-sans)" }}>
-                            {items.length > 1
-                                ? "Akses semua kado digital akan dikirim otomatis ke email kamu."
-                                : "Akses kado digital akan dikirim otomatis ke email kamu."}
+                            {isDoneForYou
+                                ? "Setelah pembayaran, kirim bahan melalui WhatsApp. Tim kami akan mengerjakan gift dan mengirim link final setelah selesai."
+                                : items.length > 1
+                                    ? "Akses semua kado digital akan dikirim otomatis ke email kamu."
+                                    : "Akses kado digital akan dikirim otomatis ke email kamu."}
                         </p>
 
                         {hasMemoria && memoriaNotice.isActive && (
@@ -342,12 +364,19 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                                 </p>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                                     {items.map((item, index) => (
-                                        <div key={item.cartItemId || `${item.id}-${index}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                        <div key={item.cartItemId || `${item.id}-${index}`} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "center", gap: 12 }}>
+                                            <div style={{ display: "grid", gridTemplateColumns: "10px minmax(0, 1fr)", alignItems: "center", gap: 8, minWidth: 0 }}>
                                                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.themeColor || "#cdab8f", flexShrink: 0 }} />
-                                                <span style={{ fontSize: 13, color: "#382a24", fontFamily: "var(--font-sans)", fontWeight: 500 }}>{item.title}</span>
+                                                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "5px 7px", minWidth: 0 }}>
+                                                    <span style={{ fontSize: 13, lineHeight: 1.35, color: "#382a24", fontFamily: "var(--font-sans)", fontWeight: 500 }}>{getReviewItemTitle(item)}</span>
+                                                    {item.fulfillmentMode === "done_for_you" && (
+                                                        <span style={{ display: "inline-flex", alignItems: "center", minHeight: 20, padding: "3px 7px", borderRadius: 999, background: `${item.themeColor}18`, color: item.themeColor, fontFamily: "var(--font-sans)", fontSize: 7.5, lineHeight: 1, fontWeight: 800, letterSpacing: ".055em", whiteSpace: "nowrap", flexShrink: 0 }}>
+                                                            TERIMA JADI
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                                            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", flexWrap: "wrap", gap: 5, minWidth: 58 }}>
                                                 {item.oldNumericPrice && (
                                                     <span style={{
                                                         fontSize: 11, fontWeight: 600,
@@ -359,7 +388,7 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                                                         Rp {item.oldNumericPrice.toLocaleString("id-ID")}
                                                     </span>
                                                 )}
-                                                <span style={{ fontSize: 13, fontWeight: 700, color: "#382a24", fontFamily: "var(--font-sans)" }}>
+                                                <span style={{ fontSize: 13, fontWeight: 700, color: "#382a24", fontFamily: "var(--font-sans)", whiteSpace: "nowrap" }}>
                                                     Rp {item.numericPrice.toLocaleString("id-ID")}
                                                 </span>
                                             </div>
@@ -437,6 +466,47 @@ export default function CartCheckoutModal({ onClose, directItem }: CartCheckoutM
                     </>
                 )}
             </div>
+
+            <style jsx global>{`
+                body.checkout-modal-open {
+                    overflow: hidden !important;
+                }
+
+                body.checkout-modal-open .site-navbar-shell,
+                body.checkout-modal-open .site-navbar-dropdown {
+                    opacity: 0 !important;
+                    visibility: hidden !important;
+                    pointer-events: none !important;
+                }
+
+                @media (max-width: 560px) {
+                    .checkout-modal-backdrop {
+                        padding: 16px !important;
+                    }
+
+                    .checkout-modal-panel {
+                        max-height: calc(100dvh - 32px) !important;
+                        padding: 32px 24px 28px !important;
+                        border-radius: 24px !important;
+                    }
+
+                    .checkout-modal-title {
+                        padding-right: 52px !important;
+                        font-size: clamp(26px, 8vw, 30px) !important;
+                        line-height: 1.08 !important;
+                    }
+                }
+
+                @media (max-width: 360px) {
+                    .checkout-modal-panel {
+                        padding-inline: 20px !important;
+                    }
+
+                    .checkout-modal-title {
+                        font-size: 25px !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

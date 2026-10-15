@@ -84,7 +84,7 @@ interface OrderItem {
     };
     studio_link?: string;
     magic_link?: string;
-    customization_status?: "draft" | "published";
+    customization_status?: "draft" | "published" | "pending_materials" | "in_progress" | "delivered";
     fulfillment_status?: "pending_customization" | "ready_to_pack" | "shipped";
     tracking_number?: string;
     courier?: string;
@@ -677,12 +677,8 @@ export default function Dashboard() {
         };
     };
 
-    const getProductType = (order: OrderItem) => {
-        return order.product_type || order.product_id || "Digital Gift";
-    };
-
     const getDigitalFormatName = (order: OrderItem) => {
-        const raw = (order.product_type || order.product_id || "").replace("unbox_", "").replace("_3slot", "");
+        const raw = (order.product_type || order.product_id || "").replace("unbox_", "").replace("_3slot", "").replace("_dfy", "");
         const map: Record<string, string> = {
             loves: "Memoria",
             letter: "Letter",
@@ -747,8 +743,13 @@ export default function Dashboard() {
             }
         } else {
             const prodName = getDigitalFormatName(order) + " Edition";
-            const magicLink = order.studio_link || order.magic_link || `https://for-you-always.my.id/order-status?order_id=${orderId}`;
-            message = `Halo Kak ${custName}! ✨\n\nTerima kasih telah memesan *${prodName}* di For you, Always. (Order ID: ${orderId}).\n\nBerikut link akses studio pembuatan kado kamu:\n👉 ${magicLink}\n\nKakak bisa langsung memasukkan foto, lagu, dan kata-kata puitis untuk pasangan lewat link di atas ya. Jika ada kendala, jangan ragu untuk chat kami di sini! 🤍`;
+            const isDoneForYou = String(order.product_id || order.product_type || "").includes("_dfy");
+            if (isDoneForYou) {
+                message = `Halo Kak ${custName}!\n\nTerima kasih telah memesan layanan *Terima Jadi ${prodName}* di For you, Always. (Order ID: ${orderId}).\n\nPembayaran sudah kami terima. Silakan kirim seluruh bahan gift melalui chat ini agar tim kami dapat mulai mengerjakan. Versi pertama selesai maksimal 1x24 jam setelah bahan lengkap dan termasuk maksimal 3 kali revisi.`;
+            } else {
+                const magicLink = order.studio_link || order.magic_link || `https://for-you-always.my.id/order-status?order_id=${orderId}`;
+                message = `Halo Kak ${custName}! ✨\n\nTerima kasih telah memesan *${prodName}* di For you, Always. (Order ID: ${orderId}).\n\nBerikut link akses studio pembuatan kado kamu:\n👉 ${magicLink}\n\nKakak bisa langsung memasukkan foto, lagu, dan kata-kata puitis untuk pasangan lewat link di atas ya. Jika ada kendala, jangan ragu untuk chat kami di sini! 🤍`;
+            }
         }
 
         return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
@@ -2143,7 +2144,7 @@ export default function Dashboard() {
                                                                         onClick={() => {
                                                                             setEditingGiftOrderId(order.order_id);
                                                                             setGiftLinkInput(giftLink);
-                                                                            setCustomizationStatusInput(order.customization_status || "draft");
+                                                                            setCustomizationStatusInput(order.customization_status === "published" ? "published" : "draft");
                                                                         }}
                                                                         style={{ background: "none", border: "none", color: "#a67c52", fontSize: 9.5, fontWeight: 700, cursor: "pointer", padding: 0, textAlign: "left", marginTop: 2 }}
                                                                     >
@@ -2471,6 +2472,7 @@ export default function Dashboard() {
                                     style={{ padding: "9px 12px", borderRadius: 8, border: "1px solid #dcd1c6", background: "#fff", fontSize: 12, fontWeight: 600 }}
                                 >
                                     <option value="all">Semua Produk</option>
+                                    <option value="dfy">Terima Jadi</option>
                                     <option value="letter">Letter Edition</option>
                                     <option value="voices">Voices Gift</option>
                                     <option value="arcade">Arcade Edition</option>
@@ -2514,7 +2516,7 @@ export default function Dashboard() {
                                         <tbody>
                                             {orders.map((order) => {
                                                 const cust = getCustomer(order);
-                                                const pType = getProductType(order);
+                                                const isDoneForYou = String(order.product_id || order.product_type || "").includes("_dfy");
                                                 const hasLink = Boolean(order.studio_link || order.magic_link);
                                                 return (
                                                     <tr key={order.order_id} style={{ borderBottom: "1px solid #f0e9e2" }}>
@@ -2547,8 +2549,21 @@ export default function Dashboard() {
                                                                 background: "rgba(166,124,82,0.1)", color: "#a67c52", fontWeight: 700,
                                                                 fontSize: 10, textTransform: "capitalize",
                                                             }}>
-                                                                {pType}
+                                                                {getDigitalFormatName(order)}
                                                             </span>
+                                                            {isDoneForYou && <span style={{ display: "block", width: "fit-content", marginTop: 5, padding: "2px 7px", borderRadius: 999, background: "#8b1d2c", color: "#fff", fontSize: 8.5, fontWeight: 800, letterSpacing: ".08em" }}>TERIMA JADI</span>}
+                                                            {isDoneForYou && (
+                                                                <select value={order.customization_status || "pending_materials"} onChange={async (event) => {
+                                                                    const value = event.target.value as OrderItem["customization_status"];
+                                                                    const response = await fetch("/api/admin/update-resi", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order_id: order.order_id, customization_status: value }) });
+                                                                    if (response.ok) setOrders((current) => current.map((item) => item.order_id === order.order_id ? { ...item, customization_status: value } : item));
+                                                                    else showToast("Gagal memperbarui status Terima Jadi.", "error");
+                                                                }} style={{ display: "block", marginTop: 6, maxWidth: 138, padding: "4px 6px", borderRadius: 6, border: "1px solid #dcd1c6", background: "#fff", color: "#59483f", fontSize: 9.5, fontWeight: 700 }}>
+                                                                    <option value="pending_materials">Menunggu bahan</option>
+                                                                    <option value="in_progress">Sedang dikerjakan</option>
+                                                                    <option value="delivered">Selesai / dikirim</option>
+                                                                </select>
+                                                            )}
                                                         </td>
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             <div style={{ fontWeight: 700, color: "#1d1816" }}>{cust.name}</div>
@@ -2573,12 +2588,12 @@ export default function Dashboard() {
                                                                         fontWeight: 700,
                                                                         textDecoration: "none"
                                                                     }}
-                                                                    title="Kirim link studio kado ke WhatsApp pembeli"
+                                                                    title={isDoneForYou ? "Hubungi customer tanpa membagikan Studio" : "Kirim link studio kado ke WhatsApp pembeli"}
                                                                 >
                                                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                                                                         <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.53 7.37C9.34 7.37 9.04 7.44 8.78 7.73C8.52 8.01 7.79 8.69 7.79 10.09C7.79 11.49 8.81 12.84 8.95 13.03C9.09 13.22 11.05 16.24 14.05 17.54C14.76 17.85 15.32 18.03 15.75 18.17C16.46 18.4 17.11 18.37 17.62 18.29C18.19 18.2 19.38 17.57 19.63 16.87C19.88 16.17 19.88 15.57 19.8 15.44C19.73 15.32 19.54 15.25 19.25 15.11C18.96 14.96 17.55 14.27 17.29 14.17C17.03 14.08 16.84 14.03 16.65 14.32C16.46 14.61 15.92 15.25 15.76 15.44C15.6 15.62 15.44 15.65 15.15 15.5C14.86 15.36 13.93 15.05 12.83 14.07C11.97 13.31 11.39 12.37 11.23 12.09C11.07 11.8 11.21 11.65 11.36 11.51C11.49 11.38 11.65 11.17 11.79 11.01C11.93 10.84 11.98 10.72 12.07 10.53C12.17 10.35 12.12 10.19 12.05 10.05C11.97 9.91 11.41 8.54 11.18 7.98C10.95 7.43 10.72 7.51 10.55 7.5C10.39 7.49 10.2 7.49 10.01 7.49L9.53 7.37Z" />
                                                                     </svg>
-                                                                    <span>Kirim Link WA</span>
+                                                                    <span>{isDoneForYou ? "Chat Customer" : "Kirim Link WA"}</span>
                                                                 </a>
                                                             )}
                                                         </td>
@@ -2598,6 +2613,7 @@ export default function Dashboard() {
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             {hasLink ? (
                                                                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                                                                    <a href={order.studio_link || order.magic_link || "#"} target="_blank" rel="noopener noreferrer" style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #8b1d2c", background: "#fff5f6", color: "#8b1d2c", fontSize: 10, fontWeight: 700, textDecoration: "none" }}>{isDoneForYou ? "Buka Studio Internal" : "Buka Studio"}</a>
                                                                     <button
                                                                         onClick={() => handleCopyStudioLink(order)}
                                                                         style={{

@@ -88,7 +88,7 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
             "Pemutar Audio Rekaman Suara Pribadi dengan Desain Aesthetic Retro Player",
             "Galeri Foto Kenangan Sinematik (Slide Foto dengan Transisi Halus)",
             "Pemutar Musik Latar Romantis yang Mengalun Bersamaan",
-            "Tersedia Paket 3-Slot Bundle (Beli 1 dapat 3 kuota kado untuk momen berbeda)"
+            "Tersedia opsi Buat Sendiri atau Terima Jadi oleh tim"
         ],
         digitalExperience: {
             interactiveMechanism: "Penerima menekan tombol play, mendengar rekaman suara tulus pengirim sambil melihat foto-foto kenangan berputar.",

@@ -137,9 +137,9 @@ export default function InvitationCatalogPage() {
                             productId="invitation"
                             label="Invitation Edition"
                             title="Undangan Kencan Interaktif"
-                            description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih paket reguler untuk 1 undangan atau paket 3 Gift untuk membuat 3 undangan berbeda."
+                            description="Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih Buat Sendiri untuk mengisi lewat Studio atau Terima Jadi agar gift dikerjakan oleh tim kami."
                             features={[
-                                "Pilihan Paket 1 atau 3 Gift",
+                                "Pilihan Buat Sendiri atau Terima Jadi",
                                 "Amplop Digital Interaktif",
                                 "Pilih Tanggal Kencan Berdua",
                                 "Pilih Aktivitas & Dress Code",
@@ -154,17 +154,16 @@ export default function InvitationCatalogPage() {
                             accentColor="#e8789a"
                             accentGlow="rgba(232,120,154,0.2)"
                             onAddToCart={() => addToCart({ id: "invitation", title: "Invitation Edition", numericPrice: 20000, oldNumericPrice: 30000, themeColor: "#8a3050" })}
-                            onAddThreeSlotToCart={() => addToCart({ id: "invitation", title: "Invitation Edition (3 Gift)", numericPrice: 25000, themeColor: "#8a3050", isThreeSlot: true, slotCount: 3 })}
                             themesLabel="Pilih Mode & Template"
                             themes={[
                                 {
                                     name: "Invitation Date",
                                     desc: "Kartu undangan kencan interaktif dengan date picker & dress code",
                                     title: "Undangan Kencan Interaktif",
-                                    description: "Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih paket reguler untuk 1 undangan atau paket 3 Gift untuk membuat 3 undangan berbeda.",
+                                    description: "Kirimkan undangan kencan yang manis dan interaktif kepada orang spesialmu. Pilih Buat Sendiri untuk mengisi lewat Studio atau Terima Jadi agar gift dikerjakan oleh tim kami.",
                                     color: "#e8789a",
                                     features: [
-                                        "Pilihan Paket 1 atau 3 Gift",
+                                        "Pilihan Buat Sendiri atau Terima Jadi",
                                         "Amplop Digital Interaktif",
                                         "Pilih Tanggal Kencan Berdua",
                                         "Pilih Aktivitas & Dress Code",
@@ -191,7 +190,7 @@ export default function InvitationCatalogPage() {
                                     description: "Buat susunan acara kencan yang rapi dan estetik untuk hari spesialmu. Pasanganmu bisa melihat jadwal kencan, dress code, dan catatan manis secara interaktif.",
                                     color: "#2b5c8f",
                                     features: [
-                                        "Pilihan Paket 1 atau 3 Gift",
+                                        "Pilihan Buat Sendiri atau Terima Jadi",
                                         "Amplop Digital Interaktif",
                                         "Kartu Rundown & Susunan Acara",
                                         "Pilih Dress Code & Catatan",

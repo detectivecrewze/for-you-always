@@ -103,7 +103,7 @@ export default function MixtapeCatalogPage() {
                             title="Mixtape Edition"
                             description="Rangkai kenangan visual dan audio menjadi satu memori abadi bernuansa sinematik ala kaset retro. Setiap pembelian sudah termasuk paket 3 gift — bisa buat 3 mixtape berbeda."
                             features={[
-                                "3 Gift Bundle Otomatis",
+                                "Studio Editor & Live Preview",
                                 "Desain kaset retro yang bisa di-play",
                                 "Bebas custom foto/video & lagu",
                                 "Bebas custom pesan personal",
@@ -118,7 +118,6 @@ export default function MixtapeCatalogPage() {
                             accentColor="#5a8d9e"
                             accentGlow="rgba(90,141,158,0.3)"
                             onAddToCart={() => addToCart(MIXTAPE_CART_ITEM)}
-                            onAddThreeSlotToCart={() => addToCart({ id: "mixtape", title: "Mixtape Edition (3 Gift)", numericPrice: 25000, themeColor: "#5a8d9e", isThreeSlot: true, slotCount: 3 })}
                             themes={[
                                 { name: "Cassette Preview", desc: "Desain kaset retro original", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781034685666-udzbps.png" },
                                 { name: "Bundle Dashboard", desc: "Sistem quota bundle otomatis", color: "#5a8d9e", fallbackImgSrc: "https://cdn.for-you-always.my.id/1781035640605-qnr98j.png" },

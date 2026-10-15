@@ -56,7 +56,7 @@ function parseMagicLinks(raw: string): MagicLinks {
 function ProductCard({ productKey, link }: { productKey: string; link: string }) {
     const isThreeSlot = productKey.endsWith("_3slot");
     const isUnbox = productKey.startsWith("unbox_") || productKey.startsWith("giftbox_");
-    const baseKey = productKey.replace("unbox_", "").replace("giftbox_", "").replace("_3slot", "");
+    const baseKey = productKey.replace("unbox_", "").replace("giftbox_", "").replace("_3slot", "").replace("_dfy", "");
     const baseMeta = PRODUCT_META[baseKey] || { name: baseKey, icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>, color: "#a88365", desc: "Kado digital" };
     
     const meta = {
@@ -324,8 +324,16 @@ export default function OrderStatusPage() {
         : 1;
     const isBundle = productCount > 1;
     const isUnbox = Boolean(productId?.startsWith("unbox_") || productId?.startsWith("giftbox_") || productId?.includes("gift-box") || orderId?.startsWith("ORDER-UNBOX") || orderId?.startsWith("ORDER-GIFTBOX"));
-    const isSorry = productId.split(",").some((item) => item.trim() === "sorry") || Boolean(orderId?.startsWith("ORDER-SORRY-"));
-    const isSorryStudioPending = isSorry && !magicLinks;
+    const isDoneForYou = productId.split(",").some((item) => item.trim().endsWith("_dfy"));
+    const normalizedProducts = productId.split(",").map((item) => item.trim().replace(/_dfy$/, ""));
+    const isSorry = normalizedProducts.includes("sorry") || Boolean(orderId?.startsWith("ORDER-SORRY-"));
+    const isSorryStudioPending = isSorry && !isDoneForYou && !magicLinks;
+    const doneForYouProductKey = productId.split(",").find((item) => item.trim().endsWith("_dfy"))?.trim().replace(/_dfy$/, "") || "kado digital";
+    const doneForYouMeta = PRODUCT_META[doneForYouProductKey];
+    const doneForYouProductName = doneForYouMeta?.name || "Kado Digital";
+    const doneForYouWhatsAppUrl = orderId
+        ? `https://wa.me/6281936109076?text=${encodeURIComponent(`Halo For You, Always. Saya sudah membayar layanan Terima Jadi untuk ${doneForYouProductName}. Order ID: ${orderId}. Saya siap mengirim bahan yang diperlukan.`)}`
+        : "https://wa.me/6281936109076";
 
     return (
         <div style={{ minHeight: "100vh", background: "#faf7f2", overflowX: "clip" }}>
@@ -389,12 +397,14 @@ export default function OrderStatusPage() {
                                     color: "#6e5c53", lineHeight: 1.7,
                                     maxWidth: 440, margin: "0 auto",
                                 }}>
-                                    {isBundle
-                                        ? `Terima kasih atas pesanan bundle-mu! Berikut akses ke ${productCount} kado digital yang kamu beli.`
-                                        : isSorryStudioPending
-                                            ? "Pembayaranmu sudah berhasil. Studio personal sedang kami siapkan."
-                                            : "Terima kasih atas pesananmu! Berikut akses ke kado digital kamu."}
-                                    {!isSorryStudioPending && <> <strong>Link juga sudah dikirimkan ke email kamu.</strong></>}
+                                    {isDoneForYou
+                                        ? `Pesanan Terima Jadi untuk ${doneForYouProductName} sudah tercatat. Kirim bahanmu melalui WhatsApp agar tim kami dapat mulai mengerjakan.`
+                                        : isBundle
+                                            ? `Terima kasih atas pesanan bundle-mu! Berikut akses ke ${productCount} kado digital yang kamu beli.`
+                                            : isSorryStudioPending
+                                                ? "Pembayaranmu sudah berhasil. Studio personal sedang kami siapkan."
+                                                : "Terima kasih atas pesananmu! Berikut akses ke kado digital kamu."}
+                                    {!isDoneForYou && !isSorryStudioPending && <> <strong>Link juga sudah dikirimkan ke email kamu.</strong></>}
                                 </p>
                             </div>
 
@@ -421,8 +431,21 @@ export default function OrderStatusPage() {
                                 </div>
                             )}
 
+                            {isDoneForYou && (
+                                <div style={{ width: "100%", marginBottom: 32, padding: "22px", borderRadius: 18, border: "1px solid rgba(139,29,44,.2)", background: "linear-gradient(145deg, rgba(139,29,44,.08), #fff)", fontFamily: "var(--font-sans)", textAlign: "left" }}>
+                                    <span style={{ display: "inline-block", marginBottom: 8, padding: "3px 9px", borderRadius: 99, background: "#8b1d2c", color: "#fff", fontSize: 9, fontWeight: 800, letterSpacing: ".1em" }}>TERIMA JADI</span>
+                                    <h2 style={{ margin: "0 0 7px", color: "#382a24", fontFamily: "var(--font-display)", fontSize: 24 }}>{doneForYouProductName}</h2>
+                                    <p style={{ margin: "0 0 15px", color: "#74645c", fontSize: 12.5, lineHeight: 1.65 }}>Versi pertama selesai maksimal 1×24 jam setelah seluruh bahan lengkap. Layanan mencakup maksimal tiga kali revisi; waktu revisi berada di luar estimasi pengerjaan pertama.</p>
+                                    <a href={doneForYouWhatsAppUrl} target="_blank" rel="noopener noreferrer" style={{ minHeight: 46, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", borderRadius: 999, background: "#1f7a4d", color: "#fff", textDecoration: "none", fontSize: 12, fontWeight: 800, letterSpacing: ".04em" }}>
+                                        Kirim Bahan via WhatsApp
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                                    </a>
+                                    <p style={{ margin: "11px 0 0", color: "#9a8a80", fontSize: 10.5, textAlign: "center" }}>Gift dikerjakan oleh tim kami. Link final akan dikirim manual melalui WhatsApp.</p>
+                                </div>
+                            )}
+
                             {/* Product Cards */}
-                            {renderProductCards()}
+                            {!isDoneForYou && renderProductCards()}
 
                             {isSorryStudioPending && (
                                 <div style={{
