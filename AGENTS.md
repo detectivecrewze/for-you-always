@@ -2,6 +2,8 @@
 ### Platform: **For you, Always.** — Digital Atelier
 ### Dokumen ini wajib dibaca tuntas sebelum menyentuh kode apapun.
 
+> **WAJIB UNTUK PRODUK/TEMPLATE BARU:** sebelum merancang repo, gift page, Studio, form, Worker, payment gateway, atau storefront untuk produk baru, baca `docs/NEW_GIFT_PRODUCT_PLAYBOOK.md` sampai selesai. Dokumen tersebut adalah sumber utama untuk tahapan kerja, stack, kontrak data, sandbox-first payment, keamanan, testing, dan deployment.
+
 ---
 
 ## 1. IDENTITAS & ALUR KERJA
