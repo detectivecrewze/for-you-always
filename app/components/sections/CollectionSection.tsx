@@ -80,6 +80,19 @@ export default function CollectionSection() {
                         speed={55}
                         cards={[
                             {
+                                badgeText: "NEW PREMIUM",
+                                badgeColor: "#8f332f",
+                                badgeVariant: "solid",
+                                imageSrc: "/assets/the-plan/hero.webp",
+                                price: "Rp 40.000",
+                                title: "The Plan",
+                                productId: "plan",
+                                titleColor: "#8f332f",
+                                description: "Scrapbook ajakan premium terima jadi—cukup isi form, tim merangkai puzzle, rundown, surat, galeri, musik, dan tiket digital.",
+                                href: "/catalog/plan",
+                                onAddToCart: () => {},
+                            },
+                            {
                                 badgeText: "#1 Terlaris",
                                 badgeColor: "#7a5438",
                                 badgeVariant: "solid",

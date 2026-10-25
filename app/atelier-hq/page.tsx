@@ -690,6 +690,7 @@ export default function Dashboard() {
             invitation: "Invitation",
             birthday: "Birthday Scrapbook",
             storybook: "Storybook Edition",
+            plan: "The Plan",
         };
         return map[raw] || raw || "Memoria";
     };
@@ -742,9 +743,13 @@ export default function Dashboard() {
                 message = `Halo Kak ${custName}! ✨\n\nTerima kasih telah memesan *The Gift Box* di For you, Always. (Order ID: ${orderId}).\n\nPesanan kamu saat ini sedang dalam antrean perakitan kado eksklusif kami dan akan segera diserahkan ke kurir.\n\nJika ada pesan khusus untuk kartu ucapan kado, silakan infokan di sini ya kak. Terima kasih! 🤍`;
             }
         } else {
-            const prodName = getDigitalFormatName(order) + " Edition";
+            const isPlan = (order.product_id || order.product_type || "").replace(/_dfy$/, "") === "plan";
+            const prodName = isPlan ? "The Plan" : getDigitalFormatName(order) + " Edition";
             const isDoneForYou = String(order.product_id || order.product_type || "").includes("_dfy");
-            if (isDoneForYou) {
+            if (isPlan) {
+                const formLink = order.magic_link || order.studio_link || `https://for-you-always.my.id/order-status?order_id=${orderId}`;
+                message = `Halo Kak ${custName}!\n\nTerima kasih sudah memesan *The Plan* di For you, Always. (Order ID: ${orderId}).\n\nSilakan isi form bahan kado melalui link berikut:\n👉 ${formLink}\n\nSetelah form dikirim, cerita, detail acara, foto, video, dan pilihan musik akan langsung masuk ke tim kami untuk dirangkai.`;
+            } else if (isDoneForYou) {
                 message = `Halo Kak ${custName}!\n\nTerima kasih telah memesan layanan *Terima Jadi ${prodName}* di For you, Always. (Order ID: ${orderId}).\n\nPembayaran sudah kami terima. Silakan kirim seluruh bahan gift melalui chat ini agar tim kami dapat mulai mengerjakan. Versi pertama selesai maksimal 1x24 jam setelah bahan lengkap dan termasuk maksimal 3 kali revisi.`;
             } else {
                 const magicLink = order.studio_link || order.magic_link || `https://for-you-always.my.id/order-status?order_id=${orderId}`;
@@ -2510,13 +2515,14 @@ export default function Dashboard() {
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Produk</th>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Pembeli</th>
                                                 <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Nominal & Status</th>
-                                                <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Akses Studio Link</th>
+                                                <th style={{ padding: "10px 12px", fontWeight: 700, color: "#7a685e" }}>Akses Form / Studio</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {orders.map((order) => {
                                                 const cust = getCustomer(order);
                                                 const isDoneForYou = String(order.product_id || order.product_type || "").includes("_dfy");
+                                                const isPlan = String(order.product_id || order.product_type || "").replace(/_dfy$/, "") === "plan";
                                                 const hasLink = Boolean(order.studio_link || order.magic_link);
                                                 return (
                                                     <tr key={order.order_id} style={{ borderBottom: "1px solid #f0e9e2" }}>
@@ -2613,7 +2619,7 @@ export default function Dashboard() {
                                                         <td style={{ padding: "12px", verticalAlign: "top" }}>
                                                             {hasLink ? (
                                                                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                                                                    <a href={order.studio_link || order.magic_link || "#"} target="_blank" rel="noopener noreferrer" style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #8b1d2c", background: "#fff5f6", color: "#8b1d2c", fontSize: 10, fontWeight: 700, textDecoration: "none" }}>{isDoneForYou ? "Buka Studio Internal" : "Buka Studio"}</a>
+                                                                    <a href={order.studio_link || order.magic_link || "#"} target="_blank" rel="noopener noreferrer" style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #8b1d2c", background: "#fff5f6", color: "#8b1d2c", fontSize: 10, fontWeight: 700, textDecoration: "none" }}>{isPlan ? "Buka Form The Plan" : isDoneForYou ? "Buka Studio Internal" : "Buka Studio"}</a>
                                                                     <button
                                                                         onClick={() => handleCopyStudioLink(order)}
                                                                         style={{

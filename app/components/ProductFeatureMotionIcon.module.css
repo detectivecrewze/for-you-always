@@ -37,6 +37,12 @@
     animation: featureBlink 1.1s steps(2, end) infinite;
 }
 
+.paper {
+    transform-box: fill-box;
+    transform-origin: top center;
+    animation: featurePrint 2.5s cubic-bezier(.22,.75,.25,1) infinite;
+}
+
 @keyframes featureDraw {
     0%, 12% { stroke-dashoffset: 42; opacity: 0.45; }
     45%, 78% { stroke-dashoffset: 0; opacity: 1; }
@@ -58,11 +64,18 @@
     46%, 100% { opacity: 0.25; }
 }
 
+@keyframes featurePrint {
+    0%, 14% { transform: translateY(-3px) scaleY(.55); opacity: .45; }
+    48%, 78% { transform: translateY(0) scaleY(1); opacity: 1; }
+    100% { transform: translateY(1px) scaleY(1); opacity: .55; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .draw,
     .pulse,
     .float,
-    .blink {
+    .blink,
+    .paper {
         animation: none;
         stroke-dashoffset: 0;
         opacity: 1;

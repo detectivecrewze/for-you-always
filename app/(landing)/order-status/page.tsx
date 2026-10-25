@@ -18,6 +18,7 @@ const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color:
     storybook:  { name: "Storybook Edition",   icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg>, color: "#8b1d2c", desc: "Buku cerita komik dengan lima room personal" },
     sorry:      { name: "Sorry Letter",        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/><path d="M12 16h.01"/></svg>, color: "#8b1d2c", desc: "Surat permintaan maaf interaktif" },
     birthday:   { name: "Birthday Scrapbook",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2"/><path d="M12 8v2"/><path d="M17 8v2"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>, color: "#bf7b19", desc: "Scrapbook ulang tahun interaktif" },
+    plan:       { name: "The Plan",            icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 3h16v18H4z"/><path d="M8 7h8"/><path d="M8 11h5"/><path d="m8 16 2 2 5-5"/></svg>, color: "#8f332f", desc: "Scrapbook ajakan premium yang dibuatkan tim" },
 };
 
 
@@ -79,10 +80,11 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
     const isBirthday = baseKey === "birthday";
     const isStorybook = baseKey === "storybook";
     const isSorry = baseKey === "sorry";
-    if (isBirthday || isStorybook || isSorry) {
+    const isPlan = baseKey === "plan";
+    if (isBirthday || isStorybook || isSorry || isPlan) {
         token = "";
     }
-    const label = isLoves ? "Isi Form Kreasi" : isSorry ? "Buka Studio Sorry Letter" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
+    const label = isPlan ? "Isi Form The Plan" : isLoves ? "Isi Form Kreasi" : isSorry ? "Buka Studio Sorry Letter" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -326,6 +328,7 @@ export default function OrderStatusPage() {
     const isUnbox = Boolean(productId?.startsWith("unbox_") || productId?.startsWith("giftbox_") || productId?.includes("gift-box") || orderId?.startsWith("ORDER-UNBOX") || orderId?.startsWith("ORDER-GIFTBOX"));
     const isDoneForYou = productId.split(",").some((item) => item.trim().endsWith("_dfy"));
     const normalizedProducts = productId.split(",").map((item) => item.trim().replace(/_dfy$/, ""));
+    const isPlan = normalizedProducts.includes("plan");
     const isSorry = normalizedProducts.includes("sorry") || Boolean(orderId?.startsWith("ORDER-SORRY-"));
     const isSorryStudioPending = isSorry && !isDoneForYou && !magicLinks;
     const doneForYouProductKey = productId.split(",").find((item) => item.trim().endsWith("_dfy"))?.trim().replace(/_dfy$/, "") || "kado digital";
@@ -397,14 +400,16 @@ export default function OrderStatusPage() {
                                     color: "#6e5c53", lineHeight: 1.7,
                                     maxWidth: 440, margin: "0 auto",
                                 }}>
-                                    {isDoneForYou
+                                    {isPlan
+                                        ? "Pembayaran berhasil. Isi form The Plan agar cerita, detail acara, foto, video, dan pilihan musikmu langsung masuk ke tim produksi. Link form juga sudah dikirimkan ke email kamu."
+                                        : isDoneForYou
                                         ? `Pesanan Terima Jadi untuk ${doneForYouProductName} sudah tercatat. Kirim bahanmu melalui WhatsApp agar tim kami dapat mulai mengerjakan.`
                                         : isBundle
                                             ? `Terima kasih atas pesanan bundle-mu! Berikut akses ke ${productCount} kado digital yang kamu beli.`
                                             : isSorryStudioPending
                                                 ? "Pembayaranmu sudah berhasil. Studio personal sedang kami siapkan."
                                                 : "Terima kasih atas pesananmu! Berikut akses ke kado digital kamu."}
-                                    {!isDoneForYou && !isSorryStudioPending && <> <strong>Link juga sudah dikirimkan ke email kamu.</strong></>}
+                                    {!isPlan && !isDoneForYou && !isSorryStudioPending && <> <strong>Link juga sudah dikirimkan ke email kamu.</strong></>}
                                 </p>
                             </div>
 

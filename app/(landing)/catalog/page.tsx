@@ -81,6 +81,10 @@ export default function CatalogPage() {
         const option = getDigitalPurchaseOption(item.id);
 
         const selectSelfService = () => {
+            if (item.id === "plan") {
+                setDirectCheckoutItem({ ...selfServiceItem, themeImgSrc: "/assets/the-plan/hero.webp" });
+                return;
+            }
             if (item.id === "sorry") setDirectCheckoutItem({ ...selfServiceItem, themeImgSrc: "/assets/sorry-features/sorry-envelope.webp", fulfillmentMode: "self_service" });
             else addToCart({ ...selfServiceItem, fulfillmentMode: "self_service" });
         };

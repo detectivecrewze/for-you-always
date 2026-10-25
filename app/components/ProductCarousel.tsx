@@ -61,6 +61,16 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
     }, []);
 
     const handlePesanClick = (card: LoopCard) => {
+        if (card.productId === "plan") {
+            setDirectCheckoutItem({
+                id: "plan",
+                title: "The Plan",
+                numericPrice: 40000,
+                themeColor: "#8f332f",
+                themeImgSrc: "/assets/the-plan/hero.webp",
+            });
+            return;
+        }
         const option = card.productId ? getDigitalPurchaseOption(card.productId) : null;
         if (!option || !card.onAddToCart) {
             card.onAddToCart?.();

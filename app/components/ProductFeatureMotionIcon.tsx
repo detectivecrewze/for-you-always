@@ -19,7 +19,53 @@ export default function ProductFeatureMotionIcon({ feature, color }: ProductFeat
         "aria-hidden": true,
     };
 
-    if (normalized.includes("musik") || normalized.includes("lagu") || normalized.includes("audio")) {
+    if (normalized.includes("puzzle")) {
+        return (
+            <span className={styles.icon} style={iconStyle}>
+                <svg {...common}>
+                    <path className={styles.draw} d="M5 4h5a2 2 0 1 1 4 0h5v5a2 2 0 1 1 0 4v6h-6a2 2 0 1 1-4 0H5v-5a2 2 0 1 1 0-4Z" />
+                    <path className={styles.float} d="m9 13 2 2 4-5" />
+                </svg>
+            </span>
+        );
+    }
+
+    if (normalized.includes("printer") || normalized.includes("invitation") || normalized.includes("rundown")) {
+        return (
+            <span className={styles.icon} style={iconStyle}>
+                <svg {...common}>
+                    <path className={styles.draw} d="M6 9V3h12v6M6 18H4V9h16v9h-2" />
+                    <path className={styles.paper} d="M7 14h10v7H7z" />
+                    <circle className={styles.pulse} cx="17" cy="12" r="1" fill="currentColor" stroke="none" />
+                </svg>
+            </span>
+        );
+    }
+
+    if (normalized.includes("tiket") || normalized.includes("ticket") || normalized.includes("unduh") || normalized.includes("bagikan")) {
+        return (
+            <span className={styles.icon} style={iconStyle}>
+                <svg {...common}>
+                    <path className={styles.draw} d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4Z" />
+                    <path className={styles.blink} d="M12 9v8M9 13h6" />
+                </svg>
+            </span>
+        );
+    }
+
+    if (normalized.includes("tim") || normalized.includes("terima jadi")) {
+        return (
+            <span className={styles.icon} style={iconStyle}>
+                <svg {...common}>
+                    <circle className={styles.pulse} cx="9" cy="8" r="3" />
+                    <circle className={styles.pulse} cx="17" cy="9" r="2" style={{ animationDelay: "0.28s" }} />
+                    <path className={styles.draw} d="M3.5 20c.4-4 2.2-6 5.5-6s5.1 2 5.5 6M14 15c3.6-.6 5.7 1.1 6.5 4" />
+                </svg>
+            </span>
+        );
+    }
+
+    if (normalized.includes("musik") || normalized.includes("lagu") || normalized.includes("audio") || normalized.includes("foto") || normalized.includes("video") || normalized.includes("surat")) {
         return (
             <span className={styles.icon} style={iconStyle}>
                 <svg {...common}>

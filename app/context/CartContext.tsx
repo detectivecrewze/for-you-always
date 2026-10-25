@@ -90,6 +90,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             birthday: "/assets/snoopy-features/main-card-updatesnoopy.webp",
             storybook: "/assets/storybook-features/spiderman-box.jpg",
             sorry: "/assets/sorry-features/sorry-envelope.webp",
+            plan: "/assets/the-plan/hero.webp",
         };
 
         if (['birthday', 'storybook'].includes(item.id) && itemsRef.current.some(existing => existing.id === item.id)) {

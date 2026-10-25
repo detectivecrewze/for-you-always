@@ -323,6 +323,38 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
         ]
     },
 
+    "the-plan": {
+        id: "the-plan",
+        name: "The Plan",
+        type: "digital_interactive",
+        singlePrice: "Rp 40.000",
+        numericPrice: 40000,
+        badge: "New Premium · Terima Jadi",
+        tagline: "Ajakan menikmati hari spesial dalam scrapbook interaktif yang dirangkai penuh oleh tim dari bahan customer.",
+        coreFeatures: [
+            "Puzzle Foto Interaktif sebagai Gerbang Pembuka",
+            "Invitation dan Rundown dengan Animasi Printer",
+            "Surat, Musik, serta Galeri Foto dan Video",
+            "Tiket Digital 9:16 yang Dapat Diunduh atau Dibagikan",
+            "Terima Jadi: customer cukup mengisi form, tim merangkai seluruh gift"
+        ],
+        digitalExperience: {
+            interactiveMechanism: "Penerima menyusun tiga keping foto, lalu menjelajahi scrapbook berisi rencana acara, surat, musik, galeri, dan tiket digital di akhir.",
+            themesAvailable: ["Burgundy Scrapbook", "Sage Keepsake", "Midnight Paper", "Dusty Rose", "Ocean Journal", "Golden Memory"],
+            customizationOptions: ["Bahasa", "Palet warna", "Detail acara dan rundown", "Cerita dan surat", "Foto/video", "Musik", "Caption"]
+        },
+        targetOccasions: ["Anniversary", "Ulang Tahun Pasangan", "Surprise Date", "Ajakan Kencan", "Perayaan Dua Momen"],
+        emotionalHooks: [
+            "Customer tidak perlu mendesain atau menyusun sendiri; cukup kirim bahan lewat form.",
+            "Rencana kencan terasa seperti hadiah utuh, bukan sekadar pesan atau undangan biasa."
+        ],
+        faqs: [
+            { q: "Apakah saya harus mengedit sendiri?", a: "Tidak. The Plan adalah layanan Terima Jadi. Kamu cukup mengisi form bahan, lalu tim merangkai gift sampai siap dibagikan." },
+            { q: "Apakah bisa memuat video?", a: "Bisa. Galeri mendukung foto dan video pendek yang disusun dalam tampilan scrapbook." },
+            { q: "Bagaimana saya menerima hasilnya?", a: "Setelah form lengkap dan gift selesai dirangkai, tim mengirimkan link final untuk kamu periksa dan bagikan." }
+        ]
+    },
+
     "invitation-edition": {
         id: "invitation-edition",
         name: "Invitation Edition",
