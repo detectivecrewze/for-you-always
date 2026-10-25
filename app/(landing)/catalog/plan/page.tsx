@@ -9,6 +9,7 @@ import DemoPreviewModal from "../../../components/LazyDemoPreviewModal";
 import type { DemoCloseReason, DemoPreviewVariant } from "../../../components/DemoPreviewModal";
 import type { CartItem } from "../../../context/CartContext";
 import { trackViewContent } from "@/lib/pixel";
+import { THE_PLAN_THEME_SWATCHES } from "@/lib/storefront-demo-config";
 
 const DEMO_URL = "https://the-plan-iota.vercel.app/";
 const PRODUCT: CartItem = {
@@ -109,6 +110,7 @@ export default function ThePlanCatalogPage() {
         <DemoPreviewModal
           isOpen src={DEMO_URL} title="Demo The Plan" subtitle="Jelajahi perjalanan lengkap dari puzzle hingga tiket digital" productName="The Plan" price="Rp 40.000"
           theme="memoria" variants={DEMO_VARIANTS} initialVariantId="complete" orderButtonLabel="Pesan The Plan"
+          themeSwatches={THE_PLAN_THEME_SWATCHES} initialSwatchId="burgundy-keepsake"
           onClose={closeDemo} onOrder={() => { setDemoOpen(false); setCheckoutOpen(true); }}
           onLoaded={(loadTimeMs) => capture("product_demo_loaded", { product_id: "plan", load_time_ms: loadTimeMs })}
         />

@@ -71,6 +71,15 @@ export const SORRY_THEME_SWATCHES = [
     { id: "dusty-purple", name: "Dusty Purple", color: "#4b2b55", bgColor: "#1F1024" },
 ] as const satisfies readonly MemoriaThemeSwatch[];
 
+export const THE_PLAN_THEME_SWATCHES = [
+    { id: "burgundy-keepsake", name: "Burgundy Keepsake", color: "#A34239", bgColor: "#F0E7DB" },
+    { id: "antique-rose", name: "Antique Rose", color: "#8B4854", bgColor: "#EADFDA" },
+    { id: "sage-botanical", name: "Sage Botanical", color: "#68745B", bgColor: "#E6E5DC" },
+    { id: "espresso-journal", name: "Espresso Journal", color: "#724C40", bgColor: "#DAC8B7" },
+    { id: "midnight-navy", name: "Midnight Navy", color: "#274C63", bgColor: "#CFD8DF" },
+    { id: "lavender-dusk", name: "Lavender Dusk", color: "#725A7D", bgColor: "#DED9E5" },
+] as const satisfies readonly MemoriaThemeSwatch[];
+
 
 export const INVITATION_DEMO_VARIANTS = [
     { id: "invitation-date", label: "Invitation Date", src: "https://invitation.for-you-always.my.id/WRcVb-mY0f", subtitle: "Undangan kencan dengan date picker dan dress code" },
