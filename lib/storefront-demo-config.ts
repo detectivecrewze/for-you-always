@@ -80,7 +80,7 @@ export const THE_PLAN_THEME_SWATCHES = [
     { id: "lavender-dusk", name: "Lavender Dusk", color: "#725A7D", bgColor: "#DED9E5" },
 ] as const satisfies readonly MemoriaThemeSwatch[];
 
-export const IZIN_MAIN_DEMO_URL = process.env.NEXT_PUBLIC_IZIN_MAIN_DEMO_URL || "https://izin.for-you-always.my.id/?gift=permit-mvtsxc97-bf660969";
+export const IZIN_MAIN_DEMO_URL = process.env.NEXT_PUBLIC_IZIN_MAIN_DEMO_URL || "https://izin.for-you-always.my.id/?gift=permit-mvtsxc97-bf660969&demo=1";
 export const IZIN_MAIN_DEMO_VARIANTS = [
     { id: "complete", label: "Berkas Lengkap", src: IZIN_MAIN_DEMO_URL, subtitle: "Buka brankas lalu jelajahi seluruh berkas perizinan" },
 ] as const satisfies readonly DemoPreviewVariant[];
