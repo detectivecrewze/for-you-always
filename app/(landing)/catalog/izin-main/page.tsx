@@ -122,7 +122,7 @@ export default function IzinMainCatalogPage() {
       {checkoutItem && <CartCheckoutModal directItem={checkoutItem} onClose={() => setCheckoutItem(null)} />}
       {demoOpen && (
         <DemoPreviewModal
-          isOpen src={IZIN_MAIN_DEMO_URL} title="Demo Izin Main" subtitle="Buka berkas dan jelajahi permohonannya" productName="Izin Main" price="Mulai Rp 15.000"
+          isOpen src={IZIN_MAIN_DEMO_URL} title="Demo Izin Main" subtitle="Buka berkas dan jelajahi permohonannya" productName="Izin Main" price="Rp 15.000"
           theme="izin-main" variants={IZIN_MAIN_DEMO_VARIANTS} initialVariantId="complete" orderButtonLabel="Pesan Izin Main"
           themeSwatches={IZIN_MAIN_THEME_SWATCHES} initialSwatchId="district-office"
           onClose={closeDemo} onOrder={() => { setDemoOpen(false); openPurchaseMode(); }}
