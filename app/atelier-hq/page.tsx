@@ -691,6 +691,7 @@ export default function Dashboard() {
             birthday: "Birthday Scrapbook",
             storybook: "Storybook Edition",
             plan: "The Plan",
+            "izin-main": "Izin Main",
         };
         return map[raw] || raw || "Memoria";
     };

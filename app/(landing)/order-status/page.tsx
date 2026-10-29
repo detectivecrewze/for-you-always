@@ -19,6 +19,7 @@ const PRODUCT_META: Record<string, { name: string; icon: React.ReactNode; color:
     sorry:      { name: "Sorry Letter",        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/><path d="M12 16h.01"/></svg>, color: "#8b1d2c", desc: "Surat permintaan maaf interaktif" },
     birthday:   { name: "Birthday Scrapbook",  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2"/><path d="M12 8v2"/><path d="M17 8v2"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>, color: "#bf7b19", desc: "Scrapbook ulang tahun interaktif" },
     plan:       { name: "The Plan",            icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 3h16v18H4z"/><path d="M8 7h8"/><path d="M8 11h5"/><path d="m8 16 2 2 5-5"/></svg>, color: "#8f332f", desc: "Scrapbook ajakan premium yang dibuatkan tim" },
+    "izin-main": { name: "Izin Main",          icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h5"/><path d="m13 16 2 2 4-5"/></svg>, color: "#27312b", desc: "Permohonan izin main digital self-edit" },
 };
 
 
@@ -81,10 +82,11 @@ function ProductCard({ productKey, link }: { productKey: string; link: string })
     const isStorybook = baseKey === "storybook";
     const isSorry = baseKey === "sorry";
     const isPlan = baseKey === "plan";
-    if (isBirthday || isStorybook || isSorry || isPlan) {
+    const isIzinMain = baseKey === "izin-main";
+    if (isBirthday || isStorybook || isSorry || isPlan || isIzinMain) {
         token = "";
     }
-    const label = isPlan ? "Isi Form The Plan" : isLoves ? "Isi Form Kreasi" : isSorry ? "Buka Studio Sorry Letter" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
+    const label = isPlan ? "Isi Form The Plan" : isIzinMain ? "Buka Studio Izin Main" : isLoves ? "Isi Form Kreasi" : isSorry ? "Buka Studio Sorry Letter" : isStorybook ? "Buka Studio Storybook" : isBirthday ? "Buka Studio Birthday" : isThreeSlot ? "Buka Dashboard (3 Kuota)" : "Buka Studio";
     const [hovered, setHovered] = useState(false);
     const [copied, setCopied] = useState(false);
 

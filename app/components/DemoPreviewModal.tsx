@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent a
 import { createPortal } from "react-dom";
 
 export type DemoCloseReason = "button" | "backdrop" | "escape" | "order";
-export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped" | "birthday" | "storybook";
+export type DemoModalTheme = "memoria" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "arcade" | "wrapped" | "birthday" | "storybook" | "izin-main";
 
 export interface DemoPreviewVariant {
     id: string;
@@ -322,6 +322,34 @@ const THEME_CONFIGS: Record<DemoModalTheme, DemoThemeTokens> = {
         retryLinkColor: "#E2991E",
         emptyBg: "radial-gradient(circle at 50% 40%, #FFFDF8 0%, #F6ECE0 72%)",
         emptyText: "#5E3D0A",
+    },
+    "izin-main": {
+        backdropBg: "rgba(25, 30, 26, 0.84)",
+        frameBg: "linear-gradient(160deg, #27312B 0%, #18201C 100%)",
+        frameBorder: "1px solid rgba(240, 231, 210, 0.28)",
+        frameShadow: "0 30px 90px rgba(0, 0, 0, 0.62), 0 0 38px rgba(107, 74, 55, 0.14)",
+        headerBg: "rgba(39, 49, 43, 0.97)",
+        headerBorder: "1px solid rgba(240, 231, 210, 0.18)",
+        footerBg: "rgba(39, 49, 43, 0.98)",
+        footerBorder: "1px solid rgba(240, 231, 210, 0.18)",
+        titleColor: "#F0E7D2",
+        subtitleColor: "#C9BCA4",
+        closeBg: "rgba(240, 231, 210, 0.08)",
+        closeBorder: "1px solid rgba(240, 231, 210, 0.28)",
+        closeColor: "#F0E7D2",
+        closeHoverBg: "rgba(107, 74, 55, 0.22)",
+        closeHoverBorder: "rgba(107, 74, 55, 0.6)",
+        orderBg: "linear-gradient(135deg, #80604A 0%, #5C3F31 100%)",
+        orderColor: "#FFF9ED",
+        orderShadow: "0 7px 20px rgba(107, 74, 55, 0.28)",
+        orderHoverShadow: "0 10px 26px rgba(107, 74, 55, 0.4)",
+        spinnerTrack: "rgba(240, 231, 210, 0.16)",
+        spinnerAccent: "#9C7358",
+        retryBtnBg: "#27312B",
+        retryBtnColor: "#F0E7D2",
+        retryLinkColor: "#6B4A37",
+        emptyBg: "radial-gradient(circle at 50% 40%, #FBF7EE 0%, #E8DCC5 74%)",
+        emptyText: "#27312B",
     },
 };
 

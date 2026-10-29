@@ -1,6 +1,6 @@
 import type { DemoModalTheme, DemoPreviewVariant, MemoriaThemeSwatch } from "@/app/components/DemoPreviewModal";
 
-export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook" | "sorry";
+export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook" | "sorry" | "izin-main";
 
 export interface StorefrontDemoConfig {
     productName: string;
@@ -80,6 +80,15 @@ export const THE_PLAN_THEME_SWATCHES = [
     { id: "lavender-dusk", name: "Lavender Dusk", color: "#725A7D", bgColor: "#DED9E5" },
 ] as const satisfies readonly MemoriaThemeSwatch[];
 
+export const IZIN_MAIN_DEMO_URL = process.env.NEXT_PUBLIC_IZIN_MAIN_DEMO_URL || "https://izin.for-you-always.my.id/";
+export const IZIN_MAIN_DEMO_VARIANTS = [
+    { id: "complete", label: "Berkas Lengkap", src: IZIN_MAIN_DEMO_URL, subtitle: "Buka brankas lalu jelajahi seluruh berkas perizinan" },
+] as const satisfies readonly DemoPreviewVariant[];
+export const IZIN_MAIN_THEME_SWATCHES = [
+    { id: "district-office", name: "Kantor Kecamatan", color: "#A33C35", bgColor: "#27312B" },
+    { id: "crimson-office", name: "Crimson Office", color: "#9F2635", bgColor: "#34171D" },
+] as const satisfies readonly MemoriaThemeSwatch[];
+
 
 export const INVITATION_DEMO_VARIANTS = [
     { id: "invitation-date", label: "Invitation Date", src: "https://invitation.for-you-always.my.id/WRcVb-mY0f", subtitle: "Undangan kencan dengan date picker dan dress code" },
@@ -98,4 +107,5 @@ export const STOREFRONT_DEMO_CONFIGS: Record<DemoProductId, StorefrontDemoConfig
     arcade: { productName: "Arcade Edition", title: "Demo Arcade Edition", subtitle: "Jelajahi sepuluh ruangan permainan", price: "Rp 25.000", theme: "arcade", variants: [{ id: "default", label: "Arcade", src: "https://arcade.for-you-always.my.id/?to=arcade-test", subtitle: "Petualangan game dengan sepuluh ruangan kenangan" }], initialVariantId: "default", opensInNewTab: true },
     storybook: { productName: "Storybook Edition", title: "Demo Storybook Edition", subtitle: "Pilih tema cerita yang ingin dijelajahi", price: "Rp 25.000", theme: "storybook", variants: STORYBOOK_DEMO_VARIANTS, initialVariantId: "spiderman" },
     sorry: { productName: "Sorry Letter", title: "Demo Sorry Letter", subtitle: "Jelajahi pengalaman surat permintaan maaf interaktif", price: "Rp 15.000", theme: "memoria", variants: SORRY_DEMO_VARIANTS, initialVariantId: "default", themeSwatches: SORRY_THEME_SWATCHES },
+    "izin-main": { productName: "Izin Main", title: "Demo Izin Main", subtitle: "Buka berkas dan lihat pengalaman izin main yang interaktif", price: "Mulai Rp 15.000", theme: "izin-main", variants: IZIN_MAIN_DEMO_VARIANTS, initialVariantId: "complete", themeSwatches: IZIN_MAIN_THEME_SWATCHES },
 };

@@ -120,6 +120,7 @@ const PROFILES: Record<string, ProductProfile> = {
     birthday: { recipients: ["partner", "crush", "friend", "family"], directIntents: ["birthday"], intents: ["affection"], experiences: ["surprises", "memories"], materials: ["few-media", "story", "song", "voice", "unsure"], depth: 2 },
     storybook: { recipients: ["partner", "crush", "friend", "family"], directIntents: ["anniversary"], intents: ["birthday", "affection", "support"], experiences: ["heartfelt", "memories", "surprises", "audio", "playful"], materials: ["message", "few-media", "story", "song", "unsure"], depth: 3 },
     plan: { recipients: ["partner", "crush"], directIntents: ["date"], intents: ["anniversary", "birthday", "affection"], experiences: ["invitation", "heartfelt", "memories", "surprises", "audio"], materials: ["message", "few-media", "story", "song", "low-effort", "unsure"], depth: 3 },
+    "izin-main": { recipients: ["partner"], directIntents: ["date"], intents: ["affection"], experiences: ["invitation", "playful", "surprises", "audio"], materials: ["message", "few-media", "song", "low-effort", "unsure"], depth: 2 },
     invitation: { recipients: ["partner", "crush"], directIntents: ["date"], intents: ["anniversary", "affection"], experiences: ["invitation", "heartfelt"], materials: ["message", "low-effort", "unsure"], depth: 1 },
     voices: { recipients: ["partner", "crush", "friend", "family"], directIntents: ["support"], intents: ["birthday", "affection"], experiences: ["audio", "heartfelt"], materials: ["voice", "song", "few-media", "unsure"], depth: 2 },
     mixtape: { recipients: ["partner", "crush", "friend"], directIntents: [], intents: ["birthday", "affection", "support"], experiences: ["audio", "memories"], materials: ["song", "few-media", "unsure"], depth: 2 },
@@ -164,6 +165,9 @@ function scoreProduct(item: StorefrontCatalogItem, answers: FinderAnswers) {
     if (material === "story" && item.id === "storybook") score += 6;
     if (item.id === "plan" && answers.intent === "date") score += 8;
     if (item.id === "plan" && material === "low-effort") score += 6;
+    if (item.id === "izin-main" && answers.intent === "date") score += 10;
+    if (item.id === "izin-main" && answers.recipient === "partner") score += 4;
+    if (item.id === "izin-main" && answers.experiences.includes("playful")) score += 5;
     if (item.id === "letter") score += 3;
     if (item.id === "arcade" && !answers.experiences.includes("playful")) score -= 14;
     if (item.id === "wrapped" && answers.intent !== "anniversary" && !answers.experiences.includes("memories")) score -= 12;
@@ -179,6 +183,7 @@ function productReason(productId: string, answers: FinderAnswers) {
         birthday: `Kamu ingin hari ulang tahunnya berisi beberapa kejutan personal. Birthday Scrapbook membuka foto, pesan, dan ucapan satu per satu seperti scrapbook yang hidup.`,
         storybook: `Kamu punya cerita, foto, lagu, dan tempat yang ingin dirangkai menjadi satu perjalanan. Storybook Edition menyatukannya dalam lima room komik yang bisa dijelajahi sampai finale.`,
         plan: `Kamu ingin mengajak ${recipient} menikmati hari yang sudah direncanakan tanpa harus menyusun desain sendiri. Kamu cukup mengisi form; tim kami merangkai invitation, rundown, surat, musik, dan galeri menjadi scrapbook interaktif yang siap dibagikan.`,
+        "izin-main": `Kamu ingin meminta izin pergi kepada ${recipient} dengan cara yang lebih lucu dan niat. Izin Main menyediakan Studio sederhana untuk menyusun foto, rencana, janji, lagu, dan berkas persetujuan yang siap dikirim.`,
         invitation: `Kamu ingin mengajak ${recipient} pergi dengan cara yang lebih spesial. Invitation mengubah ajakanmu menjadi pengalaman interaktif yang dapat langsung ia jawab.`,
         voices: `Kamu ingin ${recipient} merasakan kehadiranmu melalui suara. Voices menyatukan rekaman, pesan, dan foto dalam pengalaman yang terasa dekat.`,
         mixtape: `Kamu ingin lagu membawa kembali momen bersama ${recipient}. Mixtape membungkus musik dan kenangan dalam kaset retro yang interaktif.`,

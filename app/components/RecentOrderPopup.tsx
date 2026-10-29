@@ -97,6 +97,12 @@ const IconPlan = ({ color }: { color: string }) => (
     </svg>
 );
 
+const IconPermit = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h5"/><path d="m13 16 2 2 4-5"/>
+    </svg>
+);
+
 const PRODUCT_ICONS: Record<string, React.ComponentType<{ color: string }>> = {
     "Letter Edition":     IconLetter,
     "Voices Gift":        IconVoices,
@@ -107,6 +113,7 @@ const PRODUCT_ICONS: Record<string, React.ComponentType<{ color: string }>> = {
     "Wrapped Edition":    IconWrapped,
     "Memoria Premium":    IconMemoria,
     "The Plan":           IconPlan,
+    "Izin Main":          IconPermit,
 };
 
 const PRODUCTS = [
@@ -119,6 +126,7 @@ const PRODUCTS = [
     { label: "Wrapped Edition",    color: "#c9184a" },
     { label: "Memoria Premium",    color: "#7b2d3a" },
     { label: "The Plan",           color: "#8f332f" },
+    { label: "Izin Main",          color: "#27312b" },
 ];
 
 const TIME_OPTIONS = [

@@ -28,7 +28,7 @@ import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-o
 import styles from "./GiftFinderClient.module.css";
 
 const FINDER_VERSION = "v2";
-const DEMO_PRODUCT_IDS = new Set<DemoProductId>(["loves", "letter", "voices", "mixtape", "invitation", "retro", "wrapped", "birthday", "arcade", "storybook"]);
+const DEMO_PRODUCT_IDS = new Set<DemoProductId>(["loves", "letter", "voices", "mixtape", "invitation", "retro", "wrapped", "birthday", "arcade", "storybook", "sorry", "izin-main"]);
 
 const ROLE_LABELS: Record<FinderRecommendation["role"], string> = {
     primary: "Paling sesuai dengan jawabanmu",

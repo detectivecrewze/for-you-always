@@ -5,7 +5,7 @@ export const revalidate = 300;
 
 const PRODUCT_IDS = new Set([
     "letter", "voices", "arcade", "retro", "wrapped", "mixtape",
-    "invitation", "loves", "birthday", "storybook", "sorry", "plan", "the-gift-box",
+    "invitation", "loves", "birthday", "storybook", "sorry", "plan", "izin-main", "the-gift-box",
 ]);
 
 const PRODUCTION_GATEWAY_URL = "https://pakasir-gateway.aldoramadhan16.workers.dev";

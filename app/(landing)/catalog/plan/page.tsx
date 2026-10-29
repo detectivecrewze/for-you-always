@@ -76,7 +76,6 @@ export default function ThePlanCatalogPage() {
             title="The Plan"
             description="Satu hari yang kamu rencanakan untuknya, dirangkai tim menjadi scrapbook digital yang hangat dan interaktif. Customer cukup mengisi form; kami mengurus susunan cerita, desain, dan detail gift-nya."
             features={["Puzzle Foto Interaktif", "Invitation & Rundown dalam Animasi Printer", "Surat, Musik, Foto & Video", "Tiket Digital Siap Unduh atau Bagikan", "Terima Jadi oleh Tim"]}
-            animatedFeatureIcons
             salesCountPlacement="media"
             price="Rp 40.000"
             demoLink={DEMO_URL}

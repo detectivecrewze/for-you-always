@@ -355,6 +355,38 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
         ]
     },
 
+    "izin-main": {
+        id: "izin-main",
+        name: "Izin Main",
+        type: "digital_interactive",
+        singlePrice: "Rp 15.000",
+        numericPrice: 15000,
+        badge: "New Self Edit",
+        tagline: "Permohonan izin main digital yang lucu, personal, dan jauh lebih niat daripada sekadar chat singkat.",
+        coreFeatures: [
+            "Animasi brankas dan berkas pembuka",
+            "Dua foto berbeda untuk pemohon dan penerima",
+            "Rencana, janji, sticky notes, dan seluruh judul dapat diatur",
+            "Musik pilihan serta live preview Gift Pages asli",
+            "Surat izin digital siap diunduh setelah disetujui"
+        ],
+        digitalExperience: {
+            interactiveMechanism: "Penerima membuka map dokumen, menelusuri halaman perizinan ke samping, membaca rencana dan janji, lalu menyetujui permohonan untuk mendapatkan surat izin digital.",
+            themesAvailable: ["Kantor Kecamatan", "Crimson Office"],
+            customizationOptions: ["Bahasa Indonesia atau English", "Judul tiap halaman", "Foto pemohon dan penerima", "Rencana dan detail opsional", "Janji", "Musik", "Tema warna"]
+        },
+        targetOccasions: ["Minta Izin Main", "Ajakan Pergi", "Date", "Just Because"],
+        emotionalHooks: [
+            "Mengubah permintaan izin yang canggung menjadi pengalaman lucu yang bisa dinikmati berdua.",
+            "Self-edit, sehingga pembeli bebas menyusun permohonannya sendiri dan langsung melihat hasilnya."
+        ],
+        faqs: [
+            { q: "Apakah tim yang mengedit gift-nya?", a: "Tidak. Izin Main adalah produk self-edit. Setelah pembayaran, link Studio dikirim otomatis agar kamu dapat menyusun seluruh berkas sendiri." },
+            { q: "Apakah tempat dan alamat wajib diisi?", a: "Tidak. Detail seperti tempat, alamat, bersama siapa, dan lokasi bersifat opsional. Bagian kosong tidak akan mengganggu tampilan gift." },
+            { q: "Apakah bisa mengganti lagu?", a: "Bisa. Kamu dapat memilih lagu dari playlist yang tersedia atau mengunggah lagu sendiri melalui Studio." }
+        ]
+    },
+
     "invitation-edition": {
         id: "invitation-edition",
         name: "Invitation Edition",

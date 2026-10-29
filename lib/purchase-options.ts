@@ -23,6 +23,7 @@ const DIGITAL_PURCHASE_OPTIONS: Record<string, Omit<DigitalPurchaseOption, "done
     birthday: { id: "birthday", title: "Birthday Scrapbook", basePrice: 25000, themeColor: "#bf7b19", themeImgSrc: "/assets/snoopy-features/main-card-updatesnoopy.webp" },
     storybook: { id: "storybook", title: "Storybook Edition", basePrice: 25000, themeColor: "#8b1d2c", themeImgSrc: "/assets/storybook-features/spiderman-box.jpg" },
     sorry: { id: "sorry", title: "Sorry Letter", basePrice: 15000, themeColor: "#8b1d2c", themeImgSrc: "/assets/sorry-features/sorry-envelope.webp" },
+    "izin-main": { id: "izin-main", title: "Izin Main", basePrice: 15000, themeColor: "#6b4a37", themeImgSrc: "/assets/izin-main/hero.webp" },
 };
 
 export const DONE_FOR_YOU_PRODUCT_IDS = new Set(Object.keys(DIGITAL_PURCHASE_OPTIONS));

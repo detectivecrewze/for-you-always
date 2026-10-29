@@ -3,12 +3,34 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import AutoScrollCarousel from "../ProductCarousel";
-import { useCart } from "../../context/CartContext";
+import CartCheckoutModal from "../CartCheckoutModal";
+import PurchaseModeModal, { type PurchaseModeConfig } from "../PurchaseModeModal";
+import { useCart, type CartItem } from "../../context/CartContext";
 import DiscountPrice from "../DiscountPrice";
+import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 
 export default function CollectionSection() {
     const { addToCart } = useCart();
     const [unboxStock, setUnboxStock] = useState<number | null>(null);
+    const [purchaseModeConfig, setPurchaseModeConfig] = useState<PurchaseModeConfig | null>(null);
+    const [checkoutItem, setCheckoutItem] = useState<CartItem | null>(null);
+
+    const openIzinMainPurchaseMode = () => {
+        const option = getDigitalPurchaseOption("izin-main");
+        if (!option) return;
+        setPurchaseModeConfig({
+            productId: option.id,
+            productTitle: option.title,
+            themeColor: option.themeColor,
+            selfServicePrice: option.basePrice,
+            doneForYouPrice: option.doneForYouPrice,
+            onSelectSelfService: () => addToCart({ id: option.id, title: option.title, numericPrice: option.basePrice, themeColor: option.themeColor, themeImgSrc: option.themeImgSrc, fulfillmentMode: "self_service" }),
+            onSelectDoneForYou: () => {
+                const item = createDoneForYouItem(option.id);
+                if (item) setCheckoutItem(item);
+            },
+        });
+    };
 
     useEffect(() => {
         fetch("/api/inventory?product_id=the-gift-box-kraft")
@@ -91,6 +113,19 @@ export default function CollectionSection() {
                                 description: "Scrapbook ajakan premium terima jadi—cukup isi form, tim merangkai puzzle, rundown, surat, galeri, musik, dan tiket digital.",
                                 href: "/catalog/plan",
                                 onAddToCart: () => {},
+                            },
+                            {
+                                badgeText: "NEW SELF EDIT",
+                                badgeColor: "#6b4a37",
+                                badgeVariant: "solid",
+                                imageSrc: "/assets/izin-main/hero.webp",
+                                price: "Mulai Rp 15.000",
+                                title: "Izin Main",
+                                productId: "izin-main",
+                                titleColor: "#6b4a37",
+                                description: "Permohonan izin main digital yang lucu dan personal—bisa dirangkai sendiri lewat Studio atau dibuatkan langsung oleh tim.",
+                                href: "/catalog/izin-main",
+                                onAddToCart: openIzinMainPurchaseMode,
                             },
                             {
                                 badgeText: "#1 Terlaris",
@@ -241,6 +276,9 @@ export default function CollectionSection() {
                         ]}
                     />
                 </div>
+
+                {purchaseModeConfig && <PurchaseModeModal config={purchaseModeConfig} onClose={() => setPurchaseModeConfig(null)} />}
+                {checkoutItem && <CartCheckoutModal directItem={checkoutItem} onClose={() => setCheckoutItem(null)} />}
 
             </div>
         </section>
