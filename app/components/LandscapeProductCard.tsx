@@ -398,7 +398,7 @@ export function LandscapeProductCard({
                             <Image
                                 key={activeFallbackImgSrc || mediaSrc}
                                 src={(activeFallbackImgSrc || mediaSrc) as string}
-                                alt={title}
+                                alt={activeTitle}
                                 fill
                                 priority={priority}
                                 loading={priority ? undefined : "lazy"}
@@ -526,6 +526,8 @@ export function LandscapeProductCard({
                                 {/* Single Active Theme Display with Arrows */}
                                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                                     <button
+                                        type="button"
+                                        aria-label="Koleksi sebelumnya"
                                         onClick={handlePrevTheme}
                                         style={{
                                             width: 44, height: 44, borderRadius: "50%",
@@ -555,6 +557,8 @@ export function LandscapeProductCard({
                                     </div>
 
                                     <button
+                                        type="button"
+                                        aria-label="Koleksi berikutnya"
                                         onClick={handleNextTheme}
                                         style={{
                                             width: 44, height: 44, borderRadius: "50%",
@@ -579,11 +583,14 @@ export function LandscapeProductCard({
                                         const isSelected = (selectedIndex === null && i === 0) || selectedIndex === i;
                                         const dotColor = isSelected ? (hasExplicitColor ? themeColor : activeAccent) : (hasExplicitColor ? themeColor : "#d1d5db");
                                         return (
-                                            <div
+                                            <button
                                                 key={i}
+                                                type="button"
+                                                aria-label={`Tampilkan ${theme.name}`}
+                                                aria-pressed={isSelected}
                                                 onClick={() => selectTheme(i)}
                                                 style={{
-                                                    width: 10, height: 10, borderRadius: "50%",
+                                                    width: 10, height: 10, padding: 0, borderRadius: "50%",
                                                     background: dotColor,
                                                     cursor: "pointer",
                                                     border: isSelected ? `2px solid #fff` : `none`,
@@ -795,7 +802,7 @@ export function LandscapeProductCard({
 
                     
                     {/* Features List */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: featureFlags.length ? 32 : 0 }}>
                         {featureFlags.map((flags) => {
                             const { feat, isToggleFeature, isMusicFeature, isPageFeature, isVoiceFeature, isGalleryFeature,
                                 isEnvelopeFeature, isTypewriterFeature, isPremiumFeature, isPhotoVideoFeature,

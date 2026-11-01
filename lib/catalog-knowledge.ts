@@ -355,6 +355,25 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
         ]
     },
 
+    "confession-page": {
+        id: "confession-page",
+        name: "Confession Page",
+        type: "digital_interactive",
+        singlePrice: "Rp 20.000",
+        numericPrice: 20000,
+        badge: "Comic Confession",
+        tagline: "Cara ringan dan playful untuk mengungkapkan rasa suka lewat gift komik yang bisa kamu susun sendiri.",
+        coreFeatures: ["Puzzle foto pembuka", "Chapter komik, foto, dan surat personal", "Musik pilihan dan pertanyaan interaktif dengan tombol No yang menghindar"],
+        digitalExperience: { interactiveMechanism: "Penerima melengkapi puzzle foto, membaca cerita komik dan surat, lalu menjawab pertanyaan akhir. Jawaban Iya membuka kartu digital yang bisa dibagikan.", themesAvailable: ["Comic Toon"], customizationOptions: ["Bahasa Indonesia atau English", "Foto opsional", "Cerita dan isi surat", "Pilihan musik", "Warna gift"] },
+        targetOccasions: ["Gebetan", "Valentine", "Mau bilang suka", "Just Because"],
+        emotionalHooks: ["Mengurangi canggung saat ingin menyatakan suka.", "Playful, personal, dan bisa diedit sendiri lewat Studio."],
+        faqs: [
+            { q: "Apakah harus memakai foto?", a: "Tidak wajib, tetapi foto direkomendasikan agar puzzle dan cerita terasa lebih personal." },
+            { q: "Apa yang saya dapat setelah membayar?", a: "Link Studio akan dikirim otomatis agar kamu bisa mengisi cerita, memilih lagu, dan menyesuaikan gift sebelum dibagikan." },
+            { q: "Apakah tombol Tidak bisa ditekan?", a: "Bisa dicoba sampai 10 kali; tombolnya akan menghindar agar pertanyaannya terasa playful." }
+        ]
+    },
+
     "izin-main": {
         id: "izin-main",
         name: "Izin Main",

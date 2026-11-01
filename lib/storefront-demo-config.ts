@@ -1,6 +1,6 @@
 import type { DemoModalTheme, DemoPreviewVariant, MemoriaThemeSwatch } from "@/app/components/DemoPreviewModal";
 
-export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook" | "sorry" | "izin-main";
+export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook" | "sorry" | "izin-main" | "confession-page";
 
 export interface StorefrontDemoConfig {
     productName: string;
@@ -95,6 +95,23 @@ export const INVITATION_DEMO_VARIANTS = [
     { id: "rundown-date", label: "Rundown Date", src: "https://invitation.for-you-always.my.id/rundown-tqthew7", subtitle: "Susunan acara kencan yang rapi dan interaktif" },
 ] as const satisfies readonly DemoPreviewVariant[];
 
+export const CONFESSION_PAGE_DEMO_URL = process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:5179/?preview=1"
+    : "https://would.for-you-always.my.id/?gift=crush-note-9a199158&preview=1";
+export const CONFESSION_PAGE_THEME_SWATCHES = [
+    { id: "classic", name: "Komik Klasik", color: "#c9434d", bgColor: "#f3e1cf" },
+    { id: "strawberry", name: "Strawberry Soda", color: "#b63856", bgColor: "#f3dfe0" },
+    { id: "matcha", name: "Matcha Day", color: "#5f8d62", bgColor: "#dce9d8" },
+    { id: "blue", name: "Blue Hour", color: "#527fc2", bgColor: "#dce8f5" },
+] as const satisfies readonly MemoriaThemeSwatch[];
+
+export const CONFESSION_PAGE_DEMO_VARIANTS = [
+    { id: "opening", label: "Opening & Puzzle", src: `${CONFESSION_PAGE_DEMO_URL}&section=puzzle`, subtitle: "Lengkapi puzzle foto untuk membuka cerita" },
+    { id: "chapter1", label: "Awal Cerita", src: `${CONFESSION_PAGE_DEMO_URL}&section=chapter1`, subtitle: "Chapter komik dengan foto dan pesan personal" },
+    { id: "letter", label: "Isi Hati", src: `${CONFESSION_PAGE_DEMO_URL}&section=letter`, subtitle: "Surat confession sebelum pertanyaan terakhir" },
+    { id: "ending", label: "Pertanyaan Akhir", src: `${CONFESSION_PAGE_DEMO_URL}&section=ending`, subtitle: "Jawabannya dirangkum menjadi kartu digital" },
+] as const satisfies readonly DemoPreviewVariant[];
+
 export const STOREFRONT_DEMO_CONFIGS: Record<DemoProductId, StorefrontDemoConfig> = {
     loves: { productName: "Memoria Premium", title: "Demo Memoria Premium", subtitle: "Jelajahi pengalaman Memoria", price: "Rp 40.000", theme: "memoria", variants: MEMORIA_DEMO_VARIANTS, initialVariantId: "gift-opening", themeSwatches: MEMORIA_THEME_SWATCHES },
     letter: { productName: "Letter Edition", title: "Demo Letter Edition", subtitle: "Pilih gaya surat yang ingin dijelajahi", price: "Rp 20.000", theme: "letter", variants: LETTER_DEMO_VARIANTS, initialVariantId: "classic-wax" },
@@ -108,4 +125,5 @@ export const STOREFRONT_DEMO_CONFIGS: Record<DemoProductId, StorefrontDemoConfig
     storybook: { productName: "Storybook Edition", title: "Demo Storybook Edition", subtitle: "Pilih tema cerita yang ingin dijelajahi", price: "Rp 25.000", theme: "storybook", variants: STORYBOOK_DEMO_VARIANTS, initialVariantId: "spiderman" },
     sorry: { productName: "Sorry Letter", title: "Demo Sorry Letter", subtitle: "Jelajahi pengalaman surat permintaan maaf interaktif", price: "Rp 15.000", theme: "memoria", variants: SORRY_DEMO_VARIANTS, initialVariantId: "default", themeSwatches: SORRY_THEME_SWATCHES },
     "izin-main": { productName: "Izin Main", title: "Demo Izin Main", subtitle: "Buka berkas dan lihat pengalaman izin main yang interaktif", price: "Rp 15.000", theme: "izin-main", variants: IZIN_MAIN_DEMO_VARIANTS, initialVariantId: "complete", themeSwatches: IZIN_MAIN_THEME_SWATCHES },
+    "confession-page": { productName: "Confession Page", title: "Demo Confession Page", subtitle: "Lihat puzzle, cerita komik, dan pertanyaan akhirnya", price: "Rp 20.000", theme: "birthday", variants: CONFESSION_PAGE_DEMO_VARIANTS, initialVariantId: "opening", themeSwatches: CONFESSION_PAGE_THEME_SWATCHES },
 };
