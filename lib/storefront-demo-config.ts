@@ -1,4 +1,4 @@
-import type { DemoModalTheme, DemoPreviewVariant, MemoriaThemeSwatch } from "@/app/components/DemoPreviewModal";
+﻿import type { DemoModalTheme, DemoPreviewVariant, MemoriaThemeSwatch } from "@/app/components/DemoPreviewModal";
 
 export type DemoProductId = "loves" | "letter" | "voices" | "mixtape" | "invitation" | "retro" | "wrapped" | "birthday" | "arcade" | "storybook" | "sorry" | "izin-main" | "confession-page";
 
@@ -87,6 +87,8 @@ export const IZIN_MAIN_DEMO_VARIANTS = [
 export const IZIN_MAIN_THEME_SWATCHES = [
     { id: "district-office", name: "Kantor Kecamatan", color: "#A33C35", bgColor: "#27312B" },
     { id: "crimson-office", name: "Crimson Office", color: "#9F2635", bgColor: "#34171D" },
+    { id: "navy-bureau", name: "Navy Bureau", color: "#2B4C7E", bgColor: "#1A2A42" },
+    { id: "sage-permit", name: "Sage Permit", color: "#4A6E5A", bgColor: "#2B3D31" },
 ] as const satisfies readonly MemoriaThemeSwatch[];
 
 
@@ -127,3 +129,4 @@ export const STOREFRONT_DEMO_CONFIGS: Record<DemoProductId, StorefrontDemoConfig
     "izin-main": { productName: "Izin Main", title: "Demo Izin Main", subtitle: "Buka berkas dan lihat pengalaman izin main yang interaktif", price: "Rp 15.000", theme: "izin-main", variants: IZIN_MAIN_DEMO_VARIANTS, initialVariantId: "complete", themeSwatches: IZIN_MAIN_THEME_SWATCHES },
     "confession-page": { productName: "Confession Page", title: "Demo Confession Page", subtitle: "Lihat puzzle, cerita komik, dan pertanyaan akhirnya", price: "Rp 20.000", theme: "birthday", variants: CONFESSION_PAGE_DEMO_VARIANTS, initialVariantId: "opening", themeSwatches: CONFESSION_PAGE_THEME_SWATCHES },
 };
+
