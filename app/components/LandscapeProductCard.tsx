@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
@@ -715,19 +715,25 @@ export function LandscapeProductCard({
 
                 {/* Text Content */}
                 <div className="hub-showcase-content" style={{
-                    backgroundColor: (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
-                        ? "rgba(224, 237, 252, 0.85)"
-                        : activeAccent === '#c9184a'
-                            ? `${activeAccent}0D`
-                            : `${activeAccent}1A`,
-                    border: (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
-                        ? "1.5px solid rgba(43, 92, 143, 0.3)"
-                        : `1.5px solid ${activeAccent === '#c9184a' ? `${activeAccent}26` : `${activeAccent}33`}`,
+                    backgroundColor: productId === 'izin-main'
+                        ? "rgba(247, 242, 233, 0.94)"
+                        : (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
+                            ? "rgba(224, 237, 252, 0.85)"
+                            : activeAccent === '#c9184a'
+                                ? `${activeAccent}0D`
+                                : `${activeAccent}1A`,
+                    border: productId === 'izin-main'
+                        ? "1.5px solid rgba(206, 186, 162, 0.5)"
+                        : (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
+                            ? "1.5px solid rgba(43, 92, 143, 0.3)"
+                            : `1.5px solid ${activeAccent === '#c9184a' ? `${activeAccent}26` : `${activeAccent}33`}`,
                     borderRadius: "var(--radius-lg)",
                     padding: "clamp(32px, 4.5vw, 48px)",
-                    boxShadow: (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
-                        ? "0 24px 48px -16px rgba(43, 92, 143, 0.25)"
-                        : `0 24px 48px -16px ${activeAccent === '#c9184a' ? `${activeAccent}14` : `${activeAccent}20`}`,
+                    boxShadow: productId === 'izin-main'
+                        ? "0 24px 48px -16px rgba(107, 74, 55, 0.12)"
+                        : (activeAccent === '#2b5c8f' || activeAccent === '#356aa0' || activeAccent === '#2563eb' || activeAccent === '#3b82f6')
+                            ? "0 24px 48px -16px rgba(43, 92, 143, 0.25)"
+                            : `0 24px 48px -16px ${activeAccent === '#c9184a' ? `${activeAccent}14` : `${activeAccent}20`}`,
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
                     transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
@@ -736,9 +742,9 @@ export function LandscapeProductCard({
                     <div style={{
                         alignSelf: "flex-start",
                         padding: "6px 14px", borderRadius: 999,
-                        background: `${activeAccent}15`,
-                        border: `1px solid ${activeAccent}33`,
-                        color: activeAccent, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em",
+                        background: productId === 'izin-main' ? "rgba(107, 74, 55, 0.08)" : `${activeAccent}15`,
+                        border: productId === 'izin-main' ? "1px solid rgba(107, 74, 55, 0.22)" : `1px solid ${activeAccent}33`,
+                        color: productId === 'izin-main' ? "#7a5843" : activeAccent, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em",
                         textTransform: "uppercase" as const,
                         marginBottom: 24,
                         transition: "all 0.5s ease"
@@ -748,9 +754,9 @@ export function LandscapeProductCard({
 
                     <h3 style={{
                         fontFamily: "var(--font-display)",
+                        color: productId === 'izin-main' ? "#8d383b" : (activeAccent === "#faf7f2" ? "#382a24" : activeAccent),
                         fontSize: "clamp(1.8rem, 4vw, 2.7rem)",
                         fontWeight: 400,
-                        color: activeAccent,
                         lineHeight: 1.15,
                         marginBottom: 16,
                         transition: "color 0.5s ease"
@@ -815,8 +821,15 @@ export function LandscapeProductCard({
                                     {animatedFeatureIcons ? (
                                         <ProductFeatureMotionIcon feature={feat} color={activeAccent} />
                                     ) : (
-                                        <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: "50%", background: `${activeAccent}22`, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.5s ease" }}>
-                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={activeAccent} strokeWidth={3} style={{ transition: "stroke 0.5s ease" }}>
+                                        <div style={{
+                                            flexShrink: 0, width: 18, height: 18, borderRadius: "50%",
+                                            background: productId === 'izin-main' ? "rgba(107, 74, 55, 0.1)" : `${activeAccent}22`,
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                            transition: "background 0.5s ease"
+                                        }}>
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                                                stroke={productId === 'izin-main' ? "#7a5843" : activeAccent}
+                                                strokeWidth={3} style={{ transition: "stroke 0.5s ease" }}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                             </svg>
                                         </div>

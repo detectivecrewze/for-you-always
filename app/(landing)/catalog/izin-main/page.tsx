@@ -10,7 +10,7 @@ import DemoPreviewModal from "../../../components/LazyDemoPreviewModal";
 import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import type { CartItem } from "../../../context/CartContext";
 import { trackViewContent } from "@/lib/pixel";
-import { IZIN_MAIN_DEMO_URL, IZIN_MAIN_DEMO_VARIANTS, IZIN_MAIN_THEME_SWATCHES } from "@/lib/storefront-demo-config";
+import { IZIN_MAIN_DEMO_URL, IZIN_MAIN_DEMO_VARIANTS } from "@/lib/storefront-demo-config";
 import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 
 const PRODUCT: CartItem = {
@@ -106,54 +106,10 @@ export default function IzinMainCatalogPage() {
             onAddToCart={openPurchaseMode}
             themesLabel="Yang Bisa Kamu Atur"
             themes={[
-              {
-                name: "Opening Berkas",
-                desc: "Brankas dan map dokumen membuka gift dengan animasi berkas asli.",
-                color: "#a33c35",
-                fallbackImgSrc: "/assets/izin-main/hero.webp",
-                subThemes: [
-                  { name: "Kantor Kecamatan", color: "#a33c35", fallbackImgSrc: "/assets/izin-main/hero.webp" },
-                  { name: "Crimson Office", color: "#9f2635", fallbackImgSrc: "/assets/izin-main/hero.webp" },
-                  { name: "Navy Bureau", color: "#2b4c7e", fallbackImgSrc: "/assets/izin-main/hero.webp" },
-                  { name: "Sage Permit", color: "#4a6e5a", fallbackImgSrc: "/assets/izin-main/hero.webp" },
-                ],
-              },
-              {
-                name: "Pemohon & Penerima",
-                desc: "Dua foto berbeda membuat permohonannya terasa benar-benar personal.",
-                color: "#a33c35",
-                fallbackImgSrc: "/assets/izin-main/people.webp",
-                subThemes: [
-                  { name: "Kantor Kecamatan", color: "#a33c35", fallbackImgSrc: "/assets/izin-main/people.webp" },
-                  { name: "Crimson Office", color: "#9f2635", fallbackImgSrc: "/assets/izin-main/people.webp" },
-                  { name: "Navy Bureau", color: "#2b4c7e", fallbackImgSrc: "/assets/izin-main/people.webp" },
-                  { name: "Sage Permit", color: "#4a6e5a", fallbackImgSrc: "/assets/izin-main/people.webp" },
-                ],
-              },
-              {
-                name: "Rencana & Janji",
-                desc: "Tanggal wajib, sedangkan tempat, alamat, kebersamaan, dan detail lain boleh dikosongkan.",
-                color: "#a33c35",
-                fallbackImgSrc: "/assets/izin-main/plan.webp",
-                subThemes: [
-                  { name: "Kantor Kecamatan", color: "#a33c35", fallbackImgSrc: "/assets/izin-main/plan.webp" },
-                  { name: "Crimson Office", color: "#9f2635", fallbackImgSrc: "/assets/izin-main/plan.webp" },
-                  { name: "Navy Bureau", color: "#2b4c7e", fallbackImgSrc: "/assets/izin-main/plan.webp" },
-                  { name: "Sage Permit", color: "#4a6e5a", fallbackImgSrc: "/assets/izin-main/plan.webp" },
-                ],
-              },
-              {
-                name: "Persetujuan Digital",
-                desc: "Penerima menyetujui lalu mendapatkan surat izin yang siap diunduh.",
-                color: "#a33c35",
-                fallbackImgSrc: "/assets/izin-main/approval.webp",
-                subThemes: [
-                  { name: "Kantor Kecamatan", color: "#a33c35", fallbackImgSrc: "/assets/izin-main/approval.webp" },
-                  { name: "Crimson Office", color: "#9f2635", fallbackImgSrc: "/assets/izin-main/approval.webp" },
-                  { name: "Navy Bureau", color: "#2b4c7e", fallbackImgSrc: "/assets/izin-main/approval.webp" },
-                  { name: "Sage Permit", color: "#4a6e5a", fallbackImgSrc: "/assets/izin-main/approval.webp" },
-                ],
-              },
+              { name: "Opening Berkas", desc: "Brankas dan map dokumen membuka gift dengan animasi berkas asli.", color: "#6b4a37", fallbackImgSrc: "/assets/izin-main/hero.webp" },
+              { name: "Pemohon & Penerima", desc: "Dua foto berbeda membuat permohonannya terasa benar-benar personal.", color: "#6b4a37", fallbackImgSrc: "/assets/izin-main/people.webp" },
+              { name: "Rencana & Janji", desc: "Tanggal wajib, sedangkan tempat, alamat, kebersamaan, dan detail lain boleh dikosongkan.", color: "#6b4a37", fallbackImgSrc: "/assets/izin-main/plan.webp" },
+              { name: "Persetujuan Digital", desc: "Penerima menyetujui lalu mendapatkan surat izin yang siap diunduh.", color: "#6b4a37", fallbackImgSrc: "/assets/izin-main/approval.webp" },
             ]}
             initialSelectedIndex={0}
             autoCycle={false}
@@ -168,7 +124,6 @@ export default function IzinMainCatalogPage() {
         <DemoPreviewModal
           isOpen src={IZIN_MAIN_DEMO_URL} title="Demo Izin Main" subtitle="Buka berkas dan jelajahi permohonannya" productName="Izin Main" price="Rp 15.000"
           theme="izin-main" variants={IZIN_MAIN_DEMO_VARIANTS} initialVariantId="complete" orderButtonLabel="Pesan Izin Main"
-          themeSwatches={IZIN_MAIN_THEME_SWATCHES} initialSwatchId="district-office"
           onClose={closeDemo} onOrder={() => { setDemoOpen(false); openPurchaseMode(); }}
           onLoaded={(loadTimeMs) => capture("product_demo_loaded", { product_id: "izin-main", load_time_ms: loadTimeMs })}
         />

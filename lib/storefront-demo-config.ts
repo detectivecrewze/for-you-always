@@ -126,7 +126,8 @@ export const STOREFRONT_DEMO_CONFIGS: Record<DemoProductId, StorefrontDemoConfig
     arcade: { productName: "Arcade Edition", title: "Demo Arcade Edition", subtitle: "Jelajahi sepuluh ruangan permainan", price: "Rp 25.000", theme: "arcade", variants: [{ id: "default", label: "Arcade", src: "https://arcade.for-you-always.my.id/?to=arcade-test", subtitle: "Petualangan game dengan sepuluh ruangan kenangan" }], initialVariantId: "default", opensInNewTab: true },
     storybook: { productName: "Storybook Edition", title: "Demo Storybook Edition", subtitle: "Pilih tema cerita yang ingin dijelajahi", price: "Rp 25.000", theme: "storybook", variants: STORYBOOK_DEMO_VARIANTS, initialVariantId: "spiderman" },
     sorry: { productName: "Sorry Letter", title: "Demo Sorry Letter", subtitle: "Jelajahi pengalaman surat permintaan maaf interaktif", price: "Rp 15.000", theme: "memoria", variants: SORRY_DEMO_VARIANTS, initialVariantId: "default", themeSwatches: SORRY_THEME_SWATCHES },
-    "izin-main": { productName: "Izin Main", title: "Demo Izin Main", subtitle: "Buka berkas dan lihat pengalaman izin main yang interaktif", price: "Rp 15.000", theme: "izin-main", variants: IZIN_MAIN_DEMO_VARIANTS, initialVariantId: "complete", themeSwatches: IZIN_MAIN_THEME_SWATCHES },
+    "izin-main": { productName: "Izin Main", title: "Demo Izin Main", subtitle: "Buka berkas dan lihat pengalaman izin main yang interaktif", price: "Rp 15.000", theme: "izin-main", variants: IZIN_MAIN_DEMO_VARIANTS, initialVariantId: "complete" },
     "confession-page": { productName: "Confession Page", title: "Demo Confession Page", subtitle: "Lihat puzzle, cerita komik, dan pertanyaan akhirnya", price: "Rp 20.000", theme: "birthday", variants: CONFESSION_PAGE_DEMO_VARIANTS, initialVariantId: "opening", themeSwatches: CONFESSION_PAGE_THEME_SWATCHES },
 };
+
 
