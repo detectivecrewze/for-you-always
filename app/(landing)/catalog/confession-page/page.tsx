@@ -5,17 +5,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import { LandscapeProductCard } from "../../../components/LandscapeProductCard";
 import CartCheckoutModal from "../../../components/CartCheckoutModal";
+import PurchaseModeModal, { type PurchaseModeConfig } from "../../../components/PurchaseModeModal";
 import DemoPreviewModal from "../../../components/LazyDemoPreviewModal";
 import type { DemoCloseReason } from "../../../components/DemoPreviewModal";
 import type { CartItem } from "../../../context/CartContext";
 import { trackViewContent } from "@/lib/pixel";
 import { CONFESSION_PAGE_DEMO_URL, CONFESSION_PAGE_THEME_SWATCHES } from "@/lib/storefront-demo-config";
+import { createDoneForYouItem, getDigitalPurchaseOption } from "@/lib/purchase-options";
 
 const PRODUCT: CartItem = {
   id: "confession-page",
   title: "Confession Page",
   numericPrice: 20000,
-  themeColor: "#a93843",
+  themeColor: "#c4900a",
   themeImgSrc: "/assets/confession-page/hero.webp",
   fulfillmentMode: "self_service",
 };
@@ -25,7 +27,8 @@ function capture(event: string, properties: Record<string, unknown>) {
 }
 
 export default function ConfessionPageCatalogPage() {
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [checkoutItem, setCheckoutItem] = useState<CartItem | null>(null);
+  const [purchaseModeConfig, setPurchaseModeConfig] = useState<PurchaseModeConfig | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
   const openedAt = useRef(0);
 
@@ -33,6 +36,26 @@ export default function ConfessionPageCatalogPage() {
     window.scrollTo(0, 0);
     trackViewContent({ id: "confession-page", name: "Confession Page", price: 20000 });
     capture("product_viewed", { product_id: "confession-page", price: 20000, currency: "IDR", source: "product_detail" });
+  }, []);
+
+  const openPurchaseMode = useCallback(() => {
+    const option = getDigitalPurchaseOption("confession-page");
+    if (!option) {
+      setCheckoutItem({ ...PRODUCT, fulfillmentMode: "self_service" });
+      return;
+    }
+    setPurchaseModeConfig({
+      productId: option.id,
+      productTitle: option.title,
+      themeColor: option.themeColor,
+      selfServicePrice: option.basePrice,
+      doneForYouPrice: option.doneForYouPrice,
+      onSelectSelfService: () => setCheckoutItem({ ...PRODUCT, fulfillmentMode: "self_service" }),
+      onSelectDoneForYou: () => {
+        const item = createDoneForYouItem(PRODUCT.id);
+        if (item) setCheckoutItem(item);
+      },
+    });
   }, []);
 
   const openDemo = useCallback(() => {
@@ -60,7 +83,7 @@ export default function ConfessionPageCatalogPage() {
       <Navbar />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "120px clamp(16px, 4vw, 40px) 40px" }}>
-        <Link href="/catalog" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, color: "#9f3440", textDecoration: "none", letterSpacing: ".05em", textTransform: "uppercase" }}>
+        <Link href="/catalog" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, color: "#9f7a10", textDecoration: "none", letterSpacing: ".05em", textTransform: "uppercase" }}>
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19 3 12m0 0 7-7m-7 7h18" /></svg>
           Kembali ke Katalog
         </Link>
@@ -69,13 +92,13 @@ export default function ConfessionPageCatalogPage() {
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 clamp(16px, 4vw, 40px)" }}>
           <LandscapeProductCard
             productId="confession-page"
-            label={<span>Confession Page <span style={{ opacity: .5 }}>•</span> Self Edit</span>}
+            label={<span>Confession Page <span style={{ opacity: .5 }}>•</span> Self Edit / Terima Jadi</span>}
             title="Confession Page"
             description="Sampaikan perasaanmu dengan cara yang lebih personal. Rangkai foto, pesan, dan lagu menjadi cerita komik interaktif, lalu tutup dengan pertanyaan yang selama ini ingin kamu ajukan."
             features={["Puzzle foto sebagai pembuka cerita", "Kata-kata personal untuk mengungkapkan isi hati", "Lagu pilihan yang menemani ceritamu", "Jawaban interaktif di akhir cerita"]}
             animatedFeatureIcons
             salesCountPlacement="media"
-            price="Rp 20.000"
+            price="Mulai Rp 20.000"
             demoLink={CONFESSION_PAGE_DEMO_URL}
             demoLabel="Lihat Demo"
             fallbackImgSrc="/assets/confession-page/hero.webp"
@@ -90,21 +113,22 @@ export default function ConfessionPageCatalogPage() {
             ]}
             initialSelectedIndex={0}
             mediaType="image"
-            accentColor="#a93843"
-            accentGlow="rgba(201, 77, 85, .2)"
-            onAddToCart={() => setCheckoutOpen(true)}
+            accentColor="#c4900a"
+            accentGlow="rgba(196,144,10,.18)"
+            onAddToCart={openPurchaseMode}
             autoCycle={false}
             priority
             onDemoOpen={openDemo}
           />
         </div>
       </section>
-      {checkoutOpen && <CartCheckoutModal directItem={PRODUCT} onClose={() => setCheckoutOpen(false)} />}
+      {purchaseModeConfig && <PurchaseModeModal config={purchaseModeConfig} onClose={() => setPurchaseModeConfig(null)} />}
+      {checkoutItem && <CartCheckoutModal directItem={checkoutItem} onClose={() => setCheckoutItem(null)} />}
       {demoOpen && (
         <DemoPreviewModal
           isOpen src={`${CONFESSION_PAGE_DEMO_URL}&section=puzzle`} title="Demo Confession Page" subtitle="Lihat puzzle foto, cerita komik, surat, dan jawaban akhir" productName="Confession Page" price="Rp 20.000"
           theme="birthday" themeSwatches={CONFESSION_PAGE_THEME_SWATCHES} initialSwatchId="classic" orderButtonLabel="Pesan Confession Page"
-          onClose={closeDemo} onOrder={() => { setDemoOpen(false); setCheckoutOpen(true); }}
+          onClose={closeDemo} onOrder={() => { setDemoOpen(false); openPurchaseMode(); }}
           onLoaded={(loadTimeMs) => capture("product_demo_loaded", { product_id: "confession-page", load_time_ms: loadTimeMs })}
         />
       )}
