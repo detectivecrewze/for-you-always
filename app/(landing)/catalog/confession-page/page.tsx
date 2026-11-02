@@ -88,7 +88,7 @@ export default function ConfessionPageCatalogPage() {
               { name: "Isi Hati", desc: "Pesan personal untuk mengungkapkan perasaanmu.", fallbackImgSrc: "/assets/confession-page/letter.webp" },
               { name: "Pertanyaan Akhir", desc: "Tutup cerita dengan pertanyaan yang ingin kamu sampaikan.", fallbackImgSrc: "/assets/confession-page/hero.webp" },
             ]}
-            initialSelectedIndex={5}
+            initialSelectedIndex={0}
             mediaType="image"
             accentColor="#a93843"
             accentGlow="rgba(201, 77, 85, .2)"
