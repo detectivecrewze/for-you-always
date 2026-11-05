@@ -106,7 +106,7 @@ export default function CollectionSection() {
                                 badgeColor: "#8f332f",
                                 badgeVariant: "solid",
                                 imageSrc: "/assets/the-plan/hero.webp",
-                                price: "Rp 40.000",
+                                price: "Rp 30.000",
                                 title: "The Plan",
                                 productId: "plan",
                                 titleColor: "#8f332f",

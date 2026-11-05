@@ -327,8 +327,8 @@ export const COMPLETE_CATALOG_KNOWLEDGE: Record<string, ProductCatalogDetail> = 
         id: "the-plan",
         name: "The Plan",
         type: "digital_interactive",
-        singlePrice: "Rp 40.000",
-        numericPrice: 40000,
+        singlePrice: "Rp 30.000",
+        numericPrice: 30000,
         badge: "New Premium · Terima Jadi",
         tagline: "Ajakan menikmati hari spesial dalam scrapbook interaktif yang dirangkai penuh oleh tim dari bahan customer.",
         coreFeatures: [

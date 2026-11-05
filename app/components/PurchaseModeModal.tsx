@@ -121,10 +121,10 @@ export default function PurchaseModeModal({ config, onClose }: { config: Purchas
                         <span style={{ width: 44, height: 44, marginTop: 12, display: "grid", placeItems: "center", borderRadius: 14, background: `${accent}18`, color: accent }}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
                         </span>
-                        <span style={{ marginTop: 12 }}><strong style={{ display: "block", fontSize: 14, marginBottom: 4 }}>Terima Jadi</strong><small style={{ display: "block", color: "#6f5e55", fontSize: 11.5, lineHeight: 1.45 }}>Cukup kirim foto dan cerita lewat WhatsApp. Tim kami merangkainya sampai siap dibagikan.</small><span style={{ display: "grid", gap: 4, marginTop: 10, color: "#75645b", fontSize: 10.5 }}><span>✓ Tanpa perlu mengedit di Studio</span><span>✓ Preview pertama maksimal 1×24 jam</span><span>✓ Termasuk hingga 3 kali revisi</span></span></span>
+                        <span style={{ marginTop: 12 }}><strong style={{ display: "block", fontSize: 14, marginBottom: 4 }}>Terima Jadi</strong><small style={{ display: "block", color: "#6f5e55", fontSize: 11.5, lineHeight: 1.45 }}>Bingung merangkai kata? Cukup isi form singkat. Tim kami menyusun cerita dan desainnya sampai siap dibagikan.</small><span style={{ display: "grid", gap: 4, marginTop: 10, color: "#75645b", fontSize: 10.5 }}><span>✓ Dibantu merangkai cerita dan kata-kata</span><span>✓ Tanpa perlu mengedit di Studio</span><span>✓ Preview 1×24 jam · hingga 3 kali revisi</span></span></span>
                         <strong style={{ marginTop: 40, color: accent, fontSize: 14, whiteSpace: "nowrap" }}>{formatRupiah(config.doneForYouPrice)}</strong>
                     </button>
-                    <p style={{ margin: "1px 8px 2px", color: "#94847a", textAlign: "center", fontSize: 10.5, lineHeight: 1.5 }}>Pengerjaan dimulai setelah seluruh bahan lengkap.</p>
+                    <p style={{ margin: "1px 8px 2px", color: "#94847a", textAlign: "center", fontSize: 10.5, lineHeight: 1.5 }}>Pengerjaan dimulai setelah form dan bahan lengkap.</p>
                 </div>
             </div>
         </div>,

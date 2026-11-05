@@ -15,7 +15,7 @@ const DEMO_URL = "https://the-plan-iota.vercel.app/";
 const PRODUCT: CartItem = {
   id: "plan",
   title: "The Plan",
-  numericPrice: 40000,
+  numericPrice: 30000,
   themeColor: "#8f332f",
   themeImgSrc: "/assets/the-plan/hero.webp",
 };
@@ -34,8 +34,8 @@ export default function ThePlanCatalogPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    trackViewContent({ id: "plan", name: "The Plan", price: 40000 });
-    capture("product_viewed", { product_id: "plan", price: 40000, currency: "IDR", source: "product_detail" });
+    trackViewContent({ id: "plan", name: "The Plan", price: 30000 });
+    capture("product_viewed", { product_id: "plan", price: 30000, currency: "IDR", source: "product_detail" });
   }, []);
 
   const openDemo = useCallback(() => {
@@ -55,7 +55,7 @@ export default function ThePlanCatalogPage() {
     image: "https://for-you-always.my.id/assets/the-plan/hero.webp",
     description: "Kado digital premium berbentuk scrapbook interaktif dengan puzzle foto, invitation, rundown, surat, galeri, musik, dan tiket digital.",
     brand: { "@type": "Brand", name: "For you, Always." },
-    offers: { "@type": "Offer", priceCurrency: "IDR", price: "40000", availability: "https://schema.org/InStock", url: "https://for-you-always.my.id/catalog/plan" },
+    offers: { "@type": "Offer", priceCurrency: "IDR", price: "30000", availability: "https://schema.org/InStock", url: "https://for-you-always.my.id/catalog/plan" },
   };
 
   return (
@@ -77,7 +77,7 @@ export default function ThePlanCatalogPage() {
             description="Satu hari yang kamu rencanakan untuknya, dirangkai tim menjadi scrapbook digital yang hangat dan interaktif. Customer cukup mengisi form; kami mengurus susunan cerita, desain, dan detail gift-nya."
             features={["Puzzle Foto Interaktif", "Invitation & Rundown dalam Animasi Printer", "Surat, Musik, Foto & Video", "Tiket Digital Siap Unduh atau Bagikan", "Terima Jadi oleh Tim"]}
             salesCountPlacement="media"
-            price="Rp 40.000"
+            price="Rp 30.000"
             demoLink={DEMO_URL}
             demoLabel="Lihat Demo"
             fallbackImgSrc="/assets/the-plan/hero.webp"
@@ -107,7 +107,7 @@ export default function ThePlanCatalogPage() {
       {checkoutOpen && <CartCheckoutModal directItem={PRODUCT} onClose={() => setCheckoutOpen(false)} />}
       {demoOpen && (
         <DemoPreviewModal
-          isOpen src={DEMO_URL} title="Demo The Plan" subtitle="Jelajahi perjalanan lengkap dari puzzle hingga tiket digital" productName="The Plan" price="Rp 40.000"
+          isOpen src={DEMO_URL} title="Demo The Plan" subtitle="Jelajahi perjalanan lengkap dari puzzle hingga tiket digital" productName="The Plan" price="Rp 30.000"
           theme="memoria" variants={DEMO_VARIANTS} initialVariantId="complete" orderButtonLabel="Pesan The Plan"
           themeSwatches={THE_PLAN_THEME_SWATCHES} initialSwatchId="burgundy-keepsake"
           onClose={closeDemo} onOrder={() => { setDemoOpen(false); setCheckoutOpen(true); }}

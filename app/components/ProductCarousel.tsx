@@ -65,7 +65,7 @@ export default function AutoScrollCarousel({ cards, speed = 55 }: AutoScrollCaro
             setDirectCheckoutItem({
                 id: "plan",
                 title: "The Plan",
-                numericPrice: 40000,
+                numericPrice: 30000,
                 themeColor: "#8f332f",
                 themeImgSrc: "/assets/the-plan/hero.webp",
             });
